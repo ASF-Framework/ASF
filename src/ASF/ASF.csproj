@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.1.2" />
+    <PackageReference Include="Ocelot" Version="13.0.0" />
+  </ItemGroup>
+
+</Project>

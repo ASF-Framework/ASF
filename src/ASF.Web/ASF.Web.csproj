@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ASF.Repositories\ASF.Infrastructure.csproj" />
-    <ProjectReference Include="..\ASF\ASF.csproj" />
+    <ProjectReference Include="..\ASF.Core\ASF.Core.csproj" />
+    <ProjectReference Include="..\ASF.Infrastructure\ASF.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

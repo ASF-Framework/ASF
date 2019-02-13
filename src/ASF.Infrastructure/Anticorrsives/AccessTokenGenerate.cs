@@ -11,12 +11,10 @@ namespace ASF.Infrastructure.Anticorrsives
 {
     public class AccessTokenGenerate : IAccessTokenGenerate
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ASFOptions _options;
 
-        public AccessTokenGenerate(IHttpContextAccessor httpContextAccessor, IOptions<ASFOptions> options)
+        public AccessTokenGenerate( IOptions<ASFOptions> options)
         {
-            _httpContextAccessor = httpContextAccessor;
             _options = options.Value;
         }
 
@@ -34,10 +32,7 @@ namespace ASF.Infrastructure.Anticorrsives
             var issuer = tokenOpt.Issuer;
             var audience = tokenOpt.Audience;
             var signingCredentials = tokenOpt.SigningCredentials;
-            if (string.IsNullOrEmpty(issuer))
-            {
-                issuer = _httpContextAccessor.HttpContext.Request.Host.ToString();
-            }
+
             foreach (var claim in claims)
             {
                 claimList.Add(new Claim(claim.Key, claim.Value));

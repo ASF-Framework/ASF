@@ -37,7 +37,7 @@ namespace ASF.Application
 
             //数据持久化
             await _accountRepository.ModifyAsync(logResult.Data);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync(autoRollback: true);
             return Result<AccessToken>.ReSuccess(logResult.Data.LoginInfo.AccessToken);
         }
     }

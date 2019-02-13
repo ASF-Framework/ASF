@@ -65,7 +65,7 @@ namespace ASF.Application
         {
             _operateLog.Record(ASFPermissions.AccountDelete, id.ToString(), "Success");  //记录日志
             await _accountRepository.RemoveAsync(id);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
         /// <summary>
@@ -84,7 +84,7 @@ namespace ASF.Application
             //数据持久化
             _operateLog.Record(ASFPermissions.AccountModifyInfo, dto.ToString(), "Success");  //记录日志
             await _accountRepository.ModifyAsync(result.Data);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
         /// <summary>
@@ -103,7 +103,7 @@ namespace ASF.Application
             //数据持久化
             _operateLog.Record(ASFPermissions.AccountSetPassword, dto.ToString(), "Success");  //记录日志
             await _accountRepository.ModifyAsync(result.Data);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
 
@@ -125,7 +125,7 @@ namespace ASF.Application
             //数据持久化
             _operateLog.Record(ASFPermissions.AccountModifyPassword, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志
             await _accountRepository.ModifyAsync(result.Data);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
         /// <summary>
@@ -152,7 +152,7 @@ namespace ASF.Application
             //数据持久化
             _operateLog.Record(ASFPermissions.AccountModifyStatus, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志
             await _accountRepository.ModifyAsync(modifyResult.Data);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
         /// <summary>
@@ -178,7 +178,7 @@ namespace ASF.Application
             //数据持久化
             _operateLog.Record(ASFPermissions.AccountModifyEmail, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志
             await _accountRepository.ModifyAsync(modifyResult.Data);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
         /// <summary>
@@ -205,7 +205,8 @@ namespace ASF.Application
             //数据持久化
             _operateLog.Record(ASFPermissions.AccountModifyTelephone, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志
             await _accountRepository.ModifyAsync(modifyResult.Data);
-            await _unitOfWork.CommitAsync();
+            
+            await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
 

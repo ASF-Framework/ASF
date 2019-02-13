@@ -3,12 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ocelot.DependencyInjection;
-using Ocelot.JwtAuthorize;
 using Ocelot.Middleware;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace ASF.Web
 {
@@ -37,33 +33,23 @@ namespace ASF.Web
                     builder.AllowCredentials();
                 });
             });
-            services.AddOcelot() 
-                .AddASF();
-
-            //services.AddAuthentication();
-            services.AddOcelotJwtAuthorize();
-            services.AddTokenJwtAuthorize();
+            services.AddOcelot()
+                .AddASF(build =>
+                {
+                    build.AddSQLite();
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            ITokenBuilder _tokenBuilder = app.ApplicationServices.GetRequiredService<ITokenBuilder>();
-            List<Claim> claims = new List<Claim>();
-            //claims.Add(new Claim("role", "admin"));
-            claims.Add(new Claim(ClaimTypes.Sid, "1"));
-            claims.Add(new Claim(ClaimTypes.Name, "aqa51041500"));
-            claims.Add(new Claim("is_super", "1"));
-            claims.Add(new Claim(ClaimTypes.Role, "self"));
-            var token = _tokenBuilder.BuildJwtToken(claims.ToArray(), DateTime.UtcNow, DateTime.Now.AddHours(5)).TokenValue;
-        
             if (env.IsDevelopment())
             {
                 app.UseCors();
                 app.UseDeveloperExceptionPage();
             }
             app.UseFileServer();
-            app.UseOcelot(opt=>
+            app.UseOcelot(opt =>
             {
                 opt.AddASF();
             }).Wait();

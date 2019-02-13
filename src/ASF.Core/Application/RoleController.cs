@@ -47,7 +47,7 @@ namespace ASF.Application
             //数据持久化
             _operateLog.Record(ASFPermissions.RoleCreate, dto.ToString(), "Success");  //记录日志
             await _roleRepository.AddAsync(createResult.Data);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync(autoRollback:true);
             return Result.ReSuccess();
         }
         /// <summary>
@@ -60,7 +60,7 @@ namespace ASF.Application
         {
             _operateLog.Record(ASFPermissions.RoleDelete, id.ToString(), "Success");  //记录日志
             await this._roleRepository.RemoveAsync(id);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
         /// <summary>
@@ -85,7 +85,7 @@ namespace ASF.Application
             //数据持久化
             _operateLog.Record(ASFPermissions.RoleModify, dto.ToString(), "Success");  //记录日志
             await _roleRepository.ModifyAsync(modifyResult.Data);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
         /// <summary>
@@ -101,7 +101,7 @@ namespace ASF.Application
             //数据持久化
             _operateLog.Record(ASFPermissions.RoleModifyStatus, dto.ToString(), "Success");  //记录日志
             await _roleRepository.ModifyAsync(dto.RoleId, dto.Enable);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
 

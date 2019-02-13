@@ -137,7 +137,7 @@ namespace ASF.Application
 
             _operateLog.Record(ASFPermissions.PermissionDelete, id.ToString(), "Success");  //记录日志
             await _permissionRepository.RemoveAsync(id);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
     }

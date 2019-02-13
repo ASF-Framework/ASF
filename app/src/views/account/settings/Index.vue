@@ -9,25 +9,15 @@
             :defaultSelectedKeys="defaultSelectedKeys"
             type="inner"
             @openChange="onOpenChange"
-          >
-            <a-menu-item key="/account/settings/base">
-              <router-link :to="{ name: 'BaseSettings' }">
-                基本设置
-              </router-link>
-            </a-menu-item>
+          >          
             <a-menu-item key="/account/settings/security">
               <router-link :to="{ name: 'SecuritySettings' }">
-                安全设置
+                账户设置
               </router-link>
             </a-menu-item>
             <a-menu-item key="/account/settings/custom">
               <router-link :to="{ name: 'CustomSettings' }">
                 个性化
-              </router-link>
-            </a-menu-item>
-            <a-menu-item key="/account/settings/binding">
-              <router-link :to="{ name: 'BindingSettings' }">
-                账户绑定
               </router-link>
             </a-menu-item>
             <a-menu-item key="/account/settings/notification">

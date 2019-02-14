@@ -74,9 +74,17 @@ namespace ASF.Infrastructure.Model
         /// </summary>
         public DateTime LoginTime { get; private set; } = DateTime.Now;
         /// <summary>
-        /// 授权颁发访问Token
+        /// Token
         /// </summary>
-        public AccessToken AccessToken { get; private set; } = new AccessToken();
+        public string Token { get; private set; }
+        /// <summary>
+        /// 刷新令牌
+        /// </summary>
+        public string RefreshToken { get; private set; }
+        /// <summary>
+        /// 过期时间
+        /// </summary>
+        public DateTime Expired { get; private set; }
 
         /// <summary>
         /// 删除

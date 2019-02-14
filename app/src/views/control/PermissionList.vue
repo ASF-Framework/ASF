@@ -13,46 +13,46 @@
           </a-col>
           <a-col :span="8" :md="{span:12,offset:4}" :sm="{span:24,offset:0}" :xs="{span:24,offset:0}" :offset="8">
             <span class="table-page-search-submitButtons" style="float:right">
-              <a-input placeholder="请输入" style="width:auto;margin-right:10px"  />
-              <a-button-group>            
-                <a-button type="primary" icon="search">查询</a-button>
-                <a-button icon="undo">重置</a-button>
-              </a-button-group>
-            </span>
+                  <a-input placeholder="请输入" style="width:auto;margin-right:10px"  />
+                  <a-button-group>            
+                    <a-button type="primary" icon="search">查询</a-button>
+                    <a-button icon="undo">重置</a-button>
+                  </a-button-group>
+                </span>
           </a-col>
         </a-row>
       </a-form>
     </div>
-    <s-table :columns="columns" :data="loadData" size="small"  >
+    <s-table :columns="columns" :data="loadData" size="small">
       <span slot="actions" slot-scope="text, record">
-                    <a-tag v-for="(action, index) in record.actionList" :key="index" @click="handerContrl(action)">{{ action.describe }}</a-tag>
-                  </span>
+          <a-tag v-for="(action, index) in record.actionList" :key="index" @click="handerContrl(action)">{{ action.describe }}</a-tag>
+       </span>
       <span slot="status" slot-scope="text">
-                    {{ text | statusFilter }}
-                  </span>
+              {{ text | statusFilter }}
+        </span>
       <span slot="sort" slot-scope="text">
-                  <editable-cell :text="text" @change="handerChange" />
-                </span>
+              <editable-cell :text="text" @change="handerChange" />
+          </span>
       <span slot="action" slot-scope="text, record">
-                    <a @click="handleEdit(record)">编辑</a>
-                    <a-divider type="vertical" />
-                    <a-dropdown>
-                      <a class="ant-dropdown-link">
-                        更多 <a-icon type="down" />
-                      </a>
-                      <a-menu slot="overlay">
-                        <a-menu-item>
-                          <a href="javascript:;">详情</a>
-                        </a-menu-item>
-                        <a-menu-item>
-                          <a href="javascript:;">禁用</a>
-                        </a-menu-item>
-                        <a-menu-item>
-                          <a href="javascript:;">删除</a>
-                        </a-menu-item>
-                      </a-menu>
-                    </a-dropdown>
-                  </span>
+              <a @click="handleEdit(record)">编辑</a>
+              <a-divider type="vertical" />
+              <a-dropdown>
+                <a class="ant-dropdown-link">
+                  更多 <a-icon type="down" />
+                </a>
+                <a-menu slot="overlay">
+                  <a-menu-item>
+                    <a href="javascript:;">详情</a>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a href="javascript:;">禁用</a>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a href="javascript:;">删除</a>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
+        </span>
     </s-table>
     <a-modal title="操作权限编辑" :width="800" v-model="visibleContrl">
       <a-form :autoFormCreate="(form)=>{this.form = form}">
@@ -65,7 +65,7 @@
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label='操作地址' hasFeedback validateStatus='success'>
           <a-input placeholder='操作地址' v-model="controlFrom.adderss" />
         </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label='是否可用' >
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label='是否可用'>
           <a-switch :defaultChecked="controlFrom.defaultCheck" />
         </a-form-item>
       </a-form>
@@ -154,9 +154,9 @@
             span: 16
           }
         },
-        alert:{
-          show:true,
-clear:true,
+        alert: {
+          show: true,
+          clear: true
         },
         controlFrom: {},
         form: null,
@@ -240,9 +240,9 @@ clear:true,
     },
     methods: {
       handerContrl(action) {
-        this.controlFrom = action;
+        this.controlFrom = action
         console.log(222222222, this.controlFrom)
-        this.visibleContrl = true;
+        this.visibleContrl = true
       },
       handerChange() {},
       handleAdd() {
@@ -308,30 +308,30 @@ clear:true,
     },
     watch: {
       /*
-            'selectedRows': function (selectedRows) {
-              this.needTotalList = this.needTotalList.map(item => {
-                return {
-                  ...item,
-                  total: selectedRows.reduce( (sum, val) => {
-                    return sum + val[item.dataIndex]
-                  }, 0)
+                'selectedRows': function (selectedRows) {
+                  this.needTotalList = this.needTotalList.map(item => {
+                    return {
+                      ...item,
+                      total: selectedRows.reduce( (sum, val) => {
+                        return sum + val[item.dataIndex]
+                      }, 0)
+                    }
+                  })
                 }
-              })
-            }
-            */
+                */
     }
   }
 </script>
 <style>
   /* .rownew:before,
-        .rownew:after {
-          content: '';
-          display: none;
-        }
-        .rownew {
-          display: flex;
-          justify-content: space-between;
-        } */
+            .rownew:after {
+              content: '';
+              display: none;
+            }
+            .rownew {
+              display: flex;
+              justify-content: space-between;
+            } */
   .editable-cell {
     position: relative;
   }

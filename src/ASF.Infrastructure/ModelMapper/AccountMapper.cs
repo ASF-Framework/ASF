@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 using ASF.Domain.Entities;
 using System.Linq;
+using ASF.Domain.Values;
 
-namespace ASF.Infrastructure.Mapper
+namespace ASF.Infrastructure.ModelMapper
 {
    public class AccountMapper: Profile
     {
@@ -17,6 +18,7 @@ namespace ASF.Infrastructure.Mapper
                   .ForPath(a => a.LoginInfo.LoginIp, model => model.MapFrom(d => d.LoginIp))
                   .ForPath(a => a.LoginInfo.LoginTime, model => model.MapFrom(d => d.LoginTime))
                   .ForPath(a => a.LoginInfo.AccessToken, model => model.MapFrom(d => d.AccessToken))
+                   .ForPath(a => a.Telephone, model => model.MapFrom(d => new PhoneNumber(d.Telephone)))
                   .ForMember(a => a.Roles, model => model.MapFrom(d => (new List<string>(d.Roles.Split(','))).Select<string,int>(q => Convert.ToInt32(q))));
 
             base.CreateMap<ASF.Domain.Entities.Account,ASF.Infrastructure.Model.Account>()
@@ -25,6 +27,7 @@ namespace ASF.Infrastructure.Mapper
                   .ForPath(a => a.LoginIp, model => model.MapFrom(d => d.LoginInfo.LoginIp))
                   .ForPath(a => a.LoginTime, model => model.MapFrom(d => d.LoginInfo.LoginTime))
                   .ForPath(a => a.AccessToken, model => model.MapFrom(d => d.LoginInfo.AccessToken))
+                  .ForPath(a => a.Telephone, model => model.MapFrom(d => d.Telephone.ToString()))
                   .ForMember(a => a.Roles, model => model.MapFrom(d => string.Join(",", d.Roles)));
         }
     }

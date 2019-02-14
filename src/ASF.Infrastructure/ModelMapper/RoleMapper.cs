@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ASF.Infrastructure.Mapper
+namespace ASF.Infrastructure.ModelMapper
 {
     public class RoleMapper : Profile
     {

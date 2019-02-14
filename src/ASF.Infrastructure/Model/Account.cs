@@ -31,7 +31,7 @@ namespace ASF.Infrastructure.Model
         /// <summary>
         /// 手机号码
         /// </summary>
-        public PhoneNumber Telephone { get; set; }
+        public string Telephone { get; set; }
         /// <summary>
         /// 邮箱地址
         /// </summary>
@@ -77,5 +77,13 @@ namespace ASF.Infrastructure.Model
         /// 授权颁发访问Token
         /// </summary>
         public AccessToken AccessToken { get; private set; } = new AccessToken();
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        public void Delete()
+        {
+            this.IsDeleted = true;
+        }
     }
 }

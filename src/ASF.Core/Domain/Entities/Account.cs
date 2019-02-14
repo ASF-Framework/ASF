@@ -58,7 +58,7 @@ namespace ASF.Domain.Entities
         /// 头像
         /// </summary>
         [MaxLength(225)]
-        public string Avatar { get; set; }
+        public string Avatar { get; set; } = "/avatar.jpg";
         /// <summary>
         /// 状态
         /// </summary>

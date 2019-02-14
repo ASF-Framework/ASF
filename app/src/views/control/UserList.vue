@@ -4,7 +4,7 @@
       <a-form layout="inline" :model="filters">
         <a-row :gutter="0">
           <a-col :md="12" :sm="24">
-             <a-button icon="plus" @click="handleAdd" style="margin-right:10px">新建</a-button>
+             <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px">新建</a-button>
             <a-select placeholder="请选择状态" style="width:120px">
               <a-select-option value="0">全部</a-select-option>
               <a-select-option value="1">正常</a-select-option>

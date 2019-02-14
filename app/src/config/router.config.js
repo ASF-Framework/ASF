@@ -41,34 +41,34 @@ export const asyncRouterMap = [
       },
       // list
       {
-        path: '/list',
-        name: 'list',
+        path: '/control',
+        name: 'control',
         component: PageView,
-        redirect: '/list/query-list',
+        redirect: '/control/query-list',
         meta: { title: '控制面板', icon: 'table', permission: [ 'table' ] },
         children: [
           {
-            path: '/list/user-list',
+            path: '/control/user-list',
             name: 'UserList',
-            component: () => import('@/views/list/UserList'),
+            component: () => import('@/views/control/UserList'),
             meta: { title: '用户列表', permission: [ 'table' ] }
           },
           {
-            path: '/list/role-list',
+            path: '/control/role-list',
             name: 'RoleList',
-            component: () => import('@/views/list/RoleList'),
+            component: () => import('@/views/control/RoleList'),
             meta: { title: '角色列表', permission: [ 'table' ] }
           },
           {
-            path: '/list/system-role',
+            path: '/control/system-role',
             name: 'SystemRole',
             component: () => import('@/views/role/RoleList'),
             meta: { title: '角色列表2', permission: [ 'table' ]}
           },
           {
-            path: '/list/permission-list',
+            path: '/control/permission-list',
             name: 'PermissionList',
-            component: () => import('@/views/list/PermissionList'),
+            component: () => import('@/views/control/PermissionList'),
             meta: { title: '权限列表', permission: [ 'table' ] }
           }  
         ]

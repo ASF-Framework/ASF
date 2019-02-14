@@ -4,7 +4,7 @@
       <a-form layout="inline">
         <a-row type="flex" justify="space-around">
           <a-col :md="8" :sm="24">
-            <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+            <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px">新建</a-button>
             <a-select placeholder="请选择状态" default-value="0" style="width:100px">
               <a-select-option value="0">全部</a-select-option>
               <a-select-option value="1">关闭</a-select-option>
@@ -12,13 +12,13 @@
             </a-select>
           </a-col>
           <a-col :span="8" :md="{span:12,offset:4}" :sm="{span:24,offset:0}" :xs="{span:24,offset:0}" :offset="8">
-            <div class="table-page-search-submitButtons" style="float:right">
-              <a-button-group>
-                <a-input placeholder="请输入" style="width:auto" />
+            <span class="table-page-search-submitButtons" style="float:right">
+              <a-input placeholder="请输入" style="width:auto;margin-right:10px"  />
+              <a-button-group>            
                 <a-button type="primary" icon="search">查询</a-button>
                 <a-button icon="undo">重置</a-button>
               </a-button-group>
-            </div>
+            </span>
           </a-col>
         </a-row>
       </a-form>

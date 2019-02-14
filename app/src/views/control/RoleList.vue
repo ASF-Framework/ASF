@@ -2,32 +2,27 @@
   <a-card :bordered="false">
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
-        <a-row :gutter="48">
+       
+        <a-row type="flex" justify="space-around">
           <a-col :md="8" :sm="24">
-            <a-form-item label="角色ID">
-              <a-input placeholder="请输入" />
-            </a-form-item>
+            <a-button type="primary" icon="plus" @click="$refs.modal.add()" style="margin-right:10px">新建</a-button>
+            <a-select placeholder="请选择状态" default-value="0" style="width:100px">
+              <a-select-option value="0">全部</a-select-option>
+              <a-select-option value="1">正常</a-select-option>
+              <a-select-option value="2">禁用</a-select-option>
+            </a-select>
           </a-col>
-          <a-col :md="3" :sm="24">
-            <a-form-item label="状态">
-              <a-select placeholder="请选择" default-value="0" style="width:100px">
-                <a-select-option value="0">全部</a-select-option>
-                <a-select-option value="1">正常</a-select-option>
-                <a-select-option value="2">禁用</a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
-          <a-col :md="8" :sm="24">
-            <span class="table-page-search-submitButtons">
-                <a-button type="primary">查询</a-button>
-                <a-button style="margin-left: 8px">重置</a-button>
-              </span>
+          <a-col :span="8" :md="{span:12,offset:4}" :sm="{span:24,offset:0}" :xs="{span:24,offset:0}" :offset="8">
+            <span class="table-page-search-submitButtons" style="float:right">
+              <a-input placeholder="请输入角色ID" style="width:auto;margin-right:10px"  />
+              <a-button-group>            
+                <a-button type="primary" icon="search">查询</a-button>
+                <a-button icon="undo">重置</a-button>
+              </a-button-group>
+            </span>
           </a-col>
         </a-row>
       </a-form>
-    </div>
-    <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
     </div>
     <s-table ref="table" size="default" :columns="columns" :data="loadData">
       <div slot="expandedRowRender" slot-scope="record" style="margin: 0">

@@ -1,4 +1,5 @@
-﻿using ASF.Domain.Entities;
+﻿using ASF.Domain;
+using ASF.Infrastructure.Model;
 using ASF.Infrastructure.Repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -18,33 +19,33 @@ namespace ASF.Infrastructure.Repository
             _dbContext = dbContext;
         }
 
-        public async Task<Role> AddAsync(Role entity)
+        public async Task<Domain.Entities.Role> AddAsync(Domain.Entities.Role entity)
         {
             var model = Mapper.Map<Model.Role>(entity);
             await _dbContext.AddAsync(model);
             // await _dbContext.SaveChangesAsync();
-            return Mapper.Map<Role>(model);
+            return Mapper.Map<Domain.Entities.Role>(model);
         }
 
-        public async Task<Role> GetAsync(int id)
+        public async Task<Domain.Entities.Role> GetAsync(int id)
         {
             var model = await _dbContext.Roles.FirstOrDefaultAsync(w => w.Id == id);
-            return Mapper.Map<Role>(model);
+            return Mapper.Map<Domain.Entities.Role>(model);
         }
 
-        public async Task<List<Role>> GetList(IList<int> ids)
+        public async Task<List<Domain.Entities.Role>> GetList(IList<int> ids)
         {
             var list = await _dbContext.Roles.Where(w => ids.Contains(w.Id)).ToListAsync();
-            return Mapper.Map<List<Role>>(list);
+            return Mapper.Map<List<Domain.Entities.Role>>(list);
         }
 
-        public async Task<List<Role>> GetList()
+        public async Task<List<Domain.Entities.Role>> GetList()
         {
             var list = await _dbContext.Roles.ToListAsync();
-            return Mapper.Map<List<Role>>(list);
+            return Mapper.Map<List<Domain.Entities.Role>>(list);
         }
 
-        public Task ModifyAsync(Role role)
+        public Task ModifyAsync(Domain.Entities.Role role)
         {
             var model = Mapper.Map<Model.Role>(role);
             _dbContext.Roles.Update(model);

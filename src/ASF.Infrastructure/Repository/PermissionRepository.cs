@@ -17,30 +17,30 @@ namespace ASF.Infrastructure.Repository
         {
             _dbContext = dbContext;
         }
-        public async Task<Permission> AddAsync(Permission entity)
+        public async Task<Domain.Entities.Permission> AddAsync(Domain.Entities.Permission entity)
         {
             var model = Mapper.Map<Model.Permission>(entity);
             await _dbContext.AddAsync(model);
             // await _dbContext.SaveChangesAsync();
-            return Mapper.Map<Permission>(model);
+            return Mapper.Map<Domain.Entities.Permission>(model);
         }
 
-        public async Task<Permission> GetAsync(string id)
+        public async Task<Domain.Entities.Permission> GetAsync(string id)
         {
             var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == id);
-            return Mapper.Map<Permission>(model);
+            return Mapper.Map<Domain.Entities.Permission>(model);
         }
 
-        public async Task<Permission> GetByApiAddress(string apiAddress)
+        public async Task<Domain.Entities.Permission> GetByApiAddress(string apiAddress)
         {
             var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.ApiAddress == apiAddress);
-            return Mapper.Map<Permission>(model);
+            return Mapper.Map<Domain.Entities.Permission>(model);
         }
 
-        public async Task<List<Permission>> GetList(IList<string> ids)
+        public async Task<List<Domain.Entities.Permission>> GetList(IList<string> ids)
         {
             var list = await _dbContext.Permissions.Where(w => ids.Contains(w.Id)).ToListAsync();
-            return Mapper.Map<List<Permission>>(list);
+            return Mapper.Map<List<Domain.Entities.Permission>>(list);
         }
 
         public async Task<bool> HasById(string id)
@@ -49,7 +49,7 @@ namespace ASF.Infrastructure.Repository
             return model == null ? false : true;
         }
 
-        public Task ModifyAsync(Permission permission)
+        public Task ModifyAsync(Domain.Entities.Permission permission)
         {
             var model = Mapper.Map<Model.Permission>(permission);
             _dbContext.Permissions.Update(model);

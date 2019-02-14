@@ -9,4 +9,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ASF.Core\ASF.Core.csproj" />
+  </ItemGroup>
+
 </Project>

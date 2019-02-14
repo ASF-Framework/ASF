@@ -18,36 +18,36 @@ namespace ASF.Infrastructure.Repository
         {
             _dbContext = dbContext;
         }
-        public async Task<Account> AddAsync(Account entity)
+        public async Task<Domain.Entities.Account> AddAsync(Domain.Entities.Account entity)
         {
             var model = Mapper.Map<Model.Account>(entity);
             await _dbContext.AddAsync(model);
             // await _dbContext.SaveChangesAsync();
-            return Mapper.Map<Account>(model);
+            return Mapper.Map<Domain.Entities.Account>(model);
         }
 
-        public async Task<Account> GetAsync(PhoneNumber telephone)
+        public async Task<Domain.Entities.Account> GetAsync(PhoneNumber telephone)
         {
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Telephone == telephone.ToString());
-            return Mapper.Map<Account>(model);
+            return Mapper.Map<Domain.Entities.Account>(model);
         }
 
-        public async Task<Account> GetAsync(int id)
+        public async Task<Domain.Entities.Account> GetAsync(int id)
         {
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Id == id);
-            return Mapper.Map<Account>(model);
+            return Mapper.Map<Domain.Entities.Account>(model);
         }
 
-        public async Task<Account> GetByEmailAsync(string email)
+        public async Task<Domain.Entities.Account> GetByEmailAsync(string email)
         {
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Email == email);
-            return Mapper.Map<Account>(model);
+            return Mapper.Map<Domain.Entities.Account>(model);
         }
 
-        public async Task<Account> GetByUsernameAsync(string username)
+        public async Task<Domain.Entities.Account> GetByUsernameAsync(string username)
         {
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Username == username);
-            return Mapper.Map<Account>(model);
+            return Mapper.Map<Domain.Entities.Account>(model);
         }
 
         public async Task<bool> HasByEmail(string email)
@@ -68,7 +68,7 @@ namespace ASF.Infrastructure.Repository
             return model == null ? false : true;
         }
 
-        public Task ModifyAsync(Account account)
+        public Task ModifyAsync(Domain.Entities.Account account)
         {
             var model = Mapper.Map<Model.Account>(account);
             _dbContext.Accounts.Update(model);

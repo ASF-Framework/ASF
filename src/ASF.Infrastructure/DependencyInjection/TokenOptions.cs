@@ -7,22 +7,55 @@ namespace ASF.Infrastructure.DependencyInjection
 {
     public class TokenOptions
     {
+        public static string DefaultSecret =string.Empty;
+        public static SecurityType DefaultSecurityType;
         public TokenOptions()
         {
-            this.SecurityType = SecurityType.HmacSha256;
             this.Expires = 30;//默认30分钟
-            this.Secret = GetRandomString(256, true, true, true, false, string.Empty);
             this.Audience = "ASF";
+            this.Issuer = "ASF";
             this.DefaultScheme = "Bearer";
+
+            this.InitDefault();
         }
+        private string _secret;
+        private SecurityType _securityType;
         /// <summary>
         /// 签名秘钥
         /// </summary>
-        public string Secret { get; set; }
+        public string Secret
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_secret))
+                {
+                    return TokenOptions.DefaultSecret;
+                }
+                else
+                {
+                    return _secret;
+                }
+            }
+            set { _secret = value; }
+        }
         /// <summary>
         /// 签发秘钥方式
         /// </summary>
-        public SecurityType SecurityType { get; set; }
+        public SecurityType SecurityType
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_secret))
+                {
+                    return TokenOptions.DefaultSecurityType;
+                }
+                else
+                {
+                    return _securityType;
+                }
+            }
+            set { _securityType = value; }
+        }
         /// <summary>
         /// 签发者
         /// </summary>
@@ -132,6 +165,19 @@ namespace ASF.Infrastructure.DependencyInjection
             RSAParameters param = ASF.Internal.Security.RSA.DecodePkcsPrivateKey(secret);
             RsaSecurityKey securityKey = new RsaSecurityKey(param);
             return new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha512);
+        }
+
+        private  void InitDefault()
+        {
+            if (!string.IsNullOrEmpty(TokenOptions.DefaultSecret))
+                return;
+            lock (TokenOptions.DefaultSecret)
+            {
+                if (!string.IsNullOrEmpty(TokenOptions.DefaultSecret))
+                    return;
+                TokenOptions.DefaultSecret = GetRandomString(256, true, true, true, false, string.Empty);
+                TokenOptions.DefaultSecurityType = SecurityType.HmacSha256;
+            }
         }
     }
 

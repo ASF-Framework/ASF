@@ -2,6 +2,7 @@
 using ASF.Domain.Values;
 using ASF.Infrastructure.Anticorrsives;
 using ASF.Infrastructure.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,22 @@ namespace ASF.Domain.Services
         private readonly IAccountRepository _accountRepository;
         private readonly IAccessTokenGenerate _tokenGenerate;
         private readonly LogLoginRecordService _logLoginRecordService;
+        private readonly IMemoryCache _memoryCache;
         private string loginType = string.Empty;
+        private int maxLoginFailedCount = 5;
 
-        public AccountLoginService(IAccountRepository accountRepository, IAccessTokenGenerate tokenGenerate, LogLoginRecordService logLoginRecordService)
+        public AccountLoginService(
+            IAccountRepository accountRepository,
+            IAccessTokenGenerate tokenGenerate,
+            LogLoginRecordService logLoginRecordService,
+            IMemoryCache memoryCache)
         {
             _accountRepository = accountRepository;
             _tokenGenerate = tokenGenerate;
             _logLoginRecordService = logLoginRecordService;
+            _memoryCache = memoryCache;
         }
+
 
         /// <summary>
         /// 使用用户名登录
@@ -38,7 +47,7 @@ namespace ASF.Domain.Services
             //获取用户数据
             var account = _accountRepository.GetByUsernameAsync(username).GetAwaiter().GetResult();
             if (account == null)
-                return Result<Account>.ReFailure(ResultCodes.AccountNotExist);
+                return Result<Account>.ReFailure(ResultCodes.AccountPasswordNotSame);
 
             //登录验证
             loginType = "UsernameAndPassword";
@@ -56,7 +65,7 @@ namespace ASF.Domain.Services
             //获取用户数据
             var account = _accountRepository.GetByEmailAsync(email).GetAwaiter().GetResult();
             if (account == null)
-                return Result<Account>.ReFailure(ResultCodes.AccountNotExist);
+                return Result<Account>.ReFailure(ResultCodes.AccountPasswordNotSame);
 
             //登录验证
             loginType = "EmailAndPassword";
@@ -74,7 +83,7 @@ namespace ASF.Domain.Services
             //获取用户数据
             var account = _accountRepository.GetAsync(telephone).GetAwaiter().GetResult();
             if (account == null)
-                return Result<Account>.ReFailure(ResultCodes.AccountNotExist);
+                return Result<Account>.ReFailure(ResultCodes.AccountPasswordNotSame);
 
             //登录验证
             loginType = "TelephoneAndPassword";
@@ -93,7 +102,16 @@ namespace ASF.Domain.Services
             if (!account.IsAllowLogin())
                 return Result<Account>.ReFailure(ResultCodes.AccountNotAllowedLogin);
             if (!account.HasPassword(password))
-                return Result<Account>.ReFailure(ResultCodes.AccountPasswordNotSame);
+            {
+                //获取是否有登录失败信息
+                LoginFailed loginFailed = this.GetLoginFailedInfo(account.Username);
+                loginFailed.Accumulative();
+                if (loginFailed.FailedCount >= this.maxLoginFailedCount)
+                {
+                    return Result<Account>.ReFailure(ResultCodes.AccountPasswordNotSameOverrun);
+                }
+                return Result<Account>.ReFailure(ResultCodes.AccountPasswordNotSame2.ToFormat((this.maxLoginFailedCount- loginFailed.FailedCount).ToString()));
+            }
 
             //生成访问Token
             Dictionary<string, string> claims = new Dictionary<string, string>();
@@ -109,7 +127,32 @@ namespace ASF.Domain.Services
 
             //记录登录日志
             this._logLoginRecordService.Record(account, loginType);
+            //移除登录失败记录
+            this.RemoveLoginFailedInfo(account.Username);
             return Result<Account>.ReSuccess(account);
+        }
+
+
+        /// <summary>
+        /// 获取登录失败信息
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        private LoginFailed GetLoginFailedInfo(string username)
+        {
+            string key = "LOGIN_FILED_" + username;
+            if (_memoryCache.TryGetValue<LoginFailed>(key, out LoginFailed loginFailed))
+            {
+                return loginFailed;
+            }
+            return _memoryCache.Set<LoginFailed>(key, new LoginFailed(username), TimeSpan.FromMinutes(30));
+        }
+
+
+        private void RemoveLoginFailedInfo(string username)
+        {
+            string key = "LOGIN_FILED_" + username;
+            _memoryCache.Remove(key);
         }
     }
 }

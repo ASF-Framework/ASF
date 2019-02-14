@@ -43,7 +43,7 @@ namespace ASF.Domain.Entities
         /// <summary>
         /// 登录密码
         /// </summary>
-        [Required, StringLength(20, MinimumLength = 6)]
+        [Required, StringLength(32, MinimumLength = 6)]
         public string Password { get; private set; }
         /// <summary>
         /// 手机号码
@@ -103,7 +103,7 @@ namespace ASF.Domain.Entities
         /// <returns></returns>
         public bool HasPassword(string password)
         {
-            return this.Password == password;
+            return this.Password .Equals( password);
         }
 
         /// <summary>

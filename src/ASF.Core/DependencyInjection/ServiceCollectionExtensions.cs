@@ -13,7 +13,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddASFCore(this IServiceCollection services, Action<ASFBuilder> startupAction)
         {
-            services.AddAutoMapper();
             ASFBuilder builder = new ASFBuilder(services);
             startupAction?.Invoke(builder);
             builder.Build();

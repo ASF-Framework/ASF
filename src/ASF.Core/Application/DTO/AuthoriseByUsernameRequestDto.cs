@@ -16,13 +16,13 @@ namespace ASF.Application.DTO
         /// <summary>
         /// 登录密码
         /// </summary>
-        [Required, StringLength(20, MinimumLength = 6)]
+        [Required, StringLength(32, MinimumLength = 6)]
         public string Password { get; set; }
         /// <summary>
         /// 验证方式
         /// </summary>
         [Required]
-        public string ValidType { get; set; }
+        public string ValidType { get; set; } = "None";
         /// <summary>
         /// 验证码数据
         /// </summary>

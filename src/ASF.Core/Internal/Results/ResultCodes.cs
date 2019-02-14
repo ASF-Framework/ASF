@@ -12,7 +12,7 @@
         /// <summary>
         /// 错误请求
         /// </summary>
-        public static ValueTuple<int, string> BadRequest = (200, "{0}");
+        public static ValueTuple<int, string> BadRequest = (400, "{0}");
         /// <summary>
         /// 未授权
         /// </summary>

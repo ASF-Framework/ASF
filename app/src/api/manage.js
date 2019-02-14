@@ -1,8 +1,8 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  admin:'/admin',
-  userdetail:'/user/detail',
+  admin: '/admin',
+  userdetail: '/user/detail',
   user: '/user',
   role: '/role',
   service: '/service',
@@ -13,22 +13,21 @@ const api = {
 
 export default api
 
-export function getUserDetail(parameter){
+export function getUserDetail (parameter) {
   return axios({
-    url:api.userdetail,
-    method:'get',
-    params:parameter
+    url: api.userdetail,
+    method: 'get',
+    params: parameter
   })
 }
 
-export function getAdminList(parameter){
+export function getAdminList (parameter) {
   return axios({
     url: api.admin,
     method: 'get',
     params: parameter
   })
 }
-
 
 export function getUserList (parameter) {
   return axios({

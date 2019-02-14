@@ -16,7 +16,7 @@ namespace ASF.Domain.Services
         private readonly IPermissionRepository _permissionRepository;
         private readonly ILogger _logger;
 
-        public AccountAuthorizationService(IRoleRepository roleRepository, IPermissionRepository permissionRepository, ILogger logger)
+        public AccountAuthorizationService(IRoleRepository roleRepository, IPermissionRepository permissionRepository, ILogger<AccountAuthorizationService> logger)
         {
             _roleRepository = roleRepository;
             _permissionRepository = permissionRepository;

@@ -12,11 +12,14 @@ namespace ASF.Domain
         public static ValueTuple<int, string> AccountOldPasswordAndNewPasswordSame = (10002, "新密码和旧密码不能一样，为了安全请重新输入");
         public static ValueTuple<int, string> AccountTelephoneExist = (10003, "输入的手机号码已经被使用，请重新输入");
         public static ValueTuple<int, string> AccountNotExist = (10004, "用户不存在");
-        public static ValueTuple<int, string> AccountPasswordNotSame = (10005, "与当前账户密码不匹配");
         public static ValueTuple<int, string> AccountEmailExist = (10006, "输入的邮箱地址已经被使用，请重新输入");
         public static ValueTuple<int, string> AccountRoleAssignationFailed = (10007, "账户角色分配失败，请重试");
         public static ValueTuple<int, string> AccountNotAllowedLogin = (10008, "账户被禁止登陆，请联系管理员");
         public static ValueTuple<int, string> AccountUnavailable = (10009, "账户暂不可以使用");
+        public static ValueTuple<int, string> AccountPasswordNotSame = (10010, "账户密码不匹配");
+        public static ValueTuple<int, string> AccountPasswordNotSame2 = (10012, "账户密码不匹配，失败{0}次之后自动锁定账号");
+        public static ValueTuple<int, string> AccountPasswordNotSameOverrun = (10012, "登录失败超限，请30分钟之后再试");
+
 
         //角色错误码
         public static ValueTuple<int, string> RoleNotExist = (11000, "角色不存在");

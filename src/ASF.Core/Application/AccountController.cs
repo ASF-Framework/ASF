@@ -1,4 +1,5 @@
 ﻿using ASF.Application.DTO;
+using ASF.Domain;
 using ASF.Domain.Entities;
 using ASF.Domain.Services;
 using ASF.Domain.Values;
@@ -8,7 +9,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ASF.Application
@@ -205,11 +208,54 @@ namespace ASF.Application
             //数据持久化
             _operateLog.Record(ASFPermissions.AccountModifyTelephone, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志
             await _accountRepository.ModifyAsync(modifyResult.Data);
-            
+
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
+        /// <summary>
+        /// 获取登录用户信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Roles = "self")]
+        public async Task<Result<AccountInfoByLoginResponseDto>> Info()
+        {
+            int uid = this.User.UserId();
+            Account account = await _accountRepository.GetAsync(uid);
+            if (account == null)
+                return Result<AccountInfoByLoginResponseDto>.ReFailure(ResultCodes.AccountNotExist);
 
+            AccountInfoByLoginResponseDto responseDto = new AccountInfoByLoginResponseDto(account);
+
+            //获取账户角色
+            var roles = await this._serviceProvider.GetRequiredService<IRoleRepository>().GetList(account.Roles.ToList());
+            if (roles == null || roles.Count == 0)
+                return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
+
+            //获取权限
+            var pids = new List<string>();
+            roles.Where(f=>f.IsNormal()).Select(f => f.Permissions.ToList()).ToList().ForEach(p =>
+            {
+                pids = pids.Zip(p, (first, second) => first + second).ToList();
+            });
+            var permissions = await this._serviceProvider.GetRequiredService<IPermissionRepository>().GetList(pids);
+            if (permissions.Count == 0)
+                return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
+
+            //组装返回数据
+            permissions.Where(f => f.IsNormal()).ToList().ForEach(p =>
+            {
+                if (p.Type != PermissionType.Menu)
+                    return;
+                var permissionInfo = new AccountInfoByLoginResponseDto.PermissionInfo(p);
+                responseDto.Role.Permissions.Add(permissionInfo);
+                permissions.Where(f => f.Type == PermissionType.Action && f.ParentId == p.Id).ToList().ForEach(a =>
+                {
+                    permissionInfo.Actions.Add(new AccountInfoByLoginResponseDto.ActionInfo(a));
+                });
+            });
+            return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
+        }
 
     }
 }

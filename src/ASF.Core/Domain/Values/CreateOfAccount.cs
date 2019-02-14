@@ -7,11 +7,12 @@ namespace ASF.Domain.Values
     /// <summary>
     /// 创建的账户信息
     /// </summary>
-    public class CreateOfAccount: IValueObject
+    public class CreateOfAccount : IValueObject
     {
         public CreateOfAccount(Account account)
         {
-            this.CreateId = account.Id;
+            if (account != null)
+                this.CreateId = account.Id;
         }
 
         public CreateOfAccount(int createOfAccountId)

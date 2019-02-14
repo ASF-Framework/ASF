@@ -2,10 +2,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.Linq;
 
 namespace ASF
 {
@@ -29,6 +33,22 @@ namespace ASF
 
             if (httpContext.User.Identity.IsAuthenticated)
             {
+                //验证请求Action是角色权限
+                if (context.Resource is AuthorizationFilterContext authContext)
+                {
+                    if (authContext.ActionDescriptor is ControllerActionDescriptor actionDescriptor)
+                    {
+                        var atts = actionDescriptor.MethodInfo.GetCustomAttributes<AuthorizeAttribute>(true);
+                        if (atts.Count() > 0)
+                        {
+                            if (atts.Where(f => f.Roles.ToLower() == "self").Count() > 0)
+                            {
+                                context.Succeed(requirement);
+                                return Task.CompletedTask;
+                            }
+                        }
+                    }
+                }
                 //验证登陆用户是否有权限
                 var result = this._serviceProvider.GetRequiredService<AccountAuthorizationService>().Authentication(roles, httpContext.Request);
                 var requestPath = httpContext.Request.PathBase + httpContext.Request.Path;
@@ -41,10 +61,11 @@ namespace ASF
                 }
                 else
                 {
+                    context.Fail();
                     this._logger.LogWarning($"{requestPath} Permission authorization failed");
                 }
             }
-            context.Fail();
+
             return Task.CompletedTask;
         }
     }

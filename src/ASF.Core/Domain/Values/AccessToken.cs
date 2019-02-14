@@ -11,14 +11,14 @@ namespace ASF.Domain.Values
         {
 
         }
-        public AccessToken(string token, string tokenType, DateTime expired, string refreshToken)
+        public AccessToken(string token, string tokenType, long expired, string refreshToken)
         {
             this.Token = token;
             this.TokenType = tokenType;
             this.RefreshToken = refreshToken;
             this.Expired = expired;
         }
-        public AccessToken(string token, string tokenType, DateTime expired) :this(token,tokenType, expired, null)
+        public AccessToken(string token, string tokenType, long expired) :this(token,tokenType, expired, null)
         {
         
         }
@@ -37,6 +37,6 @@ namespace ASF.Domain.Values
         /// <summary>
         /// 过期时间
         /// </summary>
-        public DateTime Expired { get; private set; }
+        public long Expired { get; private set; }
     }
 }

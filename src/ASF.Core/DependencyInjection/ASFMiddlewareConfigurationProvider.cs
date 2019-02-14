@@ -8,7 +8,7 @@ namespace ASF
     {
         public static OcelotMiddlewareConfigurationDelegate Get = builder =>
         {
-            builder.Map("/ASF", app =>
+            builder.Map("/API/ASF", app =>
             {
                 app.UseAuthentication();
                 app.UseMvc(routes =>

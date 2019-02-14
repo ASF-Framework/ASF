@@ -1,6 +1,8 @@
-﻿using ASF.DependencyInjection;
+﻿using ASF;
+using ASF.DependencyInjection;
 using ASF.Infrastructure.Anticorrsives;
 using ASF.Infrastructure.DependencyInjection;
+using ASF.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -19,12 +21,13 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 throw new ApplicationException("can't find JwtAuthorize section in appsetting.json");
             }
-            ASFOptions options = new ASFOptions();
-            if (configuration.GetSection("ASFOptions") != null)
+
+            ASFOptions options = configuration.GetSection("ASFOptions").Get<ASFOptions>();
+            if (options == null)
             {
-                options = configuration.GetSection("ASFOptions").Get<ASFOptions>();
+                options = new ASFOptions();
             }
-            builder.Services.ConfigureOptions(options);
+            builder.Services.Configure<ASFOptions>(configuration.GetSection("ASFOptions"));
 
             builder.AddRepositories();
             builder.AddAnticorrsives();
@@ -36,7 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             ASFOptions options = new ASFOptions();
             startupAction?.Invoke(options);
-            builder.Services.ConfigureOptions(options);
+            builder.Services.ConfigureOptions(startupAction);
 
             builder.AddRepositories();
             builder.AddAnticorrsives();
@@ -51,6 +54,11 @@ namespace Microsoft.Extensions.DependencyInjection
         private static void AddRepositories(this ASFBuilder builder)
         {
             var services = builder.Services;
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<ILoggingRepository, LoggingRepository>();
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
         }
         /// <summary>
         /// 注入防腐层

@@ -9,9 +9,12 @@ namespace ASF.Domain.Entities
     /// </summary>
     public class Permission : IEntity
     {
-        public Permission(string code,string parentId,string name, PermissionType type,string description)
+        public Permission(string code, string parentId, string name, PermissionType type, string description)
         {
-            this.Id = $"{parentId}.{code}";
+            if (!string.IsNullOrEmpty(parentId))
+                this.Id = $"{parentId}.{code}";
+            else
+                this.Id = code;
             this.Code = code;
             this.ParentId = parentId;
             this.Name = name;
@@ -65,7 +68,7 @@ namespace ASF.Domain.Entities
         /// <summary>
         /// 排序
         /// </summary>
-        public int Sort { get; set; } 
+        public int Sort { get; set; }
         /// <summary>
         /// 是否启用
         /// </summary>
@@ -77,7 +80,7 @@ namespace ASF.Domain.Entities
         /// </summary>
         [Required]
         public DateTime CreateTime { get; private set; } = DateTime.Now;
-     
+
 
         /// <summary>
         /// 权限是否可用

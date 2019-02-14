@@ -19,6 +19,9 @@ namespace ASF.DependencyInjection
 
         public void Build()
         {
+            Services.AddAutoMapper();
+            Services.AddMemoryCache();
+
             this.AddDomainServices();
             this.AddAuthorization();
         }

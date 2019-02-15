@@ -22,7 +22,7 @@ namespace ASF.Infrastructure.Repository
         {
             var model = Mapper.Map<Model.Account>(entity);
             await _dbContext.AddAsync(model);
-            // await _dbContext.SaveChangesAsync();
+            //await _dbContext.SaveChangesAsync();
             return Mapper.Map<Domain.Entities.Account>(model);
         }
 
@@ -68,12 +68,12 @@ namespace ASF.Infrastructure.Repository
             return model == null ? false : true;
         }
 
-        public Task ModifyAsync(Domain.Entities.Account account)
+        public async Task ModifyAsync(Domain.Entities.Account account)
         {
-            var model = Mapper.Map<Model.Account>(account);
+            var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Id == account.Id);
+            Mapper.Map(account, model);
             _dbContext.Accounts.Update(model);
-            // await _dbContext.SaveChangesAsync();
-            return Task.FromResult(0);
+           // await _dbContext.SaveChangesAsync();
         }
 
         public async Task RemoveAsync(int primaryKey)
@@ -81,7 +81,7 @@ namespace ASF.Infrastructure.Repository
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Id == primaryKey);
             model.Delete();
             _dbContext.Accounts.Update(model);
-            // await _dbContext.SaveChangesAsync();
+            //await _dbContext.SaveChangesAsync();
         }
     }
 }

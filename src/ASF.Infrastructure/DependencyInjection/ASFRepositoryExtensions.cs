@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ASF.Infrastructure.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection
 {
    public static class ASFRepositoryExtensions
     {

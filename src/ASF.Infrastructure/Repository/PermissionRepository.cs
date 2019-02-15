@@ -49,12 +49,12 @@ namespace ASF.Infrastructure.Repository
             return model == null ? false : true;
         }
 
-        public Task ModifyAsync(Domain.Entities.Permission permission)
+        public async Task ModifyAsync(Domain.Entities.Permission permission)
         {
-            var model = Mapper.Map<Model.Permission>(permission);
+            var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == permission.Id);
+            Mapper.Map(permission, model);
             _dbContext.Permissions.Update(model);
             // await _dbContext.SaveChangesAsync();
-            return Task.FromResult(0);
         }
 
         public async Task RemoveAsync(string primaryKey)

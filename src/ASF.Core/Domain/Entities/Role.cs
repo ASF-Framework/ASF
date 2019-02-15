@@ -16,6 +16,7 @@ namespace ASF.Domain.Entities
             this.CreateInfo = new CreateOfAccount(createOfAccountId);
             this.Name = name;
             this.Description = description;
+            this.Enable = true;
         }
         /// <summary>
         /// 角色编号

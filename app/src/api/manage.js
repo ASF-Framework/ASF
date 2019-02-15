@@ -1,9 +1,8 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  admin: '/admin',
+  admin: '/asf/account/list',
   userdetail: '/user/detail',
-  user: '/user',
   role: '/role',
   service: '/service',
   permission: '/permission',
@@ -24,14 +23,6 @@ export function getUserDetail (parameter) {
 export function getAdminList (parameter) {
   return axios({
     url: api.admin,
-    method: 'get',
-    params: parameter
-  })
-}
-
-export function getUserList (parameter) {
-  return axios({
-    url: api.user,
     method: 'get',
     params: parameter
   })

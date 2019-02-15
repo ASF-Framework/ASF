@@ -22,6 +22,10 @@ namespace ASF.Application.DTO
         /// </summary>
         public string Username { get; set; }
         /// <summary>
+        /// 头像
+        /// </summary>
+        public string Avatar { get; set; }
+        /// <summary>
         /// 手机号码
         /// </summary>
         public string Telephone { get; set; }

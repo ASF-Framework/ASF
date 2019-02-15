@@ -276,6 +276,7 @@ namespace ASF.Application
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ResultPagedList<AccountInfoResponseDto>> List([FromBody]AccountInfoListPagedRequestDto dto)
         {
             //验证请求数据合法性

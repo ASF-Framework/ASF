@@ -14,6 +14,7 @@ namespace ASF.Infrastructure.Repositories
         public AccountRepository()
         {
             Account account = new Account("admin", "21232f297a57a5a743894a0e4a801fc3", null);
+            account.SetRoles(new List<int>() { 0 });
             Accounts.Add(account);
 
         }

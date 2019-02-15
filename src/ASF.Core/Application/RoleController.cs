@@ -1,10 +1,12 @@
 ﻿using ASF.Application.DTO;
 using ASF.Domain.Services;
 using ASF.Infrastructure.Repositories;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
@@ -47,7 +49,7 @@ namespace ASF.Application
             //数据持久化
             _operateLog.Record(ASFPermissions.RoleCreate, dto.ToString(), "Success");  //记录日志
             await _roleRepository.AddAsync(createResult.Data);
-            await _unitOfWork.CommitAsync(autoRollback:true);
+            await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
         /// <summary>
@@ -103,6 +105,25 @@ namespace ASF.Application
             await _roleRepository.ModifyAsync(dto.RoleId, dto.Enable);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
+        }
+
+        /// <summary>
+        /// 获取角色集合
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ResultPagedList<RoleInfoResponseDto>> List([FromBody]RoleInfoListPagedRequestDto dto)
+        {
+            //验证请求数据合法性
+            var result = dto.Valid();
+            if (!result.Success)
+                return ResultPagedList<RoleInfoResponseDto>.ReFailure(result);
+
+            //获取角色
+            var roelResult = await this._roleRepository.GetList(dto);
+            var roles = Mapper.Map<IList<RoleInfoResponseDto>>(roelResult.Roles);
+            return ResultPagedList<RoleInfoResponseDto>.ReSuccess(roles, roelResult.TotalCount);
         }
 
     }

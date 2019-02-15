@@ -1,4 +1,5 @@
-﻿using ASF.Domain.Entities;
+﻿using ASF.Application.DTO;
+using ASF.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -31,5 +32,12 @@ namespace ASF.Infrastructure.Repositories
         /// <param name="enable">是否可用</param>
         /// <returns></returns>
         Task ModifyAsync(int roleId,bool enable);
+
+        /// <summary>
+        /// 分页获取角色集合
+        /// </summary>
+        /// <param name="requestDto"></param>
+        /// <returns></returns>
+        Task<(IList<Role> Roles, int TotalCount)> GetList(RoleInfoListPagedRequestDto requestDto);
     }
 }

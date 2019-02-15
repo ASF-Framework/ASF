@@ -11,7 +11,7 @@ namespace ASF.Infrastructure.Repositories
     public class AccountRepository : IAccountRepository
     {
         static List<Account> Accounts = new List<Account>();
-        public AccountRepository()
+        static AccountRepository()
         {
             Account account = new Account("admin", "21232f297a57a5a743894a0e4a801fc3", null);
             account.SetRoles(new List<int>() { 0 });

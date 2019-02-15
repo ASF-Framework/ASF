@@ -1,4 +1,5 @@
-﻿using ASF.Domain.Entities;
+﻿using ASF.Application.DTO;
+using ASF.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,8 +8,8 @@ namespace ASF.Infrastructure.Repositories
 {
     public class RoleRepository : IRoleRepository
     {
-        List<Role> Roles = new List<Role>();
-        public RoleRepository()
+       static List<Role> Roles = new List<Role>();
+        static RoleRepository()
         {
             Role role = new Role("admin", "admin", 1);
             role.SetPermissions(new List<string>()
@@ -35,6 +36,12 @@ namespace ASF.Infrastructure.Repositories
         public Task<List<Role>> GetList()
         {
             throw new NotImplementedException();
+        }
+
+        public Task<(IList<Role> Roles, int TotalCount)> GetList(RoleInfoListPagedRequestDto requestDto)
+        {
+            var a = new ValueTuple<IList<Role>, int>(RoleRepository.Roles, RoleRepository.Roles.Count);
+            return Task.FromResult(a);
         }
 
         public Task ModifyAsync(Role role)

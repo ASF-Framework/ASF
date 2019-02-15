@@ -1,6 +1,8 @@
 ﻿using ASF.Domain.Values;
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ASF.Application.DTO
 {
@@ -44,10 +46,12 @@ namespace ASF.Application.DTO
         /// <summary>
         /// 最后登录时间
         /// </summary>
+        [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime LoginTime { get; set; }
         /// <summary>
         /// 角色集
         /// </summary>
-        public List<string> Roles { get;  set; } = new List<string>();
+        [JsonConverter(typeof(UnixDateTimeConverter))]
+        public List<string> Roles { get; set; } = new List<string>();
     }
 }

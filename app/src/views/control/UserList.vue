@@ -5,30 +5,40 @@
         <a-row :gutter="0">
           <a-col :md="12" :sm="24">
             <a-tooltip>
-              <template slot="title">新建角色</template>
+              <template slot="title">新建角色
+              </template>
               <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px"></a-button>
             </a-tooltip>
-            <a-select placeholder="请选择状态" style="width:120px">
-              <a-select-option value="0">全部</a-select-option>
+            <a-select placeholder="登录状态" style="width:120px;margin-right:10px">
+              <a-select-option value="-1">全部</a-select-option>
               <a-select-option value="1">正常</a-select-option>
-              <a-select-option value="2">禁用</a-select-option>
+              <a-select-option value="2">不可登录</a-select-option>
+            </a-select>
+             <a-select placeholder="禁用状态" style="width:120px">
+              <a-select-option value="">全部</a-select-option>
+              <a-select-option value="0">启用</a-select-option>
+              <a-select-option value="1">禁用</a-select-option>
             </a-select>
           </a-col>
 
           <a-col :md="12" :sm="24">
             <span class="table-page-search-submitButtons" style="float:right">
               <a-input
-                placeholder="请输入登录名"
+                placeholder="请输入ID/昵称/用户名"
                 v-model="filters.name"
-                style="width:auto;margin-right:10px"
+                style="width:auto;margin-right:10px"  
               />
               <a-button-group>
                 <a-tooltip>
-                  <template slot="title">查询</template>
+                <template slot="title">
+                  查询
+                </template>
                   <a-button type="primary" icon="search" @click="loadData"></a-button>
                 </a-tooltip>
                 <a-tooltip>
-                  <template slot="title">清除查询条件</template>
+                <template slot="title">
+                  重置查询条件
+                </template>
                   <a-button icon="undo"></a-button>
                 </a-tooltip>
               </a-button-group>
@@ -41,6 +51,9 @@
     <s-table size="default" :columns="columns" :data="loadData">
       <span slot="roles" slot-scope="text, record">
         <a-tag v-for="(role, index) in record.roles" :key="index">{{ role.roleName}}</a-tag>
+      </span>
+      <span slot="isDelete" slot-scope="text, record">
+       {{formatIsDelete(record.isDelete)}}
       </span>
       <span slot="action" slot-scope="text, record">
         <a @click="handleEdit(record)">编辑</a>
@@ -152,171 +165,211 @@
 </template>
 
 <script>
-import STable from '@/components/table/'
-import { getRoleList, getServiceList, getAdminList } from '@/api/manage'
-
-export default {
-  name: 'TableList',
-  components: {
-    STable
-  },
-  data() {
-    return {
-      description:
-        '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
-      visible: false,
-      visibleAdd: false,
-      filters: {
-        name: ''
-      },
-      labelCol: {
-        xs: {
-          span: 24
+  import STable from '@/components/table/'
+  import {
+    getRoleList,
+    getServiceList,
+    getAdminList
+  } from '@/api/manage'
+  export default {
+    name: 'TableList',
+    components: {
+      STable
+    },
+    data() {
+      return {
+        description: '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
+        visible: false,
+        visibleAdd: false,
+        filters: {
+          name: ''
         },
-        sm: {
-          span: 5
-        }
-      },
-      wrapperCol: {
-        xs: {
-          span: 24
-        },
-        sm: {
-          span: 16
-        }
-      },
-      form: null,
-      mdl: {},
-      // 高级搜索 展开/关闭
-      advanced: false,
-      // 查询参数
-      queryParam: {},
-      // 表头
-      columns: [
-        {
-          title: '登录名',
-          dataIndex: 'name'
-        },
-        {
-          title: '角色集',
-          dataIndex: 'roles',
-          scopedSlots: {
-            customRender: 'roles'
+        labelCol: {
+          xs: {
+            span: 24
+          },
+          sm: {
+            span: 5
           }
         },
-        {
-          title: '状态',
-          dataIndex: 'status'
-        },
-        {
-          title: '创建时间',
-          dataIndex: 'createTime',
-          sorter: true
-        },
-        {
-          title: '操作',
-          width: '150px',
-          dataIndex: 'action',
-          scopedSlots: {
-            customRender: 'action'
+        wrapperCol: {
+          xs: {
+            span: 24
+          },
+          sm: {
+            span: 16
           }
-        }
-      ],
-      permissionList: null,
-      // 加载数据方法 必须为 Promise 对象
-      loadData: parameter => {
-        return getAdminList(parameter).then(res => {
-          return res.result
+        },
+        form: null,
+        mdl: {},
+        // 高级搜索 展开/关闭
+        advanced: false,
+        // 查询参数
+        queryParam: {},
+        // 表头
+        columns: [{
+            title: '唯一标识',
+            dataIndex: 'id',
+            align: 'center'
+          },
+          {
+            title: '昵称',
+            dataIndex: 'name',
+            align: 'center'
+          },
+          {
+            title: '用户名',
+            dataIndex: 'username',
+            align: 'center'
+          },
+          {
+            title: '手机号码',
+            dataIndex: 'telephone',
+            align: 'center'
+          },
+          {
+            title: '邮箱地址',
+            dataIndex: 'email',
+            align: 'center'
+          },
+          {
+            title: '角色集',
+            dataIndex: 'roles',
+            align: 'center',
+            scopedSlots: {
+              customRender: 'roles'
+            }
+          },
+          {
+            title: '登录状态',
+            dataIndex: 'status',
+            align: 'center'
+          },
+          {
+            title: '禁用状态',
+            dataIndex: 'isDelete',
+            align: 'center',
+            scopedSlots: {
+              customRender: 'isDelete'
+            }
+          },
+          {
+            title: '创建时间',
+            dataIndex: 'createTime',
+            sorter: true,
+            align: 'center'
+          },
+          {
+            title: '最后登录时间',
+            dataIndex: 'loginTime',
+            sorter: true,
+            align: 'center'
+          },
+          {
+            title: '操作',
+            width: '150px',
+            dataIndex: 'action',
+            scopedSlots: {
+              customRender: 'action'
+            }
+          }
+        ],
+        permissionList: null,
+        // 加载数据方法 必须为 Promise 对象
+        loadData: parameter => {
+          return getAdminList(parameter).then(res => {
+            return res.result
+          })
+        },
+        selectedRowKeys: [],
+        selectedRows: []
+      }
+    },
+    created() {
+      getServiceList().then(res => {
+        console.log('getServiceList.call()', res)
+      })
+      getRoleList().then(res => {
+        this.permissionList = res.result.data
+        console.log('getRoleList.call()', res)
+      })
+      getAdminList(this.filters).then(res => {
+        console.log('getAdminList.call()', res)
+      })
+    },
+    methods: {
+      formatIsDelete(value) {
+      return value == true ? "启用" : "禁用";
+        },
+      //禁用
+      handleDisables(record) {
+        const that = this
+        this.$confirm({
+          title: '提示',
+          content: '确定要禁用吗 ?',
+          onOk() {
+            // that.$message.info({
+            //   title: '提示',
+            //   description: '功能正在升级当中'
+            // })
+            that.$message.success('功能正在升级当中')
+          },
+          onCancel() {}
         })
       },
-      selectedRowKeys: [],
-      selectedRows: []
+      handleDelete(record) {
+        const that = this
+        this.$confirm({
+          title: '提示',
+          content: '确定要删除吗 ?',
+          onOk() {
+            // that.$message.info({
+            //   title: '提示',
+            //   description: '功能正在升级当中'
+            // })
+            that.$message.success('功能正在升级当中')
+          },
+          onCancel() {}
+        })
+      },
+      handleAdd() {
+        this.visibleAdd = true
+      },
+      handleEdit(record) {
+        this.mdl = Object.assign({}, record)
+        // this.mdl.permissions.forEach(permission => {
+        //   permission.actionsOptions = permission.actionEntitySet.map(action => {
+        //     return {
+        //       label: action.describe,
+        //       value: action.action,
+        //       defaultCheck: action.defaultCheck
+        //     }
+        //   })
+        // })
+        this.visible = true
+      },
+      handleOk() {},
+      onChange(selectedRowKeys, selectedRows) {
+        this.selectedRowKeys = selectedRowKeys
+        this.selectedRows = selectedRows
+      },
+      toggleAdvanced() {
+        this.advanced = !this.advanced
+      }
+    },
+    watch: {
+      /*
+          'selectedRows': function (selectedRows) {
+            this.needTotalList = this.needTotalList.map(item => {
+              return {
+                ...item,
+                total: selectedRows.reduce( (sum, val) => {
+                  return sum + val[item.dataIndex]
+                }, 0)
+              }
+            })
+          }
+          */
     }
-  },
-  created() {
-    getServiceList().then(res => {
-      console.log('getServiceList.call()', res)
-    })
-    getRoleList().then(res => {
-      this.permissionList = res.result.data
-      console.log('getRoleList.call()', res)
-    })
-    getAdminList(this.filters).then(res => {
-      console.log('getAdminList.call()', res)
-    })
-  },
-  methods: {
-    //禁用
-    handleDisables(record) {
-      const that = this
-      this.$confirm({
-        title: '提示',
-        content: '确定要禁用吗 ?',
-        onOk() {
-          // that.$message.info({
-          //   title: '提示',
-          //   description: '功能正在升级当中'
-          // })
-          that.$message.success('功能正在升级当中')
-        },
-        onCancel() {}
-      })
-    },
-    handleDelete(record) {
-      const that = this
-      this.$confirm({
-        title: '提示',
-        content: '确定要删除吗 ?',
-        onOk() {
-          // that.$message.info({
-          //   title: '提示',
-          //   description: '功能正在升级当中'
-          // })
-          that.$message.success('功能正在升级当中')
-        },
-        onCancel() {}
-      })
-    },
-    handleAdd() {
-      this.visibleAdd = true
-    },
-    handleEdit(record) {
-      this.mdl = Object.assign({}, record)
-      // this.mdl.permissions.forEach(permission => {
-      //   permission.actionsOptions = permission.actionEntitySet.map(action => {
-      //     return {
-      //       label: action.describe,
-      //       value: action.action,
-      //       defaultCheck: action.defaultCheck
-      //     }
-      //   })
-      // })
-      this.visible = true
-    },
-    handleOk() {
-
-    },
-    onChange(selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-    },
-    toggleAdvanced() {
-      this.advanced = !this.advanced
-    }
-  },
-  watch: {
-    /*
-        'selectedRows': function (selectedRows) {
-          this.needTotalList = this.needTotalList.map(item => {
-            return {
-              ...item,
-              total: selectedRows.reduce( (sum, val) => {
-                return sum + val[item.dataIndex]
-              }, 0)
-            }
-          })
-        }
-        */
   }
-}
 </script>

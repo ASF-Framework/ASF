@@ -1,5 +1,8 @@
-﻿using ASF.Domain.Entities;
+﻿using ASF.Application.DTO;
+using ASF.Domain.Entities;
 using ASF.Domain.Values;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ASF.Infrastructure.Repositories
@@ -44,6 +47,12 @@ namespace ASF.Infrastructure.Repositories
         /// <param name="id">账户</param>
         /// <returns></returns>
         Task<Account> GetAsync(PhoneNumber telephone);
+        /// <summary>
+        /// 分页获取用户集合
+        /// </summary>
+        /// <param name="requestDto"></param>
+        /// <returns></returns>
+        Task<(IList<Account> Accounts, int TotalCount)> GetList(AccountInfoListPagedRequestDto requestDto);
         /// <summary>
         /// 修改账户
         /// </summary>

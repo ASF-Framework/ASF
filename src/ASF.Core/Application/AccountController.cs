@@ -26,88 +26,15 @@ namespace ASF.Application
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAccountRepository _accountRepository;
         private readonly LogOperateRecordService _operateLog;
-        public AccountController(IServiceProvider serviceProvider, IUnitOfWork unitOfWork, IAccountRepository accountRepository, LogOperateRecordService operateLog)
+        public AccountController(IServiceProvider serviceProvider,
+            IUnitOfWork unitOfWork,
+            IAccountRepository accountRepository,
+            LogOperateRecordService operateLog)
         {
             this._serviceProvider = serviceProvider;
             this._unitOfWork = unitOfWork;
             this._accountRepository = accountRepository;
             this._operateLog = operateLog;
-        }
-        /// <summary>
-        /// 创建账号
-        /// </summary>
-        /// <param name="dto">账号对象</param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<Result> Create([FromBody]AccountCreateRequestDto dto)
-        {
-            //验证请求数据合法性
-            var result = dto.Valid();
-            if (!result.Success)
-                return result;
-
-            //创建服务
-            var account = Mapper.Map<Account>(dto);
-            var service = this._serviceProvider.GetRequiredService<AccountCreateService>();
-            result = await service.Create(account);
-            if (!result.Success)
-                return result;
-
-            //数据持久化
-            _operateLog.Record(ASFPermissions.AccountCreate, dto.ToString(), "Success");  //记录日志
-            await _accountRepository.AddAsync(account);
-            await _unitOfWork.CommitAsync(autoRollback: true);
-            return Result.ReSuccess();
-        }
-        /// <summary>
-        /// 删除账号
-        /// </summary>
-        /// <param name="id">账号标识</param>
-        /// <returns></returns>
-        public async Task<Result> Delete([FromRoute]int id)
-        {
-            _operateLog.Record(ASFPermissions.AccountDelete, id.ToString(), "Success");  //记录日志
-            await _accountRepository.RemoveAsync(id);
-            await _unitOfWork.CommitAsync(autoRollback: true);
-            return Result.ReSuccess();
-        }
-        /// <summary>
-        /// 修改账号状态
-        /// </summary>
-        /// <param name="dto">修改状态请求</param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<Result> MidifyStatus([FromBody]AccountModifyStatusRequestDto dto)
-        {
-            var service = this._serviceProvider.GetRequiredService<AccountInfoChangeService>();
-            var result = await service.ModifyStatus(dto.Id, dto.Status);
-            if (!result.Success)
-                return result;
-
-            //数据持久化
-            _operateLog.Record(ASFPermissions.AccountModifyInfo, dto.ToString(), "Success");  //记录日志
-            await _accountRepository.ModifyAsync(result.Data);
-            await _unitOfWork.CommitAsync(autoRollback: true);
-            return Result.ReSuccess();
-        }
-        /// <summary>
-        /// 设置登录密码
-        /// </summary>
-        /// <param name="dto">设置登录密码</param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<Result> ResetPassword([FromBody] AccountResetPasswordRequestDto dto)
-        {
-            var service = this._serviceProvider.GetRequiredService<AccountPasswordChangeService>();
-            var result = await service.ModifyAsync(dto.Id, dto.Password);
-            if (!result.Success)
-                return result;
-
-            //数据持久化
-            _operateLog.Record(ASFPermissions.AccountSetPassword, dto.ToString(), "Success");  //记录日志
-            await _accountRepository.ModifyAsync(result.Data);
-            await _unitOfWork.CommitAsync(autoRollback: true);
-            return Result.ReSuccess();
         }
 
         /// <summary>
@@ -232,30 +159,159 @@ namespace ASF.Application
             if (roles == null || roles.Count == 0)
                 return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
 
-            //获取权限
+            //获取角色权限
             var pids = new List<string>();
-            roles.Where(f=>f.IsNormal()).Select(f => f.Permissions.ToList()).ToList().ForEach(p =>
-            {
-                pids = pids.Zip(p, (first, second) => first + second).ToList();
-            });
+            roles
+                .Where(f => f.IsNormal())
+                .Select(f => f.Permissions.ToList())
+                .ToList()
+                .ForEach(p =>
+                {
+                    pids = pids.Zip(p, (first, second) => first + second).ToList();
+                });
             var permissions = await this._serviceProvider.GetRequiredService<IPermissionRepository>().GetList(pids);
             if (permissions.Count == 0)
                 return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
 
-            //组装返回数据
-            permissions.Where(f => f.IsNormal()).ToList().ForEach(p =>
-            {
-                if (p.Type != PermissionType.Menu)
-                    return;
-                var permissionInfo = new AccountInfoByLoginResponseDto.PermissionInfo(p);
-                responseDto.Role.Permissions.Add(permissionInfo);
-                permissions.Where(f => f.Type == PermissionType.Action && f.ParentId == p.Id).ToList().ForEach(a =>
+            //组装响应数据
+            permissions
+                .Where(f => f.IsNormal())
+                .ToList()
+                .ForEach(p =>
                 {
-                    permissionInfo.Actions.Add(new AccountInfoByLoginResponseDto.ActionInfo(a));
+                    if (p.Type != PermissionType.Menu)
+                        return;
+                    var permissionInfo = new AccountInfoByLoginResponseDto.PermissionInfo(p);
+                    responseDto.Role.Permissions.Add(permissionInfo);
+                    permissions
+                        .Where(f => f.Type == PermissionType.Action && f.ParentId == p.Id)
+                        .ToList()
+                        .ForEach(a =>
+                        {
+                            permissionInfo.Actions.Add(new AccountInfoByLoginResponseDto.ActionInfo(a));
+                        });
                 });
-            });
             return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
         }
 
+        /// <summary>
+        /// 创建账号
+        /// </summary>
+        /// <param name="dto">账号对象</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<Result> Create([FromBody]AccountCreateRequestDto dto)
+        {
+            //验证请求数据合法性
+            var result = dto.Valid();
+            if (!result.Success)
+                return result;
+
+            //创建服务
+            var account = Mapper.Map<Account>(dto);
+            var service = this._serviceProvider.GetRequiredService<AccountCreateService>();
+            result = await service.Create(account);
+            if (!result.Success)
+                return result;
+
+            //数据持久化
+            _operateLog.Record(ASFPermissions.AccountCreate, dto.ToString(), "Success");  //记录日志
+            await _accountRepository.AddAsync(account);
+            await _unitOfWork.CommitAsync(autoRollback: true);
+            return Result.ReSuccess();
+        }
+        /// <summary>
+        /// 删除账号
+        /// </summary>
+        /// <param name="id">账号标识</param>
+        /// <returns></returns>
+        public async Task<Result> Delete([FromRoute]int id)
+        {
+            _operateLog.Record(ASFPermissions.AccountDelete, id.ToString(), "Success");  //记录日志
+            await _accountRepository.RemoveAsync(id);
+            await _unitOfWork.CommitAsync(autoRollback: true);
+            return Result.ReSuccess();
+        }
+        /// <summary>
+        /// 修改账号状态
+        /// </summary>
+        /// <param name="dto">修改状态请求</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<Result> MidifyStatus([FromBody]AccountModifyStatusRequestDto dto)
+        {
+            var service = this._serviceProvider.GetRequiredService<AccountInfoChangeService>();
+            var result = await service.ModifyStatus(dto.Id, dto.Status);
+            if (!result.Success)
+                return result;
+
+            //数据持久化
+            _operateLog.Record(ASFPermissions.AccountModifyInfo, dto.ToString(), "Success");  //记录日志
+            await _accountRepository.ModifyAsync(result.Data);
+            await _unitOfWork.CommitAsync(autoRollback: true);
+            return Result.ReSuccess();
+        }
+        /// <summary>
+        /// 设置登录密码
+        /// </summary>
+        /// <param name="dto">设置登录密码</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<Result> ResetPassword([FromBody] AccountResetPasswordRequestDto dto)
+        {
+            var service = this._serviceProvider.GetRequiredService<AccountPasswordChangeService>();
+            var result = await service.ModifyAsync(dto.Id, dto.Password);
+            if (!result.Success)
+                return result;
+
+            //数据持久化
+            _operateLog.Record(ASFPermissions.AccountSetPassword, dto.ToString(), "Success");  //记录日志
+            await _accountRepository.ModifyAsync(result.Data);
+            await _unitOfWork.CommitAsync(autoRollback: true);
+            return Result.ReSuccess();
+        }
+
+        /// <summary>
+        /// 获取账户集合
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ResultPagedList<AccountInfoResponseDto>> List([FromBody]AccountInfoListPagedRequestDto dto)
+        {
+            //验证请求数据合法性
+            var result = dto.Valid();
+            if (!result.Success)
+                return ResultPagedList<AccountInfoResponseDto>.ReFailure(result);
+
+            //获取用户数据
+            var accountsResult = await _accountRepository.GetList(dto);
+            var accounts = accountsResult.Accounts;
+            if (accounts.Count == 0)
+                return ResultPagedList<AccountInfoResponseDto>.ReSuccess();
+
+            //获取角色数据
+            var rids = new List<int>();
+            accounts
+                .Select(f => f.Roles.ToList()).ToList()
+                .ForEach(p =>
+                {
+                    rids = rids
+                        .Zip(p, (first, second) => first + second)
+                        .ToList();
+                });
+            var roles = await this._serviceProvider.GetRequiredService<IRoleRepository>().GetList(rids);
+
+            //组装响应数据
+            var accountInfos = Mapper.Map<List<AccountInfoResponseDto>>(accounts);
+            accountInfos.ForEach(ainfo =>
+            {
+                var account = accounts.FirstOrDefault(a => a.Id == ainfo.Id);
+                ainfo.Roles = roles
+                    .Where(r => r.IsNormal() && account.Roles.Contains(r.Id))
+                    .Select(r => r.Name)
+                    .ToList();
+            });
+            return ResultPagedList<AccountInfoResponseDto>.ReSuccess(accountInfos, accountsResult.TotalCount);
+        }
     }
 }

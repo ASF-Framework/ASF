@@ -29,7 +29,7 @@
                   <a-button type="primary" icon="search"></a-button>
                 </a-tooltip>
                 <a-tooltip>
-                  <template slot="title">重置查询条件</template>
+                  <template slot="title">清除查询条件</template>
                   <a-button icon="undo"></a-button>
                 </a-tooltip>
               </a-button-group>

@@ -28,7 +28,7 @@
                   <a-button type="primary" icon="search" @click="loadData"></a-button>
                 </a-tooltip>
                 <a-tooltip>
-                  <template slot="title">重置查询条件</template>
+                  <template slot="title">清除查询条件</template>
                   <a-button icon="undo"></a-button>
                 </a-tooltip>
               </a-button-group>
@@ -293,7 +293,9 @@ export default {
       // })
       this.visible = true
     },
-    handleOk() {},
+    handleOk() {
+
+    },
     onChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows

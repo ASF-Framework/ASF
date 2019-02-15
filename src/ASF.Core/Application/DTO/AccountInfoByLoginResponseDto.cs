@@ -7,7 +7,7 @@ namespace ASF.Application.DTO
     /// <summary>
     /// 账户登录之后返回信息
     /// </summary>
-    public class AccountInfoByLoginResponseDto
+    public class AccountInfoByLoginResponseDto:IDto
     {
         public AccountInfoByLoginResponseDto(Account account)
         {

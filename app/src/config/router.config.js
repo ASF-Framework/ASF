@@ -37,7 +37,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/dashboard/Analysis'),
             meta: {
               title: '分析页',
-              keepAlive: false,
+              keepAlive: true,
               permission: ['dashboard']
             }
           },
@@ -64,12 +64,12 @@ export const asyncRouterMap = [
           }
         ]
       },
-      // list
+      // control
       {
         path: '/control',
         name: 'control',
         component: PageView,
-        redirect: '/control/query-list',
+        redirect: '/control/user-list',
         meta: {
           title: '控制面板',
           icon: 'table',
@@ -82,6 +82,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/control/UserList'),
             meta: {
               title: '用户列表',
+              keepAlive: true,
               permission: ['user']
             }
           },
@@ -93,7 +94,7 @@ export const asyncRouterMap = [
               title: '角色列表',
               permission: ['role']
             }
-          },        
+          },
           {
             path: '/control/permission-list',
             name: 'PermissionList',

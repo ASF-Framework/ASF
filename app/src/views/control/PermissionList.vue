@@ -14,13 +14,7 @@
               <a-select-option value="2">运行中</a-select-option>
             </a-select>
           </a-col>
-          <a-col
-            :span="8"
-            :md="{span:12,offset:4}"
-            :sm="{span:24,offset:0}"
-            :xs="{span:24,offset:0}"
-            :offset="8"
-          >
+          <a-col :span="8" :md="{span:12,offset:4}" :sm="{span:24,offset:0}" :xs="{span:24,offset:0}" :offset="8">
             <span class="table-page-search-submitButtons" style="float:right">
               <a-input placeholder="请输入" style="width:auto;margin-right:10px"/>
               <a-button-group>
@@ -29,7 +23,7 @@
                   <a-button type="primary" icon="search"></a-button>
                 </a-tooltip>
                 <a-tooltip>
-                  <template slot="title">重置查询条件</template>
+                  <template slot="title">清除查询条件</template>
                   <a-button icon="undo"></a-button>
                 </a-tooltip>
               </a-button-group>

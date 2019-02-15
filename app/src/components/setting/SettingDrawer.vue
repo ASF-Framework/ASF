@@ -145,7 +145,7 @@
           </div>
         </div>
         <a-divider />
-        <div :style="{ marginBottom: '24px' }">
+        <div :style="{ marginBottom: '24px' }" style="display:none">
           <a-button
             @click="doCopy"
             icon="copy"

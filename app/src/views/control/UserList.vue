@@ -27,7 +27,7 @@
     </div>
     <div class="table-operator">
     </div>
-    <s-table size="default" :columns="columns" :data="loadData">
+    <s-table size="default" :columns="columns" :data="loadData" >
       <span slot="roles" slot-scope="text, record">
             <a-tag v-for="(role, index) in record.roles" :key="index">{{ role.roleName}}</a-tag>
           </span>
@@ -146,25 +146,56 @@ export default {
         // 查询参数
         queryParam: {},
         // 表头
-        columns: [{
-            title: '登录名',
-            dataIndex: 'name'
+        columns: [
+          {
+            title: '唯一标识',
+            dataIndex: 'id',
+            align:"center"
+          },
+          {
+            title: '昵称',
+            dataIndex: 'name',
+            align:"center"
+          },
+          {
+            title: '用户名',
+            dataIndex: 'username',
+            align:"center"
+          },
+          {
+            title: '手机号码',
+            dataIndex: 'telephone',
+            align:"center"
+          },
+          {
+            title: '邮箱地址',
+            dataIndex: 'email',
+            align:"center"
           },
           {
             title: '角色集',
             dataIndex: 'roles',
+            align:"center",
             scopedSlots: {
               customRender: 'roles'
             }
           },
           {
             title: '状态',
-            dataIndex: 'status'
+            dataIndex: 'status',
+            align:"center"
           },
           {
             title: '创建时间',
             dataIndex: 'createTime',
-            sorter: true
+            sorter: true,
+            align:"center"
+          },
+          {
+            title: '最后登录时间',
+            dataIndex: 'loginTime',
+            sorter: true,
+            align:"center"
           },
           {
             title: '操作',

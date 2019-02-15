@@ -15,6 +15,7 @@ import { axios } from '@/utils/request'
 export function login (parameter) {
   return axios({
     url: '/asf/authorise/login',
+    //url: '/auth/login',
     method: 'post',
     data: parameter
   })
@@ -31,6 +32,7 @@ export function getSmsCaptcha (parameter) {
 export function getInfo () {
   return axios({
     url: '/asf/account/info',
+    //url: '/user/info',
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
@@ -41,6 +43,7 @@ export function getInfo () {
 export function logout () {
   return axios({
     url: '/asf/authorise/logout',
+    //url: '/auth/logout',
     method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'

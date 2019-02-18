@@ -1,62 +1,75 @@
 ﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
-using System;
+using ASF.Infrastructure.Repositories;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace ASF.Infrastructure.Repositories
+namespace ASF.Infrastructure.Repository
 {
-    public class RoleRepository : IRoleRepository
+    public class RoleRepository: IRoleRepository
     {
-       static List<Role> Roles = new List<Role>();
-        static RoleRepository()
+        public readonly RepositoryContext _dbContext;
+        public RoleRepository(RepositoryContext dbContext)
         {
-            Role role = new Role("admin", "admin", 1);
-            role.SetPermissions(new List<string>()
-            {
-                "dashboard","exception","result","permission","role","user"
-            });
-            Roles.Add(role);
-        }
-        public Task<Role> AddAsync(Role entity)
-        {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
         }
 
-        public Task<Role> GetAsync(int id)
+        public async Task<Domain.Entities.Role> AddAsync(Domain.Entities.Role entity)
         {
-            throw new NotImplementedException();
+            var model = Mapper.Map<Model.RoleModel>(entity);
+            await _dbContext.AddAsync(model);
+            // await _dbContext.SaveChangesAsync();
+            return Mapper.Map<Domain.Entities.Role>(model);
         }
 
-        public Task<List<Role>> GetList(IList<int> ids)
+        public async Task<Domain.Entities.Role> GetAsync(int id)
         {
-            return Task.FromResult(Roles);
+            var model = await _dbContext.Roles.FirstOrDefaultAsync(w => w.Id == id);
+            return Mapper.Map<Domain.Entities.Role>(model);
         }
 
-        public Task<List<Role>> GetList()
+        public async Task<List<Domain.Entities.Role>> GetList(IList<int> ids)
         {
-            throw new NotImplementedException();
+            var list = await _dbContext.Roles.Where(w => ids.Contains(w.Id)).ToListAsync();
+            list = list == null ? new List<Model.RoleModel>() : list;
+            return Mapper.Map<List<Domain.Entities.Role>>(list);
+        }
+
+        public async Task<List<Domain.Entities.Role>> GetList()
+        {
+            var list = await _dbContext.Roles.ToListAsync();
+            list = list == null ? new List<Model.RoleModel>() : list;
+            return Mapper.Map<List<Domain.Entities.Role>>(list);
         }
 
         public Task<(IList<Role> Roles, int TotalCount)> GetList(RoleInfoListPagedRequestDto requestDto)
         {
-            var a = new ValueTuple<IList<Role>, int>(RoleRepository.Roles, RoleRepository.Roles.Count);
-            return Task.FromResult(a);
+            throw new System.NotImplementedException();
         }
 
-        public Task ModifyAsync(Role role)
+        public Task ModifyAsync(Domain.Entities.Role role)
         {
-            throw new NotImplementedException();
+            var model = Mapper.Map<Model.RoleModel>(role);
+            _dbContext.Roles.Update(model);
+            return Task.FromResult(0);
         }
 
-        public Task ModifyAsync(int roleId, bool enable)
+        public async Task ModifyAsync(int roleId, bool enable)
         {
-            throw new NotImplementedException();
+            var model = await _dbContext.Roles.FirstOrDefaultAsync(w => w.Id == roleId);
+            model.Enable = enable;
+            _dbContext.Roles.Update(model);
+           // await _dbContext.SaveChangesAsync();
         }
 
-        public Task RemoveAsync(int primaryKey)
+        public async Task RemoveAsync(int primaryKey)
         {
-            throw new NotImplementedException();
+            var model = await _dbContext.Roles.FirstOrDefaultAsync(w => w.Id == primaryKey);
+            _dbContext.Remove(model);
+            // await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -2,14 +2,11 @@
 using ASF.Infrastructure.Repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ASF.Infrastructure.Repository
 {
-   public class LogInfoRepository: ILoggingRepository
+    public class LogInfoRepository: ILoggingRepository
     {
         public readonly RepositoryContext _dbContext;
         public LogInfoRepository(RepositoryContext dbContext)
@@ -19,7 +16,7 @@ namespace ASF.Infrastructure.Repository
 
         public async Task<Logging> AddAsync(Logging entity)
         {
-            var model = Mapper.Map<Model.LogInfo>(entity);
+            var model = Mapper.Map<Model.LogInfoModel>(entity);
             await _dbContext.AddAsync(model);
             // await _dbContext.SaveChangesAsync();
             return Mapper.Map<Logging>(model);

@@ -1,9 +1,7 @@
-﻿using ASF.Infrastructure.ModelMapper;
+﻿using ASF.DependencyInjection;
+using ASF.Infrastructure.ModelMapper;
 using Microsoft.Extensions.DependencyInjection;
-using Ocelot.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TestRepository
 {
@@ -16,7 +14,7 @@ namespace TestRepository
             {
                 c.RegisterAllMappings(typeof(LogInfoMapper).Assembly);
             });
-            service.AddASFRepository();
+            new ASFBuilder(service).AddSQLite();
             return service.BuildServiceProvider();
         }
     }

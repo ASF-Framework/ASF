@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ASF.Infrastructure.Model
 {
-   public class LogInfo
+   public class LogInfoModel
     {
         /// <summary>
         /// 日志编号

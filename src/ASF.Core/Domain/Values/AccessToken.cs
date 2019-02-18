@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 
 namespace ASF.Domain.Values
 {
@@ -11,14 +13,14 @@ namespace ASF.Domain.Values
         {
 
         }
-        public AccessToken(string token, string tokenType, long expired, string refreshToken)
+        public AccessToken(string token, string tokenType, DateTime expired, string refreshToken)
         {
             this.Token = token;
             this.TokenType = tokenType;
             this.RefreshToken = refreshToken;
             this.Expired = expired;
         }
-        public AccessToken(string token, string tokenType, long expired) :this(token,tokenType, expired, null)
+        public AccessToken(string token, string tokenType, DateTime expired) :this(token,tokenType, expired, null)
         {
         
         }
@@ -37,6 +39,7 @@ namespace ASF.Domain.Values
         /// <summary>
         /// 过期时间
         /// </summary>
-        public long Expired { get; private set; }
+        [JsonConverter(typeof(UnixDateTimeConverter))]
+        public DateTime Expired { get; private set; }
     }
 }

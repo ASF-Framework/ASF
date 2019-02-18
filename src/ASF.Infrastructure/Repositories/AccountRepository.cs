@@ -1,79 +1,90 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using ASF.Application.DTO;
+﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
 using ASF.Domain.Values;
+using ASF.Infrastructure.Repositories;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace ASF.Infrastructure.Repositories
+namespace ASF.Infrastructure.Repository
 {
     public class AccountRepository : IAccountRepository
     {
-        static List<Account> Accounts = new List<Account>();
-        static AccountRepository()
+        public readonly RepositoryContext _dbContext;
+        public AccountRepository(RepositoryContext dbContext)
         {
-            Account account = new Account("admin", "21232f297a57a5a743894a0e4a801fc3", null);
-            account.SetRoles(new List<int>() { 0 });
-            Accounts.Add(account);
-
+            _dbContext = dbContext;
         }
-        public Task<Account> AddAsync(Account entity)
+        public async Task<Domain.Entities.Account> AddAsync(Domain.Entities.Account entity)
         {
-            return Task.FromResult(entity);
-        }
-
-        public Task<Account> GetAsync(PhoneNumber telephone)
-        {
-            return this.GetAsync(0);
+            var model = Mapper.Map<Model.Account>(entity);
+            await _dbContext.AddAsync(model);
+            //await _dbContext.SaveChangesAsync();
+            return Mapper.Map<Domain.Entities.Account>(model);
         }
 
-        public Task<Account> GetAsync(int id)
+        public async Task<Domain.Entities.Account> GetAsync(PhoneNumber telephone)
         {
-            Account account = new Account("admin", "21232f297a57a5a743894a0e4a801fc3", null);
-            return Task.FromResult(account);
+            var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Telephone == telephone.ToString());
+            return Mapper.Map<Domain.Entities.Account>(model);
         }
 
-        public Task<Account> GetByEmailAsync(string email)
+        public async Task<Domain.Entities.Account> GetAsync(int id)
         {
-            return this.GetAsync(0);
+            var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Id == id);
+            return Mapper.Map<Domain.Entities.Account>(model);
         }
 
-        public Task<Account> GetByUsernameAsync(string username)
+        public async Task<Domain.Entities.Account> GetByEmailAsync(string email)
         {
-            return this.GetAsync(0);
+            var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Email == email);
+            return Mapper.Map<Domain.Entities.Account>(model);
+        }
+
+        public async Task<Domain.Entities.Account> GetByUsernameAsync(string username)
+        {
+            var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Username == username);
+            return Mapper.Map<Domain.Entities.Account>(model);
         }
 
         public Task<(IList<Account> Accounts, int TotalCount)> GetList(AccountInfoListPagedRequestDto requestDto)
         {
-            var a = new ValueTuple<IList<Account>, int>(AccountRepository.Accounts, AccountRepository.Accounts.Count);
-            return Task.FromResult(a);
+            throw new System.NotImplementedException();
         }
 
-        public Task<bool> HasByEmail(string email)
+        public async Task<bool> HasByEmail(string email)
         {
-            return Task.FromResult(false);
+            var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Email == email);
+            return model == null ? false : true;
         }
 
-        public Task<bool> HasByTelephone(PhoneNumber telephone)
+        public async Task<bool> HasByTelephone(PhoneNumber telephone)
         {
-            return Task.FromResult(false);
+            var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Telephone == telephone.ToString());
+            return model == null ? false : true;
         }
 
-        public Task<bool> HasByUsername(string username)
+        public async Task<bool> HasByUsername(string username)
         {
-            return Task.FromResult(false);
+            var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Username == username);
+            return model == null ? false : true;
         }
 
-        public Task ModifyAsync(Account account)
+        public async Task ModifyAsync(Domain.Entities.Account account)
         {
-
-            return Task.CompletedTask;
+            var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Id == account.Id);
+            Mapper.Map(account, model);
+            _dbContext.Accounts.Update(model);
+           // await _dbContext.SaveChangesAsync();
         }
 
-        public Task RemoveAsync(int primaryKey)
+        public async Task RemoveAsync(int primaryKey)
         {
-            return Task.CompletedTask;
+            var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Id == primaryKey);
+            model.Delete();
+            _dbContext.Accounts.Update(model);
+            //await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -1,7 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ASF.Infrastructure.ModelMapper
 {
@@ -9,7 +6,7 @@ namespace ASF.Infrastructure.ModelMapper
     {
         public PermissionMapper()
         {
-            base.CreateMap<ASF.Infrastructure.Model.Permission, ASF.Domain.Entities.Permission>()
+            base.CreateMap<ASF.Infrastructure.Model.PermissionModel, ASF.Domain.Entities.Permission>()
                 .ReverseMap();
         }
     }

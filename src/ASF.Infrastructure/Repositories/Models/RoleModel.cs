@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ASF.Infrastructure.Model
 {
-   public class Role
+   public class RoleModel
     {
         /// <summary>
         /// 角色编号

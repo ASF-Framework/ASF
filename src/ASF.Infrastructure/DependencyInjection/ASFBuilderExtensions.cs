@@ -1,10 +1,10 @@
-﻿using ASF;
-using ASF.DependencyInjection;
+﻿using ASF.DependencyInjection;
 using ASF.Infrastructure.Anticorrsives;
 using ASF.Infrastructure.DependencyInjection;
 using ASF.Infrastructure.Repositories;
+using ASF.Infrastructure.Repository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Linq;
@@ -29,9 +29,9 @@ namespace Microsoft.Extensions.DependencyInjection
             }
             builder.Services.Configure<ASFOptions>(configuration.GetSection("ASFOptions"));
 
-            builder.AddRepositories();
-            builder.AddAnticorrsives();
-            builder.AddAuthenticationJwtBearer(options);
+            builder.Services.AddRepositories();
+            builder.Services.AddAnticorrsives();
+            builder.Services.AddAuthenticationJwtBearer(options);
             return builder;
         }
 
@@ -41,9 +41,9 @@ namespace Microsoft.Extensions.DependencyInjection
             startupAction?.Invoke(options);
             builder.Services.ConfigureOptions(startupAction);
 
-            builder.AddRepositories();
-            builder.AddAnticorrsives();
-            builder.AddAuthenticationJwtBearer(options);
+            builder.Services.AddRepositories();
+            builder.Services.AddAnticorrsives();
+            builder.Services.AddAuthenticationJwtBearer(options);
             return builder;
 
         }
@@ -51,12 +51,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// 注入仓储层
         /// </summary>
         /// <param name="builder"></param>
-        private static void AddRepositories(this ASFBuilder builder)
+        private static void AddRepositories(this IServiceCollection services)
         {
-            var services = builder.Services;
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddDbContext<RepositoryContext>(options => options.UseSqlite("Data Source=ASF.db"), ServiceLifetime.Scoped);
             services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<ILoggingRepository, LoggingRepository>();
+            services.AddScoped<ILoggingRepository, LogInfoRepository>();
             services.AddScoped<IPermissionRepository, PermissionRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
         }
@@ -64,16 +63,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// 注入防腐层
         /// </summary>
         /// <param name="builder"></param>
-        private static void AddAnticorrsives(this ASFBuilder builder)
+        private static void AddAnticorrsives(this IServiceCollection services)
         {
-            var services = builder.Services;
             services.AddSingleton<IAccessTokenGenerate, AccessTokenGenerate>();
         }
         /// <summary>
         /// 添加Jwt授权
         /// </summary>
         /// <param name="builder"></param>
-        private static void AddAuthenticationJwtBearer(this ASFBuilder builder, ASFOptions options)
+        private static void AddAuthenticationJwtBearer(this IServiceCollection services, ASFOptions options)
         {
             var tokenOpt = options.JwtToken;
             var tokenValidationParameters = new TokenValidationParameters
@@ -88,7 +86,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 ClockSkew = TimeSpan.Zero,
                 RequireExpirationTime = true
             };
-            builder.Services.AddAuthentication(opt =>
+            services.AddAuthentication(opt =>
             {
                 opt.DefaultScheme = tokenOpt.DefaultScheme;
             })

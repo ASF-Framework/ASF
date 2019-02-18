@@ -1,72 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using ASF.Application.DTO;
+﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
+using ASF.Infrastructure.Repositories;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace ASF.Infrastructure.Repositories
+namespace ASF.Infrastructure.Repository
 {
     public class PermissionRepository : IPermissionRepository
     {
-        static IList<Permission> permissions = new List<Permission>();
-        static PermissionRepository()
+        public readonly RepositoryContext _dbContext;
+        public PermissionRepository(RepositoryContext dbContext)
         {
-            permissions.Add(new Permission("dashboard", "", "仪表盘", Domain.Values.PermissionType.Menu, "仪表盘"));
-            permissions.Add(new Permission("add", "dashboard", "新增", Domain.Values.PermissionType.Action, "新增"));
-            permissions.Add(new Permission("query", "dashboard", "查询", Domain.Values.PermissionType.Action, "查询"));
-            permissions.Add(new Permission("get", "dashboard", "详情", Domain.Values.PermissionType.Action, "详情"));
-            permissions.Add(new Permission("update", "dashboard", "修改", Domain.Values.PermissionType.Action, "修改"));
-            permissions.Add(new Permission("delete", "dashboard", "删除", Domain.Values.PermissionType.Action, "删除"));
-
-            permissions.Add(new Permission("exception", "", "异常页面权限", Domain.Values.PermissionType.Menu, "异常页面权限"));
-            permissions.Add(new Permission("result", "", "结果权限", Domain.Values.PermissionType.Menu, "结果权限"));
-            permissions.Add(new Permission("permission", "", "权限管理", Domain.Values.PermissionType.Menu, "权限管理"));
-            permissions.Add(new Permission("role", "", "角色管理", Domain.Values.PermissionType.Menu, "角色管理"));
-
-            permissions.Add(new Permission("user", "", "用户管理", Domain.Values.PermissionType.Menu, "用户管理"));
-            permissions.Add(new Permission("query", "user", "查询", Domain.Values.PermissionType.Action, "查询"));
+            _dbContext = dbContext;
         }
-        public Task<Permission> AddAsync(Permission entity)
+        public async Task<Domain.Entities.Permission> AddAsync(Domain.Entities.Permission entity)
         {
-            throw new NotImplementedException();
+            var model = Mapper.Map<Model.PermissionModel>(entity);
+            await _dbContext.AddAsync(model);
+            return Mapper.Map<Domain.Entities.Permission>(model);
         }
 
-        public Task<Permission> GetAsync(string id)
+        public async Task<Domain.Entities.Permission> GetAsync(string id)
         {
-            throw new NotImplementedException();
+            var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == id);
+            return Mapper.Map<Domain.Entities.Permission>(model);
         }
 
-        public Task<Permission> GetByApiAddress(string apiAddress)
+        public async Task<Domain.Entities.Permission> GetByApiAddress(string apiAddress)
         {
-            throw new NotImplementedException();
+            var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.ApiAddress == apiAddress);
+            return Mapper.Map<Domain.Entities.Permission>(model);
         }
 
-        public Task<IList<Permission>> GetList(IList<string> ids)
+        public async Task<List<Domain.Entities.Permission>> GetList(IList<string> ids)
         {
-            return Task.FromResult(permissions);
+            var list = await _dbContext.Permissions.Where(w => ids.Contains(w.Id)).ToListAsync();
+            list = list == null ? new List<Model.PermissionModel>() : list;
+            return Mapper.Map<List<Domain.Entities.Permission>>(list);
         }
 
         public Task<IList<Permission>> GetList(PermissionInfoListRequestDto requestDto)
         {
-            return Task.FromResult(permissions);
+            throw new System.NotImplementedException();
         }
 
-        public Task<bool> HasById(string id)
+        public async Task<bool> HasById(string id)
         {
-            throw new NotImplementedException();
+            var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == id);
+            return model == null ? false : true;
         }
 
-        public Task ModifyAsync(Permission permission)
+        public async Task ModifyAsync(Domain.Entities.Permission permission)
         {
-            throw new NotImplementedException();
+            var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == permission.Id);
+            Mapper.Map(permission, model);
+            _dbContext.Permissions.Update(model);
         }
 
-        public Task RemoveAsync(string primaryKey)
+        public async Task RemoveAsync(string primaryKey)
         {
-            throw new NotImplementedException();
+            var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == primaryKey);
+            _dbContext.Remove(model);
         }
 
-    
+        Task<IList<Permission>> IPermissionRepository.GetList(IList<string> ids)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

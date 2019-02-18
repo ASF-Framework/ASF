@@ -9,7 +9,7 @@ namespace ASF.Application.DtoMapper
         public RoleMapper()
         {
             base.CreateMap<Role, RoleInfoResponseDto>()
-                .ForMember(f => f.CreateTime, m => m.MapFrom(s => s.CreateInfo.CreateTime));
+                .ForPath(f => f.CreateTime, m => m.MapFrom(s => s.CreateInfo.CreateTime));
         }
     }
 }

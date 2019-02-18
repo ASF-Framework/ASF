@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ASF.Infrastructure.Model
 {
-   public class Permission
+   public class PermissionModel
     {
         /// <summary>
         /// 唯一标示

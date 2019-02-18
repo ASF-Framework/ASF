@@ -5,7 +5,11 @@ namespace ASF.Infrastructure.Repository
 {
     public class RepositoryContext: DbContext
     {
-        public DbSet<Account> Accounts { get; set; }
+        public RepositoryContext(DbContextOptions<RepositoryContext> options)
+        : base(options)
+        {
+        }
+        public DbSet<AccountModel> Accounts { get; set; }
         public DbSet<LogInfoModel> LogInfos { get; set; }
         public DbSet<PermissionModel> Permissions { get; set; }
         public DbSet<RoleModel> Roles { get; set; }

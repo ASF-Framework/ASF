@@ -9,6 +9,10 @@ namespace ASF.Domain.Values
     /// </summary>
     public class CreateOfAccount : IValueObject
     {
+        private CreateOfAccount()
+        {
+
+        }
         public CreateOfAccount(Account account)
         {
             if (account != null)

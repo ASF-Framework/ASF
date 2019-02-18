@@ -40,6 +40,7 @@ namespace ASF.Infrastructure.Repository
         public async Task<List<Domain.Entities.Permission>> GetList(IList<string> ids)
         {
             var list = await _dbContext.Permissions.Where(w => ids.Contains(w.Id)).ToListAsync();
+            list = list == null ? new List<Model.Permission>() : list;
             return Mapper.Map<List<Domain.Entities.Permission>>(list);
         }
 

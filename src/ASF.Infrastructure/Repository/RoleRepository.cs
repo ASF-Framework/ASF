@@ -36,12 +36,14 @@ namespace ASF.Infrastructure.Repository
         public async Task<List<Domain.Entities.Role>> GetList(IList<int> ids)
         {
             var list = await _dbContext.Roles.Where(w => ids.Contains(w.Id)).ToListAsync();
+            list = list == null ? new List<Model.Role>() : list;
             return Mapper.Map<List<Domain.Entities.Role>>(list);
         }
 
         public async Task<List<Domain.Entities.Role>> GetList()
         {
             var list = await _dbContext.Roles.ToListAsync();
+            list = list == null ? new List<Model.Role>() : list;
             return Mapper.Map<List<Domain.Entities.Role>>(list);
         }
 

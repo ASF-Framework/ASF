@@ -1,6 +1,7 @@
 ﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
 using ASF.Domain.Values;
+using ASF.Infrastructure.Model;
 using ASF.Infrastructure.Repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace ASF.Infrastructure.Repository
         }
         public async Task<Domain.Entities.Account> AddAsync(Domain.Entities.Account entity)
         {
-            var model = Mapper.Map<Model.Account>(entity);
+            var model = Mapper.Map<AccountModel > (entity);
             await _dbContext.AddAsync(model);
             //await _dbContext.SaveChangesAsync();
             return Mapper.Map<Domain.Entities.Account>(model);

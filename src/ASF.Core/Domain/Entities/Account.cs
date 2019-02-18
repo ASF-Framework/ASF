@@ -10,19 +10,23 @@ namespace ASF.Domain.Entities
     /// </summary>
     public class Account : IEntity
     {
+        private Account()
+        {
+
+            this.Status = AccountStatus.Normal;
+            this.LoginInfo = new LoginInfo();
+        }000
         /// <summary>
         /// 管理员账户
         /// </summary>
         /// <param name="username">账户</param>
         /// <param name="password">密码</param>
         /// <param name="account">创建此账户管理员</param>
-        public Account(string username, string password, Account account)
+        public Account(string username, string password, Account account) : this()
         {
             this.Username = username;
             this.Password = password;
             this.Name = username;
-            this.Status = AccountStatus.Normal;
-            this.LoginInfo = new LoginInfo();
             this.CreateInfo = new CreateOfAccount(account);
         }
         /// <summary>
@@ -103,7 +107,7 @@ namespace ASF.Domain.Entities
         /// <returns></returns>
         public bool HasPassword(string password)
         {
-            return this.Password .Equals( password);
+            return this.Password.Equals(password);
         }
 
         /// <summary>

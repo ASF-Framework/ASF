@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 
 namespace ASF.Infrastructure.Repository
 {
-    public class UnitOfWorkRepository : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         public readonly RepositoryContext _dbContext;
-        public UnitOfWorkRepository(RepositoryContext dbContext)
+        public UnitOfWork(RepositoryContext dbContext)
         {
             _dbContext = dbContext;
         }

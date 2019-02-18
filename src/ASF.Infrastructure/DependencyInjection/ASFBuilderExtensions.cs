@@ -1,4 +1,5 @@
-﻿using ASF.DependencyInjection;
+﻿using ASF;
+using ASF.DependencyInjection;
 using ASF.Infrastructure.Anticorrsives;
 using ASF.Infrastructure.DependencyInjection;
 using ASF.Infrastructure.Repositories;
@@ -54,6 +55,7 @@ namespace Microsoft.Extensions.DependencyInjection
         private static void AddRepositories(this IServiceCollection services)
         {
             services.AddDbContext<RepositoryContext>(options => options.UseSqlite("Data Source=ASF.db"), ServiceLifetime.Scoped);
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ILoggingRepository, LogInfoRepository>();
             services.AddScoped<IPermissionRepository, PermissionRepository>();

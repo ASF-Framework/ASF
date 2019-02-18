@@ -21,7 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
             //AutoMapper 配置服务
             Mapper.Initialize(config =>
               {
-                  config.ShouldMapProperty = p => p.GetMethod.IsPrivate || p.GetMethod.IsPublic || p.GetMethod.IsAssembly || p.GetMethod.IsFamily;
+                  config.ShouldMapProperty = p => p.GetMethod.IsPrivate || p.GetMethod.IsPublic || p.GetMethod.IsConstructor || p.GetMethod.IsAssembly || p.GetMethod.IsFamily;
                   config.RegisterAllMappings();
               });
             return services;

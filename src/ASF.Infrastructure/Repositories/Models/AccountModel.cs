@@ -1,12 +1,10 @@
 ﻿using ASF.Domain.Values;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace ASF.Infrastructure.Model
 {
-   public class Account
+    public class AccountModel
     {
         /// <summary>
         /// 编号

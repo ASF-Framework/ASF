@@ -5,6 +5,7 @@ using ASF.Infrastructure.Repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ASF.Infrastructure.Repository
@@ -48,9 +49,28 @@ namespace ASF.Infrastructure.Repository
             return Mapper.Map<Domain.Entities.Account>(model);
         }
 
-        public Task<(IList<Account> Accounts, int TotalCount)> GetList(AccountInfoListPagedRequestDto requestDto)
+        public async Task<(IList<Account> Accounts, int TotalCount)> GetList(AccountInfoListPagedRequestDto requestDto)
         {
-            throw new System.NotImplementedException();
+            var queryable = _dbContext.Accounts
+                .Where(w => w.IsDeleted == requestDto.IsDeleted);
+
+            if (!string.IsNullOrEmpty(requestDto.Vague))
+            {
+                queryable = queryable
+                    .Where(w => EF.Functions.Like(w.Id.ToString(), "%" + requestDto.Vague + "%")
+                    || EF.Functions.Like(w.Name, "%" + requestDto.Vague + "%")
+                    || EF.Functions.Like(w.Username, "%" + requestDto.Vague + "%")
+                    );
+            }
+            if (requestDto.Status == 1)
+                queryable = queryable.Where(w => w.Status == AccountStatus.Normal);
+            if (requestDto.Status == 2)
+                queryable = queryable.Where(w => w.Status == AccountStatus.NotAllowedLogin);
+
+            var result = queryable.OrderByDescending(p => p.CreateTime);
+            var list =await result.Skip((requestDto.SkipPage - 1) * requestDto.PagedCount).Take(requestDto.PagedCount).ToListAsync();
+
+            return (Mapper.Map<List<Domain.Entities.Account>>(list), result.Count());
         }
 
         public async Task<bool> HasByEmail(string email)
@@ -76,7 +96,7 @@ namespace ASF.Infrastructure.Repository
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Id == account.Id);
             Mapper.Map(account, model);
             _dbContext.Accounts.Update(model);
-           // await _dbContext.SaveChangesAsync();
+            // await _dbContext.SaveChangesAsync();
         }
 
         public async Task RemoveAsync(int primaryKey)

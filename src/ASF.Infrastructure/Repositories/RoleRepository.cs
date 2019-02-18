@@ -45,9 +45,26 @@ namespace ASF.Infrastructure.Repository
             return Mapper.Map<List<Domain.Entities.Role>>(list);
         }
 
-        public Task<(IList<Role> Roles, int TotalCount)> GetList(RoleInfoListPagedRequestDto requestDto)
+        public async Task<(IList<Role> Roles, int TotalCount)> GetList(RoleInfoListPagedRequestDto requestDto)
         {
-            throw new System.NotImplementedException();
+            var queryable = _dbContext.Roles
+               .Where(w => w.Id > 0);
+
+            if (!string.IsNullOrEmpty(requestDto.Vague))
+            {
+                queryable = queryable
+                    .Where(w => EF.Functions.Like(w.Id.ToString(), "%" + requestDto.Vague + "%")
+                    || EF.Functions.Like(w.Name, "%" + requestDto.Vague + "%"));
+            }
+            if (requestDto.Enable == 1)
+                queryable = queryable.Where(w => w.Enable == true);
+            if (requestDto.Enable == 0)
+                queryable = queryable.Where(w => w.Enable == false);
+
+            var result = queryable.OrderByDescending(p => p.CreateTime);
+            var list = await result.Skip((requestDto.SkipPage - 1) * requestDto.PagedCount).Take(requestDto.PagedCount).ToListAsync();
+
+            return (Mapper.Map<List<Domain.Entities.Role>>(list), result.Count());
         }
 
         public Task ModifyAsync(Domain.Entities.Role role)

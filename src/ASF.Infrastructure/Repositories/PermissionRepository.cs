@@ -35,16 +35,32 @@ namespace ASF.Infrastructure.Repository
             return Mapper.Map<Domain.Entities.Permission>(model);
         }
 
-        public async Task<List<Domain.Entities.Permission>> GetList(IList<string> ids)
+        public async Task<IList<Domain.Entities.Permission>> GetList(IList<string> ids)
         {
             var list = await _dbContext.Permissions.Where(w => ids.Contains(w.Id)).ToListAsync();
             list = list == null ? new List<Model.PermissionModel>() : list;
             return Mapper.Map<List<Domain.Entities.Permission>>(list);
         }
 
-        public Task<IList<Permission>> GetList(PermissionInfoListRequestDto requestDto)
+        public async Task<IList<Permission>> GetList(PermissionInfoListRequestDto requestDto)
         {
-            throw new System.NotImplementedException();
+            var queryable = _dbContext.Permissions
+                .Where(w => w.Id !="");
+
+            if (!string.IsNullOrEmpty(requestDto.Vague))
+            {
+                queryable = queryable
+                    .Where(w => EF.Functions.Like(w.Id.ToString(), "%" + requestDto.Vague + "%")
+                    || EF.Functions.Like(w.Name, "%" + requestDto.Vague + "%"));
+            }
+            if (requestDto.Enable == 1)
+                queryable = queryable.Where(w => w.Enable == true);
+            if (requestDto.Enable == 0)
+                queryable = queryable.Where(w => w.Enable == false);
+            
+            var list = await queryable.ToListAsync();
+
+            return Mapper.Map<IList<Domain.Entities.Permission>>(list);
         }
 
         public async Task<bool> HasById(string id)
@@ -64,11 +80,6 @@ namespace ASF.Infrastructure.Repository
         {
             var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == primaryKey);
             _dbContext.Remove(model);
-        }
-
-        Task<IList<Permission>> IPermissionRepository.GetList(IList<string> ids)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
@@ -35,6 +36,7 @@ namespace ASF.Application
         /// 创建操作权限
         /// </summary>
         /// <returns></returns>
+        [HttpPost]
         public async Task<Result> CreateAction(PermissionActionCreateRequestDto dto)
         {
             //验证请求数据合法性
@@ -58,6 +60,7 @@ namespace ASF.Application
         /// 创建导航权限
         /// </summary>
         /// <returns></returns>
+        [HttpPost]
         public async Task<Result> CreateMenu(PermissionMenuCreateRequestDto dto)
         {
             //验证请求数据合法性
@@ -82,6 +85,7 @@ namespace ASF.Application
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
+        [HttpPost]
         public async Task<Result> ModifyAction(PermissionActionModifyRequestDto dto)
         {
             //验证请求数据合法性
@@ -105,6 +109,7 @@ namespace ASF.Application
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
+        [HttpPost]
         public async Task<Result> ModifyMenu(PermissionMenuModifyRequestDto dto)
         {
             //验证请求数据合法性
@@ -139,6 +144,24 @@ namespace ASF.Application
             await _permissionRepository.RemoveAsync(id);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
+        }
+        /// <summary>
+        /// 所有权限数据
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ResultList<PermissionInfoResponseDto>> List([FromBody]PermissionInfoListRequestDto dto)
+        {
+            //验证请求数据合法性
+            var result = dto.Valid();
+            if (!result.Success)
+                return ResultList<PermissionInfoResponseDto>.ReFailure(result);
+
+            //获取权限数据
+            var permissionList = await this._permissionRepository.GetList(dto);
+            var permissions = Mapper.Map<IList<PermissionInfoResponseDto>>(permissionList);
+            return ResultList<PermissionInfoResponseDto>.ReSuccess(permissions);
         }
     }
 }

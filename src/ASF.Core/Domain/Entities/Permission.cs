@@ -50,7 +50,6 @@ namespace ASF.Domain.Entities
         /// 是否系统权限
         /// </summary>
         public bool IsSystem { get; set; }
-
         /// <summary>
         /// 权限服务地址
         /// </summary>
@@ -73,7 +72,6 @@ namespace ASF.Domain.Entities
         /// 是否启用
         /// </summary>
         public bool Enable { get; set; }
-
 
         /// <summary>
         /// 添加时间

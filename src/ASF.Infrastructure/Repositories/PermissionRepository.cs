@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ASF.Application.DTO;
 using ASF.Domain.Entities;
 
 namespace ASF.Infrastructure.Repositories
 {
     public class PermissionRepository : IPermissionRepository
     {
-        static List<Permission> permissions = new List<Permission>();
+        static IList<Permission> permissions = new List<Permission>();
         static PermissionRepository()
         {
             permissions.Add(new Permission("dashboard", "", "仪表盘", Domain.Values.PermissionType.Menu, "仪表盘"));
@@ -41,7 +42,12 @@ namespace ASF.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<Permission>> GetList(IList<string> ids)
+        public Task<IList<Permission>> GetList(IList<string> ids)
+        {
+            return Task.FromResult(permissions);
+        }
+
+        public Task<IList<Permission>> GetList(PermissionInfoListRequestDto requestDto)
         {
             return Task.FromResult(permissions);
         }
@@ -60,5 +66,7 @@ namespace ASF.Infrastructure.Repositories
         {
             throw new NotImplementedException();
         }
+
+    
     }
 }

@@ -121,7 +121,6 @@ namespace ASF.Domain.Entities
         {
             return this.Password.Equals(password);
         }
-
         /// <summary>
         /// 设置分配的角色
         /// </summary>
@@ -156,7 +155,6 @@ namespace ASF.Domain.Entities
             else
                 return true;
         }
-
         /// <summary>
         /// 删除
         /// </summary>
@@ -164,7 +162,6 @@ namespace ASF.Domain.Entities
         {
             this.IsDeleted = true;
         }
-
         /// <summary>
         /// 设置登录信息
         /// </summary>
@@ -173,7 +170,6 @@ namespace ASF.Domain.Entities
         {
             this.LoginInfo = loginInfo;
         }
-
         /// <summary>
         /// 是否为超级管理员
         /// </summary>

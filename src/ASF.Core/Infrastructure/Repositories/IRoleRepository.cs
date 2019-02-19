@@ -38,6 +38,6 @@ namespace ASF.Infrastructure.Repositories
         /// </summary>
         /// <param name="requestDto"></param>
         /// <returns></returns>
-        Task<(IList<Role> Roles, int TotalCount)> GetList(RoleInfoListPagedRequestDto requestDto);
+        Task<(IList<Role> Roles, int TotalCount)> GetList(RoleListPagedRequestDto requestDto);
     }
 }

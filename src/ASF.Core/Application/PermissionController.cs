@@ -151,17 +151,17 @@ namespace ASF.Application
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ResultList<PermissionInfoResponseDto>> List([FromBody]PermissionInfoListRequestDto dto)
+        public async Task<ResultList<PermissionBaseInfoResponseDto>> List([FromBody]PermissionListRequestDto dto)
         {
             //验证请求数据合法性
             var result = dto.Valid();
             if (!result.Success)
-                return ResultList<PermissionInfoResponseDto>.ReFailure(result);
+                return ResultList<PermissionBaseInfoResponseDto>.ReFailure(result);
 
             //获取权限数据
             var permissionList = await this._permissionRepository.GetList(dto);
-            var permissions = Mapper.Map<IList<PermissionInfoResponseDto>>(permissionList);
-            return ResultList<PermissionInfoResponseDto>.ReSuccess(permissions);
+            var permissions = Mapper.Map<IList<PermissionBaseInfoResponseDto>>(permissionList);
+            return ResultList<PermissionBaseInfoResponseDto>.ReSuccess(permissions);
         }
     }
 }

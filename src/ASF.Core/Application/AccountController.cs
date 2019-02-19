@@ -155,9 +155,9 @@ namespace ASF.Application
             int uid = this.User.UserId();
             var result = await this._serviceProvider.GetRequiredService<AccountPermissionService>()
               .GetPermissions(uid);
-            if (result.Account==null)
+            if (result.Account == null)
                 return Result<AccountInfoByLoginResponseDto>.ReFailure(ResultCodes.AccountNotExist);
-         
+
             AccountInfoByLoginResponseDto responseDto = new AccountInfoByLoginResponseDto(result.Account);
             if (result.Permissions.Count == 0)
                 return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
@@ -260,24 +260,23 @@ namespace ASF.Application
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
-
         /// <summary>
         /// 获取账户集合
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ResultPagedList<AccountInfoResponseDto>> List([FromBody]AccountInfoListPagedRequestDto dto)
+        public async Task<ResultPagedList<AccountBaseInfoResponseDto>> List([FromBody]AccountListPagedRequestDto dto)
         {
             //验证请求数据合法性
             var result = dto.Valid();
             if (!result.Success)
-                return ResultPagedList<AccountInfoResponseDto>.ReFailure(result);
+                return ResultPagedList<AccountBaseInfoResponseDto>.ReFailure(result);
 
             //获取用户数据
             var accountsResult = await _accountRepository.GetList(dto);
             var accounts = accountsResult.Accounts;
             if (accounts.Count == 0)
-                return ResultPagedList<AccountInfoResponseDto>.ReSuccess();
+                return ResultPagedList<AccountBaseInfoResponseDto>.ReSuccess();
 
             //获取角色数据
             var rids = new List<int>();
@@ -292,7 +291,7 @@ namespace ASF.Application
             var roles = await this._serviceProvider.GetRequiredService<IRoleRepository>().GetList(rids);
 
             //组装响应数据
-            var accountInfos = Mapper.Map<List<AccountInfoResponseDto>>(accounts);
+            var accountInfos = Mapper.Map<List<AccountBaseInfoResponseDto>>(accounts);
             accountInfos.ForEach(ainfo =>
             {
                 var account = accounts.FirstOrDefault(a => a.Id == ainfo.Id);
@@ -301,7 +300,35 @@ namespace ASF.Application
                     .Select(r => r.Name)
                     .ToList();
             });
-            return ResultPagedList<AccountInfoResponseDto>.ReSuccess(accountInfos, accountsResult.TotalCount);
+            return ResultPagedList<AccountBaseInfoResponseDto>.ReSuccess(accountInfos, accountsResult.TotalCount);
+        }
+        /// <summary>
+        /// 获取账号详细信息
+        /// </summary>
+        /// <param name="id">账号ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<Result<AccountDetailsResponseDto>> Get([FromRoute]int id)
+        {
+            var account = await this._accountRepository.GetAsync(id);
+            if (account == null)
+                return Result<AccountDetailsResponseDto>.ReFailure(ResultCodes.AccountNotExist);
+
+            //获取创建用户
+            var createAccount = await this._accountRepository.GetAsync(account.CreateInfo.CreateId);
+
+            //组装响应数据
+            var result = Mapper.Map<AccountDetailsResponseDto>(account);
+            if (account.IsSuperAdministrator())
+            {
+                result.Roles.Clear();
+                result.Roles.Add(-1);
+            }
+            if (createAccount != null)
+            {
+                result.CreateUser = createAccount.Name;
+            }
+            return Result<AccountDetailsResponseDto>.ReSuccess(result);
         }
     }
 }

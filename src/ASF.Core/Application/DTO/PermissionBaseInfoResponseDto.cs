@@ -2,15 +2,13 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ASF.Application.DTO
 {
     /// <summary>
-    /// 权限信息响应对象
+    /// 权限基本信息响应对象
     /// </summary>
-    public class PermissionInfoResponseDto:IDto
+    public class PermissionBaseInfoResponseDto:IDto
     {
         /// <summary>
         /// 唯一标示

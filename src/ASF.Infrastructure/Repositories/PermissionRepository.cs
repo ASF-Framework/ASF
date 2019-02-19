@@ -37,7 +37,7 @@ namespace ASF.Infrastructure.Repository
             return Mapper.Map<List<Permission>>(list);
         }
 
-        public async Task<IList<Permission>> GetList(PermissionInfoListRequestDto requestDto)
+        public async Task<IList<Permission>> GetList(PermissionListRequestDto requestDto)
         {
             var queryable = _dbContext.Permissions
                 .Where(w => w.Id !="");

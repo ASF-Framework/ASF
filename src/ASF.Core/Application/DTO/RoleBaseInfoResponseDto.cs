@@ -1,12 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ASF.Application.DTO
 {
-    public class RoleInfoResponseDto : IDto
+    /// <summary>
+    /// 角色基本信息
+    /// </summary>
+    public class RoleBaseInfoResponseDto : IDto
     {
         /// <summary>
         /// 角色编号

@@ -36,6 +36,6 @@ namespace ASF.Infrastructure.Repositories
         /// </summary>
         /// <param name="requestDto"></param>
         /// <returns></returns>
-        Task<IList<Permission>> GetList(PermissionInfoListRequestDto requestDto);
+        Task<IList<Permission>> GetList(PermissionListRequestDto requestDto);
     }
 }

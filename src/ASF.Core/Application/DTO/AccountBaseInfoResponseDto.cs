@@ -1,15 +1,15 @@
 ﻿using ASF.Domain.Values;
-using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
+using System.Collections.Generic;
 
 namespace ASF.Application.DTO
 {
     /// <summary>
-    /// 账户信息响应对象
+    /// 账户基本信息
     /// </summary>
-    public class AccountInfoResponseDto
+    public class AccountBaseInfoResponseDto
     {
         /// <summary>
         /// 用户标识

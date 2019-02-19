@@ -111,17 +111,17 @@ namespace ASF.Application
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ResultPagedList<RoleInfoResponseDto>> List([FromBody]RoleInfoListPagedRequestDto dto)
+        public async Task<ResultPagedList<RoleBaseInfoResponseDto>> List([FromBody]RoleListPagedRequestDto dto)
         {
             //验证请求数据合法性
             var result = dto.Valid();
             if (!result.Success)
-                return ResultPagedList<RoleInfoResponseDto>.ReFailure(result);
+                return ResultPagedList<RoleBaseInfoResponseDto>.ReFailure(result);
 
             //获取角色
             var roelResult = await this._roleRepository.GetList(dto);
-            var roles = Mapper.Map<IList<RoleInfoResponseDto>>(roelResult.Roles);
-            return ResultPagedList<RoleInfoResponseDto>.ReSuccess(roles, roelResult.TotalCount);
+            var roles = Mapper.Map<IList<RoleBaseInfoResponseDto>>(roelResult.Roles);
+            return ResultPagedList<RoleBaseInfoResponseDto>.ReSuccess(roles, roelResult.TotalCount);
         }
 
     }

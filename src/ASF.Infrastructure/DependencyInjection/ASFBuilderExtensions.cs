@@ -58,9 +58,9 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddDbContext<RepositoryContext>(options => options.UseSqlite("Data Source=ASF.db"), ServiceLifetime.Scoped);
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            //services.AddScoped<IAccountRepository, AccountRepository>();
-            services.TryAddScoped(typeof(AccountRepository));
-            services.AddScoped<IAccountRepository, CachingAccount<AccountRepository>>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            //services.TryAddScoped(typeof(AccountRepository));
+            //services.AddScoped<IAccountRepository, CachingAccount<AccountRepository>>();
 
             services.AddScoped<ILoggingRepository, LogInfoRepository>();
             services.AddScoped<IPermissionRepository, PermissionRepository>();

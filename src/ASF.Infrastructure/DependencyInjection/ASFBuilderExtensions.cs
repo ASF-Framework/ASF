@@ -1,11 +1,13 @@
 ﻿using ASF;
 using ASF.DependencyInjection;
+using ASF.Domain.Entities;
 using ASF.Infrastructure.Anticorrsives;
 using ASF.Infrastructure.DependencyInjection;
 using ASF.Infrastructure.Repositories;
 using ASF.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Linq;
@@ -56,7 +58,10 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddDbContext<RepositoryContext>(options => options.UseSqlite("Data Source=ASF.db"), ServiceLifetime.Scoped);
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IAccountRepository, AccountRepository>();
+            //services.AddScoped<IAccountRepository, AccountRepository>();
+            services.TryAddScoped(typeof(AccountRepository));
+            services.AddScoped<IAccountRepository, CachingAccount<AccountRepository>>();
+
             services.AddScoped<ILoggingRepository, LogInfoRepository>();
             services.AddScoped<IPermissionRepository, PermissionRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();

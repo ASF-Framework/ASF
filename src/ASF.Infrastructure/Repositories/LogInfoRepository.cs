@@ -2,6 +2,8 @@
 using ASF.Infrastructure.Repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ASF.Infrastructure.Repository
@@ -31,6 +33,13 @@ namespace ASF.Infrastructure.Repository
         public Task RemoveAsync(long primaryKey)
         {
             return Task.FromResult(0);
+        }
+
+        public async Task<IList<Logging>> GetList()
+        {
+            var list = await _dbContext.Permissions.ToListAsync();
+
+            return Mapper.Map<IList<Domain.Entities.Logging>>(list);
         }
     }
 }

@@ -31,14 +31,14 @@ namespace ASF.Infrastructure.Repository
             return Mapper.Map<Domain.Entities.Role>(model);
         }
 
-        public async Task<List<Domain.Entities.Role>> GetList(IList<int> ids)
+        public async Task<IList<Domain.Entities.Role>> GetList(IList<int> ids)
         {
             var list = await _dbContext.Roles.Where(w => ids.Contains(w.Id)).ToListAsync();
             list = list == null ? new List<Model.RoleModel>() : list;
             return Mapper.Map<List<Domain.Entities.Role>>(list);
         }
 
-        public async Task<List<Domain.Entities.Role>> GetList()
+        public async Task<IList<Domain.Entities.Role>> GetList()
         {
             var list = await _dbContext.Roles.ToListAsync();
             list = list == null ? new List<Model.RoleModel>() : list;

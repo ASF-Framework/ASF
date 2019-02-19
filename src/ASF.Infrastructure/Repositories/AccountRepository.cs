@@ -107,5 +107,12 @@ namespace ASF.Infrastructure.Repository
             _dbContext.Accounts.Update(model);
             //await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<IList<Account>> GetList()
+        {
+            var list = await _dbContext.Accounts.ToListAsync();
+
+            return Mapper.Map<IList<Domain.Entities.Account>>(list);
+        }
     }
 }

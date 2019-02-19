@@ -12,13 +12,13 @@ namespace ASF.Infrastructure.Repositories
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        Task<List<Role>> GetList(IList<int> ids);
+        Task<IList<Role>> GetList(IList<int> ids);
         /// <summary>
         ///获取角色集合
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        Task<List<Role>> GetList();
+        Task<IList<Role>> GetList();
         /// <summary>
         /// 修改角色
         /// </summary>

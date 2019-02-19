@@ -59,5 +59,11 @@ namespace ASF.Infrastructure.Repositories
         /// <param name="account">账户信息</param>
         /// <returns></returns>
         Task ModifyAsync(Account account);
+        /// <summary>
+        /// 分页获取用户集合
+        /// </summary>
+        /// <param name="requestDto"></param>
+        /// <returns></returns>
+        Task<IList<Account>> GetList();
     }
 }

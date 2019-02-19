@@ -12,6 +12,7 @@ namespace ASF.Application.DtoMapper
             base.CreateMap<PermissionMenuCreateRequestDto, Permission>();
             base.CreateMap<Permission, PermissionActionInfoDetailsResponseDto>();
             base.CreateMap<Permission, PermissionMenuInfoDetailsResponseDto>();
+            base.CreateMap<Permission, PermissionMenuInfoBaseResponseDto>();
         }
     }
 }

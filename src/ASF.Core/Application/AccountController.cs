@@ -308,7 +308,7 @@ namespace ASF.Application
         /// <param name="id">账号ID</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<Result<AccountDetailsResponseDto>> Get([FromRoute]int id)
+        public async Task<Result<AccountDetailsResponseDto>> GetDetails([FromRoute]int id)
         {
             var account = await this._accountRepository.GetAsync(id);
             if (account == null)

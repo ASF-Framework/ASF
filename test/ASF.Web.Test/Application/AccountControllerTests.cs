@@ -180,10 +180,10 @@ namespace ASF.Core.Test.Application
             Assert.True(result.Success);
         }
         [Fact(DisplayName = "获取账号详细信息")]
-        public void Get()
+        public void Details()
         {
             var token = this.AccessToken();
-            var response = this.Server.CreateRequest("api/asf/account/get/1")
+            var response = this.Server.CreateRequest("api/asf/account/Details/1")
              .And(r => r.Authorization("Bearer", token))
              .GetAsync().GetAwaiter().GetResult();
             var result = response.IsSuccess().GetMessage<Result>();

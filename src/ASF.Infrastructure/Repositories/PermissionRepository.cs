@@ -63,9 +63,13 @@ namespace ASF.Infrastructure.Repository
             return Mapper.Map<IList<Domain.Entities.Permission>>(list);
         }
 
-        public Task<IList<Permission>> GetList()
+        public async Task<IList<Permission>> GetList()
         {
-            throw new System.NotImplementedException();
+            var queryable = _dbContext.Permissions
+               .Where(w => w.Id != "");
+            var list = await queryable.ToListAsync();
+
+            return Mapper.Map<IList<Domain.Entities.Permission>>(list);
         }
 
         public async Task<bool> HasById(string id)

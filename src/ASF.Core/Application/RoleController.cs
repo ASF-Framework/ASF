@@ -1,4 +1,5 @@
 ﻿using ASF.Application.DTO;
+using ASF.Domain;
 using ASF.Domain.Services;
 using ASF.Infrastructure.Repositories;
 using AutoMapper;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ASF.Application
@@ -26,6 +28,11 @@ namespace ASF.Application
             this._roleRepository = roleRepository;
             this._operateLog = operateLog;
         }
+        /// <summary>
+        /// 获取所有的角色基本信息
+        /// </summary>
+        /// <returns></returns>
+     
         /// <summary>
         /// 创建角色
         /// </summary>
@@ -106,23 +113,54 @@ namespace ASF.Application
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
+        [HttpGet]
+        [Authorize(Roles = "self")]
+        public async Task<ResultList<RoleInfoSimpleResponseDto>> GetListAll()
+        {
+            //获取角色数据
+            var roelList = await this._roleRepository.GetList();
+            if (roelList.Count == 0)
+                return ResultList<RoleInfoSimpleResponseDto>.ReSuccess();
+
+            var roles = Mapper.Map<IList<RoleInfoSimpleResponseDto>>(roelList);
+            return ResultList<RoleInfoSimpleResponseDto>.ReSuccess(roles);
+        }
         /// <summary>
         /// 获取角色集合
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ResultPagedList<RoleBaseInfoResponseDto>> List([FromBody]RoleListPagedRequestDto dto)
+        public async Task<ResultPagedList<RoleInfoBaseResponseDto>> GetList([FromBody]RoleListPagedRequestDto dto)
         {
             //验证请求数据合法性
             var result = dto.Valid();
             if (!result.Success)
-                return ResultPagedList<RoleBaseInfoResponseDto>.ReFailure(result);
+                return ResultPagedList<RoleInfoBaseResponseDto>.ReFailure(result);
 
             //获取角色
             var roelResult = await this._roleRepository.GetList(dto);
-            var roles = Mapper.Map<IList<RoleBaseInfoResponseDto>>(roelResult.Roles);
-            return ResultPagedList<RoleBaseInfoResponseDto>.ReSuccess(roles, roelResult.TotalCount);
+            var roles = Mapper.Map<IList<RoleInfoBaseResponseDto>>(roelResult.Roles);
+            return ResultPagedList<RoleInfoBaseResponseDto>.ReSuccess(roles, roelResult.TotalCount);
         }
+        /// <summary>
+        /// 获取角色详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<Result<RoleInfoDetailsResponseDto>> GetDetails([FromRoute]int id)
+        {
+            var role = await this._roleRepository.GetAsync(id);
+            if (role == null)
+                return Result<RoleInfoDetailsResponseDto>.ReFailure(ResultCodes.RoleNotExist);
 
+            //获取所有权限
+            var permissions = await this._serviceProvider.GetRequiredService<IPermissionRepository>()
+                .GetList(role.Permissions.ToList());
+
+            var result = Mapper.Map<RoleInfoDetailsResponseDto>(role);
+            result.Permissions = permissions.ToDictionary(k => k.Id, v => v.Name);
+            return Result<RoleInfoDetailsResponseDto>.ReSuccess(result);
+        }
     }
 }

@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using ASF.Domain.Values;
+using ASF.Domain;
 
 namespace ASF.Application
 {
@@ -146,22 +149,93 @@ namespace ASF.Application
             return Result.ReSuccess();
         }
         /// <summary>
-        /// 所有权限数据
+        /// 所有导航权限数据
         /// </summary>
         /// <returns></returns>
-        [AllowAnonymous]
         [HttpPost]
-        public async Task<ResultList<PermissionBaseInfoResponseDto>> List([FromBody]PermissionListRequestDto dto)
+        public async Task<ResultList<PermissionMenuInfoDetailsResponseDto>> GetMenuList([FromBody]PermissionListRequestDto dto)
         {
             //验证请求数据合法性
             var result = dto.Valid();
             if (!result.Success)
-                return ResultList<PermissionBaseInfoResponseDto>.ReFailure(result);
+                return ResultList<PermissionMenuInfoDetailsResponseDto>.ReFailure(result);
 
             //获取权限数据
             var permissionList = await this._permissionRepository.GetList(dto);
-            var permissions = Mapper.Map<IList<PermissionBaseInfoResponseDto>>(permissionList);
-            return ResultList<PermissionBaseInfoResponseDto>.ReSuccess(permissions);
+
+            //筛选所有的菜单权限
+            var menuList = permissionList.Where(p => p.Type == PermissionType.Menu).ToList();
+            var menus = Mapper.Map<List<PermissionMenuInfoDetailsResponseDto>>(menuList);
+            //筛选菜单对应的操作权限
+            menus.ForEach(m =>
+            {
+                m.Actions = permissionList
+                     .Where(f => f.Type == PermissionType.Action && f.ParentId == m.Id)
+                     .ToList()
+                     .ToDictionary(k => k.Id, v => v.Name);
+            });
+            return ResultList<PermissionMenuInfoDetailsResponseDto>.ReSuccess(menus);
+        }
+        /// <summary>
+        /// 所有导航权限数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize(Roles = "self")]
+        public async Task<ResultList<PermissionMenuInfoBaseResponseDto>> GetMenuAllList()
+        {
+            //获取权限数据
+            var permissionList = await this._permissionRepository.GetList();
+
+            //筛选所有的菜单权限
+            var menuList = permissionList.Where(p => p.Type == PermissionType.Menu).ToList();
+            var menus = Mapper.Map<List<PermissionMenuInfoBaseResponseDto>>(menuList);
+            //筛选菜单对应的操作权限
+            menus.ForEach(m =>
+            {
+                m.Actions = permissionList
+                     .Where(f => f.Type == PermissionType.Action && f.ParentId == m.Id)
+                     .ToList()
+                     .ToDictionary(k => k.Id, v => v.Name);
+            });
+            return ResultList<PermissionMenuInfoBaseResponseDto>.ReSuccess(menus);
+        }
+        /// <summary>
+        /// 根据ID获取导航权限详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Result<PermissionMenuInfoDetailsResponseDto>> GetMenuDetails([FromRoute]string id)
+        {
+            //获取导航权限数据
+            var menu = await this._permissionRepository.GetAsync(id);
+            if (menu == null || menu.Type != PermissionType.Menu)
+                return Result<PermissionMenuInfoDetailsResponseDto>.ReFailure(ResultCodes.PermissionNotExist);
+            //获取子级权限
+            var permissions = await this._permissionRepository.GetListByParentId(menu.Id);
+
+            //组装响应对象
+            var result = Mapper.Map<PermissionMenuInfoDetailsResponseDto>(menu);
+            result.Actions = permissions
+                     .Where(f => f.Type == PermissionType.Action)
+                     .ToList()
+                     .ToDictionary(k => k.Id, v => v.Name);
+            return Result<PermissionMenuInfoDetailsResponseDto>.ReSuccess(result);
+        }
+        /// <summary>
+        /// 根据ID获取操作权限详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Result<PermissionActionInfoDetailsResponseDto>> GetActionDetails([FromRoute]string id)
+        {
+            // 获取权限数据
+            var action = await this._permissionRepository.GetAsync(id);
+            if (action == null || action.Type != PermissionType.Action)
+                return Result<PermissionActionInfoDetailsResponseDto>.ReFailure(ResultCodes.PermissionNotExist);
+
+            var result = Mapper.Map<PermissionActionInfoDetailsResponseDto>(action);
+            return Result<PermissionActionInfoDetailsResponseDto>.ReSuccess(result);
         }
     }
 }

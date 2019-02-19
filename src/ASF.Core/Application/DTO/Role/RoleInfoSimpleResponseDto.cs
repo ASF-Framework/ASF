@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ASF.Application.DTO
 {
-   public class RoleSimpleInfoResponseDto:IDto
+   public class RoleInfoSimpleResponseDto:IDto
     {
         /// <summary>
         /// 角色编号
@@ -14,9 +14,5 @@ namespace ASF.Application.DTO
         /// 角色名称
         /// </summary>
         public string Name { get; set; }
-        /// <summary>
-        /// 是否启用
-        /// </summary>
-        public bool Enable { get; set; }
     }
 }

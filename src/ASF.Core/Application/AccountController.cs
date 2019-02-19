@@ -265,18 +265,18 @@ namespace ASF.Application
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ResultPagedList<AccountBaseInfoResponseDto>> List([FromBody]AccountListPagedRequestDto dto)
+        public async Task<ResultPagedList<AccountInfoBaseResponseDto>> GetList([FromBody]AccountListPagedRequestDto dto)
         {
             //验证请求数据合法性
             var result = dto.Valid();
             if (!result.Success)
-                return ResultPagedList<AccountBaseInfoResponseDto>.ReFailure(result);
+                return ResultPagedList<AccountInfoBaseResponseDto>.ReFailure(result);
 
             //获取用户数据
             var accountsResult = await _accountRepository.GetList(dto);
             var accounts = accountsResult.Accounts;
             if (accounts.Count == 0)
-                return ResultPagedList<AccountBaseInfoResponseDto>.ReSuccess();
+                return ResultPagedList<AccountInfoBaseResponseDto>.ReSuccess();
 
             //获取角色数据
             var rids = new List<int>();
@@ -291,7 +291,7 @@ namespace ASF.Application
             var roles = await this._serviceProvider.GetRequiredService<IRoleRepository>().GetList(rids);
 
             //组装响应数据
-            var accountInfos = Mapper.Map<List<AccountBaseInfoResponseDto>>(accounts);
+            var accountInfos = Mapper.Map<List<AccountInfoBaseResponseDto>>(accounts);
             accountInfos.ForEach(ainfo =>
             {
                 var account = accounts.FirstOrDefault(a => a.Id == ainfo.Id);
@@ -300,7 +300,7 @@ namespace ASF.Application
                     .Select(r => r.Name)
                     .ToList();
             });
-            return ResultPagedList<AccountBaseInfoResponseDto>.ReSuccess(accountInfos, accountsResult.TotalCount);
+            return ResultPagedList<AccountInfoBaseResponseDto>.ReSuccess(accountInfos, accountsResult.TotalCount);
         }
         /// <summary>
         /// 获取账号详细信息
@@ -308,17 +308,17 @@ namespace ASF.Application
         /// <param name="id">账号ID</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<Result<AccountDetailsResponseDto>> GetDetails([FromRoute]int id)
+        public async Task<Result<AccountInfoDetailsResponseDto>> GetDetails([FromRoute]int id)
         {
             var account = await this._accountRepository.GetAsync(id);
             if (account == null)
-                return Result<AccountDetailsResponseDto>.ReFailure(ResultCodes.AccountNotExist);
+                return Result<AccountInfoDetailsResponseDto>.ReFailure(ResultCodes.AccountNotExist);
 
             //获取创建用户
             var createAccount = await this._accountRepository.GetAsync(account.CreateInfo.CreateId);
 
             //组装响应数据
-            var result = Mapper.Map<AccountDetailsResponseDto>(account);
+            var result = Mapper.Map<AccountInfoDetailsResponseDto>(account);
             if (account.IsSuperAdministrator())
             {
                 result.Roles.Clear();
@@ -328,7 +328,7 @@ namespace ASF.Application
             {
                 result.CreateUser = createAccount.Name;
             }
-            return Result<AccountDetailsResponseDto>.ReSuccess(result);
+            return Result<AccountInfoDetailsResponseDto>.ReSuccess(result);
         }
     }
 }

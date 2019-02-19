@@ -176,7 +176,7 @@ namespace ASF.Core.Test.Application
             var response = this.Server.CreateRequest("api/asf/account/List")
               .And(r => r.Authorization("Bearer", token).ContextJson(data))
               .PostAsync().GetAwaiter().GetResult();
-            var result = response.IsSuccess().GetMessage<ResultPagedList<AccountBaseInfoResponseDto>>();
+            var result = response.IsSuccess().GetMessage<ResultPagedList<AccountInfoBaseResponseDto>>();
             Assert.True(result.Success);
         }
         [Fact(DisplayName = "获取账号详细信息")]

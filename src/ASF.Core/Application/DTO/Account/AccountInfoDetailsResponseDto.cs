@@ -10,7 +10,7 @@ namespace ASF.Application.DTO
     /// <summary>
     /// 详细信息
     /// </summary>
-    public class AccountDetailsResponseDto: AccountBaseInfoResponseDto
+    public class AccountInfoDetailsResponseDto: AccountInfoBaseResponseDto
     {
         /// <summary>
         /// 是否删除

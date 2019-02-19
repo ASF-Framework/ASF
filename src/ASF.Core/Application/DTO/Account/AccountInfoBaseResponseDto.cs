@@ -9,7 +9,7 @@ namespace ASF.Application.DTO
     /// <summary>
     /// 账户基本信息
     /// </summary>
-    public class AccountBaseInfoResponseDto
+    public class AccountInfoBaseResponseDto
     {
         /// <summary>
         /// 用户标识

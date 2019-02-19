@@ -9,6 +9,10 @@ namespace ASF.Application.DTO
     /// </summary>
     public class AccountInfoByLoginResponseDto:IDto
     {
+        private AccountInfoByLoginResponseDto()
+        {
+
+        }
         public AccountInfoByLoginResponseDto(Account account)
         {
             this.Avatar = account.Avatar;

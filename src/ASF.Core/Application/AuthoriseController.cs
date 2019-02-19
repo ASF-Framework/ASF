@@ -44,7 +44,11 @@ namespace ASF.Application
             }
 
             //账户登录验证
-            var logResult = this._serviceProvider.GetRequiredService<AccountLoginService>().LoginByUsername(dto.Username, dto.Password, HttpContext.Connection.RemoteIpAddress.ToString());
+            var service = this._serviceProvider.GetRequiredService<AccountLoginService>();
+            var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (string.IsNullOrEmpty(ip))
+                ip = "127.0.0.1";
+            var logResult = service.LoginByUsername(dto.Username, dto.Password, ip);
             if (!logResult.Success)
             {
                 HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;

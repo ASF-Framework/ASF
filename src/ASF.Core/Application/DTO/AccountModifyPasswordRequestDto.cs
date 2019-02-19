@@ -11,13 +11,13 @@ namespace ASF.Application.DTO
         /// <summary>
         /// 旧登录密码
         /// </summary>
-        [Required, StringLength(20, MinimumLength = 6)]
-        public string OldPassword { get; private set; }
+        [Required, StringLength(32, MinimumLength = 6)]
+        public string OldPassword { get;  set; }
         /// <summary>
         /// 登录密码
         /// </summary>
-        [Required, StringLength(20, MinimumLength = 6)]
-        public string Password { get; private set; }
+        [Required, StringLength(32, MinimumLength = 6)]
+        public string Password { get;  set; }
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this);

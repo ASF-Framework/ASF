@@ -11,6 +11,7 @@ namespace ASF.Domain.Entities
     {
         public Permission(string code, string parentId, string name, PermissionType type, string description)
         {
+            code = code.ToLower();//code默认小写
             if (!string.IsNullOrEmpty(parentId))
                 this.Id = $"{parentId}.{code}";
             else
@@ -54,7 +55,7 @@ namespace ASF.Domain.Entities
         /// 权限服务地址
         /// </summary>
         [MaxLength(500)]
-        public string ApiAddress { get; set; }
+        public string ApiAddress { get; private set; }
         /// <summary>
         /// 是否日志记录
         /// </summary>
@@ -87,6 +88,15 @@ namespace ASF.Domain.Entities
         public bool IsNormal()
         {
             return this.Enable;
+        }
+
+        /// <summary>
+        /// 设置权限API地址
+        /// </summary>
+        /// <param name="apiAddress"></param>
+        public void SetApiAddress(string apiAddress)
+        {
+            this.ApiAddress = apiAddress.ToLower();
         }
     }
 }

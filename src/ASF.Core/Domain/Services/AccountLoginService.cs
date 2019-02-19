@@ -110,7 +110,7 @@ namespace ASF.Domain.Services
                 {
                     return Result<Account>.ReFailure(ResultCodes.AccountPasswordNotSameOverrun);
                 }
-                return Result<Account>.ReFailure(ResultCodes.AccountPasswordNotSame2.ToFormat((this.maxLoginFailedCount- loginFailed.FailedCount).ToString()));
+                return Result<Account>.ReFailure(ResultCodes.AccountPasswordNotSame2.ToFormat((this.maxLoginFailedCount - loginFailed.FailedCount).ToString()));
             }
 
             //生成访问Token
@@ -119,7 +119,11 @@ namespace ASF.Domain.Services
             claims.Add("name", account.Name);
             claims.Add("sub", account.Id.ToString());
             claims.Add("auth_mode", loginType);
-            claims.Add("roles", string.Join(",", account.Roles.ToArray()));
+            //判断是否为超级管理员
+            if (account.IsSuperAdministrator())
+                claims.Add("roles", "ALL");
+            else
+                claims.Add("roles", string.Join(",", account.Roles.ToArray()));
             var accessToken = _tokenGenerate.Generate(claims);
 
             //生成访问Token

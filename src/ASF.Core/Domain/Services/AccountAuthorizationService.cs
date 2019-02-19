@@ -1,6 +1,8 @@
 ﻿using ASF.Domain.Entities;
 using ASF.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,24 +16,31 @@ namespace ASF.Domain.Services
     {
         private readonly IRoleRepository _roleRepository;
         private readonly IPermissionRepository _permissionRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IServiceProvider _serviceProvider;
         private readonly ILogger _logger;
 
-        public AccountAuthorizationService(IRoleRepository roleRepository, IPermissionRepository permissionRepository, ILogger<AccountAuthorizationService> logger)
+        public AccountAuthorizationService(IRoleRepository roleRepository, IPermissionRepository permissionRepository, IHttpContextAccessor httpContextAccessor, IServiceProvider serviceProvider, ILogger logger)
         {
             _roleRepository = roleRepository;
             _permissionRepository = permissionRepository;
+            _httpContextAccessor = httpContextAccessor;
+            _serviceProvider = serviceProvider;
             _logger = logger;
         }
 
-        public Result<Permission> Authentication(string roles, HttpRequest request)
+        public Result<Permission> Authentication()
         {
+            HttpContext context = _httpContextAccessor.HttpContext;
+            HttpRequest request = context.Request;
+            var roles = context.User.FindFirst("roles")?.Value;
+            var requestPath = request.PathBase + request.Path;
+
             if (string.IsNullOrEmpty(roles))
             {
                 this._logger.LogDebug("Access to Tokan needs to include roles");
                 return Result<Permission>.ReFailure(ResultCodes.NotAcceptable);
-
             }
-            var requestPath = request.PathBase + request.Path;
 
             //根据请求地址获取权限
             var parmission = _permissionRepository.GetByApiAddress(requestPath).GetAwaiter().GetResult();
@@ -46,27 +55,46 @@ namespace ASF.Domain.Services
                 return Result<Permission>.ReFailure(ResultCodes.NotAcceptable);
             }
 
-            //获取登录账户分配的角色集
-            var ridList = this.AnalysisRoleId(roles);
-
-            //根据ID获取角色
-            var roleList = this._roleRepository.GetList(ridList).GetAwaiter().GetResult();
-            if (roleList == null)
+            //判断是否为超级管理员
+            if (roles.Equals("ALL"))
             {
-                this._logger.LogWarning($"No authorized roles found");
-                return Result<Permission>.ReFailure(ResultCodes.NotAcceptable);
-            }
-            foreach (var role in roleList)
-            {
-                if (!role.IsNormal())
+                //获取超级管理员账号
+                int uid = context.User.UserId();
+                var account = this._serviceProvider.GetRequiredService<IAccountRepository>().GetAsync(uid).GetAwaiter().GetResult();
+                if(account==null)
                 {
-                    this._logger.LogWarning($"{role.Name} role are not available");
+                    this._logger.LogWarning($"{uid} Super administrator does not exist");
                     return Result<Permission>.ReFailure(ResultCodes.NotAcceptable);
                 }
-                //如果包含此权限，者返回成功
-                if (role.ContainPermission(parmission.Id))
+                else if(account.IsSuperAdministrator())
                 {
                     return Result<Permission>.ReSuccess(parmission);
+                }
+            }
+            else
+            {
+                //获取登录账户分配的角色集
+                var ridList = this.AnalysisRoleId(roles);
+
+                //根据ID获取角色
+                var roleList = this._roleRepository.GetList(ridList).GetAwaiter().GetResult();
+                if (roleList == null)
+                {
+                    this._logger.LogWarning($"No authorized roles found");
+                    return Result<Permission>.ReFailure(ResultCodes.NotAcceptable);
+                }
+                foreach (var role in roleList)
+                {
+                    if (!role.IsNormal())
+                    {
+                        this._logger.LogWarning($"{role.Name} role are not available");
+                        return Result<Permission>.ReFailure(ResultCodes.NotAcceptable);
+                    }
+                    //如果包含此权限，者返回成功
+                    if (role.ContainPermission(parmission.Id))
+                    {
+                        return Result<Permission>.ReSuccess(parmission);
+                    }
                 }
             }
             this._logger.LogWarning($"Authorized users are not assigned {parmission.Name} permissions ");

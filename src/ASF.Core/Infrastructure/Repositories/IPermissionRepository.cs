@@ -33,6 +33,12 @@ namespace ASF.Infrastructure.Repositories
         /// <returns></returns>
         Task<IList<Permission>> GetList(IList<string> ids);
         /// <summary>
+        /// 获取所有权限集合
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        Task<IList<Permission>> GetList();
+        /// <summary>
         /// 分页获取角色集合
         /// </summary>
         /// <param name="requestDto"></param>

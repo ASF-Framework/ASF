@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Threading.Tasks;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace ASF
 {
@@ -29,7 +29,6 @@ namespace ASF
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement)
         {
             HttpContext httpContext = _httpContextAccessor.HttpContext;
-            var roles = httpContext.User.FindFirst("roles")?.Value;
 
             if (httpContext.User.Identity.IsAuthenticated)
             {
@@ -50,7 +49,7 @@ namespace ASF
                     }
                 }
                 //验证登陆用户是否有权限
-                var result = this._serviceProvider.GetRequiredService<AccountAuthorizationService>().Authentication(roles, httpContext.Request);
+                var result = this._serviceProvider.GetRequiredService<AccountAuthorizationService>().Authentication();
                 var requestPath = httpContext.Request.PathBase + httpContext.Request.Path;
                 if (result.Success)
                 {

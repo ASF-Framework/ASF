@@ -44,7 +44,9 @@ namespace ASF.Domain.Services
             var accountId = httpContext.User.UserId();
             var accountName = httpContext.User.Name();
             var apiAddress = httpContext.Request.PathBase+ httpContext.Request.Path + "?" + httpContext.Request.QueryString;
-            var clientIp = httpContext.Connection.RemoteIpAddress.ToString();
+            var clientIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (string.IsNullOrEmpty(clientIp))
+                clientIp = "127.0.0.1";
             var log = new Logging(Convert.ToInt32(accountId), accountName, Values.LoggingType.Operate, permission.Name, clientIp)
             {
                 ApiAddress = apiAddress,

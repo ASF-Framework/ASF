@@ -13,6 +13,7 @@ namespace ASF.Domain.Values
         {
 
         }
+        [JsonConstructor]
         public AccessToken(string token, string tokenType, DateTime expired, string refreshToken)
         {
             this.Token = token;

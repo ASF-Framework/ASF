@@ -63,6 +63,11 @@ namespace ASF.Infrastructure.Repository
             return Mapper.Map<IList<Domain.Entities.Permission>>(list);
         }
 
+        public Task<IList<Permission>> GetList()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public async Task<bool> HasById(string id)
         {
             var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == id);

@@ -50,10 +50,10 @@ namespace ASF.Domain.Services
 
             permission.Name = name;
             permission.ParentId = parentId;
-            permission.ApiAddress = apiAddress;
             permission.IsLogger = isLogger;
             permission.Enable = enable;
             permission.Description = description;
+            permission.SetApiAddress(apiAddress);
 
             //验证权限聚合的数据合法性
             return permission.Valid<Permission>();

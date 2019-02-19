@@ -11,6 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class AutoMapperBuilderExtensions
     {
+        private static object lockObj = new object();
         /// <summary>
         /// 添加AutoMapper服务,自动加载所有继承Profile配置,配置可见性
         /// </summary>
@@ -19,12 +20,17 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddAutoMapper(this IServiceCollection services)
         {
             //AutoMapper 配置服务
-            Mapper.Initialize(config =>
-              {
-                  config.ShouldMapProperty = p => p.GetMethod.IsPrivate || p.GetMethod.IsPublic || p.GetMethod.IsConstructor || p.GetMethod.IsAssembly || p.GetMethod.IsFamily;
-                  config.RegisterAllMappings();
-              });
-            return services;
+            lock (lockObj)
+            {
+                Mapper.Reset();
+                Mapper.Initialize(config =>
+                {
+                    config.ShouldMapProperty = p => p.GetMethod.IsPrivate || p.GetMethod.IsPublic || p.GetMethod.IsConstructor || p.GetMethod.IsAssembly || p.GetMethod.IsFamily;
+                    config.RegisterAllMappings();
+                });
+                return services;
+
+            }
 
         }
 
@@ -36,12 +42,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddAutoMapper(this IServiceCollection services, Action<IMapperConfigurationExpression> configAction)
         {
-            //AutoMapper 配置服务
-            Mapper.Initialize(config =>
+            lock (lockObj)
             {
-                configAction?.Invoke(config);
-            });
-            return services;
+                //AutoMapper 配置服务
+                Mapper.Reset();
+                Mapper.Initialize(config =>
+                {
+                    configAction?.Invoke(config);
+                });
+                return services;
+            }
         }
 
 

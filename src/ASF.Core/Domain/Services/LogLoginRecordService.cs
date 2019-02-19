@@ -27,7 +27,9 @@ namespace ASF.Domain.Services
                 throw new ArgumentNullException("登录用户不能为空");
 
             //获取操作的客户端IP
-            var clientIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+            var clientIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (string.IsNullOrEmpty(clientIp))
+                clientIp = "127.0.0.1";
             //创建日志对象
             var logging = new Logging(account, Values.LoggingType.Login, loginType, clientIp)
             {

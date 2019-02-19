@@ -46,15 +46,20 @@ namespace ASF.Application
         [Authorize(Roles = "self")]
         public async Task<Result> ModifyPassword([FromBody] AccountModifyPasswordRequestDto dto)
         {
+            //验证请求数据合法性
+            var result = dto.Valid();
+            if (!result.Success)
+                return result;
+
             int id = HttpContext.User.UserId();
             var service = this._serviceProvider.GetRequiredService<AccountPasswordChangeService>();
-            var result = await service.ModifyAsync(id, dto.Password, dto.OldPassword);
+            var result1 = await service.ModifyAsync(id, dto.Password, dto.OldPassword);
             if (!result.Success)
                 return result;
 
             //数据持久化
             _operateLog.Record(ASFPermissions.AccountModifyPassword, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志
-            await _accountRepository.ModifyAsync(result.Data);
+            await _accountRepository.ModifyAsync(result1.Data);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
@@ -148,33 +153,17 @@ namespace ASF.Application
         public async Task<Result<AccountInfoByLoginResponseDto>> Info()
         {
             int uid = this.User.UserId();
-            Account account = await _accountRepository.GetAsync(uid);
-            if (account == null)
+            var result = await this._serviceProvider.GetRequiredService<AccountPermissionService>()
+              .GetPermissions(uid);
+            if (result.Account==null)
                 return Result<AccountInfoByLoginResponseDto>.ReFailure(ResultCodes.AccountNotExist);
-
-            AccountInfoByLoginResponseDto responseDto = new AccountInfoByLoginResponseDto(account);
-
-            //获取账户角色
-            var roles = await this._serviceProvider.GetRequiredService<IRoleRepository>().GetList(account.Roles.ToList());
-            if (roles == null || roles.Count == 0)
-                return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
-
-            //获取角色权限
-            var pids = new List<string>();
-            roles
-                .Where(f => f.IsNormal())
-                .Select(f => f.Permissions.ToList())
-                .ToList()
-                .ForEach(p =>
-                {
-                    pids = pids.Zip(p, (first, second) => first + second).ToList();
-                });
-            var permissions = await this._serviceProvider.GetRequiredService<IPermissionRepository>().GetList(pids);
-            if (permissions.Count == 0)
+         
+            AccountInfoByLoginResponseDto responseDto = new AccountInfoByLoginResponseDto(result.Account);
+            if (result.Permissions.Count == 0)
                 return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
 
             //组装响应数据
-            permissions
+            result.Permissions
                 .Where(f => f.IsNormal())
                 .ToList()
                 .ForEach(p =>
@@ -183,7 +172,7 @@ namespace ASF.Application
                         return;
                     var permissionInfo = new AccountInfoByLoginResponseDto.PermissionInfo(p);
                     responseDto.Role.Permissions.Add(permissionInfo);
-                    permissions
+                    result.Permissions
                         .Where(f => f.Type == PermissionType.Action && f.ParentId == p.Id)
                         .ToList()
                         .ForEach(a =>

@@ -173,7 +173,7 @@ namespace ASF.Infrastructure.DependencyInjection
                 return;
             lock (TokenOptions.DefaultSecret)
             {
-                if (!string.IsNullOrEmpty(TokenOptions.DefaultSecret))
+              if (!string.IsNullOrEmpty(TokenOptions.DefaultSecret))
                     return;
                 TokenOptions.DefaultSecret = GetRandomString(256, true, true, true, false, string.Empty);
                 TokenOptions.DefaultSecurityType = SecurityType.HmacSha256;

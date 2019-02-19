@@ -12,12 +12,11 @@ namespace ASF.Application.DTO
         /// 手机号码
         /// </summary>
         [Required, MaxLength(20)]
-        public string Number { get; }
+        public string Number { get; set; }
         /// <summary>
         /// 手机号码区号
         /// </summary>
-        [Required]
-        public int AreaCode { get; } = 86;
+        public int AreaCode { get; set; } = 86;
 
         /// <summary>
         /// 转换Json字符串

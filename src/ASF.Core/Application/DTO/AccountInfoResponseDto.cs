@@ -51,7 +51,6 @@ namespace ASF.Application.DTO
         /// <summary>
         /// 角色集
         /// </summary>
-        [JsonConverter(typeof(UnixDateTimeConverter))]
         public List<string> Roles { get; set; } = new List<string>();
     }
 }

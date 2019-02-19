@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace ASF.Domain.Entities
 {
@@ -12,10 +13,9 @@ namespace ASF.Domain.Entities
     {
         private Account()
         {
-
             this.Status = AccountStatus.Normal;
             this.LoginInfo = new LoginInfo();
-        }000
+        }
         /// <summary>
         /// 管理员账户
         /// </summary>
@@ -153,7 +153,6 @@ namespace ASF.Domain.Entities
             this.IsDeleted = true;
         }
 
-
         /// <summary>
         /// 设置登录信息
         /// </summary>
@@ -161,6 +160,15 @@ namespace ASF.Domain.Entities
         public void SetLoginInfo(LoginInfo loginInfo)
         {
             this.LoginInfo = loginInfo;
+        }
+
+        /// <summary>
+        /// 是否为超级管理员
+        /// </summary>
+        /// <returns></returns>
+        public bool IsSuperAdministrator()
+        {
+            return this.Roles.ToList().Contains(999999999);
         }
     }
 }

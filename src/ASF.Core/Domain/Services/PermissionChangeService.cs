@@ -53,7 +53,7 @@ namespace ASF.Domain.Services
             permission.IsLogger = isLogger;
             permission.Enable = enable;
             permission.Description = description;
-            permission.SetApiAddress(apiAddress);
+            permission.SetApiTemplate(apiAddress);
 
             //验证权限聚合的数据合法性
             return permission.Valid<Permission>();

@@ -1,5 +1,7 @@
 ﻿using ASF.Domain.Entities;
 using ASF.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,10 +16,12 @@ namespace ASF.Domain.Services
     {
         private readonly IAccountRepository _accountRepository;
         private readonly AccountRoleAssignationService _roleAssignationService;
-        public AccountCreateService(IAccountRepository accountRepository, AccountRoleAssignationService roleAssignationService)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public AccountCreateService(IAccountRepository accountRepository, IHttpContextAccessor httpContextAccessor, AccountRoleAssignationService roleAssignationService)
         {
             this._accountRepository = accountRepository;
             this._roleAssignationService = roleAssignationService;
+            this._httpContextAccessor = httpContextAccessor;
         }
         /// <summary>
         /// 创建账户信息
@@ -29,6 +33,11 @@ namespace ASF.Domain.Services
             //验证用户名是否已经被使用
             if (await _accountRepository.HasByUsername(account.Username))
                 return Result.ReFailure(ResultCodes.AccountUsernameExist);
+
+
+            //获取创建账户的用户
+            int uid = this._httpContextAccessor.HttpContext.User.UserId();
+            account.CreateInfo = new Values.CreateOfAccount(uid);
 
             //如果分配了角色需要验证角色
             var roles = (List<int>)account.Roles;

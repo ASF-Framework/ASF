@@ -1,5 +1,6 @@
 ﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
+using ASF.Infrastructure.Model;
 using ASF.Infrastructure.Repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -16,30 +17,24 @@ namespace ASF.Infrastructure.Repository
         {
             _dbContext = dbContext;
         }
-        public async Task<Domain.Entities.Permission> AddAsync(Domain.Entities.Permission entity)
+        public async Task<Permission> AddAsync(Permission entity)
         {
-            var model = Mapper.Map<Model.PermissionModel>(entity);
+            var model = Mapper.Map<PermissionModel>(entity);
             await _dbContext.AddAsync(model);
-            return Mapper.Map<Domain.Entities.Permission>(model);
+            return Mapper.Map<Permission>(model);
         }
 
-        public async Task<Domain.Entities.Permission> GetAsync(string id)
+        public async Task<Permission> GetAsync(string id)
         {
             var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == id);
-            return Mapper.Map<Domain.Entities.Permission>(model);
+            return Mapper.Map<Permission>(model);
         }
-
-        public async Task<Domain.Entities.Permission> GetByApiAddress(string apiAddress)
-        {
-            var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.ApiAddress == apiAddress);
-            return Mapper.Map<Domain.Entities.Permission>(model);
-        }
-
-        public async Task<IList<Domain.Entities.Permission>> GetList(IList<string> ids)
+  
+        public async Task<IList<Permission>> GetList(IList<string> ids)
         {
             var list = await _dbContext.Permissions.Where(w => ids.Contains(w.Id)).ToListAsync();
-            list = list == null ? new List<Model.PermissionModel>() : list;
-            return Mapper.Map<List<Domain.Entities.Permission>>(list);
+            list = list == null ? new List<PermissionModel>() : list;
+            return Mapper.Map<List<Permission>>(list);
         }
 
         public async Task<IList<Permission>> GetList(PermissionInfoListRequestDto requestDto)
@@ -60,7 +55,7 @@ namespace ASF.Infrastructure.Repository
             
             var list = await queryable.ToListAsync();
 
-            return Mapper.Map<IList<Domain.Entities.Permission>>(list);
+            return Mapper.Map<IList<Permission>>(list);
         }
 
         public async Task<IList<Permission>> GetList()
@@ -69,7 +64,7 @@ namespace ASF.Infrastructure.Repository
                .Where(w => w.Id != "");
             var list = await queryable.ToListAsync();
 
-            return Mapper.Map<IList<Domain.Entities.Permission>>(list);
+            return Mapper.Map<IList<Permission>>(list);
         }
 
         public async Task<bool> HasById(string id)
@@ -78,7 +73,7 @@ namespace ASF.Infrastructure.Repository
             return model == null ? false : true;
         }
 
-        public async Task ModifyAsync(Domain.Entities.Permission permission)
+        public async Task ModifyAsync(Permission permission)
         {
             var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == permission.Id);
             Mapper.Map(permission, model);

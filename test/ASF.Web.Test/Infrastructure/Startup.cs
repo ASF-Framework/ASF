@@ -27,6 +27,7 @@ namespace ASF.Core.Test.Infrastructure
                 {
                     build.AddSQLite();
                 });
+            services.AddLogging();
             services.AddAutoMapper(c =>
             {
                 c.RegisterAllMappings(typeof(LogInfoMapper).Assembly);

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace ASF.Domain.Services
@@ -20,7 +21,7 @@ namespace ASF.Domain.Services
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger _logger;
 
-        public AccountAuthorizationService(IRoleRepository roleRepository, IPermissionRepository permissionRepository, IHttpContextAccessor httpContextAccessor, IServiceProvider serviceProvider, ILogger logger)
+        public AccountAuthorizationService(IRoleRepository roleRepository, IPermissionRepository permissionRepository, IHttpContextAccessor httpContextAccessor, IServiceProvider serviceProvider, ILogger<AccountAuthorizationService> logger)
         {
             _roleRepository = roleRepository;
             _permissionRepository = permissionRepository;
@@ -34,7 +35,7 @@ namespace ASF.Domain.Services
             HttpContext context = _httpContextAccessor.HttpContext;
             HttpRequest request = context.Request;
             var roles = context.User.FindFirst("roles")?.Value;
-            var requestPath = request.PathBase + request.Path;
+            var requestPath = (request.PathBase + request.Path).ToString().ToLower() ;
 
             if (string.IsNullOrEmpty(roles))
             {
@@ -43,7 +44,7 @@ namespace ASF.Domain.Services
             }
 
             //根据请求地址获取权限
-            var parmission = _permissionRepository.GetByApiAddress(requestPath).GetAwaiter().GetResult();
+            var parmission = this.MatchPermission(requestPath);
             if (parmission==null)
             {
                 this._logger.LogWarning($"Did not find the corresponding permissions of {requestPath}");
@@ -119,5 +120,16 @@ namespace ASF.Domain.Services
             }
             return rolesId;
         }
+        /// <summary>
+        /// 匹配权限
+        /// </summary>
+        /// <param name="requestPath"></param>
+        /// <returns></returns>
+        private Permission MatchPermission(string requestPath)
+        {
+            var parmissions = _permissionRepository.GetList().GetAwaiter().GetResult();
+         return   parmissions.FirstOrDefault(f => f.MatchApiTemplate(requestPath));
+        }
+
     }
 }

@@ -214,6 +214,7 @@ namespace ASF.Application
         /// </summary>
         /// <param name="id">账号标识</param>
         /// <returns></returns>
+        [HttpPost]
         public async Task<Result> Delete([FromRoute]int id)
         {
             _operateLog.Record(ASFPermissions.AccountDelete, id.ToString(), "Success");  //记录日志

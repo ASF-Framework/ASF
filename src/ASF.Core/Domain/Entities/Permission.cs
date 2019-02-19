@@ -1,6 +1,7 @@
 ﻿using ASF.Domain.Values;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace ASF.Domain.Entities
 {
@@ -55,7 +56,11 @@ namespace ASF.Domain.Entities
         /// 权限服务地址
         /// </summary>
         [MaxLength(500)]
-        public string ApiAddress { get; private set; }
+        public string ApiTemplate { get; private set; }
+        /// <summary>
+        /// Api模板的正则表达式
+        /// </summary>
+        private Regex ApiTemplateRegex { get; set; }
         /// <summary>
         /// 是否日志记录
         /// </summary>
@@ -73,13 +78,11 @@ namespace ASF.Domain.Entities
         /// 是否启用
         /// </summary>
         public bool Enable { get; set; }
-
         /// <summary>
         /// 添加时间
         /// </summary>
         [Required]
         public DateTime CreateTime { get; private set; } = DateTime.Now;
-
 
         /// <summary>
         /// 权限是否可用
@@ -91,12 +94,25 @@ namespace ASF.Domain.Entities
         }
 
         /// <summary>
-        /// 设置权限API地址
+        /// 设置权限API模板
         /// </summary>
         /// <param name="apiAddress"></param>
-        public void SetApiAddress(string apiAddress)
+        public void SetApiTemplate(string apiTemplate)
         {
-            this.ApiAddress = apiAddress.ToLower();
+            this.ApiTemplateRegex = new Regex($"^{this.ApiTemplate}$");
+            this.ApiTemplate = apiTemplate.ToLower();
+        }
+
+        /// <summary>
+        /// 匹配Api模板
+        /// </summary>
+        /// <param name="requestPath"></param>
+        /// <returns></returns>
+        public bool MatchApiTemplate(string requestPath)
+        {
+            if (ApiTemplateRegex == null)
+                this.ApiTemplateRegex = new Regex($"^{this.ApiTemplate}$");
+            return this.ApiTemplateRegex.IsMatch(requestPath);
         }
     }
 }

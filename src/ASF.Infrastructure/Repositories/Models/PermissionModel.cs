@@ -1,13 +1,11 @@
 ﻿using ASF.Domain.Values;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace ASF.Infrastructure.Model
 {
-   public class PermissionModel
+    public class PermissionModel
     {
         /// <summary>
         /// 唯一标示
@@ -43,7 +41,7 @@ namespace ASF.Infrastructure.Model
         /// 权限服务地址
         /// </summary>
         [MaxLength(500)]
-        public string ApiAddress { get; set; }
+        public string ApiTemplate { get; set; }
         /// <summary>
         /// 是否日志记录
         /// </summary>

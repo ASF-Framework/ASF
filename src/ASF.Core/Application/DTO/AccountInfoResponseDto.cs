@@ -42,6 +42,7 @@ namespace ASF.Application.DTO
         /// <summary>
         /// 创建时间
         /// </summary>
+        [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime CreateTime { get; set; }
         /// <summary>
         /// 最后登录时间

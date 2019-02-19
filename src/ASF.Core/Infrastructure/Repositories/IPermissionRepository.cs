@@ -8,18 +8,11 @@ namespace ASF.Infrastructure.Repositories
     public interface IPermissionRepository : IRepository<Permission, string>
     {
         /// <summary>
-        /// 根据Api地址获取权限
-        /// </summary>
-        /// <param name="apiAddress"></param>
-        /// <returns></returns>
-        Task<Permission> GetByApiAddress(string apiAddress);
-        /// <summary>
         /// 这标识是否被使用
         /// </summary>
         /// <param name="id">权限标识</param>
         /// <returns></returns>
         Task<bool> HasById(string id);
-
         /// <summary>
         /// 修改权限
         /// </summary>

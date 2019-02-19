@@ -106,13 +106,11 @@ namespace ASF.Application
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
-
         /// <summary>
         /// 获取角色集合
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [AllowAnonymous]
         public async Task<ResultPagedList<RoleInfoResponseDto>> List([FromBody]RoleInfoListPagedRequestDto dto)
         {
             //验证请求数据合法性

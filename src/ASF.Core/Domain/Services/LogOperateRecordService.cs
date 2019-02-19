@@ -43,7 +43,11 @@ namespace ASF.Domain.Services
             var httpContext = _httpContextAccessor.HttpContext;
             var accountId = httpContext.User.UserId();
             var accountName = httpContext.User.Name();
-            var apiAddress = httpContext.Request.PathBase+ httpContext.Request.Path + "?" + httpContext.Request.QueryString;
+            var apiAddress = httpContext.Request.PathBase+ httpContext.Request.Path;
+            if(!string.IsNullOrEmpty(httpContext.Request?.QueryString.Value))
+            {
+                apiAddress = apiAddress + "?" + httpContext.Request.QueryString;
+            }
             var clientIp = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString();
             if (string.IsNullOrEmpty(clientIp))
                 clientIp = "127.0.0.1";

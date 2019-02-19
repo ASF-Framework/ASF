@@ -18,36 +18,35 @@ namespace ASF.Infrastructure.Repository
         {
             _dbContext = dbContext;
         }
-        public async Task<Domain.Entities.Account> AddAsync(Domain.Entities.Account entity)
+        public async Task<Account> AddAsync(Account entity)
         {
             var model = Mapper.Map<AccountModel > (entity);
             await _dbContext.AddAsync(model);
-            //await _dbContext.SaveChangesAsync();
-            return Mapper.Map<Domain.Entities.Account>(model);
+            return Mapper.Map<Account>(model);
         }
 
-        public async Task<Domain.Entities.Account> GetAsync(PhoneNumber telephone)
+        public async Task<Account> GetAsync(PhoneNumber telephone)
         {
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Telephone == telephone.ToString());
-            return Mapper.Map<Domain.Entities.Account>(model);
+            return Mapper.Map<Account>(model);
         }
 
-        public async Task<Domain.Entities.Account> GetAsync(int id)
+        public async Task<Account> GetAsync(int id)
         {
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Id == id);
-            return Mapper.Map<Domain.Entities.Account>(model);
+            return Mapper.Map<Account>(model);
         }
 
-        public async Task<Domain.Entities.Account> GetByEmailAsync(string email)
+        public async Task<Account> GetByEmailAsync(string email)
         {
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Email == email);
-            return Mapper.Map<Domain.Entities.Account>(model);
+            return Mapper.Map<Account>(model);
         }
 
-        public async Task<Domain.Entities.Account> GetByUsernameAsync(string username)
+        public async Task<Account> GetByUsernameAsync(string username)
         {
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Username == username);
-            return Mapper.Map<Domain.Entities.Account>(model);
+            return Mapper.Map<Account>(model);
         }
 
         public async Task<(IList<Account> Accounts, int TotalCount)> GetList(AccountInfoListPagedRequestDto requestDto)
@@ -71,7 +70,7 @@ namespace ASF.Infrastructure.Repository
             var result = queryable.OrderByDescending(p => p.CreateTime);
             var list =await result.Skip((requestDto.SkipPage - 1) * requestDto.PagedCount).Take(requestDto.PagedCount).ToListAsync();
 
-            return (Mapper.Map<List<Domain.Entities.Account>>(list), result.Count());
+            return (Mapper.Map<List<Account>>(list), result.Count());
         }
 
         public async Task<bool> HasByEmail(string email)
@@ -92,12 +91,11 @@ namespace ASF.Infrastructure.Repository
             return model == null ? false : true;
         }
 
-        public async Task ModifyAsync(Domain.Entities.Account account)
+        public async Task ModifyAsync(Account account)
         {
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Id == account.Id);
             Mapper.Map(account, model);
             _dbContext.Accounts.Update(model);
-            // await _dbContext.SaveChangesAsync();
         }
 
         public async Task RemoveAsync(int primaryKey)
@@ -105,14 +103,12 @@ namespace ASF.Infrastructure.Repository
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Id == primaryKey);
             model.Delete();
             _dbContext.Accounts.Update(model);
-            //await _dbContext.SaveChangesAsync();
         }
 
         public async Task<IList<Account>> GetList()
         {
             var list = await _dbContext.Accounts.ToListAsync();
-
-            return Mapper.Map<IList<Domain.Entities.Account>>(list);
+            return Mapper.Map<IList<Account>>(list);
         }
     }
 }

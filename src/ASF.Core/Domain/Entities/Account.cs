@@ -30,6 +30,18 @@ namespace ASF.Domain.Entities
             this.CreateInfo = new CreateOfAccount(account);
         }
         /// <summary>
+        /// 管理员账户
+        /// </summary>
+        /// <param name="username">账户</param>
+        /// <param name="password">密码</param>
+        /// <param name="account">创建此账户管理员</param>
+        public Account(string username, string password) : this()
+        {
+            this.Username = username;
+            this.Password = password;
+            this.Name = username;
+        }
+        /// <summary>
         /// 编号
         /// </summary>
         [Key]
@@ -80,7 +92,7 @@ namespace ASF.Domain.Entities
         /// 创建时信息
         /// </summary>
         [Required]
-        public CreateOfAccount CreateInfo { get; private set; }
+        public CreateOfAccount CreateInfo { get;  set; }
         /// <summary>
         /// 登录信息
         /// </summary>

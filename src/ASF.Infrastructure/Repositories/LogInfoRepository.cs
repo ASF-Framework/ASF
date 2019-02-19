@@ -3,7 +3,6 @@ using ASF.Infrastructure.Repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ASF.Infrastructure.Repository
@@ -20,7 +19,6 @@ namespace ASF.Infrastructure.Repository
         {
             var model = Mapper.Map<Model.LogInfoModel>(entity);
             await _dbContext.AddAsync(model);
-            // await _dbContext.SaveChangesAsync();
             return Mapper.Map<Logging>(model);
         }
 
@@ -38,8 +36,7 @@ namespace ASF.Infrastructure.Repository
         public async Task<IList<Logging>> GetList()
         {
             var list = await _dbContext.Permissions.ToListAsync();
-
-            return Mapper.Map<IList<Domain.Entities.Logging>>(list);
+            return Mapper.Map<IList<Logging>>(list);
         }
     }
 }

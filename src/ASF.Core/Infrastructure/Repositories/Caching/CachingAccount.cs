@@ -120,8 +120,8 @@ namespace ASF.Infrastructure.Repositories
             {
                 list.Remove(entity);
                 var model = await _repository.GetAsync(account.Id);
-                if (model == null) return;
-                list.Add(model);
+                if (model != null)
+                    list.Add(model);
                 await _accountCache.SetAsync(_cacheKey, list, _duration);
             }
         }
@@ -137,8 +137,8 @@ namespace ASF.Infrastructure.Repositories
             {
                 list.Remove(entity);
                 var model = await _repository.GetAsync(primaryKey);
-                if (model == null) return;
-                list.Add(model);
+                if (model != null)
+                    list.Add(model);
                 await _accountCache.SetAsync(_cacheKey, list, _duration);
             }
         }

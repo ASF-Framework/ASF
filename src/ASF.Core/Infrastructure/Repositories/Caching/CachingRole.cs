@@ -60,7 +60,7 @@ namespace ASF.Infrastructure.Repositories
                 queryable = queryable.Where(w => w.Enable == true);
             if (requestDto.Enable == 0)
                 queryable = queryable.Where(w => w.Enable == false);
-            
+
             return (queryable.Skip((requestDto.SkipPage - 1) * requestDto.PagedCount).Take(requestDto.PagedCount).ToList(), queryable.Count());
         }
 
@@ -91,8 +91,8 @@ namespace ASF.Infrastructure.Repositories
             {
                 list.Remove(entity);
                 var model = await _repository.GetAsync(roleId);
-                if (model == null) return;
-                list.Add(model);
+                if (model != null)
+                    list.Add(model);
                 await _roleCache.SetAsync(_cacheKey, list, _duration);
             }
         }

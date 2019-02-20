@@ -94,8 +94,8 @@ namespace ASF.Infrastructure.Repositories
             {
                 list.Remove(entity);
                 var model = await _repository.GetAsync(permission.Id);
-                if (model == null) return;
-                list.Add(model);
+                if (model != null)
+                    list.Add(model);
                 await _permissionCache.SetAsync(_cacheKey, list, _duration);
             }
         }

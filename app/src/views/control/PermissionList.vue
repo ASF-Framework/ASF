@@ -5,7 +5,7 @@
         <a-row type="flex" justify="space-around">
           <a-col :md="8" :sm="24">
             <a-tooltip>
-              <template slot="title">新增权限</template>
+              <template slot="title">新增权限111111111111</template>
               <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px"></a-button>
             </a-tooltip>
             <a-select placeholder="请选择状态" default-value="0" style="width:100px">

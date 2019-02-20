@@ -2,32 +2,31 @@
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ASF.Application.DTO
 {
-    public class RoleInfoResponseDto : IDto
+    /// <summary>
+    /// 权限基本信息响应对象
+    /// </summary>
+    public class PermissionMenuInfoDetailsResponseDto : PermissionMenuInfoBaseResponseDto
     {
         /// <summary>
-        /// 角色编号
+        /// 是否系统权限
         /// </summary>
-        public int Id { get; set; }
+        public bool IsSystem { get; set; }
         /// <summary>
-        /// 角色名称
+        /// 排序
         /// </summary>
-        public string Name { get; set; }
-        /// <summary>
-        /// 描述
-        /// </summary>
-        public string Description { get; set; }
+        public int Sort { get; set; }
         /// <summary>
         /// 是否启用
         /// </summary>
         public bool Enable { get; set; }
         /// <summary>
-        /// 创建时间
+        /// 添加时间
         /// </summary>
         [JsonConverter(typeof(UnixDateTimeConverter))]
-        public DateTime CreateTime { get; set; } 
+        public DateTime CreateTime { get; set; }
+ 
     }
 }

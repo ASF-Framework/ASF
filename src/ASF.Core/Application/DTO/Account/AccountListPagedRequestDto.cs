@@ -5,7 +5,7 @@ namespace ASF.Application.DTO
     /// <summary>
     /// 查询账户信息集合分页请求
     /// </summary>
-    public class AccountInfoListPagedRequestDto : ListPagedRequestDto
+    public class AccountListPagedRequestDto : ListPagedRequestDto
     {
         /// <summary>
         /// 模糊查询条件  用户名、ID、昵称

@@ -3,7 +3,7 @@
     /// <summary>
     /// 角色信息集合查询请求
     /// </summary>
-    public class RoleInfoListPagedRequestDto: ListPagedRequestDto
+    public class RoleListPagedRequestDto: ListPagedRequestDto
     {
         /// <summary>
         /// 模糊查询条件  角色标识、名称

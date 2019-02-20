@@ -26,6 +26,12 @@ namespace ASF.Infrastructure.Repositories
         /// <returns></returns>
         Task<IList<Permission>> GetList(IList<string> ids);
         /// <summary>
+        /// 根据父类获取权限集合
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        Task<IList<Permission>> GetListByParentId(string parentId);
+        /// <summary>
         /// 获取所有权限集合
         /// </summary>
         /// <param name="ids"></param>
@@ -36,6 +42,6 @@ namespace ASF.Infrastructure.Repositories
         /// </summary>
         /// <param name="requestDto"></param>
         /// <returns></returns>
-        Task<IList<Permission>> GetList(PermissionInfoListRequestDto requestDto);
+        Task<IList<Permission>> GetList(PermissionListRequestDto requestDto);
     }
 }

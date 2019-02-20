@@ -51,7 +51,7 @@ namespace ASF.Infrastructure.Repositories
             return await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
         }
 
-        public async Task<IList<Permission>> GetList(PermissionInfoListRequestDto requestDto)
+        public async Task<IList<Permission>> GetList(PermissionListRequestDto requestDto)
         {
             var list = await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
 
@@ -69,6 +69,11 @@ namespace ASF.Infrastructure.Repositories
                 queryable = queryable.Where(w => w.Enable == false);
 
             return queryable.ToList();
+        }
+
+        public Task<IList<Permission>> GetListByParentId(string parentId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<bool> HasById(string id)

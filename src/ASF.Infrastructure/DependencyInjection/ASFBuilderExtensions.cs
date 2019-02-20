@@ -58,19 +58,19 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddDbContext<RepositoryContext>(options => options.UseSqlite("Data Source=ASF.db"), ServiceLifetime.Scoped);
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            //services.AddScoped<IAccountRepository, AccountRepository>();
-            services.TryAddScoped(typeof(AccountRepository));
-            services.AddScoped<IAccountRepository, CachingAccount<AccountRepository>>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            //services.TryAddScoped(typeof(AccountRepository));
+            //services.AddScoped<IAccountRepository, CachingAccount<AccountRepository>>();
 
             services.AddScoped<ILoggingRepository, LogInfoRepository>();
 
-            //services.AddScoped<IPermissionRepository, PermissionRepository>();
-            services.TryAddScoped(typeof(PermissionRepository));
-            services.AddScoped<IPermissionRepository, CachingPermission<PermissionRepository>>();
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
+            //services.TryAddScoped(typeof(PermissionRepository));
+            //services.AddScoped<IPermissionRepository, CachingPermission<PermissionRepository>>();
 
-            //services.AddScoped<IRoleRepository, RoleRepository>();
-            services.TryAddScoped(typeof(RoleRepository));
-            services.AddScoped<IRoleRepository, CachingRole<RoleRepository>>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            //services.TryAddScoped(typeof(RoleRepository));
+            //services.AddScoped<IRoleRepository, CachingRole<RoleRepository>>();
         }
         /// <summary>
         /// 注入防腐层

@@ -60,7 +60,7 @@ namespace ASF.Infrastructure.Repositories
             return list.FirstOrDefault(w => w.Username == username);
         }
 
-        public async Task<(IList<Account> Accounts, int TotalCount)> GetList(AccountInfoListPagedRequestDto requestDto)
+        public async Task<(IList<Account> Accounts, int TotalCount)> GetList(AccountListPagedRequestDto requestDto)
         {
             var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
             var queryable = list.Where(w => w.IsDeleted == requestDto.IsDeleted);

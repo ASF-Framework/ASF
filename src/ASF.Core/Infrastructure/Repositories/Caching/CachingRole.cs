@@ -45,7 +45,7 @@ namespace ASF.Infrastructure.Repositories
             return await _roleCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
         }
 
-        public async Task<(IList<Role> Roles, int TotalCount)> GetList(RoleInfoListPagedRequestDto requestDto)
+        public async Task<(IList<Role> Roles, int TotalCount)> GetList(RoleListPagedRequestDto requestDto)
         {
             var list = await _roleCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
             var queryable = list.Where(w => w.Id > 0);

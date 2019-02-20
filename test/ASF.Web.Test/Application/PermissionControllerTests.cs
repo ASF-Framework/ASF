@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ASF.Core.Test.Application
 {
-    class PermissionControllerTests
+    public class PermissionControllerTests
     {
     }
 }

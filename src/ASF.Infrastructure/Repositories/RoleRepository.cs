@@ -45,7 +45,7 @@ namespace ASF.Infrastructure.Repository
             return Mapper.Map<List<Role>>(list);
         }
 
-        public async Task<(IList<Role> Roles, int TotalCount)> GetList(RoleInfoListPagedRequestDto requestDto)
+        public async Task<(IList<Role> Roles, int TotalCount)> GetList(RoleListPagedRequestDto requestDto)
         {
             var queryable = _dbContext.Roles
                .Where(w => w.Id > 0);

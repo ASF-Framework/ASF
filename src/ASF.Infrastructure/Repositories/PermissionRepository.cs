@@ -37,10 +37,10 @@ namespace ASF.Infrastructure.Repository
             return Mapper.Map<List<Permission>>(list);
         }
 
-        public async Task<IList<Permission>> GetList(PermissionInfoListRequestDto requestDto)
+        public async Task<IList<Permission>> GetList(PermissionListRequestDto requestDto)
         {
             var queryable = _dbContext.Permissions
-                .Where(w => w.Id !="");
+                .Where(w => w.Id != "");
 
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {
@@ -60,10 +60,13 @@ namespace ASF.Infrastructure.Repository
 
         public async Task<IList<Permission>> GetList()
         {
-            var queryable = _dbContext.Permissions
-               .Where(w => w.Id != "");
-            var list = await queryable.ToListAsync();
+            var list = await _dbContext.Permissions.ToListAsync();
+            return Mapper.Map<IList<Permission>>(list);
+        }
 
+        public async Task<IList<Permission>> GetListByParentId(string parentId)
+        {
+            var list = await _dbContext.Permissions.Where(f=>f.ParentId== parentId).ToListAsync();
             return Mapper.Map<IList<Permission>>(list);
         }
 

@@ -52,7 +52,7 @@ namespace ASF.Infrastructure.Repositories
         /// </summary>
         /// <param name="requestDto"></param>
         /// <returns></returns>
-        Task<(IList<Account> Accounts, int TotalCount)> GetList(AccountInfoListPagedRequestDto requestDto);
+        Task<(IList<Account> Accounts, int TotalCount)> GetList(AccountListPagedRequestDto requestDto);
         /// <summary>
         /// 修改账户
         /// </summary>

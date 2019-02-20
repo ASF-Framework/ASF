@@ -3,7 +3,7 @@
     /// <summary>
     /// 权限信息列表查询请求Dto
     /// </summary>
-    public class PermissionInfoListRequestDto
+    public class PermissionListRequestDto
     {
         /// <summary>
         /// 模糊查询条件  权限标识、名称

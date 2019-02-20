@@ -1,21 +1,15 @@
-﻿using ASF.Domain.Values;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ASF.Application.DTO
 {
-    /// <summary>
-    /// 权限信息响应对象
-    /// </summary>
-    public class PermissionInfoResponseDto:IDto
+    public class PermissionActionInfoDetailsResponseDto:IDto
     {
         /// <summary>
         /// 唯一标示
         /// </summary>
-        public string Id { get;  set; }
+        public string Id { get; set; }
         /// <summary>
         /// 上级权限编号
         /// </summary>
@@ -25,13 +19,9 @@ namespace ASF.Application.DTO
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// 权限类型
-        /// </summary>
-        public PermissionType Type { get; set; }
-        /// <summary>
         /// 权限服务地址
         /// </summary>
-        public string ApiAddress { get; set; }
+        public string ApiTemplate { get; set; }
         /// <summary>
         /// 是否系统权限
         /// </summary>
@@ -41,10 +31,6 @@ namespace ASF.Application.DTO
         /// </summary>
         public bool IsLogger { get; set; }
         /// <summary>
-        /// 排序
-        /// </summary>
-        public int Sort { get; set; }
-        /// <summary>
         /// 是否启用
         /// </summary>
         public bool Enable { get; set; }
@@ -52,6 +38,6 @@ namespace ASF.Application.DTO
         /// 添加时间
         /// </summary>
         [JsonConverter(typeof(UnixDateTimeConverter))]
-        public DateTime CreateTime { get;  set; }
+        public DateTime CreateTime { get; set; }
     }
 }

@@ -49,7 +49,7 @@ namespace ASF.Infrastructure.Repository
             return Mapper.Map<Account>(model);
         }
 
-        public async Task<(IList<Account> Accounts, int TotalCount)> GetList(AccountInfoListPagedRequestDto requestDto)
+        public async Task<(IList<Account> Accounts, int TotalCount)> GetList(AccountListPagedRequestDto requestDto)
         {
             var queryable = _dbContext.Accounts
                 .Where(w => w.IsDeleted == requestDto.IsDeleted);

@@ -10,14 +10,14 @@ using Microsoft.Extensions.Logging;
 
 namespace ASF.Infrastructure.Repositories
 {
-    public class CachingPermission<T> : IPermissionRepository where T : IPermissionRepository
+    public class CachingPermissionRepository<T> : IPermissionRepository where T : IPermissionRepository
     {
         private readonly T _repository;
         private readonly ICache<Permission> _permissionCache;
         private readonly string _cacheKey = "GetList";
-        private readonly ILogger<CachingPermission<T>> _logger;
+        private readonly ILogger<CachingPermissionRepository<T>> _logger;
         private TimeSpan _duration = new TimeSpan(0, 5, 0);
-        public CachingPermission(T repository, ICache<Permission> permissionCache, ILogger<CachingPermission<T>> logger)
+        public CachingPermissionRepository(T repository, ICache<Permission> permissionCache, ILogger<CachingPermissionRepository<T>> logger)
         {
             _repository = repository;
             _permissionCache = permissionCache;

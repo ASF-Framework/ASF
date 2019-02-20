@@ -10,14 +10,14 @@ using Microsoft.Extensions.Logging;
 
 namespace ASF.Infrastructure.Repositories
 {
-    public class CachingRole<T> : IRoleRepository where T : IRoleRepository
+    public class CachingRoleRepository<T> : IRoleRepository where T : IRoleRepository
     {
         private readonly T _repository;
         private readonly ICache<Role> _roleCache;
         private readonly string _cacheKey = "GetList";
-        private readonly ILogger<CachingRole<T>> _logger;
+        private readonly ILogger<CachingRoleRepository<T>> _logger;
         private TimeSpan _duration = new TimeSpan(0, 5, 0);
-        public CachingRole(T repository, ICache<Role> roleCache, ILogger<CachingRole<T>> logger)
+        public CachingRoleRepository(T repository, ICache<Role> roleCache, ILogger<CachingRoleRepository<T>> logger)
         {
             _repository = repository;
             _roleCache = roleCache;

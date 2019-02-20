@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ASF
+namespace ASF.Infrastructure.Repositories
 {
     /// <summary>
     /// Abstract interface to model data caching

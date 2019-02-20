@@ -149,7 +149,7 @@ namespace ASF.Application
             return Result.ReSuccess();
         }
         /// <summary>
-        /// 所有导航权限数据
+        /// 获取导航权限集合
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -161,10 +161,11 @@ namespace ASF.Application
                 return ResultList<PermissionMenuInfoDetailsResponseDto>.ReFailure(result);
 
             //获取权限数据
+            dto.Type = PermissionType.Menu;
             var permissionList = await this._permissionRepository.GetList(dto);
 
             //筛选所有的菜单权限
-            var menuList = permissionList.Where(p => p.Type == PermissionType.Menu).OrderBy(f => f.Sort).ToList();
+            var menuList = permissionList.OrderBy(f => f.Sort).ToList();
             var menus = Mapper.Map<List<PermissionMenuInfoDetailsResponseDto>>(menuList);
             //筛选菜单对应的操作权限
             menus.ForEach(m =>
@@ -199,6 +200,27 @@ namespace ASF.Application
                      .ToDictionary(k => k.Id, v => v.Name);
             });
             return ResultList<PermissionMenuInfoBaseResponseDto>.ReSuccess(menus);
+        }
+        /// <summary>
+        /// 获取操作权限集合
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ResultList<PermissionActionInfoDetailsResponseDto>> GetActionList([FromBody]PermissionListRequestDto dto)
+        {
+            //验证请求数据合法性
+            var result = dto.Valid();
+            if (!result.Success)
+                return ResultList<PermissionActionInfoDetailsResponseDto>.ReFailure(result);
+
+            //获取权限数据
+            dto.Type = PermissionType.Action;
+            var permissionList = await this._permissionRepository.GetList(dto);
+
+            //组合响应数据
+            var actionList = permissionList.OrderBy(f => f.Sort).ToList();
+            var actions = Mapper.Map<List<PermissionActionInfoDetailsResponseDto>>(actionList);
+            return ResultList<PermissionActionInfoDetailsResponseDto>.ReSuccess(actions);
+
         }
         /// <summary>
         /// 根据ID获取导航权限详情

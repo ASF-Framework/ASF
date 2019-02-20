@@ -22,11 +22,12 @@ namespace ASF.Domain.Values
         public CreateOfAccount(int createOfAccountId)
         {
             this.CreateId = createOfAccountId;
+            this.CreateId = 0;
         }
         /// <summary>
         /// 创建用户
         /// </summary>
-        [Required]
+        [Range(1,int.MaxValue)]
         public int CreateId { get; private set; }
         /// <summary>
         /// 创建时间

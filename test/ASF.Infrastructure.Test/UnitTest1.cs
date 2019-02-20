@@ -16,7 +16,7 @@ namespace TestRepository
             list.Add(1);
             list.Add(2);
            var service= FakeConfig.Startup().GetService<IAccountRepository>();
-            ASF.Domain.Entities.Account account = new ASF.Domain.Entities.Account("abc","123456",null) {
+            ASF.Domain.Entities.Account account = new ASF.Domain.Entities.Account("abc","123456") {
             };
             account.SetRoles(list);
           var result=  service.AddAsync(account).GetAwaiter().GetResult();
@@ -29,7 +29,7 @@ namespace TestRepository
             list.Add(1);
             list.Add(2);
             var service = FakeConfig.Startup().GetService<IAccountRepository>();
-            ASF.Domain.Entities.Account account = new ASF.Domain.Entities.Account("abc2", "123456", null)
+            ASF.Domain.Entities.Account account = new ASF.Domain.Entities.Account("abc2", "123456")
             {
             };
             account.SetRoles(list);

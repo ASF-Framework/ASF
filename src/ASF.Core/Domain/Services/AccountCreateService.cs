@@ -34,10 +34,9 @@ namespace ASF.Domain.Services
             if (await _accountRepository.HasByUsername(account.Username))
                 return Result.ReFailure(ResultCodes.AccountUsernameExist);
 
-
             //获取创建账户的用户
             int uid = this._httpContextAccessor.HttpContext.User.UserId();
-            account.CreateInfo = new Values.CreateOfAccount(uid);
+            account.SetCreateOfAccount(uid);
 
             //如果分配了角色需要验证角色
             var roles = (List<int>)account.Roles;

@@ -52,6 +52,7 @@ namespace ASF.Domain.Services
             //分配角色
             var role = result.Data;
             return await _serviceProvider.GetRequiredService<RolePermissionAssignationService>().Assignation(role, pids);
+         
         }
     }
 }

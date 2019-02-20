@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System;
 
 namespace ASF.Domain.Entities
 {
@@ -11,8 +12,14 @@ namespace ASF.Domain.Entities
     public class Role : IEntity
     {
         private List<string> permissions = new List<string>();
+        private Role()
+        {
+
+        }
         public Role(string name, string description, int createOfAccountId)
         {
+            if (createOfAccountId == 0)
+                throw new ArgumentNullException("创建用户不能为空");
             this.CreateInfo = new CreateOfAccount(createOfAccountId);
             this.Name = name;
             this.Description = description;

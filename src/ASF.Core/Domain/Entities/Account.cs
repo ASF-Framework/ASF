@@ -16,19 +16,7 @@ namespace ASF.Domain.Entities
             this.Status = AccountStatus.Normal;
             this.LoginInfo = new LoginInfo();
         }
-        /// <summary>
-        /// 管理员账户
-        /// </summary>
-        /// <param name="username">账户</param>
-        /// <param name="password">密码</param>
-        /// <param name="account">创建此账户管理员</param>
-        public Account(string username, string password, Account account) : this()
-        {
-            this.Username = username;
-            this.Password = password;
-            this.Name = username;
-            this.CreateInfo = new CreateOfAccount(account);
-        }
+ 
         /// <summary>
         /// 管理员账户
         /// </summary>
@@ -92,7 +80,7 @@ namespace ASF.Domain.Entities
         /// 创建时信息
         /// </summary>
         [Required]
-        public CreateOfAccount CreateInfo { get;  set; }
+        public CreateOfAccount CreateInfo { get; private set; }
         /// <summary>
         /// 登录信息
         /// </summary>
@@ -169,6 +157,18 @@ namespace ASF.Domain.Entities
         public void SetLoginInfo(LoginInfo loginInfo)
         {
             this.LoginInfo = loginInfo;
+        }
+        /// <summary>
+        /// 设置创建用户
+        /// </summary>
+        /// <param name="createOfAccountId"></param>
+        public void SetCreateOfAccount(int createOfAccountId)
+        {
+            if (createOfAccountId == 0)
+                throw new ArgumentNullException("创建用户不能为空");
+            if (CreateInfo == null)
+                this.CreateInfo = new CreateOfAccount(createOfAccountId);
+
         }
         /// <summary>
         /// 是否为超级管理员

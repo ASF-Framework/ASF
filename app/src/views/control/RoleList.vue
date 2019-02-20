@@ -8,11 +8,11 @@
               <template slot="title">新增角色</template>
               <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px"></a-button>
             </a-tooltip>
-            <a-select placeholder="请选择状态" default-value="0" style="width:100px">
-              <a-select-option value="0">全部</a-select-option>
-              <a-select-option value="1">正常</a-select-option>
-              <a-select-option value="2">禁用</a-select-option>
-            </a-select>
+             <a-radio-group defaultValue="-1" buttonStyle="solid">
+              <a-radio-button value="-1">全部</a-radio-button>
+              <a-radio-button value="1">启用</a-radio-button>
+              <a-radio-button value="2">停用</a-radio-button>
+            </a-radio-group>
           </a-col>
           <a-col
             :span="8"
@@ -22,7 +22,7 @@
             :offset="8"
           >
             <span class="table-page-search-submitButtons" style="float:right">
-              <a-input placeholder="请输入角色ID" style="width:auto;margin-right:10px"/>
+              <a-input placeholder="角色标识、名称" style="width:300px;margin-right:10px"/>
               <a-button-group>
                 <a-tooltip>
                   <template slot="title">查询</template>
@@ -38,29 +38,7 @@
         </a-row>
       </a-form>
     </div>
-    <s-table ref="table" size="default" :columns="columns" :data="loadData">
-      <div slot="expandedRowRender" slot-scope="record" style="margin: 0">
-        <a-row :gutter="24" :style="{ marginBottom: '12px' }">
-          <a-col
-            :span="12"
-            v-for="(role, index) in record.permissions"
-            :key="index"
-            :style="{ marginBottom: '12px' }"
-          >
-            <a-col :span="4">
-              <span>{{ role.permissionName }}：</span>
-            </a-col>
-            <a-col :span="20" v-if="role.actionEntitySet.length > 0">
-              <a-tag
-                color="cyan"
-                v-for="(action, k) in role.actionEntitySet"
-                :key="k"
-              >{{ action.describe }}</a-tag>
-            </a-col>
-            <a-col :span="20" v-else>-</a-col>
-          </a-col>
-        </a-row>
-      </div>
+    <s-table ref="table" size="default" :columns="columns" :data="loadData">     
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.modal.edit(record)">编辑</a>
         <a-divider type="vertical"/>
@@ -89,6 +67,7 @@
 <script>
 import STable from '@/components/table/'
 import RoleModal from './modules/RoleModal'
+  import {    getRoleList  } from '@/api/manage'
 export default {
   name: 'TableList',
   components: {
@@ -105,7 +84,12 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: {},
+      queryParam: {
+        Vague:"admin",
+        Enable:-1,
+        PagedCount:10,
+        SkipPage:1
+      },
       // 表头
       columns: [
         {
@@ -135,14 +119,12 @@ export default {
         }
       ],
       // 加载数据方法 必须为 Promise 对象
-      loadData: parameter => {
-        return this.$http
-          .get('/role', {
-            params: Object.assign(parameter, this.queryParam)
-          })
-          .then(res => {
-            return res.result
-          })
+      loadData: () => {
+        return getRoleList(this.queryParam).then(res=>{
+           let data =Object.assign(res,this.queryParam)
+          console.log(9999999999999,data)
+          return data
+        })
       },
       selectedRowKeys: [],
       selectedRows: []

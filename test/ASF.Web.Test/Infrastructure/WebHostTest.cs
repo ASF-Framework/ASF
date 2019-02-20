@@ -9,7 +9,7 @@ namespace ASF.Core.Test.Infrastructure
 {
     public class WebHostTest
     {
-        public static string Username = "administrator";
+        public static string Username = "admin";
         public static string Password = "e10adc3949ba59abbe56e057f20f883e";
         public WebHostTest()
         {

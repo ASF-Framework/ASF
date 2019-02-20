@@ -166,24 +166,24 @@ namespace ASF.Core.Test.Application
                 .PostAsync().GetAwaiter().GetResult();
         }
         [Fact(DisplayName = "账户列表")]
-        public void List()
+        public void GetList()
         {
             var data = new
             {
                 Status = -1
             };
             var token = this.AccessToken();
-            var response = this.Server.CreateRequest("api/asf/account/List")
+            var response = this.Server.CreateRequest("api/asf/account/GetList")
               .And(r => r.Authorization("Bearer", token).ContextJson(data))
               .PostAsync().GetAwaiter().GetResult();
             var result = response.IsSuccess().GetMessage<ResultPagedList<AccountInfoBaseResponseDto>>();
             Assert.True(result.Success);
         }
         [Fact(DisplayName = "获取账号详细信息")]
-        public void Details()
+        public void GetDetails()
         {
             var token = this.AccessToken();
-            var response = this.Server.CreateRequest("api/asf/account/Details/1")
+            var response = this.Server.CreateRequest("api/asf/account/GetDetails/1")
              .And(r => r.Authorization("Bearer", token))
              .GetAsync().GetAwaiter().GetResult();
             var result = response.IsSuccess().GetMessage<Result>();

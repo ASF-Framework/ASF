@@ -64,13 +64,13 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddScoped<ILoggingRepository, LogInfoRepository>();
 
-            //services.AddScoped<IPermissionRepository, PermissionRepository>();
-            services.TryAddScoped(typeof(PermissionRepository));
-            services.AddScoped<IPermissionRepository, CachingPermission<PermissionRepository>>();
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
+            //services.TryAddScoped(typeof(PermissionRepository));
+            //services.AddScoped<IPermissionRepository, CachingPermission<PermissionRepository>>();
 
-            //services.AddScoped<IRoleRepository, RoleRepository>();
-            services.TryAddScoped(typeof(RoleRepository));
-            services.AddScoped<IRoleRepository, CachingRole<RoleRepository>>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            //services.TryAddScoped(typeof(RoleRepository));
+            //services.AddScoped<IRoleRepository, CachingRole<RoleRepository>>();
         }
         /// <summary>
         /// 注入防腐层

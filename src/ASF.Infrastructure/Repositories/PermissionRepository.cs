@@ -79,6 +79,7 @@ namespace ASF.Infrastructure.Repository
         public async Task ModifyAsync(Permission permission)
         {
             var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == permission.Id);
+            if (model == null) return;
             Mapper.Map(permission, model);
             _dbContext.Permissions.Update(model);
         }
@@ -86,6 +87,7 @@ namespace ASF.Infrastructure.Repository
         public async Task RemoveAsync(string primaryKey)
         {
             var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == primaryKey);
+            if (model == null) return;
             _dbContext.Remove(model);
         }
     }

@@ -94,6 +94,7 @@ namespace ASF.Infrastructure.Repository
         public async Task ModifyAsync(Account account)
         {
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Id == account.Id);
+            if (model == null) return;
             Mapper.Map(account, model);
             _dbContext.Accounts.Update(model);
         }
@@ -101,6 +102,7 @@ namespace ASF.Infrastructure.Repository
         public async Task RemoveAsync(int primaryKey)
         {
             var model = await _dbContext.Accounts.FirstOrDefaultAsync(w => w.Id == primaryKey);
+            if (model == null) return;
             model.Delete();
             _dbContext.Accounts.Update(model);
         }

@@ -69,18 +69,21 @@ namespace ASF.Infrastructure.Repository
         public async Task ModifyAsync(Role role)
         {
             var model = await _dbContext.Roles.FirstOrDefaultAsync(w => w.Id == role.Id);
+            if (model == null) return;
             Mapper.Map(role, model);
             _dbContext.Roles.Update(model);
         }
         public async Task ModifyAsync(int roleId, bool enable)
         {
             var model = await _dbContext.Roles.FirstOrDefaultAsync(w => w.Id == roleId);
+            if (model == null) return;
             model.Enable = enable;
             _dbContext.Roles.Update(model);
         }
         public async Task RemoveAsync(int primaryKey)
         {
             var model = await _dbContext.Roles.FirstOrDefaultAsync(w => w.Id == primaryKey);
+            if (model == null) return;
             _dbContext.Remove(model);
         }
     }

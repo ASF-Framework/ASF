@@ -75,7 +75,8 @@ namespace ASF.Infrastructure.Repositories
             {
                 list.Remove(entity);
                 var model = await _repository.GetAsync(role.Id);
-                list.Add(model);
+                if (model != null)
+                    list.Add(model);
                 await _roleCache.SetAsync(_cacheKey, list, _duration);
             }
         }

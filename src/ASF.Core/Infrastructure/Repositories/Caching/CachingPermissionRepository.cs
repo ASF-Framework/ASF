@@ -55,7 +55,7 @@ namespace ASF.Infrastructure.Repositories
         {
             var list = await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
 
-            var queryable=list.Where(w => w.Id != "");
+            var queryable= list.Where(w => w.Type == requestDto.Type);
 
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {
@@ -63,6 +63,9 @@ namespace ASF.Infrastructure.Repositories
                     .Where(w => w.Id.Contains(requestDto.Vague)
                     || w.Name.Contains(requestDto.Vague));
             }
+            if (!string.IsNullOrEmpty(requestDto.ParamId))
+                queryable.Where(w => w.ParentId == requestDto.ParamId);
+
             if (requestDto.Enable == 1)
                 queryable = queryable.Where(w => w.Enable == true);
             if (requestDto.Enable == 0)

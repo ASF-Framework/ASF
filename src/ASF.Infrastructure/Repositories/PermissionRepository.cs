@@ -40,7 +40,7 @@ namespace ASF.Infrastructure.Repository
         public async Task<IList<Permission>> GetList(PermissionListRequestDto requestDto)
         {
             var queryable = _dbContext.Permissions
-                .Where(w => w.Id != "");
+                .Where(w => w.Type == requestDto.Type);
 
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {
@@ -48,6 +48,9 @@ namespace ASF.Infrastructure.Repository
                     .Where(w => EF.Functions.Like(w.Id.ToString(), "%" + requestDto.Vague + "%")
                     || EF.Functions.Like(w.Name, "%" + requestDto.Vague + "%"));
             }
+            if(!string.IsNullOrEmpty(requestDto.ParamId))
+                queryable.Where(w => w.ParentId == requestDto.ParamId);
+            
             if (requestDto.Enable == 1)
                 queryable = queryable.Where(w => w.Enable == true);
             if (requestDto.Enable == 0)

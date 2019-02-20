@@ -116,7 +116,8 @@ namespace ASF.Domain.Services
             //生成访问Token
             Dictionary<string, string> claims = new Dictionary<string, string>();
             claims.Add(ClaimTypes.Role, "self");
-            claims.Add("name", account.Name);
+            claims.Add("name", account.Username);
+            claims.Add("nickname", account.Name);
             claims.Add("sub", account.Id.ToString());
             claims.Add("auth_mode", loginType);
             //判断是否为超级管理员

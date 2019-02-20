@@ -43,7 +43,7 @@ namespace ASF.Domain.Entities
         [Required]
         public LoggingType Type { get; private set; }
         /// <summary>
-        /// 登录方式
+        /// 标题
         /// </summary>
         [Required, MaxLength(200)]
         public string Subject { get; private set; }

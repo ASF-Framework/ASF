@@ -35,5 +35,8 @@ namespace ASF.Domain
         public static ValueTuple<int, string> PermissionSystemNotDelete = (12004, "{0}权限为系统权限不能删除，否则系统无法正常运行");
         public static ValueTuple<int, string> PermissionParemtNotAction = (12005, "上级权限不能设置为操作权限");
 
+        //日志记录
+        public static ValueTuple<int, string> LogginDeletedCannoBeWithinThreeMonths = (13000, "三个月之内的日志不能删除");
+
     }
 }

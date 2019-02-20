@@ -34,7 +34,7 @@ namespace ASF.Application
         public static ValueTuple<string, string> PermissionModifyAction = ("asf.permission.modify_action", "修改操作权限");
         public static ValueTuple<string, string> PermissionDelete = ("asf.permission.delete", "删除权限");
 
-
+        public static ValueTuple<string, string> LoggingDelete = ("asf.logging.delete", "删除日志");
 
     }
 }

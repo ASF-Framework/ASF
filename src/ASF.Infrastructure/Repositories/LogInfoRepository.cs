@@ -1,4 +1,5 @@
-﻿using ASF.Domain.Entities;
+﻿using ASF.Application.DTO;
+using ASF.Domain.Entities;
 using ASF.Infrastructure.Repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,16 @@ namespace ASF.Infrastructure.Repository
         {
             var list = await _dbContext.Permissions.ToListAsync();
             return Mapper.Map<IList<Logging>>(list);
+        }
+
+        public Task<(IList<Logging> Loggings, int TotalCount)> GetList(LoggerListPagedRequestDto dto)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task Delete(LoggerDeleteRequestDto dto)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

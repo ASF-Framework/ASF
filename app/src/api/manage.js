@@ -1,25 +1,19 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  admin: '/asf/account/list',
+  admin: '/asf/account/getlist',
   userdetail: '/user/detail',
-  role: '/asf/role/list',
+  role: '/asf/role/getlist',
   service: '/service',
-  permission: '/permission',
+  permission: '/asf/permission/getmenulist',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree'
 }
 
 export default api
 
-export function getUserDetail (parameter) {
-  return axios({
-    url: api.userdetail,
-    method: 'get',
-    params: parameter
-  })
-}
 
+//管理员列表
 export function getAdminList (parameter) {
   return new Promise((resolve, reject) => {
     axios.post(api.admin,parameter ).then(res => {
@@ -30,6 +24,7 @@ export function getAdminList (parameter) {
   })
 }
 
+//角色列表
 export function getRoleList (parameter) {
   return new Promise((resolve, reject) => {
     axios.post(api.role, parameter).then(res => {
@@ -37,6 +32,26 @@ export function getRoleList (parameter) {
     }).catch(err => {
       reject(err)
     })
+  })
+}
+
+//权限列表
+export function getPermissions (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.permission, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+//--------------下面是旧的 -------------------//
+export function getUserDetail (parameter) {
+  return axios({
+    url: api.userdetail,
+    method: 'get',
+    params: parameter
   })
 }
 
@@ -48,13 +63,13 @@ export function getServiceList (parameter) {
   })
 }
 
-export function getPermissions (parameter) {
-  return axios({
-    url: api.permissionNoPager,
-    method: 'get',
-    params: parameter
-  })
-}
+// export function getPermissions (parameter) {
+//   return axios({
+//     url: api.permissionNoPager,
+//     method: 'get',
+//     params: parameter
+//   })
+// }
 
 export function getOrgTree (parameter) {
   return axios({

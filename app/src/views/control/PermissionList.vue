@@ -5,26 +5,26 @@
         <a-row type="flex" justify="space-around">
           <a-col :md="8" :sm="24">
             <a-tooltip>
-              <template slot="title">新增权限111111111111</template>
+              <template slot="title">新增权限</template>
               <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px"></a-button>
             </a-tooltip>
-            <a-select placeholder="请选择状态" default-value="0" style="width:100px">
-              <a-select-option value="0">全部</a-select-option>
-              <a-select-option value="1">关闭</a-select-option>
-              <a-select-option value="2">运行中</a-select-option>
-            </a-select>
+            <a-radio-group v-model="queryParam.Enable" defaultValue="-1" buttonStyle="solid" >
+              <a-radio-button value="-1">全部</a-radio-button>
+              <a-radio-button value="1">启用</a-radio-button>
+              <a-radio-button value="0">停用</a-radio-button>
+            </a-radio-group>
           </a-col>
           <a-col :span="8" :md="{span:12,offset:4}" :sm="{span:24,offset:0}" :xs="{span:24,offset:0}" :offset="8">
             <span class="table-page-search-submitButtons" style="float:right">
-              <a-input placeholder="请输入" style="width:auto;margin-right:10px"/>
+              <a-input placeholder="权限标识、名称" v-model="queryParam.Vague" style="width:300px;margin-right:10px"/>
               <a-button-group>
                 <a-tooltip>
                   <template slot="title">查询</template>
-                  <a-button type="primary" icon="search"></a-button>
+                  <a-button type="primary" icon="search" @click="loadData"></a-button>
                 </a-tooltip>
                 <a-tooltip>
                   <template slot="title">清除查询条件</template>
-                  <a-button icon="undo"></a-button>
+                  <a-button icon="undo" @click="() => queryParam = {Vague:'', Enable:-1,PagedCount:10,SkipPage:1}"></a-button>
                 </a-tooltip>
               </a-button-group>
             </span>
@@ -35,12 +35,12 @@
     <s-table :columns="columns" :data="loadData" size="small">
       <span slot="actions" slot-scope="text, record">
         <a-tag
-          v-for="(action, index) in record.actionList"
-          :key="index"
-          @click="handerContrl(action)"
-        >{{ action.describe }}</a-tag>
+          v-for="(val, key,index) in record.actions"
+          :key="key"
+          @click="handerContrl(val)"
+        >{{ val }}</a-tag>
       </span>
-      <span slot="status" slot-scope="text">{{ text | statusFilter }}</span>
+      <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
       <span slot="sort" slot-scope="text">
         <editable-cell :text="text" @change="handerChange"/>
       </span>
@@ -199,6 +199,7 @@
 <script>
 import EditableCell from '@/components/EditCell/EditableCell'
 import STable from '@/components/table/'
+import { getPermissions  } from '@/api/manage'
 export default {
   name: 'TableList',
   components: {
@@ -238,7 +239,12 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: {},
+      queryParam: {
+        Vague:"",
+        Enable:-1,
+        PagedCount:10,
+        SkipPage:1
+      },
       // 表头
       columns: [
         {
@@ -258,9 +264,9 @@ export default {
         },
         {
           title: '状态',
-          dataIndex: 'status',
+          dataIndex: 'enable',
           scopedSlots: {
-            customRender: 'status'
+            customRender: 'enable'
           }
         },
         {
@@ -281,21 +287,16 @@ export default {
       ],
       // 向后端拉取可以用的操作列表
       permissionList: null,
+      //权限子级权限children:[]
+      permissionchildren:{
+        
+      },
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        return this.$http
-          .get('/permission', {
-            params: Object.assign(parameter, this.queryParam)
-          })
-          .then(res => {
-            console.log(11111111, res)
-            const result = res.result
-            result.data.map(permission => {
-              permission.actionList = JSON.parse(permission.actionData)
-              return permission
-            })
-            return result
-          })
+        console.log("In-->")
+        return getPermissions(this.queryParam).then(res=>{
+           return this.makePermissionList(res);
+        })
       },
       selectedRowKeys: [],
       selectedRows: []
@@ -303,17 +304,37 @@ export default {
   },
   filters: {
     statusFilter(status) {
-      const statusMap = {
-        1: '正常',
-        2: '禁用'
+      const statusMap = {        
+        1: '启用',
+        0: '停止'
       }
-      return statusMap[status]
+      return statusMap[status?1:0]
     }
   },
   created() {
     this.loadPermissionList()
   },
   methods: {
+    makePermissionList(res){
+      console.log(11111,res)
+      let result= []
+      let data =Object.assign(res,this.queryParam)
+      data.result.forEach((element,index) => {
+        if(element.parentId=="" || element.parentId==" "){
+            result.push(element)
+            console.log(222222,element)
+            result[index].children=[]
+            data.result.forEach(ele => {
+              if(element.id==ele.parentId){
+                 result[index].children.push(ele)
+              }
+            });
+        }        
+      });
+      data.result=result;
+      console.log(3333333,data)
+      return data
+    },
     handerContrl(action) {
       this.controlFrom = action
       console.log(222222222, this.controlFrom)

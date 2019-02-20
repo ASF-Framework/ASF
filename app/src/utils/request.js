@@ -32,6 +32,7 @@ const err = (error) => {
   return Promise.reject(error)
 }
 
+service.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 // request interceptor
 service.interceptors.request.use(config => {
   const token = Vue.ls.get(ACCESS_TOKEN)

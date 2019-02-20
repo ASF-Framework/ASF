@@ -122,7 +122,6 @@ export default {
       loadData: () => {
         return getRoleList(this.queryParam).then(res=>{
            let data =Object.assign(res,this.queryParam)
-          console.log(9999999999999,data)
           return data
         })
       },

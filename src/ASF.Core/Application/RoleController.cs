@@ -164,7 +164,7 @@ namespace ASF.Application
                 .GetList(role.Permissions.ToList());
 
             var result = Mapper.Map<RoleInfoDetailsResponseDto>(role);
-            result.Permissions = permissions.ToDictionary(k => k.Id, v => v.Name);
+            result.Permissions = permissions.OrderBy(f=>f.Sort).ToDictionary(k => k.Id, v => v.Name);
             return Result<RoleInfoDetailsResponseDto>.ReSuccess(result);
         }
     }

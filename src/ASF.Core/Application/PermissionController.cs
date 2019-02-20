@@ -164,14 +164,14 @@ namespace ASF.Application
             var permissionList = await this._permissionRepository.GetList(dto);
 
             //筛选所有的菜单权限
-            var menuList = permissionList.Where(p => p.Type == PermissionType.Menu).ToList();
+            var menuList = permissionList.Where(p => p.Type == PermissionType.Menu).OrderBy(f => f.Sort).ToList();
             var menus = Mapper.Map<List<PermissionMenuInfoDetailsResponseDto>>(menuList);
             //筛选菜单对应的操作权限
             menus.ForEach(m =>
             {
                 m.Actions = permissionList
                      .Where(f => f.Type == PermissionType.Action && f.ParentId == m.Id)
-                     .ToList()
+                     .OrderBy(f => f.Sort).ToList()
                      .ToDictionary(k => k.Id, v => v.Name);
             });
             return ResultList<PermissionMenuInfoDetailsResponseDto>.ReSuccess(menus);
@@ -188,14 +188,14 @@ namespace ASF.Application
             var permissionList = await this._permissionRepository.GetList();
 
             //筛选所有的菜单权限
-            var menuList = permissionList.Where(p => p.Type == PermissionType.Menu).ToList();
+            var menuList = permissionList.Where(p => p.Type == PermissionType.Menu).OrderBy(f => f.Sort).ToList();
             var menus = Mapper.Map<List<PermissionMenuInfoBaseResponseDto>>(menuList);
             //筛选菜单对应的操作权限
             menus.ForEach(m =>
             {
                 m.Actions = permissionList
                      .Where(f => f.Type == PermissionType.Action && f.ParentId == m.Id)
-                     .ToList()
+                     .OrderBy(f => f.Sort).ToList()
                      .ToDictionary(k => k.Id, v => v.Name);
             });
             return ResultList<PermissionMenuInfoBaseResponseDto>.ReSuccess(menus);

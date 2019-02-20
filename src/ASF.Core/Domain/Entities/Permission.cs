@@ -10,6 +10,10 @@ namespace ASF.Domain.Entities
     /// </summary>
     public class Permission : IEntity
     {
+        private Permission()
+        {
+
+        }
         public Permission(string code, string parentId, string name, PermissionType type, string description)
         {
             code = code.ToLower();//code默认小写

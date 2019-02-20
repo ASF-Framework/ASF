@@ -29,7 +29,7 @@ namespace ASF.Application.DTO
         /// 权限服务地址
         /// </summary>
         [Required, MaxLength(500)]
-        public string ApiAddress { get; set; }
+        public string ApiTemplate { get; set; }
         /// <summary>
         /// 是否日志记录
         /// </summary>
@@ -39,6 +39,10 @@ namespace ASF.Application.DTO
         /// </summary>
         [MaxLength(200)]
         public string Description { get; set; }
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public int Sort { get; set; } = 99;
         /// <summary>
         /// 是否启用
         /// </summary>

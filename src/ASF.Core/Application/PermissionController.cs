@@ -1,18 +1,18 @@
 ﻿using ASF.Application.DTO;
+using ASF.Domain;
 using ASF.Domain.Entities;
 using ASF.Domain.Services;
+using ASF.Domain.Values;
 using ASF.Infrastructure.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
-using ASF.Domain.Values;
-using ASF.Domain;
 
 namespace ASF.Application
 {
@@ -40,7 +40,7 @@ namespace ASF.Application
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<Result> CreateAction(PermissionActionCreateRequestDto dto)
+        public async Task<Result> CreateAction([FromBody]PermissionActionCreateRequestDto dto)
         {
             //验证请求数据合法性
             var result = dto.Valid();
@@ -48,7 +48,7 @@ namespace ASF.Application
                 return result;
 
             //创建操作权限
-            var permission = Mapper.Map<Permission>(dto);
+            var permission = dto.To();
             result = await this._serviceProvider.GetRequiredService<PermissionCreateService>().CreateAction(permission);
             if (!result.Success)
                 return result;
@@ -64,7 +64,7 @@ namespace ASF.Application
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<Result> CreateMenu(PermissionMenuCreateRequestDto dto)
+        public async Task<Result> CreateMenu([FromBody]PermissionMenuCreateRequestDto dto)
         {
             //验证请求数据合法性
             var result = dto.Valid();
@@ -72,7 +72,7 @@ namespace ASF.Application
                 return result;
 
             //创建导航权限
-            var permission = Mapper.Map<Permission>(dto);
+            var permission = dto.To();
             result = await this._serviceProvider.GetRequiredService<PermissionCreateService>().CreateMenu(permission);
             if (!result.Success)
                 return result;
@@ -89,7 +89,7 @@ namespace ASF.Application
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<Result> ModifyAction(PermissionActionModifyRequestDto dto)
+        public async Task<Result> ModifyAction([FromBody]PermissionActionModifyRequestDto dto)
         {
             //验证请求数据合法性
             var result = dto.Valid();
@@ -97,13 +97,14 @@ namespace ASF.Application
                 return result;
 
             //修改操作权限
-            var modifyResult = await this._serviceProvider.GetRequiredService<PermissionChangeService>().ModifyAction(dto.Id, dto.Name, dto.ParentId, dto.Description, dto.Enable, dto.ApiAddress, dto.IsLogger);
-            if (!result.Success)
-                return result;
+            var modifyResult = await this._serviceProvider.GetRequiredService<PermissionChangeService>()
+                .ModifyAction(dto.Id, dto.Name, dto.ParentId, dto.Description, dto.Enable, dto.ApiTemplate, dto.IsLogger,dto.Sort);
+            if (!modifyResult.Success)
+                return modifyResult;
 
             //数据持久化
             _operateLog.Record(ASFPermissions.PermissionModifyAction, dto.ToString(), "Success");  //记录日志
-            await _permissionRepository.AddAsync(modifyResult.Data);
+            await _permissionRepository.ModifyAsync(modifyResult.Data);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
@@ -113,7 +114,7 @@ namespace ASF.Application
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<Result> ModifyMenu(PermissionMenuModifyRequestDto dto)
+        public async Task<Result> ModifyMenu([FromBody]PermissionMenuModifyRequestDto dto)
         {
             //验证请求数据合法性
             var result = dto.Valid();
@@ -122,12 +123,12 @@ namespace ASF.Application
 
             //修改操作权限
             var modifyResult = await this._serviceProvider.GetRequiredService<PermissionChangeService>().ModifyMenu(dto.Id, dto.Name, dto.ParentId, dto.Description, dto.Enable, dto.Sort);
-            if (!result.Success)
-                return result;
+            if (!modifyResult.Success)
+                return modifyResult;
 
             //数据持久化
             _operateLog.Record(ASFPermissions.PermissionModifyMenu, dto.ToString(), "Success");  //记录日志
-            await _permissionRepository.AddAsync(modifyResult.Data);
+            await _permissionRepository.ModifyAsync(modifyResult.Data);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
@@ -178,10 +179,10 @@ namespace ASF.Application
             return ResultList<PermissionMenuInfoDetailsResponseDto>.ReSuccess(menus);
         }
         /// <summary>
-        /// 所有导航权限数据
+        /// 获取所有导航权限集合
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Authorize(Roles = "self")]
         public async Task<ResultList<PermissionMenuInfoBaseResponseDto>> GetMenuAllList()
         {
@@ -200,6 +201,29 @@ namespace ASF.Application
                      .ToDictionary(k => k.Id, v => v.Name);
             });
             return ResultList<PermissionMenuInfoBaseResponseDto>.ReSuccess(menus);
+        }
+        /// <summary>
+        /// 根据ID获取导航权限详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<Result<PermissionMenuInfoDetailsResponseDto>> GetMenuDetails([FromRoute]string id)
+        {
+            //获取导航权限数据
+            var menu = await this._permissionRepository.GetAsync(id);
+            if (menu == null || menu.Type != PermissionType.Menu)
+                return Result<PermissionMenuInfoDetailsResponseDto>.ReFailure(ResultCodes.PermissionNotExist);
+            //获取子级权限
+            var permissions = await this._permissionRepository.GetListByParentId(menu.Id);
+
+            //组装响应对象
+            var result = Mapper.Map<PermissionMenuInfoDetailsResponseDto>(menu);
+            result.Actions = permissions
+                     .Where(f => f.Type == PermissionType.Action)
+                     .ToList()
+                     .ToDictionary(k => k.Id, v => v.Name);
+            return Result<PermissionMenuInfoDetailsResponseDto>.ReSuccess(result);
         }
         /// <summary>
         /// 获取操作权限集合
@@ -221,28 +245,6 @@ namespace ASF.Application
             var actions = Mapper.Map<List<PermissionActionInfoDetailsResponseDto>>(actionList);
             return ResultList<PermissionActionInfoDetailsResponseDto>.ReSuccess(actions);
 
-        }
-        /// <summary>
-        /// 根据ID获取导航权限详情
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public async Task<Result<PermissionMenuInfoDetailsResponseDto>> GetMenuDetails([FromRoute]string id)
-        {
-            //获取导航权限数据
-            var menu = await this._permissionRepository.GetAsync(id);
-            if (menu == null || menu.Type != PermissionType.Menu)
-                return Result<PermissionMenuInfoDetailsResponseDto>.ReFailure(ResultCodes.PermissionNotExist);
-            //获取子级权限
-            var permissions = await this._permissionRepository.GetListByParentId(menu.Id);
-
-            //组装响应对象
-            var result = Mapper.Map<PermissionMenuInfoDetailsResponseDto>(menu);
-            result.Actions = permissions
-                     .Where(f => f.Type == PermissionType.Action)
-                     .ToList()
-                     .ToDictionary(k => k.Id, v => v.Name);
-            return Result<PermissionMenuInfoDetailsResponseDto>.ReSuccess(result);
         }
         /// <summary>
         /// 根据ID获取操作权限详情

@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{576EF360-3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASF.Infrastructure.Test", "test\ASF.Infrastructure.Test\ASF.Infrastructure.Test.csproj", "{E2277E25-6394-44A0-AD5F-996C07D120D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASF.Core.Test", "test\ASF.Web.Test\ASF.Core.Test.csproj", "{0AAE28BD-FC8A-411D-ABBA-D855718D4CDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASF.Core.Test", "test\ASF.Web.Test\ASF.Core.Test.csproj", "{0AAE28BD-FC8A-411D-ABBA-D855718D4CDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

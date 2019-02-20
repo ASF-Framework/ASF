@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ASF.Domain.Entities;
+using ASF.Domain.Values;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -34,5 +36,11 @@ namespace ASF.Application.DTO
         /// </summary>
         [MaxLength(200)]
         public string Description { get; set; }
+        public Permission To()
+        {
+            var p = new Permission(this.Code, this.ParentId, this.Name, PermissionType.Menu, this.Description);
+            p.Sort = this.Sort;
+            return p;
+        }
     }
 }

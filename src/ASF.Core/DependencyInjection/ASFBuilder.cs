@@ -53,6 +53,7 @@ namespace ASF.DependencyInjection
             Services.AddTransient<LogOperateRecordService>();
             Services.AddTransient<PermissionCreateService>();
             Services.AddTransient<PermissionChangeService>();
+            Services.AddTransient<PermissionDeleteService>();
             Services.AddTransient<RoleCreateService>();
             Services.AddTransient<RoleInfoChangeService>();
             Services.AddTransient<RolePermissionAssignationService>();

@@ -23,12 +23,15 @@ namespace ASF.Domain.Services
         /// <param name="enable">是否可用</param>
         /// <param name="apiAddress">api 地址</param>
         /// <param name="isLogger">是否记录日志</param>
+        /// <param name="sort">导航排序</param>
         /// <returns></returns>
-        public async Task<Result<Permission>> ModifyAction (string pid, string name, string parentId, string description, bool enable, string apiAddress, bool isLogger)
+        public async Task<Result<Permission>> ModifyAction (string pid, string name, string parentId, string description, bool enable, string apiAddress, bool isLogger, int sort)
         {
             //获取权限数据
             var permission = await _permissionRepository.GetAsync(pid);
             if (permission == null)
+                return Result<Permission>.ReFailure(ResultCodes.PermissionNotExist);
+            if (permission.Type != Values.PermissionType.Action)
                 return Result<Permission>.ReFailure(ResultCodes.PermissionNotExist);
 
             //如果是系统权限不能修改
@@ -36,24 +39,28 @@ namespace ASF.Domain.Services
             {
                 return Result<Permission>.ReFailure(ResultCodes.PermissionSystemNotModify.ToFormat(permission.Name));
             }
-
+            
             //判断上级权限,上级权限不能为操作权限
-            var paremt = await this._permissionRepository.GetAsync(parentId);
-            if (paremt == null)
+            if(permission.ParentId != parentId)
             {
-                return Result<Permission>.ReFailure(ResultCodes.PermissionNotExist);
+                var paremt = await this._permissionRepository.GetAsync(parentId);
+                if (paremt == null)
+                {
+                    return Result<Permission>.ReFailure(ResultCodes.PermissionNotExist);
+                }
+                if (paremt.Type == Values.PermissionType.Action)
+                {
+                    return Result<Permission>.ReFailure(ResultCodes.PermissionParemtNotAction);
+                }
             }
-            if (paremt.Type == Values.PermissionType.Action)
-            {
-                return Result<Permission>.ReFailure(ResultCodes.PermissionParemtNotAction);
-            }
-
+          
             permission.Name = name;
             permission.ParentId = parentId;
             permission.IsLogger = isLogger;
             permission.Enable = enable;
             permission.Description = description;
             permission.SetApiTemplate(apiAddress);
+            permission.Sort = sort;
 
             //验证权限聚合的数据合法性
             return permission.Valid<Permission>();
@@ -73,6 +80,8 @@ namespace ASF.Domain.Services
             //获取权限数据
             var permission = await _permissionRepository.GetAsync(pid);
             if (permission == null)
+                return Result<Permission>.ReFailure(ResultCodes.PermissionNotExist);
+            if (permission.Type != Values.PermissionType.Menu)
                 return Result<Permission>.ReFailure(ResultCodes.PermissionNotExist);
 
             //如果是系统权限不能修改

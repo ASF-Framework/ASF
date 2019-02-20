@@ -20,7 +20,7 @@ namespace ASF.Application.DTO
         /// </summary>
         public string ParamId { get; set; }
         /// <summary>
-        /// 权限履行
+        /// 权限类型
         /// </summary>
         public PermissionType Type { get; set; }
     }

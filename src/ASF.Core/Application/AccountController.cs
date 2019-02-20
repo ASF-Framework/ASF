@@ -53,13 +53,13 @@ namespace ASF.Application
 
             int id = HttpContext.User.UserId();
             var service = this._serviceProvider.GetRequiredService<AccountPasswordChangeService>();
-            var result1 = await service.ModifyAsync(id, dto.Password, dto.OldPassword);
-            if (!result.Success)
-                return result;
+            var modifyResult = await service.ModifyAsync(id, dto.Password, dto.OldPassword);
+            if (!modifyResult.Success)
+                return modifyResult;
 
             //数据持久化
             _operateLog.Record(ASFPermissions.AccountModifyPassword, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志
-            await _accountRepository.ModifyAsync(result1.Data);
+            await _accountRepository.ModifyAsync(modifyResult.Data);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
@@ -135,7 +135,7 @@ namespace ASF.Application
             var service = this._serviceProvider.GetRequiredService<AccountTelephoneChangeService>();
             var modifyResult = service.Modify(id, new PhoneNumber(dto.Number, dto.AreaCode));
             if (!modifyResult.Success)
-                return result;
+                return modifyResult;
 
             //数据持久化
             _operateLog.Record(ASFPermissions.AccountModifyTelephone, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志

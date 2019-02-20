@@ -55,8 +55,7 @@ namespace ASF.Infrastructure.Repositories
         {
             var list = await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
 
-            var queryable= list.Where(w => w.Type == requestDto.Type);
-
+            var queryable= list.Where(w => w.Id != "");
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {
                 queryable = queryable

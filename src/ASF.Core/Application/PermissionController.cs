@@ -162,11 +162,10 @@ namespace ASF.Application
                 return ResultList<PermissionMenuInfoDetailsResponseDto>.ReFailure(result);
 
             //获取权限数据
-            dto.Type = PermissionType.Menu;
             var permissionList = await this._permissionRepository.GetList(dto);
 
             //筛选所有的菜单权限
-            var menuList = permissionList.OrderBy(f => f.Sort).ToList();
+            var menuList = permissionList.Where(f=>f.Type == PermissionType.Menu).OrderBy(f => f.Sort).ToList();
             var menus = Mapper.Map<List<PermissionMenuInfoDetailsResponseDto>>(menuList);
             //筛选菜单对应的操作权限
             menus.ForEach(m =>
@@ -237,11 +236,10 @@ namespace ASF.Application
                 return ResultList<PermissionActionInfoDetailsResponseDto>.ReFailure(result);
 
             //获取权限数据
-            dto.Type = PermissionType.Action;
             var permissionList = await this._permissionRepository.GetList(dto);
 
             //组合响应数据
-            var actionList = permissionList.OrderBy(f => f.Sort).ToList();
+            var actionList = permissionList.Where(f=>f.Type== PermissionType.Action).OrderBy(f => f.Sort).ToList();
             var actions = Mapper.Map<List<PermissionActionInfoDetailsResponseDto>>(actionList);
             return ResultList<PermissionActionInfoDetailsResponseDto>.ReSuccess(actions);
 

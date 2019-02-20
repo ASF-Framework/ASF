@@ -19,9 +19,6 @@ namespace ASF.Application.DTO
         /// 父亲节点
         /// </summary>
         public string ParamId { get; set; }
-        /// <summary>
-        /// 权限类型
-        /// </summary>
-        public PermissionType Type { get; set; }
+
     }
 }

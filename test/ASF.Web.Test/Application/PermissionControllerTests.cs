@@ -110,7 +110,7 @@ namespace ASF.Core.Test.Application
             var token = this.AccessToken();
             var response = this.Server.CreateRequest("api/asf/permission/GetMenuList")
                 .And(r => r.Authorization("Bearer", token).ContextJson(data))
-                .GetAsync().GetAwaiter().GetResult();
+                .PostAsync().GetAwaiter().GetResult();
             var result = response.IsSuccess().GetMessage<ResultList<PermissionMenuInfoDetailsResponseDto>>();
             Assert.True(result.Success);
             Assert.True(result.Data.Count>0);

@@ -40,7 +40,7 @@ namespace ASF.Infrastructure.Repository
         public async Task<IList<Permission>> GetList(PermissionListRequestDto requestDto)
         {
             var queryable = _dbContext.Permissions
-                .Where(w => w.Type == requestDto.Type);
+                .Where(w => w.Id != "");
 
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {

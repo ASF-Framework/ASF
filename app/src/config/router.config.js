@@ -28,7 +28,7 @@ export const asyncRouterMap = [
           title: '仪表盘',
           keepAlive: true,
           icon: 'dashboard',
-          permission: ['dashboard']
+          permission: ['asf.acount']
         },
         children: [
           {
@@ -38,18 +38,7 @@ export const asyncRouterMap = [
             meta: {
               title: '分析页',
               keepAlive: true,
-              permission: ['dashboard']
-            }
-          },
-          {
-            path: '/dashboard/monitor',
-            name: 'Monitor',
-            hidden: true,
-            component: () => import('@/views/dashboard/Monitor'),
-            meta: {
-              title: '监控页',
-              keepAlive: true,
-              permission: ['dashboard']
+              permission: ['asf.acount']
             }
           },
           {
@@ -59,7 +48,7 @@ export const asyncRouterMap = [
             meta: {
               title: '工作台',
               keepAlive: true,
-              permission: ['dashboard']
+              permission: ['asf.acount']
             }
           }
         ]
@@ -73,7 +62,7 @@ export const asyncRouterMap = [
         meta: {
           title: '控制面板',
           icon: 'table',
-          permission: ['user']
+          permission: ['asf.acount']
         },
         children: [
           {
@@ -81,9 +70,9 @@ export const asyncRouterMap = [
             name: 'UserList',
             component: () => import('@/views/control/UserList'),
             meta: {
-              title: '用户列表',
+              title: '管理员列表',
               keepAlive: true,
-              permission: ['user']
+              permission: ['asf.acount']
             }
           },
           {
@@ -92,7 +81,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/control/RoleList'),
             meta: {
               title: '角色列表',
-              permission: ['role']
+              permission: ['asf.acount']
             }
           },
           {
@@ -101,7 +90,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/control/PermissionList'),
             meta: {
               title: '权限列表',
-              permission: ['permission']
+              permission: ['asf.acount']
             }
           }
         ]

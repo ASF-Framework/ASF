@@ -3,7 +3,7 @@ import { axios } from '@/utils/request'
 const api = {
   admin: '/asf/account/list',
   userdetail: '/user/detail',
-  role: '/role',
+  role: '/asf/role/list',
   service: '/service',
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
@@ -21,18 +21,22 @@ export function getUserDetail (parameter) {
 }
 
 export function getAdminList (parameter) {
-  return axios({
-    url: api.admin,
-    method: 'get',
-    params: parameter
+  return new Promise((resolve, reject) => {
+    axios.post(api.admin,parameter ).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
   })
 }
 
 export function getRoleList (parameter) {
-  return axios({
-    url: api.role,
-    method: 'get',
-    params: parameter
+  return new Promise((resolve, reject) => {
+    axios.post(api.role, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
   })
 }
 

@@ -5,35 +5,29 @@
         <a-row :gutter="0">
           <a-col :md="12" :sm="24">
             <a-tooltip>
-              <template slot="title">新建角色
+              <template slot="title">新建管理员
               </template>
               <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px"></a-button>
             </a-tooltip>
-            <a-select placeholder="登录状态" style="width:120px;margin-right:10px">
-              <a-select-option value="-1">全部</a-select-option>
-              <a-select-option value="1">正常</a-select-option>
-              <a-select-option value="2">不可登录</a-select-option>
-            </a-select>
-             <a-select placeholder="禁用状态" style="width:120px">
-              <a-select-option value="">全部</a-select-option>
-              <a-select-option value="0">启用</a-select-option>
-              <a-select-option value="1">禁用</a-select-option>
-            </a-select>
+             <a-radio-group defaultValue="-1" buttonStyle="solid" @change="onRadioChange">
+              <a-radio-button value="-1">全部</a-radio-button>
+              <a-radio-button value="1">正常</a-radio-button>
+              <a-radio-button value="2">不可登录</a-radio-button>
+            </a-radio-group>
           </a-col>
-
           <a-col :md="12" :sm="24">
             <span class="table-page-search-submitButtons" style="float:right">
               <a-input
                 placeholder="请输入ID/昵称/用户名"
                 v-model="filters.name"
-                style="width:auto;margin-right:10px"  
+                style="width:300px;margin-right:10px"  
               />
               <a-button-group>
                 <a-tooltip>
                 <template slot="title">
                   查询
                 </template>
-                  <a-button type="primary" icon="search" @click="loadData"></a-button>
+                  <a-button type="primary" icon="search"></a-button>
                 </a-tooltip>
                 <a-tooltip>
                 <template slot="title">
@@ -47,35 +41,54 @@
         </a-row>
       </a-form>
     </div>
-    <div class="table-operator"></div>
-    <s-table size="default" :columns="columns" :data="loadData">
-      <span slot="roles" slot-scope="text, record">
-        <a-tag v-for="(role, index) in record.roles" :key="index">{{ role.roleName}}</a-tag>
-      </span>
-      <span slot="isDelete" slot-scope="text, record">
-       {{formatIsDelete(record.isDelete)}}
-      </span>
-      <span slot="action" slot-scope="text, record">
-        <a @click="handleEdit(record)">编辑</a>
-        <a-divider type="vertical"/>
-        <a-dropdown>
-          <a class="ant-dropdown-link">更多
-            <a-icon type="down"/>
-          </a>
-          <a-menu slot="overlay">
-            <a-menu-item>
-              <a href="javascript:;">详情</a>
-            </a-menu-item>
-            <a-menu-item>
-              <a href="javascript:;" @click="handleDisables(record)">禁用</a>
-            </a-menu-item>
-            <a-menu-item>
-              <a href="javascript:;" @click="handleDelete(record)">删除</a>
-            </a-menu-item>
-          </a-menu>
-        </a-dropdown>
-      </span>
-    </s-table>
+    <a-divider style="margin:0;"></a-divider>
+    <a-list size="large" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: queryParam.PagedCount, total: total}">
+        <a-list-item :key="index" v-for="(item, index) in userList">
+          <a-list-item-meta>
+            <a slot="description"><a-tag v-for="(role, index) in item.roles" :key="index">{{ role}}</a-tag></a>
+            <a-avatar slot="avatar" size="large" shape="square" :src="item.avatar"/>
+            <a slot="title">{{item.name+'（'+item.id+'）'}}</a>
+          </a-list-item-meta>
+          <div slot="actions">
+            <a>编辑</a>
+          </div>
+          <div slot="actions">
+            <a-dropdown>
+              <a-menu slot="overlay">
+                <a-menu-item><a>编辑</a></a-menu-item>
+                <a-menu-item><a>删除</a></a-menu-item>
+              </a-menu>
+              <a>更多<a-icon type="down"/></a>
+            </a-dropdown>
+          </div>
+          <div class="list-content">
+            <div class="list-content-item">
+              <span>登录名</span>
+              <p>{{ item.username }}</p>
+            </div>
+            <div class="list-content-item">
+              <span>手机号码</span>
+              <p>{{ item.telephone==null?"--":item.telephone }}</p>
+            </div>
+            <div class="list-content-item">
+              <span>邮箱</span>
+              <p>{{ item.email==null?"--":item.email }}</p>
+            </div>
+            <div class="list-content-item">
+              <span>状态</span>
+              <p>{{ formatStatus(item.status) }}</p>
+            </div>
+            <div class="list-content-item">
+              <span>创建</span>
+              <p>{{ item.createTime }}</p>
+            </div>
+            <div class="list-content-item">
+              <span>登录</span>
+              <p>{{ item.loginTime }}</p>
+            </div>          
+          </div>
+        </a-list-item>
+      </a-list>
     <a-modal title="编辑" style="top: 20px;" :width="800" v-model="visible" @ok="handleOk">
       <a-form :autoFormCreate="(form)=>{this.form = form}">
         <a-form-item
@@ -205,84 +218,34 @@
         // 高级搜索 展开/关闭
         advanced: false,
         // 查询参数
-        queryParam: {},
-        // 表头
-        columns: [{
-            title: '唯一标识',
-            dataIndex: 'id',
-            align: 'center'
-          },
-          {
-            title: '昵称',
-            dataIndex: 'name',
-            align: 'center'
-          },
-          {
-            title: '用户名',
-            dataIndex: 'username',
-            align: 'center'
-          },
-          {
-            title: '手机号码',
-            dataIndex: 'telephone',
-            align: 'center'
-          },
-          {
-            title: '邮箱地址',
-            dataIndex: 'email',
-            align: 'center'
-          },
-          {
-            title: '角色集',
-            dataIndex: 'roles',
-            align: 'center',
-            scopedSlots: {
-              customRender: 'roles'
-            }
-          },
-          {
-            title: '登录状态',
-            dataIndex: 'status',
-            align: 'center'
-          },
-          {
-            title: '禁用状态',
-            dataIndex: 'isDelete',
-            align: 'center',
-            scopedSlots: {
-              customRender: 'isDelete'
-            }
-          },
-          {
-            title: '创建时间',
-            dataIndex: 'createTime',
-            sorter: true,
-            align: 'center'
-          },
-          {
-            title: '最后登录时间',
-            dataIndex: 'loginTime',
-            sorter: true,
-            align: 'center'
-          },
-          {
-            title: '操作',
-            width: '150px',
-            dataIndex: 'action',
-            scopedSlots: {
-              customRender: 'action'
-            }
-          }
-        ],
+        queryParam: {
+          Vague:"",
+          Status:-1,
+          IsDeleted:false,
+          PagedCount:10,
+          SkipPage:1
+        },       
         permissionList: null,
-        // 加载数据方法 必须为 Promise 对象
-        loadData: parameter => {
-          return getAdminList(parameter).then(res => {
-            return res.result
-          })
-        },
+        
         selectedRowKeys: [],
-        selectedRows: []
+        selectedRows: [],
+
+        userList:[],
+        total:0,
+        status:[
+          {
+          value: -1,
+          label: "全部"
+        },
+        {
+          value: 1,
+          label: "正常"
+        },
+        {
+          value: 2,
+          label: "不可登录"
+        }
+        ]
       }
     },
     created() {
@@ -293,11 +256,27 @@
         this.permissionList = res.result.data
         console.log('getRoleList.call()', res)
       })
-      getAdminList(this.filters).then(res => {
-        console.log('getAdminList.call()', res)
+      getAdminList(this.queryParam).then(res => {
+        let data =Object.assign(res,this.queryParam)
+        this.total=res.totalCount
+        console.log(1111111,data)
+        this.userList=res.result
       })
     },
     methods: {
+      //中文表示状态
+    formatStatus(value) {
+      let retValue = "";
+      this.status.forEach(function(opt) {
+        if (opt.value == value) {
+          retValue = opt.label;
+        }
+      });
+      return retValue;
+    },
+    onRadioChange(e){
+      this.$message.success('你选择的是：'+e.target.value)
+    },
       formatIsDelete(value) {
       return value == true ? "启用" : "禁用";
         },
@@ -373,3 +352,26 @@
     }
   }
 </script>
+<style lang="less" scoped>
+    .ant-avatar-lg {
+        width: 48px;
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .list-content-item {
+        color: rgba(0, 0, 0, .45);
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 14px;
+        margin-left: 40px;
+        span {
+            line-height: 20px;
+        }
+        p {
+            margin-top: 4px;
+            margin-bottom: 0;
+            line-height: 22px;
+        }
+    }
+</style>

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ASF.Infrastructure.Repository
 {
-    public class RoleRepository: IRoleRepository
+    public class RoleRepository : IRoleRepository
     {
         public readonly RepositoryContext _dbContext;
         public RoleRepository(RepositoryContext dbContext)
@@ -66,11 +66,11 @@ namespace ASF.Infrastructure.Repository
 
             return (Mapper.Map<List<Role>>(list), result.Count());
         }
-        public Task ModifyAsync(Role role)
+        public async Task ModifyAsync(Role role)
         {
-            var model = Mapper.Map<RoleModel>(role);
+            var model = await _dbContext.Roles.FirstOrDefaultAsync(w => w.Id == role.Id);
+            Mapper.Map(role, model);
             _dbContext.Roles.Update(model);
-            return Task.FromResult(0);
         }
         public async Task ModifyAsync(int roleId, bool enable)
         {

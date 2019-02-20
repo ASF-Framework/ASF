@@ -53,6 +53,7 @@ namespace ASF.Domain.Services
                         pids = pids.Zip(p, (first, second) => first + second).ToList();
                     });
                 result.Item2 = await _permissionRepository.GetList(pids);
+                result.Item2 = result.Item2.OrderBy(f => f.Sort).ToList();
                 return result;
             }
            

@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ASF.Application.DTO;
+﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
 using ASF.Domain.Values;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ASF.Infrastructure.Repositories
 {
-    public class CachingAccount<T> : IAccountRepository where T : IAccountRepository
+    public class CachingAccountRepository<T> : IAccountRepository where T : IAccountRepository
     {
         private readonly T _repository;
         private readonly ICache<Account> _accountCache;
         private readonly string _cacheKey = "GetList";
-        private readonly ILogger<CachingAccount<T>> _logger;
+        private readonly ILogger<CachingAccountRepository<T>> _logger;
         private TimeSpan _duration = new TimeSpan(0, 5, 0);
-        public CachingAccount(T repository, ICache<Account> accountCache, ILogger<CachingAccount<T>> logger)
+        public CachingAccountRepository(T repository, ICache<Account> accountCache, ILogger<CachingAccountRepository<T>> logger)
         {
             _repository = repository;
             _accountCache = accountCache;
@@ -81,20 +79,17 @@ namespace ASF.Infrastructure.Repositories
             var result = queryable.OrderByDescending(p => p.CreateInfo.CreateTime);
             return (result.Skip((requestDto.SkipPage - 1) * requestDto.PagedCount).Take(requestDto.PagedCount).ToList(), result.Count());
         }
-
         public async Task<IList<Account>> GetList()
         {
             var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
             return list;
         }
-
         public async Task<bool> HasByEmail(string email)
         {
             var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
             var model = list.FirstOrDefault(w => w.Email == email);
             return model == null ? false : true;
         }
-
         public async Task<bool> HasByTelephone(PhoneNumber telephone)
         {
             var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
@@ -120,7 +115,8 @@ namespace ASF.Infrastructure.Repositories
             {
                 list.Remove(entity);
                 var model = await _repository.GetAsync(account.Id);
-                list.Add(model);
+                if (model != null)
+                    list.Add(model);
                 await _accountCache.SetAsync(_cacheKey, list, _duration);
             }
         }
@@ -136,7 +132,8 @@ namespace ASF.Infrastructure.Repositories
             {
                 list.Remove(entity);
                 var model = await _repository.GetAsync(primaryKey);
-                list.Add(model);
+                if (model != null)
+                    list.Add(model);
                 await _accountCache.SetAsync(_cacheKey, list, _duration);
             }
         }

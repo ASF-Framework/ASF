@@ -1,13 +1,11 @@
 ﻿using ASF;
 using ASF.DependencyInjection;
-using ASF.Domain.Entities;
 using ASF.Infrastructure.Anticorrsives;
 using ASF.Infrastructure.DependencyInjection;
 using ASF.Infrastructure.Repositories;
 using ASF.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Linq;
@@ -18,23 +16,9 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static ASFBuilder AddSQLite(this ASFBuilder builder)
         {
-            var configuration = builder.Services
-                .SingleOrDefault(s => s.ServiceType.Name == typeof(IConfiguration).Name)?.ImplementationInstance as IConfiguration;
-            if (configuration == null)
-            {
-                throw new ApplicationException("can't find JwtAuthorize section in appsetting.json");
-            }
-
-            ASFOptions options = configuration.GetSection("ASFOptions").Get<ASFOptions>();
-            if (options == null)
-            {
-                options = new ASFOptions();
-            }
-            builder.Services.Configure<ASFOptions>(configuration.GetSection("ASFOptions"));
-
+            var options = builder.Services.GetDefaultConfiguration();
             builder.Services.AddRepositories();
-            builder.Services.AddAnticorrsives();
-            builder.Services.AddAuthenticationJwtBearer(options);
+            builder.Services.AddAnticorrsives(options);
             return builder;
         }
 
@@ -43,12 +27,26 @@ namespace Microsoft.Extensions.DependencyInjection
             ASFOptions options = new ASFOptions();
             startupAction?.Invoke(options);
             builder.Services.ConfigureOptions(startupAction);
-
             builder.Services.AddRepositories();
-            builder.Services.AddAnticorrsives();
-            builder.Services.AddAuthenticationJwtBearer(options);
+            builder.Services.AddAnticorrsives(options);
             return builder;
+        }
+        public static ASFBuilder AddSQLiteCache(this ASFBuilder builder)
+        {
+            var options = builder.Services.GetDefaultConfiguration();
+            builder.Services.AddAnticorrsives(options);
+            builder.AddRepositoriesCache();
+            return builder;
+        }
 
+        public static ASFBuilder AddSQLiteCache(this ASFBuilder builder, Action<ASFOptions> startupAction)
+        {
+            ASFOptions options = new ASFOptions();
+            startupAction?.Invoke(options);
+            builder.Services.ConfigureOptions(startupAction);
+            builder.Services.AddAnticorrsives(options);
+            builder.AddRepositoriesCache();
+            return builder;
         }
         /// <summary>
         /// 注入仓储层
@@ -59,26 +57,32 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddDbContext<RepositoryContext>(options => options.UseSqlite("Data Source=ASF.db"), ServiceLifetime.Scoped);
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAccountRepository, AccountRepository>();
-            //services.TryAddScoped(typeof(AccountRepository));
-            //services.AddScoped<IAccountRepository, CachingAccount<AccountRepository>>();
-
             services.AddScoped<ILoggingRepository, LogInfoRepository>();
-
             services.AddScoped<IPermissionRepository, PermissionRepository>();
-            //services.TryAddScoped(typeof(PermissionRepository));
-            //services.AddScoped<IPermissionRepository, CachingPermission<PermissionRepository>>();
-
             services.AddScoped<IRoleRepository, RoleRepository>();
-            //services.TryAddScoped(typeof(RoleRepository));
-            //services.AddScoped<IRoleRepository, CachingRole<RoleRepository>>();
+        }
+        /// <summary>
+        /// 注入缓存仓储层
+        /// </summary>
+        /// <param name="builder"></param>
+        private static void AddRepositoriesCache(this ASFBuilder builder)
+        {
+            builder.Services.AddDbContext<RepositoryContext>(options => options.UseSqlite("Data Source=ASF.db"), ServiceLifetime.Scoped);
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<ILoggingRepository, LogInfoRepository>();
+
+            builder.AddAccountRepositoryCache<AccountRepository>();
+            builder.AddPermissionRepositoryCache<PermissionRepository>();
+            builder.AddRoleRepositoryCache<RoleRepository>();
         }
         /// <summary>
         /// 注入防腐层
         /// </summary>
         /// <param name="builder"></param>
-        private static void AddAnticorrsives(this IServiceCollection services)
+        private static void AddAnticorrsives(this IServiceCollection services, ASFOptions options)
         {
             services.AddSingleton<IAccessTokenGenerate, AccessTokenGenerate>();
+            services.AddAuthenticationJwtBearer(options);
         }
         /// <summary>
         /// 添加Jwt授权
@@ -108,6 +112,28 @@ namespace Microsoft.Extensions.DependencyInjection
                 opt.RequireHttpsMetadata = tokenOpt.RequireHttpsMetadata;
                 opt.TokenValidationParameters = tokenValidationParameters;
             });
+        }
+
+        /// <summary>
+        /// 获取默认配置
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        private static ASFOptions GetDefaultConfiguration(this IServiceCollection services)
+        {
+            var configuration = services
+                   .SingleOrDefault(s => s.ServiceType.Name == typeof(IConfiguration).Name)?.ImplementationInstance as IConfiguration;
+            if (configuration == null)
+            {
+                throw new ApplicationException("can't find JwtAuthorize section in appsetting.json");
+            }
+            ASFOptions options = configuration.GetSection("ASFOptions").Get<ASFOptions>();
+            if (options == null)
+            {
+                options = new ASFOptions();
+            }
+            services.Configure<ASFOptions>(configuration.GetSection("ASFOptions"));
+            return options;
         }
     }
 }

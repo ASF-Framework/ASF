@@ -10,14 +10,14 @@ using Microsoft.Extensions.Logging;
 
 namespace ASF.Infrastructure.Repositories
 {
-    public class CachingRole<T> : IRoleRepository where T : IRoleRepository
+    public class CachingRoleRepository<T> : IRoleRepository where T : IRoleRepository
     {
         private readonly T _repository;
         private readonly ICache<Role> _roleCache;
         private readonly string _cacheKey = "GetList";
-        private readonly ILogger<CachingRole<T>> _logger;
+        private readonly ILogger<CachingRoleRepository<T>> _logger;
         private TimeSpan _duration = new TimeSpan(0, 5, 0);
-        public CachingRole(T repository, ICache<Role> roleCache, ILogger<CachingRole<T>> logger)
+        public CachingRoleRepository(T repository, ICache<Role> roleCache, ILogger<CachingRoleRepository<T>> logger)
         {
             _repository = repository;
             _roleCache = roleCache;
@@ -60,7 +60,7 @@ namespace ASF.Infrastructure.Repositories
                 queryable = queryable.Where(w => w.Enable == true);
             if (requestDto.Enable == 0)
                 queryable = queryable.Where(w => w.Enable == false);
-            
+
             return (queryable.Skip((requestDto.SkipPage - 1) * requestDto.PagedCount).Take(requestDto.PagedCount).ToList(), queryable.Count());
         }
 
@@ -75,7 +75,8 @@ namespace ASF.Infrastructure.Repositories
             {
                 list.Remove(entity);
                 var model = await _repository.GetAsync(role.Id);
-                list.Add(model);
+                if (model != null)
+                    list.Add(model);
                 await _roleCache.SetAsync(_cacheKey, list, _duration);
             }
         }
@@ -91,7 +92,8 @@ namespace ASF.Infrastructure.Repositories
             {
                 list.Remove(entity);
                 var model = await _repository.GetAsync(roleId);
-                list.Add(model);
+                if (model != null)
+                    list.Add(model);
                 await _roleCache.SetAsync(_cacheKey, list, _duration);
             }
         }

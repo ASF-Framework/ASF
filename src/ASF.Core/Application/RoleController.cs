@@ -21,6 +21,7 @@ namespace ASF.Application
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRoleRepository _roleRepository;
         private readonly LogOperateRecordService _operateLog;
+
         public RoleController(IServiceProvider serviceProvider, IUnitOfWork unitOfWork, IRoleRepository roleRepository, LogOperateRecordService operateLog)
         {
             this._serviceProvider = serviceProvider;
@@ -47,7 +48,7 @@ namespace ASF.Application
                 return result;
 
             //调用领域服务
-            int createOfAccountId = Convert.ToInt32(HttpContext.User.FindFirst("sub"));
+            int createOfAccountId = HttpContext.User.UserId();
             var createResult = await this._serviceProvider.GetRequiredService<RoleCreateService>()
                 .Create(dto.Name, dto.Description, createOfAccountId, dto.Permissions);
             if (!createResult.Success)
@@ -113,6 +114,10 @@ namespace ASF.Application
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
+        /// <summary>
+        /// 获取所有角色基本信息
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Authorize(Roles = "self")]
         public async Task<ResultList<RoleInfoSimpleResponseDto>> GetListAll()
@@ -159,7 +164,7 @@ namespace ASF.Application
                 .GetList(role.Permissions.ToList());
 
             var result = Mapper.Map<RoleInfoDetailsResponseDto>(role);
-            result.Permissions = permissions.ToDictionary(k => k.Id, v => v.Name);
+            result.Permissions = permissions.OrderBy(f=>f.Sort).ToDictionary(k => k.Id, v => v.Name);
             return Result<RoleInfoDetailsResponseDto>.ReSuccess(result);
         }
     }

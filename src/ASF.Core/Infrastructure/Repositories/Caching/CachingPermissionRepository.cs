@@ -10,14 +10,14 @@ using Microsoft.Extensions.Logging;
 
 namespace ASF.Infrastructure.Repositories
 {
-    public class CachingPermission<T> : IPermissionRepository where T : IPermissionRepository
+    public class CachingPermissionRepository<T> : IPermissionRepository where T : IPermissionRepository
     {
         private readonly T _repository;
         private readonly ICache<Permission> _permissionCache;
         private readonly string _cacheKey = "GetList";
-        private readonly ILogger<CachingPermission<T>> _logger;
+        private readonly ILogger<CachingPermissionRepository<T>> _logger;
         private TimeSpan _duration = new TimeSpan(0, 5, 0);
-        public CachingPermission(T repository, ICache<Permission> permissionCache, ILogger<CachingPermission<T>> logger)
+        public CachingPermissionRepository(T repository, ICache<Permission> permissionCache, ILogger<CachingPermissionRepository<T>> logger)
         {
             _repository = repository;
             _permissionCache = permissionCache;
@@ -55,7 +55,7 @@ namespace ASF.Infrastructure.Repositories
         {
             var list = await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
 
-            var queryable=list.Where(w => w.Id != "");
+            var queryable= list.Where(w => w.Type == requestDto.Type);
 
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {
@@ -63,6 +63,9 @@ namespace ASF.Infrastructure.Repositories
                     .Where(w => w.Id.Contains(requestDto.Vague)
                     || w.Name.Contains(requestDto.Vague));
             }
+            if (!string.IsNullOrEmpty(requestDto.ParamId))
+                queryable.Where(w => w.ParentId == requestDto.ParamId);
+
             if (requestDto.Enable == 1)
                 queryable = queryable.Where(w => w.Enable == true);
             if (requestDto.Enable == 0)
@@ -94,7 +97,8 @@ namespace ASF.Infrastructure.Repositories
             {
                 list.Remove(entity);
                 var model = await _repository.GetAsync(permission.Id);
-                list.Add(model);
+                if (model != null)
+                    list.Add(model);
                 await _permissionCache.SetAsync(_cacheKey, list, _duration);
             }
         }

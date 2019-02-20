@@ -8,10 +8,14 @@ namespace ASF.Infrastructure.ModelMapper
         public RoleMapper()
         {
             base.CreateMap<ASF.Infrastructure.Model.RoleModel, ASF.Domain.Entities.Role>()
-              .ForMember(o => o.Permissions, model => model.MapFrom(d => new List<string>(d.Permissions.Split(','))));
+              .ForMember(o => o.Permissions, model => model.MapFrom(d => new List<string>(d.Permissions.Split(','))))
+            .ForPath(a => a.CreateInfo.CreateId, model => model.MapFrom(d => d.CreateId))
+                .ForPath(a => a.CreateInfo.CreateTime, model => model.MapFrom(d => d.CreateTime));
 
-            base.CreateMap<ASF.Domain.Entities.Role,ASF.Infrastructure.Model.RoleModel > ()
-              .ForMember(o => o.Permissions, e => e.MapFrom(d => string.Join(",", d.Permissions)));
+            base.CreateMap<ASF.Domain.Entities.Role, ASF.Infrastructure.Model.RoleModel>()
+              .ForMember(o => o.Permissions, e => e.MapFrom(d => string.Join(",", d.Permissions)))
+               .ForPath(a => a.CreateId, model => model.MapFrom(d => d.CreateInfo.CreateId))
+                .ForPath(a => a.CreateTime, model => model.MapFrom(d => d.CreateInfo.CreateTime));
         }
     }
 }

@@ -25,7 +25,7 @@ namespace ASF.Infrastructure.Repositories
         }
         public async Task<Permission> AddAsync(Permission entity)
         {
-            var permission= await _repository.AddAsync(entity);
+            var permission = await _repository.AddAsync(entity);
 
             //更新缓存
             var list = await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
@@ -55,11 +55,11 @@ namespace ASF.Infrastructure.Repositories
         {
             var list = await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
 
-            var queryable= list.Where(w => w.Id != "");
+            var queryable = list.Where(w => w.Id != "");
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {
                 queryable = queryable
-                    .Where(w => w.Id.Contains(requestDto.Vague)
+                    .Where(w => w.Id == requestDto.Vague
                     || w.Name.Contains(requestDto.Vague));
             }
             if (!string.IsNullOrEmpty(requestDto.ParamId))

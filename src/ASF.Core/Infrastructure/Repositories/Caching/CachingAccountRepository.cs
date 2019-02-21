@@ -66,7 +66,7 @@ namespace ASF.Infrastructure.Repositories
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {
                 queryable = queryable
-                    .Where(w => w.Id.ToString().Contains(requestDto.Vague)
+                    .Where(w => w.Id.ToString() == requestDto.Vague
                     || w.Name.Contains(requestDto.Vague)
                     || w.Username.Contains(requestDto.Vague)
                     );

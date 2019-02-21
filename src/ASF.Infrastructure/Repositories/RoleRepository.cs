@@ -53,7 +53,7 @@ namespace ASF.Infrastructure.Repository
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {
                 queryable = queryable
-                    .Where(w => EF.Functions.Like(w.Id.ToString(), "%" + requestDto.Vague + "%")
+                    .Where(w => w.Id.ToString() == requestDto.Vague
                     || EF.Functions.Like(w.Name, "%" + requestDto.Vague + "%"));
             }
             if (requestDto.Enable == 1)

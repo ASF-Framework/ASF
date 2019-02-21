@@ -35,7 +35,7 @@
     <s-table  ref="table" :columns="columns" :data="loadData" size="small" :defaultExpandAllRows="true">     
       <span slot="actions" slot-scope="text, record">
         <a-tag
-          v-for="(val, key,index) in record.actions"
+          v-for="(val,key) in record.actions"
           :key="key"
           @click="handerContrl(val)"
         >{{ val }}</a-tag>

@@ -28,7 +28,7 @@ export const asyncRouterMap = [
           title: '仪表盘',
           keepAlive: true,
           icon: 'dashboard',
-          permission: ['asf.acount']
+          permission: ['asf']
         },
         children: [
           {
@@ -38,7 +38,7 @@ export const asyncRouterMap = [
             meta: {
               title: '分析页',
               keepAlive: true,
-              permission: ['asf.acount']
+              permission: ['asf']
             }
           },
           {
@@ -48,7 +48,7 @@ export const asyncRouterMap = [
             meta: {
               title: '工作台',
               keepAlive: true,
-              permission: ['asf.acount']
+              permission: ['asf']
             }
           }
         ]
@@ -62,7 +62,7 @@ export const asyncRouterMap = [
         meta: {
           title: '控制面板',
           icon: 'table',
-          permission: ['asf.acount']
+          permission: ['asf']
         },
         children: [
           {
@@ -72,7 +72,7 @@ export const asyncRouterMap = [
             meta: {
               title: '管理员列表',
               keepAlive: true,
-              permission: ['asf.acount']
+              permission: ['asf']
             }
           },
           {
@@ -81,7 +81,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/control/RoleList'),
             meta: {
               title: '角色列表',
-              permission: ['asf.acount']
+              permission: ['asf']
             }
           },
           {
@@ -90,7 +90,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/control/PermissionList'),
             meta: {
               title: '权限列表',
-              permission: ['asf.acount']
+              permission: ['asf']
             }
           }
         ]
@@ -105,8 +105,7 @@ export const asyncRouterMap = [
         meta: {
           title: '个人页',
           icon: 'user',
-          keepAlive: true,
-          permission: ['user']
+          keepAlive: true
         },
         children: [
           {
@@ -115,8 +114,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/account/center/Index'),
             meta: {
               title: '个人中心',
-              keepAlive: true,
-              permission: ['user']
+              keepAlive: true
             }
           },
           {
@@ -126,8 +124,7 @@ export const asyncRouterMap = [
             meta: {
               title: '个人设置',
               hideHeader: true,
-              keepAlive: true,
-              permission: ['user']
+              keepAlive: true
             },
             redirect: '/account/settings/security',
             alwaysShow: true,
@@ -139,8 +136,7 @@ export const asyncRouterMap = [
                 meta: {
                   title: '基本设置',
                   hidden: true,
-                  keepAlive: true,
-                  permission: ['user']
+                  keepAlive: true
                 }
               },
               {
@@ -150,8 +146,7 @@ export const asyncRouterMap = [
                 meta: {
                   title: '账户设置',
                   hidden: true,
-                  keepAlive: true,
-                  permission: ['user']
+                  keepAlive: true
                 }
               },
               {
@@ -161,8 +156,7 @@ export const asyncRouterMap = [
                 meta: {
                   title: '个性化设置',
                   hidden: true,
-                  keepAlive: true,
-                  permission: ['user']
+                  keepAlive: true
                 }
               },
               {
@@ -172,8 +166,7 @@ export const asyncRouterMap = [
                 meta: {
                   title: '账户绑定',
                   hidden: true,
-                  keepAlive: true,
-                  permission: ['user']
+                  keepAlive: true
                 }
               },
               {
@@ -183,8 +176,7 @@ export const asyncRouterMap = [
                 meta: {
                   title: '新消息通知',
                   hidden: true,
-                  keepAlive: true,
-                  permission: ['user']
+                  keepAlive: true
                 }
               }
             ]

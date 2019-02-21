@@ -49,17 +49,19 @@
             <a-avatar slot="avatar" size="large" shape="square" :src="item.avatar"/>
             <a slot="title">{{item.name+'（'+item.id+'）'}}</a>
           </a-list-item-meta>
-          <div slot="actions" >
-            <a @click="$refs.modal.edit(item)">编辑</a>
+          <div slot="actions"  >
+            <a @click="$refs.modal.edit(item)" v-if="!item.isSystem">编辑</a>
+            <a v-else disabled >编辑</a>
           </div>
-          <div slot="actions">
-            <a-dropdown>
+          <div slot="actions" >
+            <a-dropdown v-if="!item.isSystem" >
               <a-menu slot="overlay">
                 <a-menu-item><a @click="handleStatus(item)">{{ShowStatus(item.status)}}</a></a-menu-item>
                 <a-menu-item><a @click="handleDelete(item.id)">删除</a></a-menu-item>
               </a-menu>
               <a>更多<a-icon type="down"/></a>
             </a-dropdown>
+            <a v-else disabled >更多<a-icon type="down"/></a>
           </div>
           <div class="list-content">
             <div class="list-content-item">

@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    title="操作"
+    title="编辑管理员"
     :width="800"
     :visible="visible"
     :confirmLoading="confirmLoading"
@@ -75,7 +75,8 @@ export default {
 
       form: this.$form.createForm(this),
       permissions: [],
-      roleList:[]
+      roleList:[],
+      accountId:0
     }
   },
   created () {
@@ -87,18 +88,16 @@ export default {
       this.edit({ id: 0 })
     },
     edit (record) {
-        console.log('record:', record)
         getAccountDetail(record.id).then(res=>{
-
-            this.mdl = Object.assign({}, res.result)
-     
-      this.visible = true
-      this.$nextTick(() => {
-        this.form.setFieldsValue(pick(this.mdl, 'username', 'name', 'status', 'roles'))
-      })
-      console.log('this.mdl', this.mdl)
-        })
-      
+            if(res.status==200){
+                this.mdl = Object.assign({}, res.result)     
+                this.visible = true
+                this.$nextTick(() => {
+                  this.form.setFieldsValue(pick(this.mdl, 'username', 'name', 'status', 'roles'))
+                })
+                this.accountId=record.id
+            }
+        })      
     },
     close () {
       this.$emit('close')
@@ -110,6 +109,7 @@ export default {
       this.form.validateFields((err, values) => {
         // 验证表单没错误
         if (!err) {
+          values.accountId=this.accountId
           console.log('form values', values)
 
           _this.confirmLoading = true
@@ -117,9 +117,8 @@ export default {
           new Promise((resolve) => {
             setTimeout(() => resolve(), 2000)
           }).then(() => {
-            // Do something
+            // Do something            
             modifyAccount(values).then(res=>{
-                console.log('form res', res)
                 if(res.status==200){
                     this.visible = false
                     this.confirmLoading=false

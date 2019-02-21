@@ -6,34 +6,34 @@
           <a-col :md="12" :sm="24">
             <a-tooltip>
               <template slot="title">新建管理员
-              </template>
+</template>
               <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px"></a-button>
             </a-tooltip>
-             <a-radio-group defaultValue="-1" buttonStyle="solid" @change="onRadioChange">
+             <a-radio-group defaultValue="-1" v-model="queryParam.status" buttonStyle="solid" @change="handleSearch">
               <a-radio-button value="-1">全部</a-radio-button>
               <a-radio-button value="1">正常</a-radio-button>
-              <a-radio-button value="2">不可登录</a-radio-button>
+              <a-radio-button value="2">禁用</a-radio-button>
             </a-radio-group>
           </a-col>
           <a-col :md="12" :sm="24">
             <span class="table-page-search-submitButtons" style="float:right">
               <a-input
                 placeholder="请输入ID/昵称/用户名"
-                v-model="filters.name"
+                v-model="queryParam.Vague"
                 style="width:300px;margin-right:10px"  
               />
               <a-button-group>
                 <a-tooltip>
-                <template slot="title">
-                  查询
-                </template>
-                  <a-button type="primary" icon="search"></a-button>
+<template slot="title">
+   查询
+</template>
+                  <a-button type="primary" icon="search" @click="handleSearch"></a-button>
                 </a-tooltip>
                 <a-tooltip>
-                <template slot="title">
-                  重置查询条件
-                </template>
-                  <a-button icon="undo"></a-button>
+<template slot="title">
+   重置查询条件
+</template>
+                  <a-button icon="undo" @click="() => queryParam = {Vague:'', Status:-1,PagedCount:10,SkipPage:1}"></a-button>
                 </a-tooltip>
               </a-button-group>
             </span>
@@ -49,14 +49,14 @@
             <a-avatar slot="avatar" size="large" shape="square" :src="item.avatar"/>
             <a slot="title">{{item.name+'（'+item.id+'）'}}</a>
           </a-list-item-meta>
-          <div slot="actions">
-            <a>编辑</a>
+          <div slot="actions" >
+            <a @click="handleEdit(item)">编辑</a>
           </div>
           <div slot="actions">
             <a-dropdown>
               <a-menu slot="overlay">
-                <a-menu-item><a>编辑</a></a-menu-item>
-                <a-menu-item><a>删除</a></a-menu-item>
+                <a-menu-item><a @click="handleStatus(item)">{{ShowStatus(item.status)}}</a></a-menu-item>
+                <a-menu-item><a @click="handleDelete(item.id)">删除</a></a-menu-item>
               </a-menu>
               <a>更多<a-icon type="down"/></a>
             </a-dropdown>
@@ -89,86 +89,82 @@
           </div>
         </a-list-item>
       </a-list>
-    <a-modal title="编辑" style="top: 20px;" :width="800" v-model="visible" @ok="handleOk">
-      <a-form :autoFormCreate="(form)=>{this.form = form}">
+    <a-modal title="编辑" style="top: 20px;" :width="800" v-model="visibleEdit" @ok="">
+      <a-form :form="form">
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="登录名"
-          hasFeedback
-          validateStatus="success"
         >
-          <a-input placeholder="登录名" v-model="mdl.name" id="no" disabled="disabled"/>
+          <a-input placeholder="登录名" v-model="mdl.username" disabled="disabled"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="角色名称"
-          hasFeedback
-          validateStatus="success"
+          label="昵称"
         >
-          <a-input placeholder="角色名称" v-model="mdl.roleName" id="role_name"/>
+          <a-input placeholder="昵称" v-model="mdl.name" v-decorator="['name',{rules: [{ required: true, message: '请输入昵称' }]}]"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="状态"
-          hasFeedback
-          validateStatus="warning"
         >
-          <a-select v-model="mdl.status">
+          <a-select v-model="mdl.status" v-decorator="['status',{rules: [{ required: true, message: '请选择状态' }]}]">
             <a-select-option value="1">正常</a-select-option>
             <a-select-option value="2">禁用</a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="描述" hasFeedback>
-          <a-textarea :rows="5" v-model="mdl.describe" placeholder="..." id="describe"/>
-        </a-form-item>
         <a-divider/>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予角色" hasFeedback>
-          <a-select style="width: 100%" mode="multiple" :allowClear="true">
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予角色" >
+          <a-select style="width: 100%" mode="multiple" :allowClear="true"  v-decorator="['roles',{rules: [{ required: true, message: '请赋予角色' }]}]">
             <a-select-option
-              v-for="(role, index) in permissionList"
+              v-for="(role, index) in roleList"
               :key="index"
-              :value="role.name"
+              :value="role.id"
             >{{ role.name }}</a-select-option>
           </a-select>
         </a-form-item>
       </a-form>
     </a-modal>
-    <a-modal title="添加" style="top: 20px;" :width="800" v-model="visibleAdd" @ok="handleOk">
-      <a-form :autoFormCreate="(form)=>{this.form = form}">
+    <a-modal title="添加" style="top: 20px;" :width="800" v-model="visibleAdd" :confirmLoading="loadingAdd" @ok="handleAddSubmit" @cancel="handleAddCancel">
+      <a-form :form="form">
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="登录名"
-          hasFeedback
-          validateStatus="success"
         >
-          <a-input placeholder="登录名" id="no"/>
+          <a-input placeholder="登录名"  v-decorator="['username',{rules: [{ required: true, message: '请输入登录名' }]}]"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="状态"
-          hasFeedback
-          validateStatus="warning"
+          label="昵称"
         >
-          <a-select>
-            <a-select-option value="1">正常</a-select-option>
-            <a-select-option value="2">禁用</a-select-option>
-          </a-select>
+          <a-input placeholder="昵称" v-decorator="['name',{rules: [{ required: true, message: '请输入昵称' }]}]"/>
         </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="描述" hasFeedback>
-          <a-textarea :rows="5" placeholder="..." id="describe"/>
+         <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="登录密码"
+        >
+          <a-input placeholder="登录密码"  type="password" v-decorator="['password',{rules: [{ required: true, message: '请输入密码' }]}]"/>
+        </a-form-item>
+        </a-form-item>
+         <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="确认登录密码"
+        >
+          <a-input placeholder="确认登录密码" type="password" v-decorator="['confPassword',{rules: [{ required: true, message: '请确认密码' }]}]"/>
         </a-form-item>
         <a-divider/>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予角色" hasFeedback>
-          <a-select style="width: 100%" mode="multiple" :allowClear="true">
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予角色">
+          <a-select style="width: 100%" mode="multiple" :allowClear="true" v-decorator="['roles',{rules: [{ required: true, message: '请赋予角色' }]}]">
             <a-select-option
-              v-for="(role, index) in permissionList"
+              v-for="(role, index) in roleList"
               :key="index"
-              :value="role.name"
+              :value="role.id"
             >{{ role.name }}</a-select-option>
           </a-select>
         </a-form-item>
@@ -180,9 +176,12 @@
 <script>
   import STable from '@/components/table/'
   import {
-    getRoleList,
+    getRoleListAll,
     getServiceList,
-    getAdminList
+    getAdminList,
+    createAccount,
+    modifyStatusAccount,
+    deleteAccount
   } from '@/api/manage'
   export default {
     name: 'TableList',
@@ -192,8 +191,9 @@
     data() {
       return {
         description: '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
-        visible: false,
+        visibleEdit: false,
         visibleAdd: false,
+        loadingAdd: false,
         filters: {
           name: ''
         },
@@ -213,104 +213,159 @@
             span: 16
           }
         },
-        form: null,
+        form: this.$form.createForm(this),
         mdl: {},
         // 高级搜索 展开/关闭
         advanced: false,
         // 查询参数
         queryParam: {
-          Vague:"",
-          Status:-1,
-          IsDeleted:false,
-          PagedCount:10,
-          SkipPage:1
-        },       
-        permissionList: null,
-        
+          Vague: "",
+          Status: -1,
+          IsDeleted: false,
+          PagedCount: 10,
+          SkipPage: 1
+        },
+        roleList: [],
         selectedRowKeys: [],
         selectedRows: [],
-
-        userList:[],
-        total:0,
-        status:[
+        userList: [],
+        total: 0,
+        status: [{
+            value: -1,
+            label: "全部"
+          },
           {
-          value: -1,
-          label: "全部"
-        },
-        {
-          value: 1,
-          label: "正常"
-        },
-        {
-          value: 2,
-          label: "不可登录"
-        }
+            value: 1,
+            label: "正常"
+          },
+          {
+            value: 2,
+            label: "禁用"
+          }
         ]
       }
+    },
+    filters: {
+    statusFilter(status) {
+      const statusMap = {        
+        1: '正常',
+        0: '禁用'
+      }
+      return statusMap[status?1:0]
+    }
     },
     created() {
       getServiceList().then(res => {
         console.log('getServiceList.call()', res)
       })
-      getRoleList().then(res => {
-        this.permissionList = res.result.data
-        console.log('getRoleList.call()', res)
+      getRoleListAll().then(res => {      
+        this.roleList = res.result        
       })
-      getAdminList(this.queryParam).then(res => {
-        let data =Object.assign(res,this.queryParam)
-        this.total=res.totalCount
-        console.log(1111111,data)
-        this.userList=res.result
-      })
+      this.makeList()
     },
     methods: {
+      //中文表示角色
+      formatRole(rid){
+        let retValue=""
+         this.roleList.forEach(element => {
+            if(element.id==rid){
+                 retValue = element.name;
+            }
+         });
+         return retValue
+      },
       //中文表示状态
-    formatStatus(value) {
-      let retValue = "";
-      this.status.forEach(function(opt) {
-        if (opt.value == value) {
-          retValue = opt.label;
-        }
-      });
-      return retValue;
-    },
-    onRadioChange(e){
-      this.$message.success('你选择的是：'+e.target.value)
-    },
-      formatIsDelete(value) {
-      return value == true ? "启用" : "禁用";
-        },
-      //禁用
-      handleDisables(record) {
+      formatStatus(value) {
+        let retValue = "";
+        this.status.forEach(function(opt) {
+          if (opt.value == value) {
+            retValue = opt.label;
+          }
+        });
+        return retValue;
+      },
+      //显示状态
+      ShowStatus(value) {
+        let retValue = "";
+        this.status.forEach(function(opt) {
+          if (opt.value != value) {
+            retValue = opt.label;
+          }
+        });
+        return retValue;
+      },
+      //返回item状态的其它状态
+      ReturnStatus(value){
+        let retValue = "";
+        this.status.forEach(function(opt) {
+          if (opt.value != value) {
+            retValue = opt.value;
+          }
+        });
+        return retValue;
+      },
+      //改变状态
+      handleStatus(item){
         const that = this
-        this.$confirm({
+        let par={};
+        par.id=item.id
+        par.status=this.ReturnStatus(item.status)
+        let text=this.ShowStatus(item.status)
+        console.log(par)
+        that.$confirm({
           title: '提示',
-          content: '确定要禁用吗 ?',
+          content: '确定要修改该管理员状态为'+text+'吗 ?',
           onOk() {
-            // that.$message.info({
-            //   title: '提示',
-            //   description: '功能正在升级当中'
-            // })
-            that.$message.success('功能正在升级当中')
+            modifyStatusAccount(par).then(res=>{
+              if(res.status==200){
+                that.makeList()
+                 that.$message.success('修改成功')
+              }else{
+                that.$message.error(res.message)
+              }
+            })
           },
           onCancel() {}
         })
       },
-      handleDelete(record) {
+      //查询
+      handleSearch(){
+         this.makeList()
+      },
+      //获取列表
+      makeList(){
+         getAdminList(this.queryParam).then(res => {
+            console.log(11111111,res)
+            let data = Object.assign(res, this.queryParam)
+            this.total = res.totalCount
+            this.userList = res.result
+            console.log("Data-resource：",this.userList)
+        })
+      },
+      formatIsDelete(value) {
+        return value == true ? "启用" : "禁用";
+      },
+      //删除
+      handleDelete(id) {
         const that = this
         this.$confirm({
           title: '提示',
           content: '确定要删除吗 ?',
           onOk() {
-            // that.$message.info({
-            //   title: '提示',
-            //   description: '功能正在升级当中'
-            // })
-            that.$message.success('功能正在升级当中')
+           deleteAccount(id).then(res=>{
+             if(res.status==200){
+               that.makeList()
+               that.$message.success('删除成功')
+             }else{
+               that.$message.error(res.message)
+             }
+           })
+            
           },
           onCancel() {}
         })
       },
+      //添加弹出框
       handleAdd() {
         this.visibleAdd = true
       },
@@ -325,9 +380,42 @@
         //     }
         //   })
         // })
-        this.visible = true
+        this.visibleEdit = true
       },
-      handleOk() {},
+      //添加框点击取消
+      handleAddCancel(){
+        this.visibleAdd = false
+         this.loadingAdd=false
+        this.form=this.$form.createForm(this)
+      },
+      //添加提交
+      handleAddSubmit() {
+        this.loadingAdd=true
+         this.form.validateFields((err, values) => {
+           if (!err) {            
+             if(values.password!=values.confPassword){
+               this.$message.error("输入的密码不一致，请重新输入");
+               this.loadingAdd=false
+              return false;
+             }            
+             createAccount(values).then(res=>{               
+               if(res.status==200){
+                  setTimeout(() => {
+                      this.visibleAdd = false
+                      this.loadingAdd=false
+                   }, 2000);
+                 this.makeList()
+                  this.$message.success('提交成功')
+               }else{
+                 this.loadingAdd=false
+                 this.$message.error(res.message)
+               }              
+             })
+           }else{
+             this.loadingAdd=false
+           }
+         })
+      },
       onChange(selectedRowKeys, selectedRows) {
         this.selectedRowKeys = selectedRowKeys
         this.selectedRows = selectedRows
@@ -353,25 +441,24 @@
   }
 </script>
 <style lang="less" scoped>
-    .ant-avatar-lg {
-        width: 48px;
-        height: 48px;
-        line-height: 48px;
+  .ant-avatar-lg {
+    width: 48px;
+    height: 48px;
+    line-height: 48px;
+  }
+  .list-content-item {
+    color: rgba(0, 0, 0, .45);
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    margin-left: 40px;
+    span {
+      line-height: 20px;
     }
-
-    .list-content-item {
-        color: rgba(0, 0, 0, .45);
-        display: inline-block;
-        vertical-align: middle;
-        font-size: 14px;
-        margin-left: 40px;
-        span {
-            line-height: 20px;
-        }
-        p {
-            margin-top: 4px;
-            margin-bottom: 0;
-            line-height: 22px;
-        }
+    p {
+      margin-top: 4px;
+      margin-bottom: 0;
+      line-height: 22px;
     }
+  }
 </style>

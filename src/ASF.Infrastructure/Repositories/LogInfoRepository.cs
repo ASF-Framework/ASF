@@ -54,7 +54,7 @@ namespace ASF.Infrastructure.Repository
             {
                 queryable = queryable
                     .Where(w => EF.Functions.Like(w.AccountName, "%" + dto.Account + "%")
-                    || EF.Functions.Like(w.AccountId.ToString(), "%" + dto.Account + "%")
+                    || w.AccountId.ToString() == dto.Account
                     );
             }
             if (dto.Type == 1)

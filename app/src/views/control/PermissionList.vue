@@ -8,7 +8,7 @@
               <template slot="title">新增权限</template>
               <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px"></a-button>
             </a-tooltip>
-            <a-radio-group v-model="queryParam.Enable" defaultValue="-1" buttonStyle="solid" >
+            <a-radio-group  defaultValue="-1" v-model="queryParam.Enable"  buttonStyle="solid" @change="$refs.table.refresh(true)" >
               <a-radio-button value="-1">全部</a-radio-button>
               <a-radio-button value="1">启用</a-radio-button>
               <a-radio-button value="0">停用</a-radio-button>
@@ -20,7 +20,7 @@
               <a-button-group>
                 <a-tooltip>
                   <template slot="title">查询</template>
-                  <a-button type="primary" icon="search" @click="loadData"></a-button>
+                  <a-button type="primary" icon="search" @click="$refs.table.refresh(true)"></a-button>
                 </a-tooltip>
                 <a-tooltip>
                   <template slot="title">清除查询条件</template>
@@ -32,7 +32,7 @@
         </a-row>
       </a-form>
     </div>
-    <s-table :columns="columns" :data="loadData" size="small">
+    <s-table  ref="table" :columns="columns" :data="loadData" size="small" :defaultExpandAllRows="true">     
       <span slot="actions" slot-scope="text, record">
         <a-tag
           v-for="(val, key,index) in record.actions"
@@ -155,7 +155,7 @@
           hasFeedback
           validateStatus="success"
         >
-          <a-input placeholder="权限编码" id="no"/>
+          <a-input placeholder="权限编码" v-model="form.id"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -164,7 +164,7 @@
           hasFeedback
           validateStatus="success"
         >
-          <a-input placeholder="起一个名字" id="permission_name"/>
+          <a-input placeholder="起一个名字" v-model="form.name"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -173,16 +173,16 @@
           hasFeedback
           validateStatus="warning"
         >
-          <a-select>
-            <a-select-option value="1">正常</a-select-option>
-            <a-select-option value="2">禁用</a-select-option>
+          <a-select v-model="form.enable">
+            <a-select-option value="1">启用</a-select-option>
+            <a-select-option value="0">停止</a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="描述" hasFeedback>
-          <a-textarea :rows="5" placeholder="..." id="describe"/>
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="排序" hasFeedback>
+          <a-input-number :min="1" :max="10"  v-model="form.sort"  />
         </a-form-item>
         <a-divider/>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予权限" hasFeedback>
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予操作权限" hasFeedback>
           <a-select style="width: 100%" mode="multiple" v-model="mdl.actions" :allowClear="true">
             <a-select-option
               v-for="(action, index) in permissionList"
@@ -243,7 +243,8 @@ export default {
         Vague:"",
         Enable:-1,
         PagedCount:10,
-        SkipPage:1
+        SkipPage:1,
+        IsLoad:true
       },
       // 表头
       columns: [
@@ -256,7 +257,7 @@ export default {
           dataIndex: 'name'
         },
         {
-          title: '可操作权限',
+          title: '操作权限',
           dataIndex: 'actions',
           scopedSlots: {
             customRender: 'actions'
@@ -292,10 +293,9 @@ export default {
         
       },
       // 加载数据方法 必须为 Promise 对象
-      loadData: parameter => {
-        console.log("In-->")
-        return getPermissions(this.queryParam).then(res=>{
-           return this.makePermissionList(res);
+      loadData: parameter => {    
+        return getPermissions(this.queryParam).then(res=>{           
+               return this.makePermissionList(res)
         })
       },
       selectedRowKeys: [],
@@ -315,25 +315,28 @@ export default {
     this.loadPermissionList()
   },
   methods: {
-    makePermissionList(res){
-      console.log(11111,res)
+    makePermissionList(res){      
       let result= []
       let data =Object.assign(res,this.queryParam)
-      data.result.forEach((element,index) => {
-        if(element.parentId=="" || element.parentId==" "){
+      if(this.queryParam.Vague=="" && this.queryParam.Enable==-1){
+         data.result.forEach((element,index) => {
+           if(element.parentId=="" || element.parentId==" "){
             result.push(element)
-            console.log(222222,element)
             result[index].children=[]
             data.result.forEach(ele => {
               if(element.id==ele.parentId){
                  result[index].children.push(ele)
               }
             });
-        }        
-      });
-      data.result=result;
-      console.log(3333333,data)
+          }        
+        });
+         data.result=result;
+        console.log("Table-resource:",data)
+      }    
       return data
+    },
+    handleBtn(){
+      this.makePermissionList()
     },
     handerContrl(action) {
       this.controlFrom = action

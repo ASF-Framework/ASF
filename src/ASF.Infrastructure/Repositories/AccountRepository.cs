@@ -20,7 +20,7 @@ namespace ASF.Infrastructure.Repository
         }
         public async Task<Account> AddAsync(Account entity)
         {
-            var model = Mapper.Map<AccountModel > (entity);
+            var model = Mapper.Map<AccountModel>(entity);
             await _dbContext.AddAsync(model);
             return Mapper.Map<Account>(model);
         }
@@ -57,7 +57,7 @@ namespace ASF.Infrastructure.Repository
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {
                 queryable = queryable
-                    .Where(w => EF.Functions.Like(w.Id.ToString(), "%" + requestDto.Vague + "%")
+                    .Where(w => w.Id.ToString() == requestDto.Vague
                     || EF.Functions.Like(w.Name, "%" + requestDto.Vague + "%")
                     || EF.Functions.Like(w.Username, "%" + requestDto.Vague + "%")
                     );
@@ -68,7 +68,7 @@ namespace ASF.Infrastructure.Repository
                 queryable = queryable.Where(w => w.Status == AccountStatus.NotAllowedLogin);
 
             var result = queryable.OrderByDescending(p => p.CreateTime);
-            var list =await result.Skip((requestDto.SkipPage - 1) * requestDto.PagedCount).Take(requestDto.PagedCount).ToListAsync();
+            var list = await result.Skip((requestDto.SkipPage - 1) * requestDto.PagedCount).Take(requestDto.PagedCount).ToListAsync();
 
             return (Mapper.Map<List<Account>>(list), result.Count());
         }

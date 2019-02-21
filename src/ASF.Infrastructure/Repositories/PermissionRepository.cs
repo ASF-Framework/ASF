@@ -29,7 +29,7 @@ namespace ASF.Infrastructure.Repository
             var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == id);
             return Mapper.Map<Permission>(model);
         }
-  
+
         public async Task<IList<Permission>> GetList(IList<string> ids)
         {
             var list = await _dbContext.Permissions.Where(w => ids.Contains(w.Id)).ToListAsync();
@@ -45,17 +45,17 @@ namespace ASF.Infrastructure.Repository
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {
                 queryable = queryable
-                    .Where(w => EF.Functions.Like(w.Id.ToString(), "%" + requestDto.Vague + "%")
+                    .Where(w => w.Id.ToString() == requestDto.Vague
                     || EF.Functions.Like(w.Name, "%" + requestDto.Vague + "%"));
             }
-            if(!string.IsNullOrEmpty(requestDto.ParamId))
+            if (!string.IsNullOrEmpty(requestDto.ParamId))
                 queryable = queryable.Where(w => w.ParentId == requestDto.ParamId);
-            
+
             if (requestDto.Enable == 1)
                 queryable = queryable.Where(w => w.Enable == true);
             if (requestDto.Enable == 0)
                 queryable = queryable.Where(w => w.Enable == false);
-            
+
             var list = await queryable.ToListAsync();
 
             return Mapper.Map<IList<Permission>>(list);
@@ -69,7 +69,7 @@ namespace ASF.Infrastructure.Repository
 
         public async Task<IList<Permission>> GetListByParentId(string parentId)
         {
-            var list = await _dbContext.Permissions.Where(f=>f.ParentId== parentId).ToListAsync();
+            var list = await _dbContext.Permissions.Where(f => f.ParentId == parentId).ToListAsync();
             return Mapper.Map<IList<Permission>>(list);
         }
 

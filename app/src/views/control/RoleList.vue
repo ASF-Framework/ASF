@@ -8,7 +8,7 @@
               <template slot="title">新增角色</template>
               <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px"></a-button>
             </a-tooltip>
-             <a-radio-group defaultValue="-1" buttonStyle="solid">
+             <a-radio-group defaultValue="-1" v-model="queryParam.Enable" buttonStyle="solid" @change="$refs.table.refresh(true)">
               <a-radio-button value="-1">全部</a-radio-button>
               <a-radio-button value="1">启用</a-radio-button>
               <a-radio-button value="2">停用</a-radio-button>
@@ -22,15 +22,15 @@
             :offset="8"
           >
             <span class="table-page-search-submitButtons" style="float:right">
-              <a-input placeholder="角色标识、名称" style="width:300px;margin-right:10px"/>
+              <a-input placeholder="角色标识、名称" style="width:300px;margin-right:10px" v-model="queryParam.Vague"/>
               <a-button-group>
                 <a-tooltip>
                   <template slot="title">查询</template>
-                  <a-button type="primary" icon="search"></a-button>
+                  <a-button type="primary" icon="search" @click="$refs.table.refresh(true)"></a-button>
                 </a-tooltip>
                 <a-tooltip>
                   <template slot="title">清除查询条件</template>
-                  <a-button icon="undo"></a-button>
+                  <a-button icon="undo" @click="() => queryParam = {Vague:'', Enable:-1,PagedCount:10,SkipPage:1}"></a-button>
                 </a-tooltip>
               </a-button-group>
             </span>
@@ -85,7 +85,7 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-        Vague:"admin",
+        Vague:"",
         Enable:-1,
         PagedCount:10,
         SkipPage:1

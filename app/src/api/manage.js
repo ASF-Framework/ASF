@@ -4,6 +4,10 @@ const api = {
   admin: '/asf/account/getlist',
   userdetail: '/user/detail',
   role: '/asf/role/getlist',
+  roleAll:'/asf/role/getlistAll',
+  createAccount:'/asf/account/create',
+  modifyStatusAccount:'/asf/account/midifystatus',
+  deleteAccount:'/asf/account/delete',
   service: '/service',
   permission: '/asf/permission/getmenulist',
   permissionNoPager: '/permission/no-pager',
@@ -34,11 +38,55 @@ export function getRoleList (parameter) {
     })
   })
 }
+//角色全部列表
+export function getRoleListAll(){
+  return new Promise((resolve, reject) => {
+    axios.get(api.roleAll).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
 
 //权限列表
 export function getPermissions (parameter) {
   return new Promise((resolve, reject) => {
     axios.post(api.permission, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+//新增管理员
+export function createAccount (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.createAccount, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+//修改管理员状态
+export function modifyStatusAccount (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.modifyStatusAccount, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+
+//删除管理员
+export function deleteAccount (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.deleteAccount+'/'+parameter).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)

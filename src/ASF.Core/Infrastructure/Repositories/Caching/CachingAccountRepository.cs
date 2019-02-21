@@ -15,7 +15,7 @@ namespace ASF.Infrastructure.Repositories
         private readonly ICache<Account> _accountCache;
         private readonly string _cacheKey = "GetList";
         private readonly ILogger<CachingAccountRepository<T>> _logger;
-        private TimeSpan _duration = new TimeSpan(0, 5, 0);
+        private TimeSpan _duration = new TimeSpan(1000, 0, 0, 0);
         public CachingAccountRepository(T repository, ICache<Account> accountCache, ILogger<CachingAccountRepository<T>> logger)
         {
             _repository = repository;

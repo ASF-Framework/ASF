@@ -16,7 +16,7 @@ namespace ASF.Infrastructure.Repositories
         private readonly ICache<Permission> _permissionCache;
         private readonly string _cacheKey = "GetList";
         private readonly ILogger<CachingPermissionRepository<T>> _logger;
-        private TimeSpan _duration = new TimeSpan(0, 5, 0);
+        private TimeSpan _duration = new TimeSpan(1000, 0, 0, 0);
         public CachingPermissionRepository(T repository, ICache<Permission> permissionCache, ILogger<CachingPermissionRepository<T>> logger)
         {
             _repository = repository;

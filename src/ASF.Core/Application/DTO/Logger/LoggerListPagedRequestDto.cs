@@ -16,7 +16,7 @@ namespace ASF.Application.DTO
         /// <summary>
         /// 操作账号 操作账户ID 和 操作账号
         /// </summary>
-        public int Account { get;  set; }
+        public string Account { get;  set; }
         /// <summary>
         /// 日志类型 -1 全部，1:登录日志  2:操作日志
         /// </summary>

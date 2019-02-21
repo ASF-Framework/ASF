@@ -16,7 +16,7 @@ namespace ASF.Infrastructure.Repositories
         private readonly ICache<Role> _roleCache;
         private readonly string _cacheKey = "GetList";
         private readonly ILogger<CachingRoleRepository<T>> _logger;
-        private TimeSpan _duration = new TimeSpan(0, 5, 0);
+        private TimeSpan _duration = new TimeSpan(1000, 0, 0, 0);
         public CachingRoleRepository(T repository, ICache<Role> roleCache, ILogger<CachingRoleRepository<T>> logger)
         {
             _repository = repository;

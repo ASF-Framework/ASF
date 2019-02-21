@@ -1,14 +1,17 @@
 ﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
+using ASF.Domain.Values;
 using ASF.Infrastructure.Repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ASF.Infrastructure.Repository
 {
-    public class LogInfoRepository: ILoggingRepository
+    public class LogInfoRepository : ILoggingRepository
     {
         public readonly RepositoryContext _dbContext;
         public LogInfoRepository(RepositoryContext dbContext)
@@ -36,18 +39,54 @@ namespace ASF.Infrastructure.Repository
 
         public async Task<IList<Logging>> GetList()
         {
-            var list = await _dbContext.Permissions.ToListAsync();
+            var list = await _dbContext.LogInfos.ToListAsync();
             return Mapper.Map<IList<Logging>>(list);
         }
 
-        public Task<(IList<Logging> Loggings, int TotalCount)> GetList(LoggerListPagedRequestDto dto)
+        public async Task<(IList<Logging> Loggings, int TotalCount)> GetList(LoggerListPagedRequestDto dto)
         {
-            throw new System.NotImplementedException();
+            var queryable = _dbContext.LogInfos
+                .Where(w => w.Id > 0);
+
+            if (!string.IsNullOrEmpty(dto.Subject))
+                queryable = queryable.Where(w => w.Subject == dto.Subject);
+            if (!string.IsNullOrEmpty(dto.Account))
+            {
+                queryable = queryable
+                    .Where(w => EF.Functions.Like(w.AccountName, "%" + dto.Account + "%")
+                    || EF.Functions.Like(w.AccountId.ToString(), "%" + dto.Account + "%")
+                    );
+            }
+            if (dto.Type == 1)
+                queryable = queryable.Where(w => w.Type == LoggingType.Login);
+            if (dto.Type == 2)
+                queryable = queryable.Where(w => w.Type == LoggingType.Operate);
+            if (dto.BeginTime != default(DateTime) && dto.BeginTime != null)
+                queryable.Where(w => w.AddTime >= dto.BeginTime);
+            if (dto.EndTime != default(DateTime) && dto.EndTime != null)
+                queryable.Where(w => w.AddTime <= dto.EndTime);
+
+            if (!string.IsNullOrEmpty(dto.PermissionId))
+                queryable = queryable.Where(w => w.PermissionId == dto.PermissionId);
+            if (!string.IsNullOrEmpty(dto.ClientIp))
+                queryable = queryable.Where(w => w.ClientIp == dto.ClientIp);
+
+            var result = queryable.OrderByDescending(p => p.AddTime);
+            var list = await result.Skip((dto.SkipPage - 1) * dto.PagedCount).Take(dto.PagedCount).ToListAsync();
+
+            return (Mapper.Map<List<Logging>>(list), result.Count());
         }
 
         public Task Delete(LoggerDeleteRequestDto dto)
         {
-            throw new System.NotImplementedException();
+            var queryable = _dbContext.LogInfos.Where(w => w.Id > 0);
+            if (dto.BeginTime != default(DateTime) && dto.BeginTime != null)
+                queryable.Where(w => w.AddTime >= dto.BeginTime);
+            if (dto.EndTime != default(DateTime) && dto.EndTime != null)
+                queryable.Where(w => w.AddTime <= dto.EndTime);
+
+            _dbContext.LogInfos.RemoveRange(queryable);
+            return Task.FromResult(0);
         }
     }
 }

@@ -4,6 +4,8 @@ using System;
 using Xunit;
 using ASF.Domain;
 using System.Collections.Generic;
+using ASF.Application.DTO;
+using ASF.Domain.Values;
 
 namespace TestRepository
 {
@@ -53,6 +55,25 @@ namespace TestRepository
             list.Add(3);
             result.SetRoles(list);
             service.ModifyAsync(result);
+        }
+
+        [Fact]
+        public void AddP()
+        {
+            var service = FakeConfig.Startup().GetService<IPermissionRepository>();
+            ASF.Domain.Entities.Permission p = new ASF.Domain.Entities.Permission("test","1","testname",ASF.Domain.Values.PermissionType.Action,"desc")
+            {
+            };
+            var result = service.AddAsync(p).GetAwaiter().GetResult();
+        }
+
+        [Fact]
+        public void GetP()
+        {
+            var service = FakeConfig.Startup().GetService<IPermissionRepository>();
+            PermissionListRequestDto dto = new PermissionListRequestDto();
+            dto.Vague = "1.test";
+             var result = service.GetList(dto).GetAwaiter().GetResult();
         }
     }
 }

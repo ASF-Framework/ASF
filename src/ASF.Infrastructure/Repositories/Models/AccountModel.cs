@@ -1,9 +1,11 @@
 ﻿using ASF.Domain.Values;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ASF.Infrastructure.Model
 {
+    [Table("Account")]
     public class AccountModel
     {
         /// <summary>

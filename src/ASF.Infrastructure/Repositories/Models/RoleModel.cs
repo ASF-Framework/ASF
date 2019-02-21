@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace ASF.Infrastructure.Model
 {
-   public class RoleModel
+    [Table("Role")]
+    public class RoleModel
     {
         /// <summary>
         /// 角色编号

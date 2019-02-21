@@ -63,7 +63,6 @@ namespace ASF.Application
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
-
         /// <summary>
         /// 个人修改邮箱地址
         /// </summary>
@@ -351,7 +350,6 @@ namespace ASF.Application
             if (account.IsSuperAdministrator())
             {
                 result.Roles.Clear();
-                result.Roles.Add(-1);
             }
             if (createAccount != null)
             {

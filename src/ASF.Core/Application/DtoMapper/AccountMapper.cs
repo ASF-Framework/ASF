@@ -17,6 +17,7 @@ namespace ASF.Application.DtoMapper
                 .ForPath(f => f.IsSystem, p => p.MapFrom(s => s.IsSuperAdministrator()));
             base.CreateMap<Account, AccountInfoDetailsResponseDto>()
                 .IncludeBase<Account, AccountInfoBaseResponseDto>()
+                .ForPath(f => f.Roles, p => p.MapFrom(s => s.Roles))
                 .ForPath(f => f.LoginIp, p => p.MapFrom(s => s.LoginInfo.LoginIp));
         }
     }

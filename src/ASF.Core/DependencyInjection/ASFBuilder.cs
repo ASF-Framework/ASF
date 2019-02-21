@@ -48,7 +48,9 @@ namespace ASF.DependencyInjection
             Services.AddTransient<AccountLoginService>();
             Services.AddTransient<AccountPasswordChangeService>();
             Services.AddTransient<AccountRoleAssignationService>();
+            Services.AddTransient<AccountPermissionService>();
             Services.AddTransient<AccountTelephoneChangeService>();
+            Services.AddTransient<AccountDeleteService>();
             Services.AddTransient<LogLoginRecordService>();
             Services.AddTransient<LogOperateRecordService>();
             Services.AddTransient<PermissionCreateService>();
@@ -57,7 +59,6 @@ namespace ASF.DependencyInjection
             Services.AddTransient<RoleCreateService>();
             Services.AddTransient<RoleInfoChangeService>();
             Services.AddTransient<RolePermissionAssignationService>();
-            Services.AddTransient<AccountPermissionService>();
         }
 
         /// <summary>

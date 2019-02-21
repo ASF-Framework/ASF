@@ -31,6 +31,8 @@ namespace ASF.Domain.Services
         {
             if (account == null)
                 return Result<Account>.ReFailure(ResultCodes.AccountNotExist);
+            if (account.IsSuperAdministrator())
+                return Result<Account>.ReFailure(ResultCodes.AccountSuperAdminNoAllowedModify);
 
             //获取角色信息
             var roles = await _roleRepository.GetList(rids);

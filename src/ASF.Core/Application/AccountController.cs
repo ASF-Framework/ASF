@@ -218,8 +218,13 @@ namespace ASF.Application
         [HttpPost]
         public async Task<Result> Delete([FromRoute]int id)
         {
+            //删除账户
+            var result = await this._serviceProvider.GetRequiredService<AccountDeleteService>().Delete(id);
+            if (!result.Success)
+                return result;
+
             _operateLog.Record(ASFPermissions.AccountDelete, id.ToString(), "Success");  //记录日志
-            await _accountRepository.RemoveAsync(id);
+            await _accountRepository.ModifyAsync(result.Data);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }

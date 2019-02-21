@@ -53,5 +53,9 @@ namespace ASF.Application.DTO
         /// 角色集
         /// </summary>
         public List<string> Roles { get; set; } = new List<string>();
+        /// <summary>
+        /// 是否为超级管理员
+        /// </summary>
+        public bool IsSystem { get; set; }
     }
 }

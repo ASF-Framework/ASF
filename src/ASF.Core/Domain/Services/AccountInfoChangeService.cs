@@ -39,9 +39,9 @@ namespace ASF.Domain.Services
             var account = await _accountRepository.GetAsync(accountId);
             if (account == null)
                 return Result<Account>.ReFailure(ResultCodes.AccountNotExist);
-
-            //如果分配了角色需要验证角色
-            if (roles.Count > 0)
+            if (account.IsSuperAdministrator())
+                //如果分配了角色需要验证角色
+                if (roles.Count > 0)
             {
                 var result = await this._serviceProvider.GetRequiredService<AccountRoleAssignationService>()
                     .Assignation(account, roles);

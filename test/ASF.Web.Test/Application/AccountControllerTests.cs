@@ -39,6 +39,7 @@ namespace ASF.Core.Test.Application
         {
             var data = new
             {
+                AccountId=1,
                 Status = 1,
                 Name = "超级管理员1",
                 Roles = new List<int>()

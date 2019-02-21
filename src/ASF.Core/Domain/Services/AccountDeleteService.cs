@@ -9,6 +9,11 @@ namespace ASF.Domain.Services
     {
         private readonly IAccountRepository _accountRepository;
 
+        public AccountDeleteService(IAccountRepository accountRepository)
+        {
+            _accountRepository = accountRepository;
+        }
+
         /// <summary>
         /// 删除账户
         /// </summary>

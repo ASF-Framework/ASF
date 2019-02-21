@@ -42,7 +42,7 @@
       </a-form>
     </div>
     <a-divider style="margin:0;"></a-divider>
-    <a-list size="large" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: queryParam.PagedCount, total: total}">
+    <a-list size="large" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: queryParam.PagedCount, total: total}" >
         <a-list-item :key="index" v-for="(item, index) in userList">
           <a-list-item-meta>
             <a slot="description"><a-tag v-for="(role, index) in item.roles" :key="index">{{ role}}</a-tag></a>
@@ -50,7 +50,7 @@
             <a slot="title">{{item.name+'（'+item.id+'）'}}</a>
           </a-list-item-meta>
           <div slot="actions" >
-            <a @click="handleEdit(item)">编辑</a>
+            <a @click="$refs.modal.edit(item)">编辑</a>
           </div>
           <div slot="actions">
             <a-dropdown>
@@ -89,45 +89,8 @@
           </div>
         </a-list-item>
       </a-list>
-    <a-modal title="编辑" style="top: 20px;" :width="800" v-model="visibleEdit" @ok="">
-      <a-form :form="form">
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="登录名"
-        >
-          <a-input placeholder="登录名" v-model="mdl.username" disabled="disabled"/>
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="昵称"
-        >
-          <a-input placeholder="昵称" v-model="mdl.name" v-decorator="['name',{rules: [{ required: true, message: '请输入昵称' }]}]"/>
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="状态"
-        >
-          <a-select v-model="mdl.status" v-decorator="['status',{rules: [{ required: true, message: '请选择状态' }]}]">
-            <a-select-option value="1">正常</a-select-option>
-            <a-select-option value="2">禁用</a-select-option>
-          </a-select>
-        </a-form-item>
-        <a-divider/>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予角色" >
-          <a-select style="width: 100%" mode="multiple" :allowClear="true"  v-decorator="['roles',{rules: [{ required: true, message: '请赋予角色' }]}]">
-            <a-select-option
-              v-for="(role, index) in roleList"
-              :key="index"
-              :value="role.id"
-            >{{ role.name }}</a-select-option>
-          </a-select>
-        </a-form-item>
-      </a-form>
-    </a-modal>
-    <a-modal title="添加" style="top: 20px;" :width="800" v-model="visibleAdd" :confirmLoading="loadingAdd" @ok="handleAddSubmit" @cancel="handleAddCancel">
+    <user-modal ref="modal" @ok="handleEditSubmit"></user-modal>
+    <a-modal title="添加管理员" style="top: 20px;" :width="800" v-model="visibleAdd" :confirmLoading="loadingAdd" @ok="handleAddSubmit" @cancel="handleAddCancel">
       <a-form :form="form">
         <a-form-item
           :labelCol="labelCol"
@@ -175,6 +138,7 @@
 
 <script>
   import STable from '@/components/table/'
+  import UserModal from './modules/UserModal'
   import {
     getRoleListAll,
     getServiceList,
@@ -183,10 +147,12 @@
     modifyStatusAccount,
     deleteAccount
   } from '@/api/manage'
+  import pick from 'lodash.pick'
   export default {
     name: 'TableList',
     components: {
-      STable
+      STable,
+      UserModal
     },
     data() {
       return {
@@ -213,6 +179,8 @@
             span: 16
           }
         },
+        //formEdit:this.$form.createForm(this),
+        //mdl:this.$form.createForm(this),
         form: this.$form.createForm(this),
         mdl: {},
         // 高级搜索 展开/关闭
@@ -256,7 +224,6 @@
     },
     created() {
       getServiceList().then(res => {
-        console.log('getServiceList.call()', res)
       })
       getRoleListAll().then(res => {      
         this.roleList = res.result        
@@ -335,11 +302,10 @@
       //获取列表
       makeList(){
          getAdminList(this.queryParam).then(res => {
-            console.log(11111111,res)
             let data = Object.assign(res, this.queryParam)
             this.total = res.totalCount
             this.userList = res.result
-            console.log("Data-resource：",this.userList)
+            console.log("this.userList:",this.userList)
         })
       },
       formatIsDelete(value) {
@@ -371,6 +337,10 @@
       },
       handleEdit(record) {
         this.mdl = Object.assign({}, record)
+        this.$nextTick(() => {
+        this.form.setFieldsValue(pick(this.mdl, 'username', 'name'))
+        })
+        console.log(11111,this.mdl)
         // this.mdl.permissions.forEach(permission => {
         //   permission.actionsOptions = permission.actionEntitySet.map(action => {
         //     return {
@@ -382,6 +352,10 @@
         // })
         this.visibleEdit = true
       },
+      handleEditSubmit(){
+       this.makeList()
+      },
+      
       //添加框点击取消
       handleAddCancel(){
         this.visibleAdd = false

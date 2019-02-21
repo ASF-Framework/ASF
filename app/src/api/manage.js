@@ -8,6 +8,8 @@ const api = {
   createAccount:'/asf/account/create',
   modifyStatusAccount:'/asf/account/midifystatus',
   deleteAccount:'/asf/account/delete',
+  modifyAccount:'/asf/account/midify',
+  getAccountDetail:'/asf/account/GetDetails',
   service: '/service',
   permission: '/asf/permission/getmenulist',
   permissionNoPager: '/permission/no-pager',
@@ -87,6 +89,27 @@ export function modifyStatusAccount (parameter) {
 export function deleteAccount (parameter) {
   return new Promise((resolve, reject) => {
     axios.post(api.deleteAccount+'/'+parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+//修改管理员
+export function modifyAccount (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.modifyAccount,parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+//获取管理员详情
+export function getAccountDetail (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.get(api.getAccountDetail+'/'+parameter,).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)

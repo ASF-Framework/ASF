@@ -38,7 +38,7 @@ namespace ASF.Application
         }
 
         /// <summary>
-        /// 修改登录密码
+        /// 个人修改登录密码
         /// </summary>
         /// <param name="dto">修改登录密码</param>
         /// <returns></returns>
@@ -53,7 +53,7 @@ namespace ASF.Application
 
             int id = HttpContext.User.UserId();
             var service = this._serviceProvider.GetRequiredService<AccountPasswordChangeService>();
-            var modifyResult = await service.ModifyAsync(id, dto.Password, dto.OldPassword);
+            var modifyResult = await service.Modify(id, dto.Password, dto.OldPassword);
             if (!modifyResult.Success)
                 return modifyResult;
 
@@ -63,35 +63,9 @@ namespace ASF.Application
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
         }
-        /// <summary>
-        /// 修改账户信息
-        /// </summary>
-        /// <param name="dto">账户信息</param>
-        /// <returns></returns>
-        [HttpPost]
-        [Authorize(Roles = "self")]
-        public async Task<Result> Midify([FromBody]AccountModifyInfoRequestDto dto)
-        {
-            //验证请求数据合法性
-            var result = dto.Valid();
-            if (!result.Success)
-                return result;
 
-            //调用服务修改账户数据
-            int id = HttpContext.User.UserId();
-            var service = this._serviceProvider.GetRequiredService<AccountInfoChangeService>();
-            var modifyResult = await service.Modify(id, dto.Name,  dto.Status, dto.Roles);
-            if (!modifyResult.Success)
-                return modifyResult;
-
-            //数据持久化
-            _operateLog.Record(ASFPermissions.AccountModifyStatus, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志
-            await _accountRepository.ModifyAsync(modifyResult.Data);
-            await _unitOfWork.CommitAsync(autoRollback: true);
-            return Result.ReSuccess();
-        }
         /// <summary>
-        /// 修改邮箱地址
+        /// 个人修改邮箱地址
         /// </summary>
         /// <param name="dto">邮箱地址</param>
         /// <returns></returns>
@@ -117,7 +91,7 @@ namespace ASF.Application
             return Result.ReSuccess();
         }
         /// <summary>
-        /// 修改电话号码
+        /// 个人修改电话号码
         /// </summary>
         /// <param name="dto">电话号码</param>
         /// <returns></returns>
@@ -145,7 +119,7 @@ namespace ASF.Application
             return Result.ReSuccess();
         }
         /// <summary>
-        /// 获取登录用户信息
+        /// 登录获取用户信息
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -223,6 +197,32 @@ namespace ASF.Application
             return Result.ReSuccess();
         }
         /// <summary>
+        /// 修改账户信息
+        /// </summary>
+        /// <param name="dto">账户信息</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<Result> Midify([FromBody]AccountModifyInfoRequestDto dto)
+        {
+            //验证请求数据合法性
+            var result = dto.Valid();
+            if (!result.Success)
+                return result;
+
+            //调用服务修改账户数据
+            int id = HttpContext.User.UserId();
+            var service = this._serviceProvider.GetRequiredService<AccountInfoChangeService>();
+            var modifyResult = await service.Modify(id, dto.Name, dto.Status, dto.Roles);
+            if (!modifyResult.Success)
+                return modifyResult;
+
+            //数据持久化
+            _operateLog.Record(ASFPermissions.AccountModifyStatus, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志
+            await _accountRepository.ModifyAsync(modifyResult.Data);
+            await _unitOfWork.CommitAsync(autoRollback: true);
+            return Result.ReSuccess();
+        }
+        /// <summary>
         /// 修改账号状态
         /// </summary>
         /// <param name="dto">修改状态请求</param>
@@ -250,7 +250,7 @@ namespace ASF.Application
         public async Task<Result> ResetPassword([FromBody] AccountResetPasswordRequestDto dto)
         {
             var service = this._serviceProvider.GetRequiredService<AccountPasswordChangeService>();
-            var result = await service.ModifyAsync(dto.Id, dto.Password);
+            var result = await service.Reset(dto.Id, dto.Password, HttpContext.User.UserId(), dto.AdminPassword);
             if (!result.Success)
                 return result;
 

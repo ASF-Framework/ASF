@@ -23,15 +23,21 @@ namespace ASF.Domain.Services
         /// <param name="accountId">账户标识</param>
         /// <param name="password">需要设置的密码</param>
         /// <returns></returns>
-        public async Task<Result<Account>> ModifyAsync(int accountId, string password)
+        public async Task<Result<Account>> Reset(int accountId, string password, int adminAccountId,string adminPassword)
         {
             //获取账户信息
             var account = await _accountRepository.GetAsync(accountId);
             if (account == null)
                 return Result<Account>.ReFailure(ResultCodes.AccountNotExist);
 
-            account.SetPassword(password);
+            //获取管理员信息,需要验证管理员密码
+            var admin =  await _accountRepository.GetAsync(adminAccountId);
+            if (account == null)
+                return Result<Account>.ReFailure(ResultCodes.AccountResetPasswordPasswordNotSame);
+            if (!account.HasPassword(adminPassword))
+                return Result<Account>.ReFailure(ResultCodes.AccountResetPasswordPasswordNotSame);
 
+            account.SetPassword(password);
             //验证聚合数据是否合法
             return account.Valid<Account>();
         }
@@ -42,7 +48,7 @@ namespace ASF.Domain.Services
         /// <param name="newPassword">需要设置的密码</param>
         /// <param name="oldPassword">原密码</param>
         /// <returns></returns>
-        public async Task<Result<Account>> ModifyAsync(int accountId, string newPassword, string oldPassword)
+        public async Task<Result<Account>> Modify(int accountId, string newPassword, string oldPassword)
         {
             //获取账户信息
             var account = await _accountRepository.GetAsync(accountId);

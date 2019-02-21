@@ -19,6 +19,7 @@ namespace ASF.Domain
         public static ValueTuple<int, string> AccountPasswordNotSame = (10010, "账户密码不匹配");
         public static ValueTuple<int, string> AccountPasswordNotSame2 = (10012, "账户密码不匹配，失败{0}次之后自动锁定账号");
         public static ValueTuple<int, string> AccountPasswordNotSameOverrun = (10012, "登录失败超限，请30分钟之后再试");
+        public static ValueTuple<int, string> AccountResetPasswordPasswordNotSame = (100013, "重置密码失败，管理员密码不匹配");
 
 
         //角色错误码

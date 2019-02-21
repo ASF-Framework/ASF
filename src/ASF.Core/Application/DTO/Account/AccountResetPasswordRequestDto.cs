@@ -1,15 +1,12 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace ASF.Application.DTO
 {
     /// <summary>
     /// 重置管理员密码请求
     /// </summary>
-   public class AccountResetPasswordRequestDto:IDto
+    public class AccountResetPasswordRequestDto : IDto
     {
         /// <summary>
         /// 账户标识
@@ -17,10 +14,15 @@ namespace ASF.Application.DTO
         [Required]
         public int Id { get; set; }
         /// <summary>
+        /// 管理员密码
+        /// </summary>
+        [Required, StringLength(20, MinimumLength = 6)]
+        public string AdminPassword { get; set; }
+        /// <summary>
         /// 登录密码
         /// </summary>
         [Required, StringLength(20, MinimumLength = 6)]
-        public string Password { get;  set; }
+        public string Password { get; set; }
         /// <summary>
         /// 转换Json字符串
         /// </summary>

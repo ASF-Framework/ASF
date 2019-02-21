@@ -11,6 +11,11 @@ namespace ASF.Application.DTO
     public class AccountModifyInfoRequestDto : IDto
     {
         /// <summary>
+        /// 账号编号
+        /// </summary>
+        [Required]
+        public int AccountId { get; set; }
+        /// <summary>
         /// 账户状态
         /// </summary>
         public AccountStatus Status { get; set; }

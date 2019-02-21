@@ -58,7 +58,7 @@ namespace ASF.Application
                 return modifyResult;
 
             //数据持久化
-            _operateLog.Record(ASFPermissions.AccountModifyPassword, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.AccountModifyPassword, $"uid:{id}\r\n" + dto.ToString(), "Success");  //记录日志
             await _accountRepository.ModifyAsync(modifyResult.Data);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
@@ -85,7 +85,7 @@ namespace ASF.Application
                 return modifyResult;
 
             //数据持久化
-            _operateLog.Record(ASFPermissions.AccountModifyEmail, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.AccountModifyEmail, $"uid:{id}\r\n" + dto.ToString(), "Success");  //记录日志
             await _accountRepository.ModifyAsync(modifyResult.Data);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
@@ -112,11 +112,38 @@ namespace ASF.Application
                 return modifyResult;
 
             //数据持久化
-            _operateLog.Record(ASFPermissions.AccountModifyTelephone, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.AccountModifyTelephone, $"uid:{id}\r\n" + dto.ToString(), "Success");  //记录日志
             await _accountRepository.ModifyAsync(modifyResult.Data);
 
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
+        }
+        /// <summary>
+        /// 个人修改昵称或者头像
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "self")]
+        public async Task<Result> ModifyNameOrAvatar([FromQuery]AccountModifyNameOrAvatarRequestDto dto)
+        {
+            //验证请求数据合法性
+            var result = dto.Valid();
+            if (!result.Success)
+                return result;
+
+            //修改昵称和头像
+            int id = HttpContext.User.UserId();
+            var modifyResult = await this._serviceProvider.GetRequiredService<AccountInfoChangeService>()
+                .ModifyNameOrAvatar(id, dto.Name, dto.Avatar);
+            if (!modifyResult.Success)
+                return modifyResult;
+
+            //数据持久化
+            _operateLog.Record(ASFPermissions.AccountModifyInfo, $"uid:{id}\r\n" + dto.ToString(), "Success");  //记录日志
+            await _accountRepository.ModifyAsync(modifyResult.Data);
+            await _unitOfWork.CommitAsync(autoRollback: true);
+            return Result.ReSuccess();
+
         }
         /// <summary>
         /// 登录获取用户信息
@@ -210,14 +237,13 @@ namespace ASF.Application
                 return result;
 
             //调用服务修改账户数据
-            int id = HttpContext.User.UserId();
             var service = this._serviceProvider.GetRequiredService<AccountInfoChangeService>();
-            var modifyResult = await service.Modify(id, dto.Name, dto.Status, dto.Roles);
+            var modifyResult = await service.Modify(dto.AccountId, dto.Name, dto.Status, dto.Roles);
             if (!modifyResult.Success)
                 return modifyResult;
 
             //数据持久化
-            _operateLog.Record(ASFPermissions.AccountModifyStatus, $"{id}\r\n" + dto.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.AccountModifyStatus, dto.ToString(), "Success");  //记录日志
             await _accountRepository.ModifyAsync(modifyResult.Data);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();

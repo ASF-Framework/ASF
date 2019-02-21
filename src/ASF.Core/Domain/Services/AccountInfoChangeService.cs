@@ -71,7 +71,27 @@ namespace ASF.Domain.Services
             account.Status = status;
             return Result<Account>.ReSuccess(account);
         }
+        /// <summary>
+        /// 修改昵称和头像
+        /// </summary>
+        /// <param name="accountId">账户标识</param>
+        /// <param name="name">昵称</param>
+        /// <param name="avatar">头像</param>
+        /// <returns></returns>
+        public async Task<Result<Account>> ModifyNameOrAvatar(int accountId,string name,string avatar)
+        {
+            //获取账户信息
+            var account = await _accountRepository.GetAsync(accountId);
+            if (account == null)
+                return Result<Account>.ReFailure(ResultCodes.AccountNotExist);
 
+            if (!string.IsNullOrEmpty(name))
+                account.Name = name;
 
+            if (!string.IsNullOrEmpty(avatar))
+                account.Avatar = avatar;
+            //验证角色是否可用
+            return account.Valid<Account>();
+        }
     }
 }

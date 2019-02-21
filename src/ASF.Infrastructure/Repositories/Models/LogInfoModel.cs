@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ASF.Infrastructure.Model
 {
-    [Table("LogInfo")]
+    [Table("LogInfos")]
     public class LogInfoModel
     {
         /// <summary>

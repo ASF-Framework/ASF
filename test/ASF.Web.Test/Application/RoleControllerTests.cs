@@ -18,7 +18,7 @@ namespace ASF.Core.Test.Application
                 Description = "超级管理员",
                 Permissions = new List<string>
                 {
-                    "asf.acount","asf.acount.details","asf.acount.create"
+                    "asf.account","asf.account.details","asf.account.create"
                 }
             };
             var token = this.AccessToken();

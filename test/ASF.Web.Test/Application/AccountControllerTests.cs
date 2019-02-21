@@ -40,7 +40,8 @@ namespace ASF.Core.Test.Application
             var data = new
             {
                 Status = 1,
-                Name = "超级管理员1"
+                Name = "超级管理员1",
+                Roles = new List<int>()
             };
             var token = this.AccessToken();
             var response = this.Server.CreateRequest("api/asf/account/Midify")

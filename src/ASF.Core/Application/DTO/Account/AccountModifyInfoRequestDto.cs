@@ -1,5 +1,6 @@
 ﻿using ASF.Domain.Values;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ASF.Application.DTO
@@ -19,10 +20,10 @@ namespace ASF.Application.DTO
         [Required, MaxLength(20)]
         public string Name { get; set; }
         /// <summary>
-        /// 头像
+        /// 角色集
         /// </summary>
-        [MaxLength(225)]
-        public string Avatar { get; set; }
+        [Required]
+        public List<int> Roles { get; set; } = new List<int>();
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this);

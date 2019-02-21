@@ -10,6 +10,7 @@ namespace ASF.Application.DtoMapper
         {
             base.CreateMap<AccountCreateRequestDto, Account>();
             base.CreateMap<Account, AccountInfoBaseResponseDto>()
+                .ForPath(f => f.Roles, p => p.MapFrom(s => s.Roles))
                 .ForPath(f => f.Telephone, p => p.MapFrom(s => s.Telephone.ToString()))
                 .ForPath(f => f.CreateTime, p => p.MapFrom(s => s.CreateInfo.CreateTime.ToString()))
                 .ForPath(f => f.LoginTime, p => p.MapFrom(s => s.LoginInfo.LoginTime.ToString()));

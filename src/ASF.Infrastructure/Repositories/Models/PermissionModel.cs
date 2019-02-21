@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ASF.Infrastructure.Model
 {
-    [Table("Permission")]
+    [Table("Permissions")]
     public class PermissionModel
     {
         /// <summary>

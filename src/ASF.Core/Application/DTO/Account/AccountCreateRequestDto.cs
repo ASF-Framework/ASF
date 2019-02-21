@@ -25,11 +25,6 @@ namespace ASF.Application.DTO
         [Required, StringLength(20, MinimumLength = 6)]
         public string Password { get; set; }
         /// <summary>
-        /// 头像
-        /// </summary>
-        [MaxLength(225)]
-        public string Avatar { get; set; }
-        /// <summary>
         /// 角色集
         /// </summary>
         [Required]

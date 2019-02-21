@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ASF.Infrastructure.Model
 {
-    [Table("Account")]
+    [Table("Accounts")]
     public class AccountModel
     {
         /// <summary>

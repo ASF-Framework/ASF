@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ASF.Infrastructure.Model
 {
-    [Table("Role")]
+    [Table("Roles")]
     public class RoleModel
     {
         /// <summary>

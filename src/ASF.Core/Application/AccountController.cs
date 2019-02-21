@@ -80,7 +80,7 @@ namespace ASF.Application
             //调用服务修改账户数据
             int id = HttpContext.User.UserId();
             var service = this._serviceProvider.GetRequiredService<AccountInfoChangeService>();
-            var modifyResult = await service.Modify(id, dto.Name, dto.Avatar, dto.Status);
+            var modifyResult = await service.Modify(id, dto.Name,  dto.Status, dto.Roles);
             if (!modifyResult.Success)
                 return modifyResult;
 
@@ -284,9 +284,7 @@ namespace ASF.Application
                 .Select(f => f.Roles.ToList()).ToList()
                 .ForEach(p =>
                 {
-                    rids = rids
-                        .Zip(p, (first, second) => first + second)
-                        .ToList();
+                    rids.AddRange(p);
                 });
             var roles = await this._serviceProvider.GetRequiredService<IRoleRepository>().GetList(rids);
 

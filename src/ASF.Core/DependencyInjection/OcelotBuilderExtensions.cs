@@ -28,7 +28,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Services.AddASFCore(startupAction);
             builder.Services.AddSingleton<OcelotMiddlewareConfigurationDelegate>(ASFMiddlewareConfigurationProvider.Get);
-
             return builder;
         }
 

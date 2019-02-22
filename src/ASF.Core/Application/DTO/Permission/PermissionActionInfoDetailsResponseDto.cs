@@ -39,5 +39,13 @@ namespace ASF.Application.DTO
         /// </summary>
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime CreateTime { get; set; }
+        /// <summary>
+        /// 描述
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public int Sort { get; set; }
     }
 }

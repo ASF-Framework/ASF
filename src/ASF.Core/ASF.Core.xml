@@ -645,6 +645,16 @@
             添加时间
             </summary>
         </member>
+        <member name="P:ASF.Application.DTO.PermissionActionInfoDetailsResponseDto.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionInfoDetailsResponseDto.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
         <member name="T:ASF.Application.DTO.PermissionActionModifyRequestDto">
             <summary>
             修改操作权限请求
@@ -653,11 +663,6 @@
         <member name="P:ASF.Application.DTO.PermissionActionModifyRequestDto.Id">
             <summary>
             权限标识
-            </summary>
-        </member>
-        <member name="P:ASF.Application.DTO.PermissionActionModifyRequestDto.ParentId">
-            <summary>
-            上级权限编号
             </summary>
         </member>
         <member name="P:ASF.Application.DTO.PermissionActionModifyRequestDto.Name">
@@ -783,6 +788,11 @@
         <member name="P:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto.CreateTime">
             <summary>
             添加时间
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto.Description">
+            <summary>
+            描述
             </summary>
         </member>
         <member name="T:ASF.Application.DTO.PermissionMenuModifyRequestDto">
@@ -1761,7 +1771,7 @@
             权限修改服务
             </summary>
         </member>
-        <member name="M:ASF.Domain.Services.PermissionChangeService.ModifyAction(System.String,System.String,System.String,System.String,System.Boolean,System.String,System.Boolean,System.Int32)">
+        <member name="M:ASF.Domain.Services.PermissionChangeService.ModifyAction(System.String,System.String,System.String,System.Boolean,System.String,System.Boolean,System.Int32)">
             <summary>
             修改操作权限
             </summary>

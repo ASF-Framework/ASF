@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ASF.Domain.Services
 {
+    /// <summary>
+    /// 权限修改服务
+    /// </summary>
     public class PermissionChangeService
     {
         private readonly IPermissionRepository _permissionRepository;
@@ -115,7 +118,21 @@ namespace ASF.Domain.Services
             return permission.Valid<Permission>();
         }
 
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="pid"></param>
+        /// <param name="sort"></param>
+        /// <returns></returns>
+        public async Task<Result<Permission>> ModifySort(string pid,int sort)
+        {
+            //获取权限数据
+            var permission = await _permissionRepository.GetAsync(pid);
+            if (permission == null)
+                return Result<Permission>.ReFailure(ResultCodes.PermissionNotExist);
 
-
+            permission.Sort = sort;
+            return Result<Permission>.ReSuccess(permission);
+        }
     }
 }

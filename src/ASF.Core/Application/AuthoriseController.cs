@@ -14,6 +14,7 @@ namespace ASF.Application
     /// <summary>
     /// 管理员账户验证
     /// </summary>
+    [Route("[controller]/[action]")]
     public class AuthoriseController : Controller
     {
         private readonly IServiceProvider _serviceProvider;
@@ -65,6 +66,7 @@ namespace ASF.Application
         /// 退出登录
         /// </summary>
         /// <returns></returns>
+        [HttpPost]
         public Result Logout()
         {
             return Result.ReSuccess();

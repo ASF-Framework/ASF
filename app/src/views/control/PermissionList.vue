@@ -6,7 +6,7 @@
           <a-col :md="8" :sm="24">
             <a-tooltip>
               <template slot="title">新增权限</template>
-              <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px"></a-button>
+              <a-button type="primary" @click="NevigateView" icon="plus"  style="margin-right:10px"></a-button>
             </a-tooltip>
             <a-radio-group
               defaultValue="-1"
@@ -59,6 +59,8 @@
         <!--<a @click="handleEdit(record)">编辑</a>-->
         <a @click="handleEdit(record)" v-if="!record.isSystem">编辑</a>
         <a v-else disabled>编辑</a>
+        <a-divider type="vertical"/>
+        <a @click="handleAdd">添加权限</a>
         <a-divider type="vertical"/>
         <a-dropdown>
           <a class="ant-dropdown-link">更多
@@ -270,6 +272,65 @@
       </a-form>
     </a-modal>
     <a-modal
+      title="添加导航权限"
+      :width="800"
+      :centered="true"
+      v-model="addNevigate"
+      @ok="addNevigateView"
+    >
+      <a-form :autoFormCreate="(form)=>{this.form = form}">
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="权限编码"
+          hasFeedback
+          validateStatus="success"
+        >
+          <a-input placeholder="权限编码,默认是code" v-model="addNevigateData.code" />
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="权限名称"
+          hasFeedback
+          validateStatus="success"
+        >
+          <a-input placeholder="起一个名字" v-model="addNevigateData.name"/>
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="上级权限编码"
+        >
+          <!--<a-input placeholder="上级权限编码" v-model="addActine.parentId"/>-->
+          <!--<a-dropdown>-->
+            <!--<span class="ant-dropdown-link"  :trigger="['click']" href="#">-->
+              <!--点击选择父级 <a-icon type="down" />-->
+            <!--</span>-->
+            <!--<a-menu slot="overlay">-->
+              <!--<a-sub-menu  v-for="(items,index) in dataLoad.result" :key="index" :title="items.name">-->
+                <!--<a-menu-item v-for="(list,index) in items.children" :key="index" @click="actionTrigger(index, list.id)">{{list.name}}</a-menu-item>-->
+              <!--</a-sub-menu>-->
+            <!--</a-menu>-->
+          <!--</a-dropdown>-->
+          <!--您的选择： {{addActine.parentId}}-->
+        </a-form-item>
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="排序" hasFeedback>
+          <a-input-number :min="1" :max="10" v-model="addNevigateData.sort"/>
+        </a-form-item>
+        <a-divider/>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="描述"
+          hasFeedback
+          validateStatus="success"
+        >
+          <a-input placeholder="描述" v-model="addNevigateData.description"/>
+        </a-form-item>
+      </a-form>
+    </a-modal>
+    <a-modal
       title="详情"
       :width="1000"
       :centered="true"
@@ -301,7 +362,7 @@
 <script>
 import EditableCell from '@/components/EditCell/EditableCell'
 import STable from '@/components/table/'
-import { getPermissions, getActionDetails, modifyAction, modifySort, getMenuDetails, getActionList, deleteAction, CreateAction } from '@/api/manage'
+import { getPermissions, getActionDetails, modifyAction, modifySort, getMenuDetails, getActionList, deleteAction, CreateAction, CreateMenu } from '@/api/manage'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
 const DetalisColumns = [
   {
@@ -363,6 +424,14 @@ export default {
     return {
       DetalisColumns,
       editSort: '',
+      addNevigate: false,
+      addNevigateData: {
+        code: 'code',
+        parentId: '',
+        name: '',
+        sort: '',
+        description: ''
+      },
       addActine: {
         code: 'code',
         parentId: '',
@@ -460,7 +529,6 @@ export default {
         },
         {
           title: '操作',
-          width: '150px',
           dataIndex: 'action',
           scopedSlots: {
             customRender: 'action'
@@ -511,6 +579,23 @@ export default {
   methods: {
     actionTrigger (index, id) {
       this.addActine.parentId = id
+    },
+    NevigateView () {
+      this.addNevigate = true
+    },
+    addNevigateView () {
+      CreateMenu(this.addNevigateData).then(res => {
+        if (res.status === 200) {
+          // this.$refs.table.refresh(true)
+          this.addNevigate = false
+        } else {
+          this.$notification['error']({
+            message: '错误',
+            description: res.message,
+            duration: 4
+          })
+        }
+      })
     },
     addAction () {
       CreateAction(this.addActine).then(res => {

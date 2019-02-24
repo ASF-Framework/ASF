@@ -21,7 +21,8 @@ const api = {
   getDetails: '/asf/Permission/GetActionDetails',
   getActionList: '/asf/Permission/GetActionList',
   deleteAction: '/asf/Permission/Delete',
-  CreateAction: '/asf/Permission/CreateAction'
+  CreateAction: '/asf/Permission/CreateAction',
+  CreateMenu: '/asf/Permission/CreateMenu'
 }
 
 export default api
@@ -81,6 +82,16 @@ export function getActionDetails (id) {
 export function CreateAction (id) {
   return new Promise((resolve, reject) => {
     axios.post(api.CreateAction, id).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+// 创建导航权限
+export function CreateMenu (id) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.CreateMenu, id).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)

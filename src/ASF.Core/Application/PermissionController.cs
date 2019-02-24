@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace ASF.Application
 {
     /// <summary>
-    /// 操作权限
+    /// 功能权限
     /// </summary>
     [Authorize]
     [Route("[controller]/[action]")]
@@ -37,7 +37,7 @@ namespace ASF.Application
         }
 
         /// <summary>
-        /// 创建操作权限
+        /// 创建功能权限
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -48,7 +48,7 @@ namespace ASF.Application
             if (!result.Success)
                 return result;
 
-            //创建操作权限
+            //创建功能权限
             var permission = dto.To();
             result = await this._serviceProvider.GetRequiredService<PermissionCreateService>().CreateAction(permission);
             if (!result.Success)
@@ -61,7 +61,7 @@ namespace ASF.Application
             return Result.ReSuccess();
         }
         /// <summary>
-        /// 创建导航权限
+        /// 创建菜单权限
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -72,7 +72,7 @@ namespace ASF.Application
             if (!result.Success)
                 return result;
 
-            //创建导航权限
+            //创建菜单权限
             var permission = dto.To();
             result = await this._serviceProvider.GetRequiredService<PermissionCreateService>().CreateMenu(permission);
             if (!result.Success)
@@ -85,7 +85,7 @@ namespace ASF.Application
             return Result.ReSuccess();
         }
         /// <summary>
-        /// 修改操作权限
+        /// 修改功能权限
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
@@ -97,7 +97,7 @@ namespace ASF.Application
             if (!result.Success)
                 return result;
 
-            //修改操作权限
+            //修改功能权限
             var modifyResult = await this._serviceProvider.GetRequiredService<PermissionChangeService>()
                 .ModifyAction(dto.Id, dto.Name,  dto.Description, dto.Enable, dto.ApiTemplate, dto.IsLogger, dto.Sort);
             if (!modifyResult.Success)
@@ -110,7 +110,7 @@ namespace ASF.Application
             return Result.ReSuccess();
         }
         /// <summary>
-        /// 修改导航权限
+        /// 修改菜单权限
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
@@ -122,7 +122,7 @@ namespace ASF.Application
             if (!result.Success)
                 return result;
 
-            //修改操作权限
+            //修改功能权限
             var modifyResult = await this._serviceProvider.GetRequiredService<PermissionChangeService>().ModifyMenu(dto.Id, dto.Name, dto.ParentId, dto.Description, dto.Enable, dto.Sort);
             if (!modifyResult.Success)
                 return modifyResult;
@@ -152,7 +152,7 @@ namespace ASF.Application
             return Result.ReSuccess();
         }
         /// <summary>
-        /// 获取导航权限集合
+        /// 获取菜单权限集合
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -169,7 +169,7 @@ namespace ASF.Application
             //筛选所有的菜单权限
             var menuList = permissionList.Where(f => f.Type == PermissionType.Menu).OrderBy(f => f.Sort).ToList();
             var menus = Mapper.Map<List<PermissionMenuInfoDetailsResponseDto>>(menuList);
-            //筛选菜单对应的操作权限
+            //筛选菜单对应的功能权限
             menus.ForEach(m =>
             {
                 m.Actions = permissionList
@@ -180,7 +180,7 @@ namespace ASF.Application
             return ResultList<PermissionMenuInfoDetailsResponseDto>.ReSuccess(menus);
         }
         /// <summary>
-        /// 获取所有导航权限集合
+        /// 获取所有菜单权限集合
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -193,7 +193,7 @@ namespace ASF.Application
             //筛选所有的菜单权限
             var menuList = permissionList.Where(p => p.Type == PermissionType.Menu).OrderBy(f => f.Sort).ToList();
             var menus = Mapper.Map<List<PermissionMenuInfoBaseResponseDto>>(menuList);
-            //筛选菜单对应的操作权限
+            //筛选菜单对应的功能权限
             menus.ForEach(m =>
             {
                 m.Actions = permissionList
@@ -204,14 +204,14 @@ namespace ASF.Application
             return ResultList<PermissionMenuInfoBaseResponseDto>.ReSuccess(menus);
         }
         /// <summary>
-        /// 根据ID获取导航权限详情
+        /// 根据ID获取菜单权限详情
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<Result<PermissionMenuInfoDetailsResponseDto>> GetMenuDetails([FromRoute]string id)
         {
-            //获取导航权限数据
+            //获取菜单权限数据
             var menu = await this._permissionRepository.GetAsync(id);
             if (menu == null || menu.Type != PermissionType.Menu)
                 return Result<PermissionMenuInfoDetailsResponseDto>.ReFailure(ResultCodes.PermissionNotExist);
@@ -227,7 +227,7 @@ namespace ASF.Application
             return Result<PermissionMenuInfoDetailsResponseDto>.ReSuccess(result);
         }
         /// <summary>
-        /// 获取操作权限集合
+        /// 获取功能权限集合
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -248,7 +248,7 @@ namespace ASF.Application
 
         }
         /// <summary>
-        /// 根据ID获取操作权限详情
+        /// 根据ID获取功能权限详情
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -277,7 +277,7 @@ namespace ASF.Application
                 return result;
 
 
-            //修改操作权限
+            //修改功能权限
             var modifyResult = await this._serviceProvider.GetRequiredService<PermissionChangeService>().ModifySort(dto.Id,dto.Sort);
             if (!modifyResult.Success)
                 return modifyResult;

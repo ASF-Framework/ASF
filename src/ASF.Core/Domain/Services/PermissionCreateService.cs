@@ -17,7 +17,7 @@ namespace ASF.Domain.Services
             this._permissionRepository = permissionRepository;
         }
         /// <summary>
-        /// 创建操作权限
+        /// 创建功能权限
         /// </summary>
         /// <param name="permission">权限对象</param>
         /// <returns></returns>
@@ -28,7 +28,7 @@ namespace ASF.Domain.Services
             if (await this._permissionRepository.HasById(permission.Id))
                 return Result.ReFailure(ResultCodes.PermissionIdExist.ToFormat(permission.Code));
 
-            //判断上级权限,上级权限不能为操作权限
+            //判断上级权限,上级权限不能为功能权限
             var paremt = await this._permissionRepository.GetAsync(permission.ParentId);
             if (paremt == null)
             {
@@ -44,7 +44,7 @@ namespace ASF.Domain.Services
         }
 
         /// <summary>
-        /// 创建导航权限
+        /// 创建菜单权限
         /// </summary>
         /// <param name="permission">权限对象</param>
         /// <returns></returns>
@@ -55,7 +55,7 @@ namespace ASF.Domain.Services
             if (await this._permissionRepository.HasById(permission.Id))
                 return Result.ReFailure(ResultCodes.PermissionIdExist.ToFormat(permission.Code));
 
-            //如果配置上级权限，需要验证上级权限必须为导航权限
+            //如果配置上级权限，需要验证上级权限必须为菜单权限
             if (permission.ParentId != permission.ParentId)
             {
                 var paremt = await this._permissionRepository.GetAsync(permission.ParentId);

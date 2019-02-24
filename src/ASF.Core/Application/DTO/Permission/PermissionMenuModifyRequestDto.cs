@@ -6,7 +6,7 @@ using System.Text;
 namespace ASF.Application.DTO
 {
     /// <summary>
-    /// 修改导航权限请求
+    /// 修改菜单权限请求
     /// </summary>
     public class PermissionMenuModifyRequestDto : IDto
     {

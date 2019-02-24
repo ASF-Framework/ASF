@@ -8,7 +8,7 @@ using System.Text;
 namespace ASF.Application.DTO
 {
     /// <summary>
-    /// 导航权限创建请求
+    /// 菜单权限创建请求
     /// </summary>
     public class PermissionMenuCreateRequestDto : IDto
     {

@@ -26,12 +26,12 @@ namespace ASF.Application
         public static ValueTuple<string, string> RoleModifyStatus = ("asf.role.modify_status", "修改角色状态");
 
         public static ValueTuple<string, string> PermissionList = ("asf.permission", "权限列表");
-        public static ValueTuple<string, string> PermissionMenuDelatils = ("asf.permission.menu_details", "导航权限详情");
-        public static ValueTuple<string, string> PermissionActionDelatils = ("asf.permission.action_details", "操作权限详情");
-        public static ValueTuple<string, string> PermissionCreateMenu = ("asf.permission.create_menu", "创建导航权限");
-        public static ValueTuple<string, string> PermissionCreateAction = ("asf.permission.create_action", "创建操作权限");
-        public static ValueTuple<string, string> PermissionModifyMenu = ("asf.permission.modify_menu", "修改导航权限");
-        public static ValueTuple<string, string> PermissionModifyAction = ("asf.permission.modify_action", "修改操作权限");
+        public static ValueTuple<string, string> PermissionMenuDelatils = ("asf.permission.menu_details", "菜单权限详情");
+        public static ValueTuple<string, string> PermissionActionDelatils = ("asf.permission.action_details", "功能权限详情");
+        public static ValueTuple<string, string> PermissionCreateMenu = ("asf.permission.create_menu", "创建菜单权限");
+        public static ValueTuple<string, string> PermissionCreateAction = ("asf.permission.create_action", "创建功能权限");
+        public static ValueTuple<string, string> PermissionModifyMenu = ("asf.permission.modify_menu", "修改菜单权限");
+        public static ValueTuple<string, string> PermissionModifyAction = ("asf.permission.modify_action", "修改功能权限");
         public static ValueTuple<string, string> PermissionDelete = ("asf.permission.delete", "删除权限");
         public static ValueTuple<string, string> PermissionModifySort = ("asf.permission.sort", "修改权限排序");
 

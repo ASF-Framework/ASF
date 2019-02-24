@@ -22,7 +22,6 @@ namespace ASF.Domain.Entities
         /// </summary>
         /// <param name="username">账户</param>
         /// <param name="password">密码</param>
-        /// <param name="account">创建此账户管理员</param>
         public Account(string username, string password) : this()
         {
             this.Username = username;

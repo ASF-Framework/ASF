@@ -51,7 +51,7 @@ namespace ASF.Application.DTO
             /// </summary>
             public string PermissionName { get; set; }
             /// <summary>
-            /// 操作集合
+            /// 功能集合
             /// </summary>
             [JsonProperty("actionEntitySet")]
             public List<ActionInfo> Actions { get; set; } = new List<ActionInfo>();

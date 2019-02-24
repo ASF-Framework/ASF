@@ -297,24 +297,24 @@
         >
           <a-input placeholder="起一个名字" v-model="addNevigateData.name"/>
         </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="上级权限编码"
-        >
-          <!--<a-input placeholder="上级权限编码" v-model="addActine.parentId"/>-->
-          <!--<a-dropdown>-->
-            <!--<span class="ant-dropdown-link"  :trigger="['click']" href="#">-->
-              <!--点击选择父级 <a-icon type="down" />-->
-            <!--</span>-->
-            <!--<a-menu slot="overlay">-->
-              <!--<a-sub-menu  v-for="(items,index) in dataLoad.result" :key="index" :title="items.name">-->
-                <!--<a-menu-item v-for="(list,index) in items.children" :key="index" @click="actionTrigger(index, list.id)">{{list.name}}</a-menu-item>-->
-              <!--</a-sub-menu>-->
-            <!--</a-menu>-->
-          <!--</a-dropdown>-->
-          <!--您的选择： {{addActine.parentId}}-->
-        </a-form-item>
+        <!--<a-form-item-->
+          <!--:labelCol="labelCol"-->
+          <!--:wrapperCol="wrapperCol"-->
+          <!--label="上级权限编码"-->
+        <!--&gt;-->
+          <!--&lt;!&ndash;<a-input placeholder="上级权限编码" v-model="addActine.parentId"/>&ndash;&gt;-->
+          <!--&lt;!&ndash;<a-dropdown>&ndash;&gt;-->
+            <!--&lt;!&ndash;<span class="ant-dropdown-link"  :trigger="['click']" href="#">&ndash;&gt;-->
+              <!--&lt;!&ndash;点击选择父级 <a-icon type="down" />&ndash;&gt;-->
+            <!--&lt;!&ndash;</span>&ndash;&gt;-->
+            <!--&lt;!&ndash;<a-menu slot="overlay">&ndash;&gt;-->
+              <!--&lt;!&ndash;<a-sub-menu  v-for="(items,index) in dataLoad.result" :key="index" :title="items.name">&ndash;&gt;-->
+                <!--&lt;!&ndash;<a-menu-item v-for="(list,index) in items.children" :key="index" @click="actionTrigger(index, list.id)">{{list.name}}</a-menu-item>&ndash;&gt;-->
+              <!--&lt;!&ndash;</a-sub-menu>&ndash;&gt;-->
+            <!--&lt;!&ndash;</a-menu>&ndash;&gt;-->
+          <!--&lt;!&ndash;</a-dropdown>&ndash;&gt;-->
+          <!--&lt;!&ndash;您的选择： {{addActine.parentId}}&ndash;&gt;-->
+        <!--</a-form-item>-->
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="排序" hasFeedback>
           <a-input-number :min="1" :max="10" v-model="addNevigateData.sort"/>
         </a-form-item>

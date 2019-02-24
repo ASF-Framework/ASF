@@ -199,12 +199,12 @@
       </a-form>
     </a-modal>
     <a-modal
-      title="添加"
+      title="添加操作权限"
       :width="800"
       :centered="true"
       v-model="visibleAdd"
-      @ok="handleOk"
-      :footer="null">
+      @ok="addAction"
+    >
       <a-form :autoFormCreate="(form)=>{this.form = form}">
         <a-form-item
           :labelCol="labelCol"
@@ -213,7 +213,7 @@
           hasFeedback
           validateStatus="success"
         >
-          <a-input placeholder="权限编码"/>
+          <a-input placeholder="权限编码,默认是code" v-model="addActine.code" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -222,33 +222,50 @@
           hasFeedback
           validateStatus="success"
         >
-          <a-input placeholder="起一个名字"/>
+          <a-input placeholder="起一个名字" v-model="addActine.name"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="状态"
-          hasFeedback
-          validateStatus="warning"
+          label="上级权限编码"
         >
-          <a-select>
-            <a-select-option value="1">启用</a-select-option>
-            <a-select-option value="0">停止</a-select-option>
-          </a-select>
+          <!--<a-input placeholder="上级权限编码" v-model="addActine.parentId"/>-->
+          <a-dropdown>
+            <span class="ant-dropdown-link"  :trigger="['click']" href="#">
+              点击选择父级 <a-icon type="down" />
+            </span>
+            <a-menu slot="overlay">
+              <a-sub-menu  v-for="(items,index) in dataLoad.result" :key="index" :title="items.name">
+                <a-menu-item v-for="(list,index) in items.children" :key="index" @click="actionTrigger(index, list.id)">{{list.name}}</a-menu-item>
+              </a-sub-menu>
+            </a-menu>
+          </a-dropdown>
+          您的选择： {{addActine.parentId}}
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="权限服务地址"
+          hasFeedback
+          validateStatus="success"
+        >
+          <a-input placeholder="权限服务地址" v-model="addActine.apiTemplate"/>
+        </a-form-item>
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="是否日志记录">
+          <a-switch :checked="addActine.isLogger"/>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="排序" hasFeedback>
-          <a-input-number :min="1" :max="10"/>
+          <a-input-number :min="1" :max="10" v-model="addActine.sort"/>
         </a-form-item>
         <a-divider/>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予操作权限" hasFeedback>
-          <a-select style="width: 100%" mode="multiple" v-model="mdl.actions" :allowClear="true">
-            <a-select-option
-              v-for="(action, index) in permissionList"
-              :key="index"
-              :value="action.value"
-            >{{ action.label }}
-            </a-select-option>
-          </a-select>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="描述"
+          hasFeedback
+          validateStatus="success"
+        >
+          <a-input placeholder="描述" v-model="addActine.description"/>
         </a-form-item>
       </a-form>
     </a-modal>
@@ -269,10 +286,11 @@
           <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
           <span slot="action" slot-scope="text, record, index">
             <!--<a @click="handleEdit(record)">编辑</a>-->
-            <a @click="handerContrl('222', record.id)">编辑</a>
+            <a @click="handerContrl('222', record.id)" v-if="!record.isSystem">编辑</a>
+            <a v-else disabled>编辑</a>
             <a-divider type="vertical"/>
             <a @click="editDelete(record.id, index)" v-if="!record.isSystem">删除</a>
-              <a v-else disabled>删除</a>
+            <a v-else disabled>删除</a>
           </span>
         </a-table>
       </div>
@@ -283,20 +301,20 @@
 <script>
 import EditableCell from '@/components/EditCell/EditableCell'
 import STable from '@/components/table/'
-import { getPermissions, getActionDetails, modifyAction, modifySort, getMenuDetails, getActionList, deleteAction } from '@/api/manage'
+import { getPermissions, getActionDetails, modifyAction, modifySort, getMenuDetails, getActionList, deleteAction, CreateAction } from '@/api/manage'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
 const DetalisColumns = [
   {
     title: '权限名称',
     dataIndex: 'name'
   },
-  {
-    title: '是否系统权限',
-    dataIndex: 'isSystem',
-    scopedSlots: {
-      customRender: 'isSystem'
-    }
-  },
+  // {
+  //   title: '是否系统权限',
+  //   dataIndex: 'isSystem',
+  //   scopedSlots: {
+  //     customRender: 'isSystem'
+  //   }
+  // },
   {
     title: '是否日志记录',
     dataIndex: 'isLogger',
@@ -345,6 +363,15 @@ export default {
     return {
       DetalisColumns,
       editSort: '',
+      addActine: {
+        code: 'code',
+        parentId: '',
+        name: '',
+        apiTemplate: '',
+        isLogger: true,
+        sort: '',
+        description: ''
+      },
       formLayout: 'horizontal',
       form: this.$form.createForm(this),
       defaultExpandAllRows: true,
@@ -355,6 +382,7 @@ export default {
       detailsView: false,
       visibleContrl: false,
       menuDetails: [],
+      dataLoad: '',
       tableDetails: '',
       labelCol: {
         xs: {
@@ -446,12 +474,13 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         return getPermissions(this.queryParam).then(res => {
+          console.log(res)
+          this.addActine.parentId = res.result[0].id
           //           if(this.queryParam.Enable!="0")   {
           // this.queryParam.totalCount=5
           //           }else{
           //             this.queryParam.totalCount=0
           //           }
-
           return this.makePermissionList(res)
         })
       },
@@ -475,16 +504,28 @@ export default {
       return statusMap[status ? 1 : 0]
     }
   },
-  // watch: {
-  //   controlFrom (newData, oldData) {
-  //     console.log(newData)
-  //     console.log(oldData)
-  //   }
-  // },
   created () {
     this.loadPermissionList()
+    console.log(this.loadData)
   },
   methods: {
+    actionTrigger (index, id) {
+      this.addActine.parentId = id
+    },
+    addAction () {
+      CreateAction(this.addActine).then(res => {
+        if (res.status === 200) {
+          this.$refs.table.refresh(true)
+          this.visibleAdd = false
+        } else {
+          this.$notification['error']({
+            message: '错误',
+            description: res.message,
+            duration: 4
+          })
+        }
+      })
+    },
     pushDetalis (record) {
       this.detailsView = true
       // console.log(record)
@@ -550,6 +591,7 @@ export default {
         data.result = result
       }
       console.log('Table-resource:', data)
+      this.dataLoad = data
       return data
     },
     handleBtn () {

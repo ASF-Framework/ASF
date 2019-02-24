@@ -20,7 +20,8 @@ const api = {
   getMenuDetails: '/asf/Permission/GetMenuDetails',
   getDetails: '/asf/Permission/GetActionDetails',
   getActionList: '/asf/Permission/GetActionList',
-  deleteAction: '/asf/Permission/Delete'
+  deleteAction: '/asf/Permission/Delete',
+  CreateAction: '/asf/Permission/CreateAction'
 }
 
 export default api
@@ -71,6 +72,15 @@ export function getPermissions (parameter) {
 export function getActionDetails (id) {
   return new Promise((resolve, reject) => {
     axios.get(api.getActionDetails + `/${id}`).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+export function CreateAction (id) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.CreateAction, id).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)

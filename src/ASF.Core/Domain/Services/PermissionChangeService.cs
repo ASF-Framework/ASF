@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ASF.Domain.Services
 {
+    /// <summary>
+    /// 权限修改服务
+    /// </summary>
     public class PermissionChangeService
     {
         private readonly IPermissionRepository _permissionRepository;
@@ -25,7 +28,7 @@ namespace ASF.Domain.Services
         /// <param name="isLogger">是否记录日志</param>
         /// <param name="sort">导航排序</param>
         /// <returns></returns>
-        public async Task<Result<Permission>> ModifyAction (string pid, string name, string parentId, string description, bool enable, string apiAddress, bool isLogger, int sort)
+        public async Task<Result<Permission>> ModifyAction (string pid, string name, string description, bool enable, string apiAddress, bool isLogger, int sort)
         {
             //获取权限数据
             var permission = await _permissionRepository.GetAsync(pid);
@@ -40,22 +43,7 @@ namespace ASF.Domain.Services
                 return Result<Permission>.ReFailure(ResultCodes.PermissionSystemNotModify.ToFormat(permission.Name));
             }
             
-            //判断上级权限,上级权限不能为操作权限
-            if(permission.ParentId != parentId)
-            {
-                var paremt = await this._permissionRepository.GetAsync(parentId);
-                if (paremt == null)
-                {
-                    return Result<Permission>.ReFailure(ResultCodes.PermissionNotExist);
-                }
-                if (paremt.Type == Values.PermissionType.Action)
-                {
-                    return Result<Permission>.ReFailure(ResultCodes.PermissionParemtNotAction);
-                }
-            }
-          
             permission.Name = name;
-            permission.ParentId = parentId;
             permission.IsLogger = isLogger;
             permission.Enable = enable;
             permission.Description = description;
@@ -115,7 +103,21 @@ namespace ASF.Domain.Services
             return permission.Valid<Permission>();
         }
 
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="pid"></param>
+        /// <param name="sort"></param>
+        /// <returns></returns>
+        public async Task<Result<Permission>> ModifySort(string pid,int sort)
+        {
+            //获取权限数据
+            var permission = await _permissionRepository.GetAsync(pid);
+            if (permission == null)
+                return Result<Permission>.ReFailure(ResultCodes.PermissionNotExist);
 
-
+            permission.Sort = sort;
+            return Result<Permission>.ReSuccess(permission);
+        }
     }
 }

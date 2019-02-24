@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 namespace ASF.Application
 {
     [Authorize]
+    [Route("[controller]/[action]")]
     public class RoleController : Controller
     {
         private readonly IServiceProvider _serviceProvider;
@@ -33,7 +34,7 @@ namespace ASF.Application
         /// 获取所有的角色基本信息
         /// </summary>
         /// <returns></returns>
-     
+
         /// <summary>
         /// 创建角色
         /// </summary>
@@ -65,7 +66,7 @@ namespace ASF.Application
         /// </summary>
         /// <param name="id">角色标识</param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("{id}")]
         public async Task<Result> Delete([FromRoute]int id)
         {
             _operateLog.Record(ASFPermissions.RoleDelete, id.ToString(), "Success");  //记录日志
@@ -103,6 +104,7 @@ namespace ASF.Application
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
+        [HttpPost]
         public async Task<Result> ModifyStatus([FromBody] RoleModifyStatusRequestDto dto)
         {
             if (dto.RoleId <= 0)
@@ -152,7 +154,7 @@ namespace ASF.Application
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<Result<RoleInfoDetailsResponseDto>> GetDetails([FromRoute]int id)
         {
             var role = await this._roleRepository.GetAsync(id);

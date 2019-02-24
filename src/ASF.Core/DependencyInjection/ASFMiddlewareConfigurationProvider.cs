@@ -11,10 +11,7 @@ namespace ASF
             builder.Map("/API/ASF", app =>
             {
                 app.UseAuthentication();
-                app.UseMvc(routes =>
-                {
-                    routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
-                });
+                app.UseMvc();
             });
             return Task.CompletedTask;
         };

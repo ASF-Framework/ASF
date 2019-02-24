@@ -42,7 +42,7 @@ namespace ASF.Domain.Entities
         /// 上级权限编号
         /// </summary>
         [MaxLength(100)]
-        public string ParentId { get; set; }
+        public string ParentId { get;  set; }
         /// <summary>
         /// 名称
         /// </summary>

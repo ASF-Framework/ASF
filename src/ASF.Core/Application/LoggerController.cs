@@ -16,6 +16,7 @@ namespace ASF.Application
     /// 日志服务
     /// </summary>
     [Authorize]
+    [Route("[controller]/[action]")]
     public class LoggerController : Controller
     {
         private readonly ILoggingRepository _loggingRepository;

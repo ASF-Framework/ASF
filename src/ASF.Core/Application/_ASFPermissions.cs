@@ -33,6 +33,7 @@ namespace ASF.Application
         public static ValueTuple<string, string> PermissionModifyMenu = ("asf.permission.modify_menu", "修改导航权限");
         public static ValueTuple<string, string> PermissionModifyAction = ("asf.permission.modify_action", "修改操作权限");
         public static ValueTuple<string, string> PermissionDelete = ("asf.permission.delete", "删除权限");
+        public static ValueTuple<string, string> PermissionModifySort = ("asf.permission.sort", "修改权限排序");
 
         public static ValueTuple<string, string> LoggingDelete = ("asf.logging.delete", "删除日志");
 

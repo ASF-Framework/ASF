@@ -15,11 +15,7 @@ namespace ASF.Application.DTO
         /// </summary>
         [Required]
         public string Id { get; set; }
-        /// <summary>
-        /// 上级权限编号
-        /// </summary>
-        [Required, MaxLength(100)]
-        public string ParentId { get; set; }
+  
         /// <summary>
         /// 名称
         /// </summary>

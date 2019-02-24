@@ -8,7 +8,11 @@
               <template slot="title">新增权限</template>
               <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px"></a-button>
             </a-tooltip>
-            <a-radio-group  defaultValue="-1" v-model="queryParam.Enable"  buttonStyle="solid" @change="$refs.table.refresh(true)" >
+            <a-radio-group
+              defaultValue="-1"
+              v-model="queryParam.Enable"
+              buttonStyle="solid"
+              @change="$refs.table.refresh(true)">
               <a-radio-button value="-1">全部</a-radio-button>
               <a-radio-button value="1">启用</a-radio-button>
               <a-radio-button value="0">停用</a-radio-button>
@@ -24,7 +28,9 @@
                 </a-tooltip>
                 <a-tooltip>
                   <template slot="title">清除查询条件</template>
-                  <a-button icon="undo" @click="() => queryParam = {Vague:'', Enable:-1,PagedCount:10,SkipPage:1}"></a-button>
+                  <a-button
+                    icon="undo"
+                    @click="() => queryParam = {Vague:'', Enable:-1,PagedCount:10,SkipPage:1}"></a-button>
                 </a-tooltip>
               </a-button-group>
             </span>
@@ -32,20 +38,27 @@
         </a-row>
       </a-form>
     </div>
-    <s-table  ref="table" :columns="columns" :data="loadData" size="small" :defaultExpandAllRows="true">     
+    <s-table
+      ref="table"
+      :columns="columns"
+      :data="loadData"
+      size="small"
+    >
       <span slot="actions" slot-scope="text, record">
         <a-tag
           v-for="(val,key) in record.actions"
           :key="key"
-          @click="handerContrl(val)"
+          @click="handerContrl(val,key)"
         >{{ val }}</a-tag>
       </span>
       <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
-      <span slot="sort" slot-scope="text">
-        <editable-cell :text="text" @change="handerChange"/>
+      <span slot="sort" slot-scope="text, record">
+        <editable-cell :text="text" ref="sortDom" @handleChange="editSortInput" @change="handerChange" @editBlurInput="handerChange(record)"/>
       </span>
       <span slot="action" slot-scope="text, record">
-        <a @click="handleEdit(record)">编辑</a>
+        <!--<a @click="handleEdit(record)">编辑</a>-->
+        <a @click="handleEdit(record)" v-if="!record.isSystem">编辑</a>
+        <a v-else disabled>编辑</a>
         <a-divider type="vertical"/>
         <a-dropdown>
           <a class="ant-dropdown-link">更多
@@ -53,52 +66,90 @@
           </a>
           <a-menu slot="overlay">
             <a-menu-item>
-              <a href="javascript:;">详情</a>
+              <a href="javascript:;" @click="pushDetalis(record)">详情</a>
             </a-menu-item>
-            <a-menu-item>
-              <a href="javascript:;">禁用</a>
+            <a-menu-item :disabled="record.isSystem">
+              <!--<a href="javascript:;">禁用</a>-->
+              <a @click="handleEdit(record)" v-if="!record.isSystem">禁用</a>
+              <a v-else disabled>禁用</a>
             </a-menu-item>
-            <a-menu-item>
-              <a href="javascript:;">删除</a>
+            <a-menu-item :disabled="record.isSystem">
+              <!--<a href="javascript:;">删除</a>-->
+              <a @click="handleEdit(record)" v-if="!record.isSystem">删除</a>
+              <a v-else disabled>删除</a>
             </a-menu-item>
           </a-menu>
         </a-dropdown>
       </span>
     </s-table>
-    <a-modal title="操作权限编辑" :width="800" v-model="visibleContrl">
-      <a-form :autoFormCreate="(form)=>{this.form = form}">
+
+    <!--点击操作权限弹出详情编辑框-->
+    <a-modal
+      title="操作权限编辑"
+      :width="800"
+      v-model="visibleContrl"
+      @cancel="editModalCancel()"
+      :centered="true"
+      @ok="handleSubmit">
+      <a-form :form="form">
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="操作编码"
+          label="父级权限"
           hasFeedback
-          validateStatus="success"
         >
-          <a-input placeholder="操作编码" v-model="controlFrom.action" id="no" disabled="disabled"/>
+          <a-input placeholder="父级权限" v-model="controlFrom.parentId" disabled="disabled"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="权限描述"
+          label="标识"
           hasFeedback
-          validateStatus="success"
         >
-          <a-input placeholder="权限描述" v-model="controlFrom.describe"/>
+          <a-input placeholder="标识" v-model="controlFrom.id" disabled="disabled"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="操作地址"
+          label="API地址模板"
           hasFeedback
           validateStatus="success"
         >
-          <a-input placeholder="操作地址" v-model="controlFrom.adderss"/>
+          <a-input
+            placeholder="请输入API地址模板"
+            v-model="controlFrom.apiTemplate"/>
         </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="是否可用">
-          <a-switch :defaultChecked="controlFrom.defaultCheck"/>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="权限名称"
+          hasFeedback
+          validateStatus="success"
+        >
+          <a-input
+            placeholder="权限描述"
+            v-model="controlFrom.name"/>
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="添加时间"
+          hasFeedback
+        >
+          <a-input placeholder="添加时间" v-model="controlFrom.createTime" disabled="disabled"/>
+        </a-form-item>
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="系统权限">
+          <a-switch :checked="controlFrom.isSystem" :disabled="true"/>
+        </a-form-item>
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="记录日志">
+          <a-switch :checked="controlFrom.isLogger"/>
+        </a-form-item>
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="是否启用">
+          <a-switch :checked="controlFrom.enable"/>
         </a-form-item>
       </a-form>
     </a-modal>
+    <!--编辑弹窗-->
     <a-modal title="编辑" :width="800" v-model="visible" @ok="handleOk">
       <a-form :autoFormCreate="(form)=>{this.form = form}">
         <a-form-item
@@ -108,7 +159,7 @@
           hasFeedback
           validateStatus="success"
         >
-          <a-input placeholder="权限编码" v-model="mdl.id" id="no" disabled="disabled"/>
+          <a-input placeholder="权限编码" disabled="disabled"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -117,7 +168,7 @@
           hasFeedback
           validateStatus="success"
         >
-          <a-input placeholder="起一个名字" v-model="mdl.name" id="permission_name"/>
+          <a-input placeholder="起一个名字"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -132,7 +183,7 @@
           </a-select>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="描述" hasFeedback>
-          <a-textarea :rows="5" v-model="mdl.describe" placeholder="..." id="describe"/>
+          <a-textarea :rows="5" v-model="mdl.describe" placeholder="..."/>
         </a-form-item>
         <a-divider/>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予权限" hasFeedback>
@@ -141,12 +192,19 @@
               v-for="(action, index) in permissionList"
               :key="index"
               :value="action.value"
-            >{{ action.label }}</a-select-option>
+            >{{ action.label }}
+            </a-select-option>
           </a-select>
         </a-form-item>
       </a-form>
     </a-modal>
-    <a-modal title="添加" :width="800" v-model="visibleAdd" @ok="handleOk">
+    <a-modal
+      title="添加"
+      :width="800"
+      :centered="true"
+      v-model="visibleAdd"
+      @ok="handleOk"
+      :footer="null">
       <a-form :autoFormCreate="(form)=>{this.form = form}">
         <a-form-item
           :labelCol="labelCol"
@@ -155,7 +213,7 @@
           hasFeedback
           validateStatus="success"
         >
-          <a-input placeholder="权限编码" v-model="form.id"/>
+          <a-input placeholder="权限编码"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -164,7 +222,7 @@
           hasFeedback
           validateStatus="success"
         >
-          <a-input placeholder="起一个名字" v-model="form.name"/>
+          <a-input placeholder="起一个名字"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -173,13 +231,13 @@
           hasFeedback
           validateStatus="warning"
         >
-          <a-select v-model="form.enable">
+          <a-select>
             <a-select-option value="1">启用</a-select-option>
             <a-select-option value="0">停止</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="排序" hasFeedback>
-          <a-input-number :min="1" :max="10"  v-model="form.sort"  />
+          <a-input-number :min="1" :max="10"/>
         </a-form-item>
         <a-divider/>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予操作权限" hasFeedback>
@@ -188,10 +246,36 @@
               v-for="(action, index) in permissionList"
               :key="index"
               :value="action.value"
-            >{{ action.label }}</a-select-option>
+            >{{ action.label }}
+            </a-select-option>
           </a-select>
         </a-form-item>
       </a-form>
+    </a-modal>
+    <a-modal
+      title="详情"
+      :width="1000"
+      :centered="true"
+      v-model="detailsView"
+      @ok="handleOk">
+      <div>
+        <a-table
+          :columns="DetalisColumns"
+          :dataSource="tableDetails"
+          :pagination="false"
+        >
+          <span slot="isSystem" slot-scope="text"> {{ text | statusIsSystem }}</span>
+          <span slot="isLogger" slot-scope="text"> {{ text | statusIsSystem }}</span>
+          <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
+          <span slot="action" slot-scope="text, record, index">
+            <!--<a @click="handleEdit(record)">编辑</a>-->
+            <a @click="handerContrl('222', record.id)">编辑</a>
+            <a-divider type="vertical"/>
+            <a @click="editDelete(record.id, index)" v-if="!record.isSystem">删除</a>
+              <a v-else disabled>删除</a>
+          </span>
+        </a-table>
+      </div>
     </a-modal>
   </a-card>
 </template>
@@ -199,20 +283,79 @@
 <script>
 import EditableCell from '@/components/EditCell/EditableCell'
 import STable from '@/components/table/'
-import { getPermissions  } from '@/api/manage'
+import { getPermissions, getActionDetails, modifyAction, modifySort, getMenuDetails, getActionList, deleteAction } from '@/api/manage'
+import AFormItem from 'ant-design-vue/es/form/FormItem'
+const DetalisColumns = [
+  {
+    title: '权限名称',
+    dataIndex: 'name'
+  },
+  {
+    title: '是否系统权限',
+    dataIndex: 'isSystem',
+    scopedSlots: {
+      customRender: 'isSystem'
+    }
+  },
+  {
+    title: '是否日志记录',
+    dataIndex: 'isLogger',
+    scopedSlots: {
+      customRender: 'isLogger'
+    }
+  },
+  {
+    title: '状态',
+    dataIndex: 'enable',
+    scopedSlots: {
+      customRender: 'enable'
+    }
+  },
+  {
+    title: '添加时间',
+    dataIndex: 'createTime'
+  },
+  {
+    title: '描述',
+    dataIndex: 'description'
+  },
+  {
+    title: '排序',
+    dataIndex: 'sort',
+    scopedSlots: {
+      customRender: 'sort'
+    }
+  },
+  {
+    title: '操作',
+    dataIndex: 'action',
+    scopedSlots: {
+      customRender: 'action'
+    }
+  }
+]
 export default {
   name: 'TableList',
   components: {
+    AFormItem,
     STable,
     EditableCell
   },
-  data() {
+  data () {
     return {
+      DetalisColumns,
+      editSort: '',
+      formLayout: 'horizontal',
+      form: this.$form.createForm(this),
+      defaultExpandAllRows: true,
       description:
-        '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
+          '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
       visible: false,
       visibleAdd: false,
+      detailsView: false,
       visibleContrl: false,
+      menuDetails: [],
+      tableDetails: '',
       labelCol: {
         xs: {
           span: 24
@@ -233,18 +376,28 @@ export default {
         show: true,
         clear: true
       },
-      controlFrom: {},
-      form: null,
+      controlFrom: {
+        id: '',
+        parentId: '',
+        name: '',
+        apiTemplate: '',
+        isSystem: '',
+        isLogger: '',
+        enable: '',
+        createTime: ''
+      },
+      // form: null,
       mdl: {},
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
       queryParam: {
-        Vague:"",
-        Enable:-1,
-        PagedCount:10,
-        SkipPage:1,
-        IsLoad:true
+        Vague: '',
+        Enable: -1,
+        PagedCount: 10,
+        SkipPage: 1,
+        IsLoad: true,
+        totalCount: 0
       },
       // 表头
       columns: [
@@ -288,14 +441,18 @@ export default {
       ],
       // 向后端拉取可以用的操作列表
       permissionList: null,
-      //权限子级权限children:[]
-      permissionchildren:{
-        
-      },
+      // 权限子级权限children:[]
+      permissionchildren: {},
       // 加载数据方法 必须为 Promise 对象
-      loadData: parameter => {    
-        return getPermissions(this.queryParam).then(res=>{           
-               return this.makePermissionList(res)
+      loadData: parameter => {
+        return getPermissions(this.queryParam).then(res => {
+          //           if(this.queryParam.Enable!="0")   {
+          // this.queryParam.totalCount=5
+          //           }else{
+          //             this.queryParam.totalCount=0
+          //           }
+
+          return this.makePermissionList(res)
         })
       },
       selectedRowKeys: [],
@@ -303,51 +460,151 @@ export default {
     }
   },
   filters: {
-    statusFilter(status) {
-      const statusMap = {        
+    statusFilter (status) {
+      const statusMap = {
         1: '启用',
         0: '停止'
       }
-      return statusMap[status?1:0]
+      return statusMap[status ? 1 : 0]
+    },
+    statusIsSystem (status) {
+      const statusMap = {
+        1: '是',
+        0: '否'
+      }
+      return statusMap[status ? 1 : 0]
     }
   },
-  created() {
+  // watch: {
+  //   controlFrom (newData, oldData) {
+  //     console.log(newData)
+  //     console.log(oldData)
+  //   }
+  // },
+  created () {
     this.loadPermissionList()
   },
   methods: {
-    makePermissionList(res){      
-      let result= []
-      let data =Object.assign(res,this.queryParam)
-      if(this.queryParam.Vague=="" && this.queryParam.Enable==-1){
-         data.result.forEach((element,index) => {
-           if(element.parentId=="" || element.parentId==" "){
+    pushDetalis (record) {
+      this.detailsView = true
+      // console.log(record)
+      getMenuDetails(record.id).then(res => {
+        this.menuDetails = res.result
+        const obj = {
+          vague: '',
+          enable: '-1',
+          paramId: res.result.id
+        }
+        getActionList(obj).then(data => {
+          this.tableDetails = data.result
+          console.log(data.result)
+        })
+      })
+    },
+    // 编辑权限弹窗关闭回调函数
+    editModalCancel () {
+      const obj = {
+        id: '',
+        parentId: '',
+        name: '',
+        apiTemplate: '',
+        isSystem: '',
+        isLogger: '',
+        enable: '',
+        createTime: ''
+      }
+      this.controlFrom = obj
+    },
+    handleSubmit (e) {
+      e.preventDefault()
+      // this.visibleContrl = true
+      const obj = this.controlFrom
+      modifyAction(obj).then(res => {
+        // console.log(res)
+        if (res.status === 200) {
+          this.visibleContrl = !this.visibleContrl
+        } else {
+          this.$notification['error']({
+            message: '错误',
+            description: res.message,
+            duration: 4
+          })
+        }
+      })
+    },
+    makePermissionList (res) {
+      const result = []
+      const data = Object.assign(res, this.queryParam)
+      if (this.queryParam.Vague === '' && this.queryParam.Enable === -1) {
+        data.result.forEach((element, index) => {
+          if (element.parentId === '' || element.parentId === ' ') {
             result.push(element)
-            result[index].children=[]
+            result[index].children = []
             data.result.forEach(ele => {
-              if(element.id==ele.parentId){
-                 result[index].children.push(ele)
+              if (element.id === ele.parentId) {
+                result[index].children.push(ele)
               }
-            });
-          }        
-        });
-         data.result=result;
-        console.log("Table-resource:",data)
-      }    
+            })
+          }
+        })
+        data.result = result
+      }
+      console.log('Table-resource:', data)
       return data
     },
-    handleBtn(){
+    handleBtn () {
       this.makePermissionList()
     },
-    handerContrl(action) {
-      this.controlFrom = action
-      console.log(222222222, this.controlFrom)
-      this.visibleContrl = true
+    editDelete (id, index) {
+      console.log(index)
+      deleteAction(id).then(res => {
+        console.log(res)
+        if (res.status === 200) {
+          // 重新请求数据
+          // this.$refs.table.refresh(true)
+          this.tableDetails.splice(index, 1)
+        }
+      })
     },
-    handerChange() {},
-    handleAdd() {
+    handerContrl (action, key) {
+      // this.controlFrom = action
+      // console.log(222222222, action, key)
+      console.log(key)
+      this.visibleContrl = true
+      const id = key
+      getActionDetails(id).then(res => {
+        console.log(res)
+        if (res.status === 200) {
+          this.controlFrom = res.result
+        }
+      })
+    },
+    loadGetData () {
+      return getPermissions(this.queryParam).then(res => {
+        return this.makePermissionList(res)
+      })
+    },
+    // 修改排序input，input失去焦点或者按Enter键触发此函数
+    handerChange (record) {
+      console.log(record)
+      const parameter = {
+        id: record.id,
+        sort: this.editSort
+      }
+      modifySort(parameter).then(res => {
+        if (res.status === 200) {
+          // 重新请求数据
+          this.$refs.table.refresh(true)
+        }
+      })
+    },
+    editSortInput (e) {
+      this.editSort = e
+    },
+    handleAdd () {
       this.visibleAdd = true
     },
-    loadPermissionList() {
+    loadPermissionList () {
       // permissionList
       new Promise(resolve => {
         const data = [
@@ -392,53 +649,42 @@ export default {
         this.permissionList = res
       })
     },
-    handleEdit(record) {
+    handleEdit (record, text) {
       this.mdl = Object.assign({}, record)
-      console.log(this.mdl)
+      console.log(this.mdl, record, text)
       this.visible = true
     },
-    handleOk() {},
-    onChange(selectedRowKeys, selectedRows) {
+    handleOk () {
+    },
+    onChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    toggleAdvanced() {
+    toggleAdvanced () {
       this.advanced = !this.advanced
     }
-  },
-  watch: {
-    /*
-                'selectedRows': function (selectedRows) {
-                  this.needTotalList = this.needTotalList.map(item => {
-                    return {
-                      ...item,
-                      total: selectedRows.reduce( (sum, val) => {
-                        return sum + val[item.dataIndex]
-                      }, 0)
-                    }
-                  })
-                }
-                */
   }
 }
 </script>
 <style>
-/* .rownew:before,
-            .rownew:after {
-              content: '';
-              display: none;
-            }
-            .rownew {
-              display: flex;
-              justify-content: space-between;
-            } */
-.editable-cell {
-  position: relative;
-}
-.editable-add-btn {
-  margin-bottom: 8px;
-}
-.editable-cell .ant-input {
-  width: 50px;
-}
+  /* .rownew:before,
+              .rownew:after {
+                content: '';
+                display: none;
+              }
+              .rownew {
+                display: flex;
+                justify-content: space-between;
+              } */
+  .editable-cell {
+    position: relative;
+  }
+
+  .editable-add-btn {
+    margin-bottom: 8px;
+  }
+
+  .editable-cell .ant-input {
+    width: 50px;
+  }
 </style>

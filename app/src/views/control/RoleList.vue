@@ -8,7 +8,7 @@
               <template slot="title">新增角色</template>
               <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px"></a-button>
             </a-tooltip>
-             <a-radio-group defaultValue="-1" v-model="queryParam.Enable" buttonStyle="solid" @change="$refs.table.refresh(true)">
+            <a-radio-group defaultValue="-1" v-model="queryParam.Enable" buttonStyle="solid" @change="$refs.table.refresh(true)">
               <a-radio-button value="-1">全部</a-radio-button>
               <a-radio-button value="1">启用</a-radio-button>
               <a-radio-button value="2">停用</a-radio-button>
@@ -38,7 +38,7 @@
         </a-row>
       </a-form>
     </div>
-    <s-table ref="table" size="default" :columns="columns" :data="loadData">     
+    <s-table ref="table" size="default" :columns="columns" :data="loadData">
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.modal.edit(record)">编辑</a>
         <a-divider type="vertical"/>
@@ -67,14 +67,14 @@
 <script>
 import STable from '@/components/table/'
 import RoleModal from './modules/RoleModal'
-  import {    getRoleList  } from '@/api/manage'
+import { getRoleList } from '@/api/manage'
 export default {
   name: 'TableList',
   components: {
     STable,
     RoleModal
   },
-  data() {
+  data () {
     return {
       description:
         '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
@@ -85,10 +85,10 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-        Vague:"",
-        Enable:-1,
-        PagedCount:10,
-        SkipPage:1
+        Vague: '',
+        Enable: -1,
+        PagedCount: 10,
+        SkipPage: 1
       },
       // 表头
       columns: [
@@ -120,8 +120,8 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: () => {
-        return getRoleList(this.queryParam).then(res=>{
-           let data =Object.assign(res,this.queryParam)
+        return getRoleList(this.queryParam).then(res => {
+          const data = Object.assign(res, this.queryParam)
           return data
         })
       },
@@ -130,8 +130,8 @@ export default {
     }
   },
   methods: {
-    handleAdd() {},
-    handleEdit(record) {
+    handleAdd () {},
+    handleEdit (record) {
       this.mdl = Object.assign({}, record)
       this.mdl.permissions.forEach(permission => {
         permission.actionsOptions = permission.actionEntitySet.map(action => {
@@ -145,15 +145,15 @@ export default {
       console.log(this.mdl)
       this.visible = true
     },
-    handleOk() {
+    handleOk () {
       // 新增/修改 成功时，重载列表
       this.$refs.table.refresh()
     },
-    onChange(selectedRowKeys, selectedRows) {
+    onChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    toggleAdvanced() {
+    toggleAdvanced () {
       this.advanced = !this.advanced
     }
   },

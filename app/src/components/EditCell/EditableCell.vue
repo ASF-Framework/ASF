@@ -1,9 +1,15 @@
 <template>
-  <div class='editable-cell'>
-    <div v-if="editable" class='editable-cell-input-wrapper'>
-      <a-input size="small" :value="value" @change="handleChange" @pressEnter="check" />
+  <div class="editable-cell">
+    <div v-if="editable" class="editable-cell-input-wrapper">
+      <a-input
+        size="small"
+        :value="value"
+        @change="handleChange"
+        @focus="editFocus"
+        @pressEnter="check"
+        @blur="editBlurInput" />
     </div>
-    <div v-else class='editable-cell-text-wrapper'>
+    <div v-else class="editable-cell-text-wrapper">
       <a-input :value="value || ' '" @click="edit" size="small" />
     </div>
   </div>
@@ -13,23 +19,34 @@ export default {
   props: {
     text: Number
   },
-  data() {
+  data () {
     return {
       value: this.text,
       editable: false
     }
   },
   methods: {
-    handleChange(e) {
+    // 失去焦点事件，触发父级函数
+    editBlurInput () {
+      this.$emit('editBlurInput', this.value)
+    },
+    editFocus () {
+      this.$notification.open({
+        message: '温馨提醒！',
+        description: '修改排序顺序只能接受数字，当失去input焦点或者修改完成按Enter键，使修改生效！',
+        icon: <a-icon type="smile" style="color: #108ee9" />
+      })
+    },
+    handleChange (e) {
       const value = e.target.value
       this.value = value
+      this.$emit('handleChange', this.value)
     },
-    check() {
+    check () {
       this.editable = false
       this.$emit('change', this.value)
     },
-    edit() {
-      console.log(1111111)
+    edit () {
       this.editable = true
     }
   }

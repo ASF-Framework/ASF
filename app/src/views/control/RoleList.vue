@@ -8,7 +8,7 @@
               <template slot="title">新增角色</template>
               <a-button type="primary" icon="plus" @click="$refs.modal.add()" style="margin-right:10px"></a-button>
             </a-tooltip>
-            <a-radio-group defaultValue="-1" v-model="queryParam.Enable" buttonStyle="solid" @change="$refs.table.refresh(true)">
+             <a-radio-group defaultValue="-1" v-model="queryParam.Enable" buttonStyle="solid" @change="$refs.table.refresh(true)">
               <a-radio-button value="-1">全部</a-radio-button>
               <a-radio-button value="1">启用</a-radio-button>
               <a-radio-button value="0">停用</a-radio-button>
@@ -75,7 +75,7 @@ export default {
     STable,
     RoleModal
   },
-  data () {
+  data() {
     return {
       description:
         '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
@@ -87,10 +87,10 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-        Vague: '',
-        Enable: -1,
-        PagedCount: 10,
-        SkipPage: 1
+        Vague:"",
+        Enable:-1,
+        PagedCount:10,
+        SkipPage:1
       },
       // 表头
       columns: [
@@ -180,7 +180,7 @@ export default {
       console.log(this.mdl)
       this.visible = true
     },
-    handleOk () {
+    handleOk() {
       // 新增/修改 成功时，重载列表
       this.$refs.table.refresh(true)
     },
@@ -253,7 +253,7 @@ export default {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    toggleAdvanced () {
+    toggleAdvanced() {
       this.advanced = !this.advanced
     }
   },

@@ -5,7 +5,7 @@ const api = {
   userdetail: '/user/detail',
   role: '/asf/role/getlist',
   addRole:'/asf/role/Create',
-  editRole:'/asf/roe/Modify',
+  editRole:'/asf/role/Modify',
   roleAll:'/asf/role/getlistAll',
   modifyStatusRole:'/asf/role/ModifyStatus',
   deleteRole:'/asf/role/delete',
@@ -75,6 +75,18 @@ export function getPermissions (parameter) {
     })
   })
 }
+
+//获取全部权限
+export function getPermissionAll (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.get(api.permissionAll).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
 // 根据ID获取操作权限详情
 export function getActionDetails (id) {
   return new Promise((resolve, reject) => {

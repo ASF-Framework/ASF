@@ -92,6 +92,7 @@ export default {
       isAdd:false,
       roleId:0,
       tagList:[],
+      actionKeys:[]
     }
   },
   created () {
@@ -117,23 +118,14 @@ export default {
                 this.roleId=record.id 
                  // 有权限表，处理勾选
                 if (this.mdl.permissions && this.permissions) {
-                  // 先处理要勾选的权限结构
-                  let permissionsAction = {}
-
-                  permissionsAction=this.loadOptions(this.mdl.permissions)
-                  //console.log("permissionsAction:",permissionsAction)
-                  // this.mdl.permissions.forEach(permission => {
-                  //   console.log(permission)
-                  //   permissionsAction[permission.permissionId] = permission.actionEntitySet.map(entity => entity.action)
-                  // })
+                  for(let key in this.mdl.permissions){
+                    this.actionKeys.push(key)
+                  }
                   // 把权限表遍历一遍，设定要勾选的权限 action
                   this.permissions.forEach(permission => {
-                    //console.log("permission",permission)
-                    //permission.selected = permissionsAction[permission.id]
+                    permission.selected = this.actionKeys
                   })
                 }              
-                // console.log("edit--this.mdl:",this.mdl)
-                // console.log("edit--this.permissions:",this.permissions) 
                 this.$nextTick(() => {
                   this.form.setFieldsValue(pick(this.mdl,'name', 'description'))
                 })
@@ -151,6 +143,7 @@ export default {
       this.form=this.$form.createForm(this)
       this.mdl={}
       this.tagList=[]
+      this.actionKeys=[]
       this.loadPermissions()
       this.$emit('close')
       this.visible = false
@@ -165,14 +158,14 @@ export default {
            values.roleId=this.roleId
            this.loadCheck()
           values.permissions=this.checkpermissions
-          console.log('form values', values)
+          //console.log('form values', values)
            _this.confirmLoading = true
           // 模拟后端请求 2000 毫秒延迟
           new Promise((resolve) => {
             setTimeout(() => resolve(), 2000)
           }).then(() => {
             // Do something
-            console.log('form add/edit',)
+            //console.log('form add/edit',)
             if(this.isAdd){
               console.log('form add')
               addRole(values).then(res=>{
@@ -187,10 +180,9 @@ export default {
                 }
               })
             }else{
-              console.log('form edit')
+              console.log('form edit:',values)
               editRole(values).then(res=>{
-                if(res.status==200){
-                
+                if(res.status==200){                
                   _this.confirmLoading = false
                   _this.$message.success('保存成功')
                   _this.$emit('ok')
@@ -263,14 +255,19 @@ export default {
     loadPermissions () {
       getPermissionAll().then(res => {
         console.log("权限：",res.result)
-        const result = res.result
+        const result = res.result       
+
         this.permissions = result.map(permission => {
-          permission.checkedAll = false
-          permission.selected = []
-          permission.indeterminate = false
-          permission.actionsOptions=this.loadOptions(permission.actions)
+          let actions= Object.keys(permission.actions)
+          if(actions.length>0){
+            permission.checkedAll = false
+            permission.selected = []
+            permission.indeterminate = false
+            permission.actionsOptions=this.loadOptions(permission.actions)            
+          }
           return permission
         })
+        //console.log('权限permissions:',this.permissions)
       })
     },
     loadOptions(actions){

@@ -16,6 +16,7 @@ namespace ASF.Application
 {
     [Authorize]
     [Route("[controller]/[action]")]
+    [AllowAnonymous]
     public class RoleController : Controller
     {
         private readonly IServiceProvider _serviceProvider;

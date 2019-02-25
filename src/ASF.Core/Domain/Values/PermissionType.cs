@@ -6,11 +6,11 @@
     public enum PermissionType
     {
         /// <summary>
-        /// 操作行为
+        /// 功能
         /// </summary>
         Action = 1,
         /// <summary>
-        /// 导航
+        /// 菜单
         /// </summary>
         Menu = 2
     }

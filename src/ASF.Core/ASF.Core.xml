@@ -1,0 +1,2873 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ASF.Core</name>
+    </assembly>
+    <members>
+        <member name="T:ASF.Application.AccountController">
+            <summary>
+            账户控制器
+            </summary>
+        </member>
+        <member name="M:ASF.Application.AccountController.ModifyPassword(ASF.Application.DTO.AccountModifyPasswordRequestDto)">
+            <summary>
+            个人修改登录密码
+            </summary>
+            <param name="dto">修改登录密码</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.AccountController.ModifyEmail(ASF.Application.DTO.AccountModifyEmailRequestDto)">
+            <summary>
+            个人修改邮箱地址
+            </summary>
+            <param name="dto">邮箱地址</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.AccountController.ModifyTelephone(ASF.Application.DTO.AccountModifyTelephoneRequestDto)">
+            <summary>
+            个人修改电话号码
+            </summary>
+            <param name="dto">电话号码</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.AccountController.ModifyNameOrAvatar(ASF.Application.DTO.AccountModifyNameOrAvatarRequestDto)">
+            <summary>
+            个人修改昵称或者头像
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.AccountController.Info">
+            <summary>
+            登录获取用户信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.AccountController.Create(ASF.Application.DTO.AccountCreateRequestDto)">
+            <summary>
+            创建账号
+            </summary>
+            <param name="dto">账号对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.AccountController.Delete(System.Int32)">
+            <summary>
+            删除账号
+            </summary>
+            <param name="id">账号标识</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.AccountController.Midify(ASF.Application.DTO.AccountModifyInfoRequestDto)">
+            <summary>
+            修改账户信息
+            </summary>
+            <param name="dto">账户信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.AccountController.MidifyStatus(ASF.Application.DTO.AccountModifyStatusRequestDto)">
+            <summary>
+            修改账号状态
+            </summary>
+            <param name="dto">修改状态请求</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.AccountController.ResetPassword(ASF.Application.DTO.AccountResetPasswordRequestDto)">
+            <summary>
+            设置登录密码
+            </summary>
+            <param name="dto">设置登录密码</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.AccountController.GetList(ASF.Application.DTO.AccountListPagedRequestDto)">
+            <summary>
+            获取账户集合
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.AccountController.GetDetails(System.Int32)">
+            <summary>
+            获取账号详细信息
+            </summary>
+            <param name="id">账号ID</param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Application.AuthoriseController">
+            <summary>
+            管理员账户验证
+            </summary>
+        </member>
+        <member name="M:ASF.Application.AuthoriseController.Login(ASF.Application.DTO.AuthoriseByUsernameRequestDto)">
+            <summary>
+            账户登录
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.AuthoriseController.Logout">
+            <summary>
+            退出登录
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Application.DTO.AccountCreateRequestDto">
+            <summary>
+            账号创建Dto
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountCreateRequestDto.Name">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountCreateRequestDto.Username">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountCreateRequestDto.Password">
+            <summary>
+            登录密码
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountCreateRequestDto.Roles">
+            <summary>
+            角色集
+            </summary>
+        </member>
+        <member name="M:ASF.Application.DTO.AccountCreateRequestDto.ToString">
+            <summary>
+            转换Json字符串
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Application.DTO.AccountInfoBaseResponseDto">
+            <summary>
+            账户基本信息
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoBaseResponseDto.Id">
+            <summary>
+            用户标识
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoBaseResponseDto.Name">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoBaseResponseDto.Username">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoBaseResponseDto.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoBaseResponseDto.Telephone">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoBaseResponseDto.Email">
+            <summary>
+            邮箱地址
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoBaseResponseDto.Status">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoBaseResponseDto.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoBaseResponseDto.LoginTime">
+            <summary>
+            最后登录时间
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoBaseResponseDto.Roles">
+            <summary>
+            角色集
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoBaseResponseDto.IsSystem">
+            <summary>
+            是否为超级管理员
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.AccountInfoByLoginResponseDto">
+            <summary>
+            账户登录之后返回信息
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoByLoginResponseDto.Name">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoByLoginResponseDto.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoByLoginResponseDto.Role">
+            <summary>
+            角色
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoByLoginResponseDto.PermissionInfo.PermissionId">
+            <summary>
+            权限ID
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoByLoginResponseDto.PermissionInfo.PermissionName">
+            <summary>
+            权限名称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoByLoginResponseDto.PermissionInfo.Actions">
+            <summary>
+            操作集合
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoByLoginResponseDto.ActionInfo.Describe">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.AccountInfoDetailsResponseDto">
+            <summary>
+            详细信息
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoDetailsResponseDto.IsDeleted">
+            <summary>
+            是否删除
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoDetailsResponseDto.Roles">
+            <summary>
+            角色集
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoDetailsResponseDto.CreateUser">
+            <summary>
+            创建用户
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountInfoDetailsResponseDto.LoginIp">
+            <summary>
+            最后登录IP
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.AccountListPagedRequestDto">
+            <summary>
+            查询账户信息集合分页请求
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountListPagedRequestDto.Vague">
+            <summary>
+            模糊查询条件  用户名、ID、昵称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountListPagedRequestDto.Status">
+            <summary>
+            状态 -1:全部 1:正常  2:不允许登录
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountListPagedRequestDto.IsDeleted">
+            <summary>
+            是否删除
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.AccountModifyEmailRequestDto">
+            <summary>
+            修改账户邮箱地址
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountModifyEmailRequestDto.Email">
+            <summary>
+            邮箱地址
+            </summary>
+        </member>
+        <member name="M:ASF.Application.DTO.AccountModifyEmailRequestDto.ToString">
+            <summary>
+            转换Json字符串
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Application.DTO.AccountModifyInfoRequestDto">
+            <summary>
+            账户修改信息请求
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountModifyInfoRequestDto.AccountId">
+            <summary>
+            账号编号
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountModifyInfoRequestDto.Status">
+            <summary>
+            账户状态
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountModifyInfoRequestDto.Name">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountModifyInfoRequestDto.Roles">
+            <summary>
+            角色集
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountModifyNameOrAvatarRequestDto.Name">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountModifyNameOrAvatarRequestDto.Avatar">
+            <summary>
+            头像地址
+            </summary>
+        </member>
+        <member name="M:ASF.Application.DTO.AccountModifyNameOrAvatarRequestDto.ToString">
+            <summary>
+            转换Json字符串
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Application.DTO.AccountModifyPasswordRequestDto">
+            <summary>
+            账户修改登录密码
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountModifyPasswordRequestDto.OldPassword">
+            <summary>
+            旧登录密码
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountModifyPasswordRequestDto.Password">
+            <summary>
+            登录密码
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.AccountModifyStatusRequestDto">
+            <summary>
+            修改账户状态
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountModifyStatusRequestDto.Id">
+            <summary>
+            账户标识
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountModifyStatusRequestDto.Status">
+            <summary>
+            账户状态
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.AccountModifyTelephoneRequestDto">
+            <summary>
+            修改账户手机号码
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountModifyTelephoneRequestDto.Number">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountModifyTelephoneRequestDto.AreaCode">
+            <summary>
+            手机号码区号
+            </summary>
+        </member>
+        <member name="M:ASF.Application.DTO.AccountModifyTelephoneRequestDto.ToString">
+            <summary>
+            转换Json字符串
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Application.DTO.AccountResetPasswordRequestDto">
+            <summary>
+            重置管理员密码请求
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountResetPasswordRequestDto.Id">
+            <summary>
+            账户标识
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountResetPasswordRequestDto.AdminPassword">
+            <summary>
+            管理员密码
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AccountResetPasswordRequestDto.Password">
+            <summary>
+            登录密码
+            </summary>
+        </member>
+        <member name="M:ASF.Application.DTO.AccountResetPasswordRequestDto.ToString">
+            <summary>
+            转换Json字符串
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Application.DTO.AuthoriseByUsernameRequestDto">
+            <summary>
+            管理员身份验证请求
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AuthoriseByUsernameRequestDto.Username">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AuthoriseByUsernameRequestDto.Password">
+            <summary>
+            登录密码
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AuthoriseByUsernameRequestDto.ValidType">
+            <summary>
+            验证方式
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.AuthoriseByUsernameRequestDto.Validate">
+            <summary>
+            验证码数据
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.LoggerDeleteRequestDto">
+            <summary>
+            批量删除日志请求
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerDeleteRequestDto.BeginTime">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerDeleteRequestDto.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerInfoDetailsResponseDto.Id">
+            <summary>
+            日志编号
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerInfoDetailsResponseDto.AccountId">
+            <summary>
+            操作账号编号
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerInfoDetailsResponseDto.AccountName">
+            <summary>
+            操作账户昵称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerInfoDetailsResponseDto.Type">
+            <summary>
+            日志类型
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerInfoDetailsResponseDto.Subject">
+            <summary>
+            登录方式
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerInfoDetailsResponseDto.ClientIp">
+            <summary>
+            客户端IP
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerInfoDetailsResponseDto.PermissionId">
+            <summary>
+            权限ID
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerInfoDetailsResponseDto.AddTime">
+            <summary>
+            日志记录时间
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerInfoDetailsResponseDto.ApiAddress">
+            <summary>
+            请求地址
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerInfoDetailsResponseDto.ApiRequest">
+            <summary>
+            API请求数据
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerInfoDetailsResponseDto.ApiResponse">
+            <summary>
+            响应数据
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerInfoDetailsResponseDto.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.LoggerListPagedRequestDto">
+            <summary>
+            日志列表分页查询请求
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerListPagedRequestDto.Subject">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerListPagedRequestDto.Account">
+            <summary>
+            操作账号 操作账户ID 和 操作账号
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerListPagedRequestDto.Type">
+            <summary>
+            日志类型 -1 全部，1:登录日志  2:操作日志
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerListPagedRequestDto.BeginTime">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerListPagedRequestDto.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerListPagedRequestDto.PermissionId">
+            <summary>
+            权限ID
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.LoggerListPagedRequestDto.ClientIp">
+            <summary>
+            客户端IP
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.PermissionActionCreateRequestDto">
+            <summary>
+            功能权限创建请求
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionCreateRequestDto.Code">
+            <summary>
+            权限代码
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionCreateRequestDto.ParentId">
+            <summary>
+            上级权限编号
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionCreateRequestDto.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionCreateRequestDto.ApiTemplate">
+            <summary>
+            权限服务地址
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionCreateRequestDto.IsLogger">
+            <summary>
+            是否日志记录
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionCreateRequestDto.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionCreateRequestDto.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="M:ASF.Application.DTO.PermissionActionCreateRequestDto.ToString">
+            <summary>
+            转换Json字符串
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionInfoDetailsResponseDto.Id">
+            <summary>
+            唯一标示
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionInfoDetailsResponseDto.ParentId">
+            <summary>
+            上级权限编号
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionInfoDetailsResponseDto.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionInfoDetailsResponseDto.ApiTemplate">
+            <summary>
+            权限服务地址
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionInfoDetailsResponseDto.IsSystem">
+            <summary>
+            是否系统权限
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionInfoDetailsResponseDto.IsLogger">
+            <summary>
+            是否日志记录
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionInfoDetailsResponseDto.Enable">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionInfoDetailsResponseDto.CreateTime">
+            <summary>
+            添加时间
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionInfoDetailsResponseDto.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionInfoDetailsResponseDto.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.PermissionActionModifyRequestDto">
+            <summary>
+            修改功能权限请求
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionModifyRequestDto.Id">
+            <summary>
+            权限标识
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionModifyRequestDto.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionModifyRequestDto.ApiTemplate">
+            <summary>
+            权限服务地址
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionModifyRequestDto.IsLogger">
+            <summary>
+            是否日志记录
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionModifyRequestDto.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionModifyRequestDto.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionActionModifyRequestDto.Enable">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.PermissionListRequestDto">
+            <summary>
+            权限信息列表查询请求Dto
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionListRequestDto.Vague">
+            <summary>
+            模糊查询条件  权限标识、名称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionListRequestDto.Enable">
+            <summary>
+            状态 -1:全部 1:启用  0:停止
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionListRequestDto.ParamId">
+            <summary>
+            父亲节点
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.PermissionMenuCreateRequestDto">
+            <summary>
+            菜单权限创建请求
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuCreateRequestDto.Code">
+            <summary>
+            权限代码
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuCreateRequestDto.ParentId">
+            <summary>
+            上级权限编号
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuCreateRequestDto.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuCreateRequestDto.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuCreateRequestDto.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuInfoBaseResponseDto.Id">
+            <summary>
+            唯一标示
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuInfoBaseResponseDto.ParentId">
+            <summary>
+            上级权限编号
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuInfoBaseResponseDto.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuInfoBaseResponseDto.Actions">
+            <summary>
+            操作集合
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto">
+            <summary>
+            权限基本信息响应对象
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto.IsSystem">
+            <summary>
+            是否系统权限
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto.Enable">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto.CreateTime">
+            <summary>
+            添加时间
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.PermissionMenuModifyRequestDto">
+            <summary>
+            修改菜单权限请求
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuModifyRequestDto.Id">
+            <summary>
+            权限标识
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuModifyRequestDto.ParentId">
+            <summary>
+            上级权限编号
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuModifyRequestDto.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuModifyRequestDto.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuModifyRequestDto.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuModifyRequestDto.Enable">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.PermissionModifySortRequestDto">
+            <summary>
+            修改权限排序请求
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionModifySortRequestDto.Id">
+            <summary>
+            唯一标示
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionModifySortRequestDto.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.RoleCreateRequestDto">
+            <summary>
+            角色创建请求Dto
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleCreateRequestDto.Name">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleCreateRequestDto.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleCreateRequestDto.Permissions">
+            <summary>
+            分配的权限
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.RoleInfoBaseResponseDto">
+            <summary>
+            角色基本信息
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleInfoBaseResponseDto.Enable">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleInfoBaseResponseDto.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleInfoBaseResponseDto.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleInfoDetailsResponseDto.Permissions">
+            <summary>
+            分配的权限
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleInfoSimpleResponseDto.Id">
+            <summary>
+            角色编号
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleInfoSimpleResponseDto.Name">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.RoleListPagedRequestDto">
+            <summary>
+            角色信息集合查询请求
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleListPagedRequestDto.Vague">
+            <summary>
+            模糊查询条件  角色标识、名称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleListPagedRequestDto.Enable">
+            <summary>
+            状态 -1:全部 1:启用  0:停止
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.RoleModifyRequestDto">
+            <summary>
+            角色修改请求
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleModifyRequestDto.RoleId">
+            <summary>
+            角色标识
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleModifyRequestDto.Name">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleModifyRequestDto.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleModifyRequestDto.Enable">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleModifyRequestDto.Permissions">
+            <summary>
+            分配的权限
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.RoleModifyStatusRequestDto">
+            <summary>
+            修改角色状态
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleModifyStatusRequestDto.RoleId">
+            <summary>
+            角色标识
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.RoleModifyStatusRequestDto.Enable">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="T:ASF.Application.DTO.ListPagedAndSortedRequestDto">
+            <summary>
+            集合分页排序请求对象
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.ListPagedAndSortedRequestDto.Sorting">
+            <summary>
+            Sorting information.
+            Should include sorting field and optionally a direction (ASC or DESC)
+            Can contain more than one field separated by comma (,).
+            </summary>
+            <example>
+            Examples:
+            "Name"
+            "Name DESC"
+            "Name ASC, Age DESC"
+            </example>
+        </member>
+        <member name="T:ASF.Application.DTO.ListPagedRequestDto">
+            <summary>
+            集合分页请求对象
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.ListPagedRequestDto.PagedCount">
+            <summary>
+            每页显示数量
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.ListPagedRequestDto.SkipPage">
+            <summary>
+            跳过页
+            </summary>
+        </member>
+        <member name="T:ASF.Application.LoggerController">
+            <summary>
+            日志服务
+            </summary>
+        </member>
+        <member name="M:ASF.Application.LoggerController.GetList(ASF.Application.DTO.LoggerListPagedRequestDto)">
+            <summary>
+            分页获取所有的日志集合
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.LoggerController.Delete(ASF.Application.DTO.LoggerDeleteRequestDto)">
+            <summary>
+            根据指定时间删除日志（三个月之内的日志不能删除）
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Application.PermissionController">
+            <summary>
+            功能权限
+            </summary>
+        </member>
+        <member name="M:ASF.Application.PermissionController.CreateAction(ASF.Application.DTO.PermissionActionCreateRequestDto)">
+            <summary>
+            创建功能权限
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.PermissionController.CreateMenu(ASF.Application.DTO.PermissionMenuCreateRequestDto)">
+            <summary>
+            创建菜单权限
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.PermissionController.ModifyAction(ASF.Application.DTO.PermissionActionModifyRequestDto)">
+            <summary>
+            修改功能权限
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.PermissionController.ModifyMenu(ASF.Application.DTO.PermissionMenuModifyRequestDto)">
+            <summary>
+            修改菜单权限
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.PermissionController.Delete(System.String)">
+            <summary>
+            删除权限
+            </summary>
+            <param name="id">权限标识</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.PermissionController.GetMenuList(ASF.Application.DTO.PermissionListRequestDto)">
+            <summary>
+            获取菜单权限集合
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.PermissionController.GetMenuAllList">
+            <summary>
+            获取所有菜单权限集合
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.PermissionController.GetMenuDetails(System.String)">
+            <summary>
+            根据ID获取菜单权限详情
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.PermissionController.GetActionList(ASF.Application.DTO.PermissionListRequestDto)">
+            <summary>
+            获取功能权限集合
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.PermissionController.GetActionDetails(System.String)">
+            <summary>
+            根据ID获取功能权限详情
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.PermissionController.ModifySort(ASF.Application.DTO.PermissionModifySortRequestDto)">
+            <summary>
+            修改权限排序
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.RoleController.Create(ASF.Application.DTO.RoleCreateRequestDto)">
+            <summary>
+            获取所有的角色基本信息
+            </summary>
+            <returns></returns>
+            <summary>
+            创建角色
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.RoleController.Delete(System.Int32)">
+            <summary>
+            删除角色
+            </summary>
+            <param name="id">角色标识</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.RoleController.Modify(ASF.Application.DTO.RoleModifyRequestDto)">
+            <summary>
+            修改角色
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.RoleController.ModifyStatus(ASF.Application.DTO.RoleModifyStatusRequestDto)">
+            <summary>
+            修改角色状态
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.RoleController.GetListAll">
+            <summary>
+            获取所有角色基本信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.RoleController.GetList(ASF.Application.DTO.RoleListPagedRequestDto)">
+            <summary>
+            获取角色集合
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.RoleController.GetDetails(System.Int32)">
+            <summary>
+            获取角色详情
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Application.ASFPermissions">
+            <summary>
+            ASF 权限集
+            </summary>
+        </member>
+        <member name="T:ASF.ASFRequestLogger">
+            <summary>
+            日子记录
+            </summary>
+        </member>
+        <member name="M:ASF.ASFRequestLogger.Record">
+            <summary>
+            记录日志
+            </summary>
+            <param name="httpContext"></param>
+        </member>
+        <member name="M:ASF.ASFRequestLogger.GetRequestData(Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            获取请求参数
+            </summary>
+            <param name="httpContext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.ASFRequestLogger.GetResponseData(Microsoft.AspNetCore.Http.HttpResponse)">
+            <summary>
+            获取响应数据
+            </summary>
+            <param name="response"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.ASFRequestLoggerMiddleware">
+            <summary>
+            ASF 通过Ocelot拦截记录日志
+            </summary>
+        </member>
+        <member name="T:ASF.DependencyInjection.ASFBuilder">
+            <summary>
+            ASF 建造器
+            </summary>
+        </member>
+        <member name="M:ASF.DependencyInjection.ASFBuilder.AddAuthorization">
+            <summary>
+            添加授权
+            </summary>
+        </member>
+        <member name="M:ASF.DependencyInjection.ASFBuilder.AddDomainServices">
+            <summary>
+            添加领域服务
+            </summary>
+        </member>
+        <member name="M:ASF.DependencyInjection.ASFBuilder.AddAccountRepositoryCache``1">
+            <summary>
+            添加账户仓储缓存
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.DependencyInjection.ASFBuilder.AddPermissionRepositoryCache``1">
+            <summary>
+            添加权限仓储缓存
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.DependencyInjection.ASFBuilder.AddRoleRepositoryCache``1">
+            <summary>
+            添加角色仓储缓存
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Entities.Account">
+            <summary>
+            管理员账户
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Entities.Account.#ctor(System.String,System.String)">
+            <summary>
+            管理员账户
+            </summary>
+            <param name="username">账户</param>
+            <param name="password">密码</param>
+            <param name="account">创建此账户管理员</param>
+        </member>
+        <member name="P:ASF.Domain.Entities.Account.Id">
+            <summary>
+            编号
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Account.Name">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Account.Username">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Account.Password">
+            <summary>
+            登录密码
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Account.Telephone">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Account.Email">
+            <summary>
+            邮箱地址
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Account.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Account.Status">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Account.IsDeleted">
+            <summary>
+            是否删除
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Account.Roles">
+            <summary>
+            角色集
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Account.CreateInfo">
+            <summary>
+            创建时信息
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Account.LoginInfo">
+            <summary>
+            登录信息
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Entities.Account.SetPassword(System.String)">
+            <summary>
+            设置登录密码
+            </summary>
+            <param name="password">登录密码</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Entities.Account.HasPassword(System.String)">
+            <summary>
+            是否和当前密码一致
+            </summary>
+            <param name="password">验证密码</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Entities.Account.SetRoles(System.Collections.Generic.List{System.Int32})">
+            <summary>
+            设置分配的角色
+            </summary>
+            <param name="roles">角色编号</param>
+        </member>
+        <member name="M:ASF.Domain.Entities.Account.IsAllowLogin">
+            <summary>
+            是否允许登录
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Entities.Account.IsNormal">
+            <summary>
+            账户是否正常
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Entities.Account.Delete">
+            <summary>
+            删除
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Entities.Account.SetLoginInfo(ASF.Domain.Values.LoginInfo)">
+            <summary>
+            设置登录信息
+            </summary>
+            <param name="loginInfo"></param>
+        </member>
+        <member name="M:ASF.Domain.Entities.Account.SetCreateOfAccount(System.Int32)">
+            <summary>
+            设置创建用户
+            </summary>
+            <param name="createOfAccountId"></param>
+        </member>
+        <member name="M:ASF.Domain.Entities.Account.IsSuperAdministrator">
+            <summary>
+            是否为超级管理员
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Entities.Logging">
+            <summary>
+            管理日志
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Logging.Id">
+            <summary>
+            日志编号
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Logging.AccountId">
+            <summary>
+            操作账号编号
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Logging.AccountName">
+            <summary>
+            操作账户昵称
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Logging.Type">
+            <summary>
+            日志类型
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Logging.Subject">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Logging.ClientIp">
+            <summary>
+            客户端IP
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Logging.PermissionId">
+            <summary>
+            权限ID
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Logging.AddTime">
+            <summary>
+            日志记录时间
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Logging.ApiAddress">
+            <summary>
+            请求地址
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Logging.ApiRequest">
+            <summary>
+            API请求数据
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Logging.ApiResponse">
+            <summary>
+            响应数据
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Logging.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Entities.Notification">
+            <summary>
+            通知消息
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Entities.Permission">
+            <summary>
+            权限
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Permission.Id">
+            <summary>
+            唯一标示
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Permission.Code">
+            <summary>
+            权限代码
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Permission.ParentId">
+            <summary>
+            上级权限编号
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Permission.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Permission.Type">
+            <summary>
+            权限类型
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Permission.IsSystem">
+            <summary>
+            是否系统权限
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Permission.ApiTemplate">
+            <summary>
+            权限服务地址
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Permission.ApiTemplateRegex">
+            <summary>
+            Api模板的正则表达式
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Permission.IsLogger">
+            <summary>
+            是否日志记录
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Permission.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Permission.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Permission.Enable">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Permission.CreateTime">
+            <summary>
+            添加时间
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Entities.Permission.IsNormal">
+            <summary>
+            权限是否可用
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Entities.Permission.SetApiTemplate(System.String)">
+            <summary>
+            设置权限API模板
+            </summary>
+            <param name="apiAddress"></param>
+        </member>
+        <member name="M:ASF.Domain.Entities.Permission.MatchApiTemplate(System.String)">
+            <summary>
+            匹配Api模板
+            </summary>
+            <param name="requestPath"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Entities.Role">
+            <summary>
+            管理员角色
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Role.Id">
+            <summary>
+            角色编号
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Role.Name">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Role.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Role.Enable">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Role.CreateInfo">
+            <summary>
+            创建时信息
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.Role.Permissions">
+            <summary>
+            分配的权限
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Entities.Role.IsNormal">
+            <summary>
+            角色是否正常
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Entities.Role.SetPermissions(System.Collections.Generic.IList{System.String})">
+            <summary>
+            设置分配的权限
+            </summary>
+            <param name="permissions">分配的权限</param>
+        </member>
+        <member name="M:ASF.Domain.Entities.Role.ContainPermission(System.String)">
+            <summary>
+            是否包含对应的权限
+            </summary>
+            <param name="permissionId">权限标识</param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Entities.SystemInfo">
+            <summary>
+            后台系统相关信息
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.SystemInfo.Name">
+            <summary>
+            系统名称
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Entities.SystemInfo.Logo">
+            <summary>
+            系统Logo
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Entities.IEntity">
+            <summary>
+            标示领域实体基类
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.ResultCodes">
+            <summary>
+            错误结果代码
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Services.AccountAuthorizationService">
+            <summary>
+            账号权限认证服务
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountAuthorizationService.AnalysisRoleId(System.String)">
+            <summary>
+            解析Token中的角色集
+            </summary>
+            <param name="roles">角色集标识</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountAuthorizationService.MatchPermission(System.String)">
+            <summary>
+            匹配权限
+            </summary>
+            <param name="requestPath"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Services.AccountCreateService">
+            <summary>
+            账户创建服务
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountCreateService.Create(ASF.Domain.Entities.Account)">
+            <summary>
+            创建账户信息
+            </summary>
+            <param name="account">账户</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountDeleteService.Delete(System.Int32)">
+            <summary>
+            删除账户
+            </summary>
+            <param name="uid"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Services.AccountInfoChangeService">
+            <summary>
+            账户信息修改服务
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountInfoChangeService.Modify(System.Int32,System.String,ASF.Domain.Values.AccountStatus,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            修改账户信息
+            </summary>
+            <param name="accountId">账户标识</param>
+            <param name="name">昵称</param>
+            <param name="status">状态</param>
+            <param name="roles">角色</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountInfoChangeService.ModifyStatus(System.Int32,ASF.Domain.Values.AccountStatus)">
+            <summary>
+            修改账户状态
+            </summary>
+            <param name="accountId">账户标识</param>
+            <param name="status">账户状态</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountInfoChangeService.ModifyNameOrAvatar(System.Int32,System.String,System.String)">
+            <summary>
+            修改昵称和头像
+            </summary>
+            <param name="accountId">账户标识</param>
+            <param name="name">昵称</param>
+            <param name="avatar">头像</param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Services.AccountLoginService">
+            <summary>
+            账户登录服务
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountLoginService.LoginByUsername(System.String,System.String,System.String)">
+            <summary>
+            使用用户名登录
+            </summary>
+            <param name="username">账户账号</param>
+            <param name="password">账户密码</param>
+            <param name="ip">登录IP</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountLoginService.LoginByEmail(System.String,System.String,System.String)">
+            <summary>
+            使用邮箱登录账户
+            </summary>
+            <param name="email">邮箱地址</param>
+            <param name="password">账户密码</param>
+            <param name="ip">登录IP</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountLoginService.LoginByTelephone(ASF.Domain.Values.PhoneNumber,System.String,System.String)">
+            <summary>
+            使用邮箱登录账户
+            </summary>
+            <param name="telephone">手机号码</param>
+            <param name="password">账户密码</param>
+            <param name="ip">登录IP</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountLoginService.Login(ASF.Domain.Entities.Account,System.String,System.String)">
+            <summary>
+            登录用户验证
+            </summary>
+            <param name="account">账户</param>
+            <param name="password">账户密码</param>
+            <param name="loginInfo">登录信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountLoginService.GetLoginFailedInfo(System.String)">
+            <summary>
+            获取登录失败信息
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Services.AccountPasswordChangeService">
+            <summary>
+            账户登录密码修改、设置服务
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountPasswordChangeService.Reset(System.Int32,System.String,System.Int32,System.String)">
+            <summary>
+            设置登录密码
+            </summary>
+            <param name="accountId">账户标识</param>
+            <param name="password">需要设置的密码</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountPasswordChangeService.Modify(System.Int32,System.String,System.String)">
+            <summary>
+            修改登录密码(需要验证原密码是否相符)
+            </summary>
+            <param name="accountId">账户标识</param>
+            <param name="newPassword">需要设置的密码</param>
+            <param name="oldPassword">原密码</param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Services.AccountRoleAssignationService">
+            <summary>
+            管理员账户角色分配服务
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Services.AccountTelephoneChangeService">
+            <summary>
+            账户手机号码设置、修改服务
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Services.AccountTelephoneChangeService.Modify(System.Int32,ASF.Domain.Values.PhoneNumber)">
+            <summary>
+            设置手机号码
+            </summary>
+            <param name="accountId">账户标识</param>
+            <param name="telephone">手机号码</param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Services.LogLoginRecordService">
+            <summary>
+            记录登录日志
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Services.LogLoginRecordService.Record(ASF.Domain.Entities.Account,System.String)">
+            <summary>
+            记录日志
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Services.LogOperateRecordService">
+            <summary>
+            记录操作日志
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Services.LogOperateRecordService.Record(ASF.Domain.Entities.Permission,System.String,System.String)">
+            <summary>
+            记录日志
+            </summary>
+            <param name="permission">记录的权限</param>
+            <param name="requestData">请求参数</param>
+            <param name="responseData">响应参数</param>
+        </member>
+        <member name="M:ASF.Domain.Services.LogOperateRecordService.Record(System.ValueTuple{System.String,System.String},System.String,System.String)">
+            <summary>
+            记录
+            </summary>
+            <param name="permission">记录的权限 标识和权限名称</param>
+            <param name="requestData">请求数据</param>
+            <param name="responseData">响应数据</param>
+        </member>
+        <member name="T:ASF.Domain.Services.PermissionChangeService">
+            <summary>
+            权限修改服务
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Services.PermissionChangeService.ModifyAction(System.String,System.String,System.String,System.Boolean,System.String,System.Boolean,System.Int32)">
+            <summary>
+            修改功能权限
+            </summary>
+            <param name="pid">权限标识</param>
+            <param name="name">权限名称</param>
+            <param name="parentId">分类</param>
+            <param name="description">描述</param>
+            <param name="enable">是否可用</param>
+            <param name="apiAddress">api 地址</param>
+            <param name="isLogger">是否记录日志</param>
+            <param name="sort">菜单排序</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.PermissionChangeService.ModifyMenu(System.String,System.String,System.String,System.String,System.Boolean,System.Int32)">
+            <summary>
+            修改菜单权限
+            </summary>
+            <param name="pid">权限标识</param>
+            <param name="name">权限名称</param>
+            <param name="parentId">分类</param>
+            <param name="description">描述</param>
+            <param name="enable">是否可用</param>
+            <param name="sort">菜单排序</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.PermissionChangeService.ModifySort(System.String,System.Int32)">
+            <summary>
+            修改
+            </summary>
+            <param name="pid"></param>
+            <param name="sort"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Services.PermissionCreateService">
+            <summary>
+            权限创建服务
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Services.PermissionCreateService.CreateAction(ASF.Domain.Entities.Permission)">
+            <summary>
+            创建功能权限
+            </summary>
+            <param name="permission">权限对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.PermissionCreateService.CreateMenu(ASF.Domain.Entities.Permission)">
+            <summary>
+            创建菜单权限
+            </summary>
+            <param name="permission">权限对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Services.PermissionDeleteService">
+            <summary>
+            删除权限服务
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Services.PermissionDeleteService.Delete(System.String)">
+            <summary>
+            删除权限
+            </summary>
+            <param name="permissionId">权限标识</param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Services.RoleCreateService">
+            <summary>
+            角色创建服务
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Services.RoleCreateService.Create(System.String,System.String,System.Int32)">
+            <summary>
+            创建角色
+            </summary>
+            <param name="name">角色名称</param>
+            <param name="description">结算描述</param>
+            <param name="createOfAccountId">创建的账户标识</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.RoleCreateService.Create(System.String,System.String,System.Int32,System.Collections.Generic.IList{System.String})">
+            <summary>
+            创建角色
+            </summary>
+            <param name="name">角色名称</param>
+            <param name="description">结算描述</param>
+            <param name="createOfAccountId">创建的账户标识</param>
+            <param name="pids">分配的角色</param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Services.RoleInfoChangeService">
+            <summary>
+            角色信息修改
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Services.RoleInfoChangeService.Modify(System.Int32,System.String,System.Boolean,System.String)">
+            <summary>
+            修改角色信息
+            </summary>
+            <param name="roleId">角色标识</param>
+            <param name="name">角色昵称</param>
+            <param name="enable">是否可用</param>
+            <param name="description">角色描述</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Domain.Services.RoleInfoChangeService.Modify(System.Int32,System.String,System.Boolean,System.String,System.Collections.Generic.IList{System.String})">
+            <summary>
+            修改角色信息
+            </summary>
+            <param name="roleId">角色标识</param>
+            <param name="name">角色昵称</param>
+            <param name="enable">是否可用</param>
+            <param name="description">角色描述</param>
+            <param name="pids">分配的角色</param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Domain.Services.RolePermissionAssignationService">
+            <summary>
+            角色权限分配服务
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Values.AccessToken">
+            <summary>
+            授权访问Token
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Values.AccessToken.Token">
+            <summary>
+            Token
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Values.AccessToken.TokenType">
+            <summary>
+            Token 类型
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Values.AccessToken.RefreshToken">
+            <summary>
+            刷新令牌
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Values.AccessToken.Expired">
+            <summary>
+            过期时间
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Values.AccountStatus">
+            <summary>
+            账户状态
+            </summary>
+        </member>
+        <member name="F:ASF.Domain.Values.AccountStatus.Normal">
+            <summary>
+            正常
+            </summary>
+        </member>
+        <member name="F:ASF.Domain.Values.AccountStatus.NotAllowedLogin">
+            <summary>
+            不允许登录
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Values.CreateOfAccount">
+            <summary>
+            创建的账户信息
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Values.CreateOfAccount.CreateId">
+            <summary>
+            创建用户
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Values.CreateOfAccount.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Values.LoggingType">
+            <summary>
+            管理日志类型
+            </summary>
+        </member>
+        <member name="F:ASF.Domain.Values.LoggingType.Login">
+            <summary>
+            登录日志
+            </summary>
+        </member>
+        <member name="F:ASF.Domain.Values.LoggingType.Operate">
+            <summary>
+            操作日志
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Values.LoginFailed">
+            <summary>
+            登录失败信息
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Values.LoginFailed.#ctor(System.String)">
+            <summary>
+            登录失败信息
+            </summary>
+            <param name="username">用户名</param>
+        </member>
+        <member name="P:ASF.Domain.Values.LoginFailed.Username">
+            <summary>
+            登录用户名
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Values.LoginFailed.FailedCount">
+            <summary>
+            失败次数
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Values.LoginFailed.LastLoginTime">
+            <summary>
+            最后一次登录时间
+            </summary>
+        </member>
+        <member name="M:ASF.Domain.Values.LoginFailed.Accumulative">
+            <summary>
+            累计失败次数
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Values.LoginInfo">
+            <summary>
+            登录日志
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Values.LoginInfo.LoginIp">
+            <summary>
+            最后登录IP
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Values.LoginInfo.LoginTime">
+            <summary>
+            最后登录时间
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Values.LoginInfo.AccessToken">
+            <summary>
+            授权颁发访问Token
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Values.PermissionType">
+            <summary>
+            权限类型
+            </summary>
+        </member>
+        <member name="F:ASF.Domain.Values.PermissionType.Action">
+            <summary>
+            操作行为
+            </summary>
+        </member>
+        <member name="F:ASF.Domain.Values.PermissionType.Menu">
+            <summary>
+            导航
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Values.PhoneNumber">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Values.PhoneNumber.Number">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:ASF.Domain.Values.PhoneNumber.AreaCode">
+            <summary>
+            手机号码区号
+            </summary>
+        </member>
+        <member name="T:ASF.Domain.Values.IValueObject">
+            <summary>
+            值对象接口
+            </summary>
+        </member>
+        <member name="M:ASF.Infrastructure.Anticorrsives.IAccessTokenGenerate.Generate(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            生成授权访问Tokan
+            </summary>
+            <param name="claims">Token 声明</param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Infrastructure.Repositories.DefaultCache`1">
+            <summary>
+            IMemoryCache-based implementation of the cache
+            </summary>
+            <typeparam name="T"></typeparam>
+            <seealso cref="!:IdentityServer4.Services.ICache&lt;T&gt;" />
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.DefaultCache`1.#ctor(Microsoft.Extensions.Caching.Memory.IMemoryCache)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ASF.Infrastructure.Repositories.DefaultCache`1"/> class.
+            </summary>
+            <param name="cache">The cache.</param>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.DefaultCache`1.GetAsync(System.String)">
+            <summary>
+            Gets the cached data based upon a key index.
+            </summary>
+            <param name="key">The key.</param>
+            <returns>
+            The cached item, or <c>null</c> if no item matches the key.
+            </returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.DefaultCache`1.SetAsync(System.String,System.Collections.Generic.IList{`0},System.TimeSpan)">
+            <summary>
+            Caches the data based upon a key
+            </summary>
+            <param name="key">The key.</param>
+            <param name="item">The item.</param>
+            <param name="expiration">The expiration.</param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Infrastructure.Repositories.ICache`1">
+            <summary>
+            Abstract interface to model data caching
+            </summary>
+            <typeparam name="T">The data type to be cached</typeparam>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.ICache`1.GetAsync(System.String)">
+            <summary>
+            Gets the cached data based upon a key index.
+            </summary>
+            <param name="key">The key.</param>
+            <returns>The cached item, or <c>null</c> if no item matches the key.</returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.ICache`1.SetAsync(System.String,System.Collections.Generic.IList{`0},System.TimeSpan)">
+            <summary>
+            Caches the data based upon a key
+            </summary>
+            <param name="key">The key.</param>
+            <param name="item">The item.</param>
+            <param name="expiration">The expiration.</param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.Infrastructure.Repositories.ICacheExtensions">
+            <summary>
+            Extensions for ICache
+            </summary>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.ICacheExtensions.GetAsync``1(ASF.Infrastructure.Repositories.ICache{``0},System.String,System.TimeSpan,System.Func{System.Threading.Tasks.Task{System.Collections.Generic.IList{``0}}},Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Attempts to get an item from the cache. If the item is not found, the <c>get</c> function is used to
+            obtain the item and populate the cache.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="cache">The cache.</param>
+            <param name="key">The key.</param>
+            <param name="duration">The duration.</param>
+            <param name="get">The get function.</param>
+            <param name="logger">The logger.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException">cache
+            or
+            get</exception>
+            <exception cref="T:System.ArgumentNullException">cache
+            or
+            get</exception>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IAccountRepository.HasByUsername(System.String)">
+            <summary>
+            这用户名是否被使用
+            </summary>
+            <param name="username">用户名</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IAccountRepository.HasByTelephone(ASF.Domain.Values.PhoneNumber)">
+            <summary>
+            这电话号码是否被使用
+            </summary>
+            <param name="telephone">电话号码</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IAccountRepository.HasByEmail(System.String)">
+            <summary>
+            这邮箱地址是否被使用
+            </summary>
+            <param name="email">邮箱地址</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IAccountRepository.GetByUsernameAsync(System.String)">
+            <summary>
+            获取实体
+            </summary>
+            <param name="id">账户</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IAccountRepository.GetByEmailAsync(System.String)">
+            <summary>
+            获取实体
+            </summary>
+            <param name="id">电子邮箱</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IAccountRepository.GetAsync(ASF.Domain.Values.PhoneNumber)">
+            <summary>
+            获取实体
+            </summary>
+            <param name="id">账户</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IAccountRepository.GetList(ASF.Application.DTO.AccountListPagedRequestDto)">
+            <summary>
+            分页获取用户集合
+            </summary>
+            <param name="requestDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IAccountRepository.ModifyAsync(ASF.Domain.Entities.Account)">
+            <summary>
+            修改账户
+            </summary>
+            <param name="account">账户信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IAccountRepository.GetList">
+            <summary>
+            分页获取用户集合
+            </summary>
+            <param name="requestDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.ILoggingRepository.GetList(ASF.Application.DTO.LoggerListPagedRequestDto)">
+            <summary>
+            分页获取日志激活
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.ILoggingRepository.Delete(ASF.Application.DTO.LoggerDeleteRequestDto)">
+            <summary>
+            根据时间删除日志
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IPermissionRepository.HasById(System.String)">
+            <summary>
+            这标识是否被使用
+            </summary>
+            <param name="id">权限标识</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IPermissionRepository.ModifyAsync(ASF.Domain.Entities.Permission)">
+            <summary>
+            修改权限
+            </summary>
+            <param name="permission">权限信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IPermissionRepository.GetList(System.Collections.Generic.IList{System.String})">
+            <summary>
+            根据ID获取权限集合
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IPermissionRepository.GetListByParentId(System.String)">
+            <summary>
+            根据父类获取权限集合
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IPermissionRepository.GetList">
+            <summary>
+            获取所有权限集合
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IPermissionRepository.GetList(ASF.Application.DTO.PermissionListRequestDto)">
+            <summary>
+            分页获取角色集合
+            </summary>
+            <param name="requestDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IRoleRepository.GetList(System.Collections.Generic.IList{System.Int32})">
+             <summary>
+            根据角色标识获取角色集合
+             </summary>
+             <param name="ids"></param>
+             <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IRoleRepository.GetList">
+             <summary>
+            获取角色集合
+             </summary>
+             <param name="ids"></param>
+             <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IRoleRepository.ModifyAsync(ASF.Domain.Entities.Role)">
+            <summary>
+            修改角色
+            </summary>
+            <param name="account">角色信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IRoleRepository.ModifyAsync(System.Int32,System.Boolean)">
+            <summary>
+            修改角色状态
+            </summary>
+            <param name="enable">是否可用</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Infrastructure.Repositories.IRoleRepository.GetList(ASF.Application.DTO.RoleListPagedRequestDto)">
+            <summary>
+            分页获取角色集合
+            </summary>
+            <param name="requestDto"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.IAnticorrsive">
+            <summary>
+            表示防腐层接口
+            </summary>
+        </member>
+        <member name="T:ASF.IRepository">
+            <summary>
+            仓储接口
+            </summary>
+        </member>
+        <member name="T:ASF.IRepository`2">
+            <summary>
+            仓储接口
+            </summary>
+        </member>
+        <member name="M:ASF.IRepository`2.GetAsync(`1)">
+            <summary>
+            获取实体
+            </summary>
+            <param name="id">标识ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.IRepository`2.AddAsync(`0)">
+            <summary>
+            添加实体
+            </summary>
+            <param name="entity">实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.IRepository`2.RemoveAsync(`1)">
+            <summary>
+            删除实体
+            </summary>
+            <param name="primaryKey">实体唯一标识</param>
+            <returns></returns>
+        </member>
+        <member name="T:ASF.IUnitOfWork">
+            <summary>
+            表示所有集成于该接口的类型都是Unit Of Work的一种实现。
+            </summary>
+            <remarks>有关Unit Of Work的详细信息，请参见UnitOfWork模式：http://martinfowler.com/eaaCatalog/unitOfWork.html。
+            </remarks>
+        </member>
+        <member name="P:ASF.IUnitOfWork.Committed">
+            <summary>
+            获得一个<see cref="T:System.Boolean"/>值，该值表述了当前的Unit Of Work事务是否已被提交。
+            </summary>
+        </member>
+        <member name="M:ASF.IUnitOfWork.Commit(System.Boolean)">
+            <summary>
+            提交当前的Unit Of Work事务。
+            </summary>
+            <param name="autoRollback"></param>
+        </member>
+        <member name="M:ASF.IUnitOfWork.CommitAsync(System.Boolean)">
+            <summary>
+            提交当前的Unit Of Work事务。
+            </summary>
+            <param name="autoRollback"></param>
+        </member>
+        <member name="M:ASF.IUnitOfWork.Rollback">
+            <summary>
+            回滚当前的Unit Of Work事务。
+            </summary>
+        </member>
+        <member name="M:ASF.Internal.Security.RSA.Sign(System.String,System.String,System.Text.Encoding,System.Security.Cryptography.HashAlgorithmName)">
+            <summary>
+            签名
+            </summary>
+            <param name="content">签名内容</param>
+            <param name="privateKey">私钥</param>
+            <param name="encoding">编码类型</param>
+            <param name="hashAlgorithm">加密方式</param>
+            <returns>加密密文</returns>
+        </member>
+        <member name="M:ASF.Internal.Security.RSA.CheckSign(System.String,System.String,System.String,System.Text.Encoding,System.Security.Cryptography.HashAlgorithmName)">
+            <summary>
+            验证签名
+            </summary>
+            <param name="content">验证签名内容</param>
+            <param name="publicKey">公钥</param>
+            <param name="sign">签名密文</param>
+            <param name="encoding">编码类型</param>
+            <param name="hashAlgorithm">加密方式</param>
+            <returns>加密密文</returns>
+        </member>
+        <member name="M:ASF.Internal.Security.RSA.Decrypt(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            解密
+            </summary>
+            <param name="cipher">密文</param>
+            <param name="privateKey">私钥</param>
+            <param name="encoding">编码</param>
+            <returns>明文</returns>
+        </member>
+        <member name="M:ASF.Internal.Security.RSA.Encrypt(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            加密
+            </summary>
+            <param name="plainText ">明文</param>
+            <param name="publicKey">公钥</param>
+            <param name="encoding">编码</param>
+            <returns>密文</returns>
+        </member>
+        <member name="M:ASF.Internal.Security.RSA.DecodePkcs8PrivateKey(System.Byte[])">
+            <summary>
+            Pkcs#8 证书解密
+            </summary>
+            <param name="privateKeyData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Internal.Security.RSA.GetIntegerSize(System.IO.BinaryReader)">
+            <summary>
+            获取Integer的大小
+            </summary>
+            <param name="binr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Internal.Security.RSA.GetPrivateKeyType(System.Int32)">
+            <summary>
+            获取私钥的类型
+            </summary>
+            <param name="privateKeyLength"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.AutoMapperBuilderExtensions">
+            <summary>
+            AutoMapper 建造控制类
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.AutoMapperBuilderExtensions.AddAutoMapper(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            添加AutoMapper服务,自动加载所有继承Profile配置,配置可见性
+            </summary>
+            <param name="services"><see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.AutoMapperBuilderExtensions.AddAutoMapper(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{AutoMapper.IMapperConfigurationExpression})">
+            <summary>
+            添加AutoMapper服务,自动加载所有继承Profile配置
+            </summary>
+            <param name="services"><see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></param>
+            <param name="configAction">配置函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.AutoMapperBuilderExtensions.RegisterAllMappings(AutoMapper.IMapperConfigurationExpression)">
+            <summary>
+            注入程序集Mappings
+            </summary>
+            <param name="config"><see cref="T:AutoMapper.IMapperConfigurationExpression"/></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.AutoMapperBuilderExtensions.RegisterAllMappings(AutoMapper.IMapperConfigurationExpression,System.Reflection.Assembly)">
+            <summary>
+            注入程序集Mappings
+            </summary>
+            <param name="config"><see cref="T:AutoMapper.IMapperConfigurationExpression"/></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.OcelotBuilderExtensions.AddASF(Ocelot.DependencyInjection.IOcelotBuilder)">
+            <summary>
+            添加ASF
+            </summary>
+            <param name="builder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.OcelotBuilderExtensions.AddASF(Ocelot.DependencyInjection.IOcelotBuilder,System.Action{ASF.DependencyInjection.ASFBuilder})">
+            <summary>
+            添加ASF
+            </summary>
+            <param name="builder"></param>
+            <param name="startupAction">配置ASF函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddASFCore(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{ASF.DependencyInjection.ASFBuilder})">
+            <summary>
+            添加添加ASF核心服务
+            </summary>
+            <param name="services"></param>
+            <param name="startupAction">ASF启动配置函数</param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Mvc.ClaimsPrincipalExtension">
+            <summary>
+            ClaimsPrincipal 扩展类
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.ClaimsPrincipalExtension.UserId(System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            账户Id
+            </summary>
+            <param name="principal"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.ClaimsPrincipalExtension.Name(System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            名称
+            </summary>
+            <param name="principal"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.ClaimsPrincipalExtension.NickName(System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            昵称
+            </summary>
+            <param name="principal"></param>
+            <returns></returns>
+        </member>
+        <member name="T:System.ComponentModel.DataAnnotations.CollectionCountAttribute">
+            <summary>
+            Collection数量限制
+            </summary>
+        </member>
+        <member name="M:System.ComponentModel.DataAnnotations.CollectionCountAttribute.#ctor(System.Int32,System.Int32)">
+            <summary>
+            List最大数量限制
+            </summary>
+            <param name="minCount">最小数量</param>
+            <param name="maxCount">最大数量</param>
+        </member>
+        <member name="P:System.ComponentModel.DataAnnotations.CollectionCountAttribute.MaxCount">
+            <summary>
+            最大数量
+            </summary>
+        </member>
+        <member name="P:System.ComponentModel.DataAnnotations.CollectionCountAttribute.MinCount">
+            <summary>
+            最小数了
+            </summary>
+        </member>
+        <member name="M:System.ComponentModel.DataAnnotations.ValidationHelper.IsValid``1(``0)">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ComponentModel.DataAnnotations.ValidationHelper.IsValid``1(``0,Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity">实体</param>
+            <param name="logger">日志记录</param>
+            <param name="logLevel">日志记录级别</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ComponentModel.DataAnnotations.ValidationHelper.ValidResult``1(``0)">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity">实体</param>
+            <returns></returns>
+        </member>
+        <member name="T:System.ValidationHelperExtensions">
+            <summary>
+            验证帮助根据扩展类
+            </summary>
+        </member>
+        <member name="M:System.ValidationHelperExtensions.IsDomainUrl(System.String)">
+            <summary>
+            验证域名格式
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ValidationHelperExtensions.IsUrl(System.String)">
+            <summary>
+            验证URL格式
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:System.Result">
+            <summary>
+            结果对象
+            </summary>
+        </member>
+        <member name="P:System.Result.Success">
+            <summary>
+            执行是否成功
+            </summary>
+        </member>
+        <member name="P:System.Result.Status">
+            <summary>
+            业务返回码
+            </summary>
+        </member>
+        <member name="P:System.Result.Message">
+            <summary>
+            执行返回消息
+            </summary>
+        </member>
+        <member name="M:System.Result.To(System.Result)">
+            <summary>
+            转换实体
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:System.Result.To(System.String,System.Int32)">
+            <summary>
+            转换实体
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:System.Result.To(System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            转换实体
+            </summary>
+            <param name="result">结果对象</param>
+        </member>
+        <member name="M:System.Result.ReFailure(System.String,System.Int32)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="message">结果消息</param>
+            <param name="status">结果状态</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result.ReFailure(System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果消息</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result.ReFailure``1(System.Result)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result.ReFailure``1(System.String,System.Int32)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="message">结果消息</param>
+            <param name="status">结果状态</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result.ReFailure``1(System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果消息</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result.ReSuccess">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result.ReSuccess``1">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <returns></returns>
+        </member>
+        <!-- 对于成员“M:System.Result.AsTask”忽略有格式错误的 XML 注释 -->
+        <member name="T:System.Result`1">
+            <summary>
+            实体结果对象
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:System.Result`1.#ctor">
+            <summary>
+            实体结果
+            </summary>
+        </member>
+        <member name="M:System.Result`1.#ctor(`0)">
+            <summary>
+            实体结果
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="P:System.Result`1.Data">
+            <summary>
+            返回对象
+            </summary>
+        </member>
+        <member name="M:System.Result`1.ReSuccess(`0)">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result`1.ReFailure(System.String,System.Int32)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="message">结果消息</param>
+            <param name="status">结果状态</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result`1.ReFailure(System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果消息</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result`1.ReFailure(System.Result)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果</param>
+            <returns></returns>
+        </member>
+        <!-- 对于成员“M:System.Result`1.AsTask”忽略有格式错误的 XML 注释 -->
+        <member name="T:System.BaseResultCodes">
+            <summary>
+            结果返回码
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.Success">
+            <summary>
+            处理成功
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.BadRequest">
+            <summary>
+            错误请求
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.UnAuthorized">
+            <summary>
+            未授权
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.NotAcceptable">
+            <summary>
+            拒绝请求
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.NotFound">
+            <summary>
+            未找到服务
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.UnknowError">
+            <summary>
+            系统错误
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.RequestTimeout">
+            <summary>
+            请求超时
+            </summary>
+        </member>
+        <member name="M:System.BaseResultCodesExtension.ToFormat(System.ValueTuple{System.Int32,System.String},System.String[])">
+            <summary>
+            根据替换符进行替换支付
+            </summary>
+            <param name="result">结果对象</param>
+            <param name="args">替换字符</param>
+            <returns></returns>
+        </member>
+        <member name="T:System.ResultList`1">
+            <summary>
+            集合结果类
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:System.ResultList`1.#ctor">
+            <summary>
+            实体集合结果
+            </summary>
+        </member>
+        <member name="M:System.ResultList`1.#ctor(System.Collections.Generic.IList{`0})">
+            <summary>
+            实体集合结果
+            </summary>
+            <param name="data">实体集合</param>
+        </member>
+        <member name="M:System.ResultList`1.#ctor(System.Collections.Generic.IList{`0},System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            实体集合结果
+            </summary>
+            <param name="data">实体集合</param>
+            <param name="result">结果状态</param>
+        </member>
+        <member name="M:System.ResultList`1.ReSuccess(System.Collections.Generic.IList{`0})">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultList`1.ReSuccess">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultList`1.ReFailure(System.String,System.Int32)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="message">结果消息</param>
+            <param name="status">结果状态</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultList`1.ReFailure(System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果消息</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultList`1.ReFailure(System.Result)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果</param>
+            <returns></returns>
+        </member>
+        <!-- 对于成员“M:System.ResultList`1.AsTask”忽略有格式错误的 XML 注释 -->
+        <member name="T:System.ResultPagedList`1">
+            <summary>
+            分页列表结果对象
+            </summary>
+        </member>
+        <member name="M:System.ResultPagedList`1.#ctor">
+            <summary>
+            实体分页集合结果
+            </summary>
+        </member>
+        <member name="M:System.ResultPagedList`1.#ctor(System.Collections.Generic.IList{`0},System.Int32)">
+            <summary>
+            实体分页集合结果
+            </summary>
+            <param name="data">实体集合</param>
+            <param name="totalCount">总条数</param>
+        </member>
+        <member name="M:System.ResultPagedList`1.#ctor(System.Collections.Generic.IList{`0},System.Int32,System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            实体分页集合结果
+            </summary>
+            <param name="data">实体集合</param>
+            <param name="result">结果状态</param>
+        </member>
+        <member name="P:System.ResultPagedList`1.TotalCount">
+            <summary>
+            Total count of Items.
+            </summary>
+        </member>
+        <member name="M:System.ResultPagedList`1.ReSuccess(System.Collections.Generic.IList{`0},System.Int32)">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <param name="data">实体集合</param>
+            <param name="totalCount">总条数</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultPagedList`1.ReSuccess">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultPagedList`1.ReFailure(System.String,System.Int32)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="message">结果消息</param>
+            <param name="status">结果状态</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultPagedList`1.ReFailure(System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果消息</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultPagedList`1.ReFailure(System.Result)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果</param>
+            <returns></returns>
+        </member>
+        <!-- 对于成员“M:System.ResultPagedList`1.AsTask”忽略有格式错误的 XML 注释 -->
+    </members>
+</doc>

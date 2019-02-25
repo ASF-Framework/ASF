@@ -9,7 +9,7 @@ using System.Text;
 namespace ASF.Application.DTO
 {
     /// <summary>
-    /// 操作权限创建请求
+    /// 功能权限创建请求
     /// </summary>
     public class PermissionActionCreateRequestDto : IDto
     {

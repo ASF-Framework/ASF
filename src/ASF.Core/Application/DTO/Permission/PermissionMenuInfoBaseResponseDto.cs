@@ -17,7 +17,7 @@ namespace ASF.Application.DTO
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// 操作集合
+        /// 功能集合
         /// </summary>
         public Dictionary<string, string> Actions { get; set; } = new Dictionary<string, string>();
     }

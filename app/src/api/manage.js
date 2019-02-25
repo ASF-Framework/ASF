@@ -4,6 +4,7 @@ const api = {
   admin: '/asf/account/getlist',
   userdetail: '/user/detail',
   role: '/asf/role/getlist',
+<<<<<<< HEAD
   addRole:'/asf/role/Create',
   editRole:'/asf/roe/Modify',
   roleAll:'/asf/role/getlistAll',
@@ -15,20 +16,36 @@ const api = {
   deleteAccount:'/asf/account/delete',
   modifyAccount:'/asf/account/midify',
   getAccountDetail:'/asf/account/GetDetails',
+=======
+  roleAll: '/asf/role/getlistAll',
+  createAccount: '/asf/account/create',
+  modifyStatusAccount: '/asf/account/midifystatus',
+  deleteAccount: '/asf/account/delete',
+  modifyAccount: '/asf/account/midify',
+  getAccountDetail: '/asf/account/GetDetails',
+>>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
   service: '/service',
   permission: '/asf/permission/getmenulist',
   permissionAll:'/asf/permission/GetMenuAllList',
   permissionNoPager: '/permission/no-pager',
-  orgTree: '/org/tree'
+  orgTree: '/org/tree',
+  getActionDetails: '/asf/Permission/GetActionDetails',
+  modifyAction: '/asf/Permission/ModifyAction',
+  modifySort: '/asf/Permission/ModifySort',
+  getMenuDetails: '/asf/Permission/GetMenuDetails',
+  getDetails: '/asf/Permission/GetActionDetails',
+  getActionList: '/asf/Permission/GetActionList',
+  deleteAction: '/asf/Permission/Delete',
+  CreateAction: '/asf/Permission/CreateAction',
+  CreateMenu: '/asf/Permission/CreateMenu'
 }
 
 export default api
 
-
-//管理员列表
+// 管理员列表
 export function getAdminList (parameter) {
   return new Promise((resolve, reject) => {
-    axios.post(api.admin,parameter ).then(res => {
+    axios.post(api.admin, parameter).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)
@@ -36,7 +53,7 @@ export function getAdminList (parameter) {
   })
 }
 
-//角色列表
+// 角色列表
 export function getRoleList (parameter) {
   return new Promise((resolve, reject) => {
     axios.post(api.role, parameter).then(res => {
@@ -46,8 +63,8 @@ export function getRoleList (parameter) {
     })
   })
 }
-//角色全部列表
-export function getRoleListAll(){
+// 角色全部列表
+export function getRoleListAll () {
   return new Promise((resolve, reject) => {
     axios.get(api.roleAll).then(res => {
       resolve(res)
@@ -57,7 +74,7 @@ export function getRoleListAll(){
   })
 }
 
-//权限列表
+// 权限列表
 export function getPermissions (parameter) {
   return new Promise((resolve, reject) => {
     axios.post(api.permission, parameter).then(res => {
@@ -67,11 +84,58 @@ export function getPermissions (parameter) {
     })
   })
 }
-
-//获取全部权限
-export function getPermissionAll (parameter) {
+// 根据ID获取操作权限详情
+export function getActionDetails (id) {
   return new Promise((resolve, reject) => {
-    axios.get(api.permissionAll).then(res => {
+    axios.get(api.getActionDetails + `/${id}`).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+export function CreateAction (id) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.CreateAction, id).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+// 创建导航权限
+export function CreateMenu (id) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.CreateMenu, id).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+// 根据ID获取导航权限详情
+export function getMenuDetails (id) {
+  return new Promise((resolve, reject) => {
+    axios.get(api.getMenuDetails + `/${id}`).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+// 根据ID获取操作权限详情
+export function getDetails (id) {
+  return new Promise((resolve, reject) => {
+    axios.get(api.getDetails + `/${id}`).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+export function getActionList (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.getActionList, parameter).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)
@@ -79,8 +143,49 @@ export function getPermissionAll (parameter) {
   })
 }
 
+<<<<<<< HEAD
+//获取全部权限
+export function getPermissionAll (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.get(api.permissionAll).then(res => {
+=======
+export function deleteAction (id) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.deleteAction + `/${id}`).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+// 修改操作权限
+export function modifyAction (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.modifyAction, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+// 修改排序
+export function modifySort (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.modifySort, parameter).then(res => {
+>>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+<<<<<<< HEAD
 
 //新增管理员
+=======
+// 新增管理员
+>>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
 export function createAccount (parameter) {
   return new Promise((resolve, reject) => {
     axios.post(api.createAccount, parameter).then(res => {
@@ -91,7 +196,7 @@ export function createAccount (parameter) {
   })
 }
 
-//修改管理员状态
+// 修改管理员状态
 export function modifyStatusAccount (parameter) {
   return new Promise((resolve, reject) => {
     axios.post(api.modifyStatusAccount, parameter).then(res => {
@@ -102,21 +207,20 @@ export function modifyStatusAccount (parameter) {
   })
 }
 
-
-//删除管理员
+// 删除管理员
 export function deleteAccount (parameter) {
   return new Promise((resolve, reject) => {
-    axios.post(api.deleteAccount+'/'+parameter).then(res => {
+    axios.post(api.deleteAccount + '/' + parameter).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)
     })
   })
 }
-//修改管理员
+// 修改管理员
 export function modifyAccount (parameter) {
   return new Promise((resolve, reject) => {
-    axios.post(api.modifyAccount,parameter).then(res => {
+    axios.post(api.modifyAccount, parameter).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)
@@ -124,10 +228,10 @@ export function modifyAccount (parameter) {
   })
 }
 
-//获取管理员详情
+// 获取管理员详情
 export function getAccountDetail (parameter) {
   return new Promise((resolve, reject) => {
-    axios.get(api.getAccountDetail+'/'+parameter,).then(res => {
+    axios.get(api.getAccountDetail + '/' + parameter).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)
@@ -135,6 +239,7 @@ export function getAccountDetail (parameter) {
   })
 }
 
+<<<<<<< HEAD
 //----------角色管理-----------
 //添加角色
 export function addRole (parameter) {
@@ -191,6 +296,9 @@ export function getRoleDetail (parameter) {
 }
 
 //--------------下面是旧的 -------------------//
+=======
+// --------------下面是旧的 -------------------//
+>>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
 export function getUserDetail (parameter) {
   return axios({
     url: api.userdetail,

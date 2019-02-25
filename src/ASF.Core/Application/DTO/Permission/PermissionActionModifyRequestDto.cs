@@ -6,7 +6,7 @@ using System.Text;
 namespace ASF.Application.DTO
 {
     /// <summary>
-    /// 修改操作权限请求
+    /// 修改功能权限请求
     /// </summary>
     public class PermissionActionModifyRequestDto : IDto
     {
@@ -15,18 +15,14 @@ namespace ASF.Application.DTO
         /// </summary>
         [Required]
         public string Id { get; set; }
-        /// <summary>
-        /// 上级权限编号
-        /// </summary>
-        [Required, MaxLength(100)]
-        public string ParentId { get; set; }
+  
         /// <summary>
         /// 名称
         /// </summary>
         [Required, MaxLength(100)]
         public string Name { get; set; }
         /// <summary>
-        /// 权限服务地址
+        /// API模板
         /// </summary>
         [Required, MaxLength(500)]
         public string ApiTemplate { get; set; }

@@ -20,6 +20,7 @@ namespace ASF.Application
     /// 账户控制器
     /// </summary>
     [Authorize]
+    [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
         private readonly IServiceProvider _serviceProvider;
@@ -122,6 +123,7 @@ namespace ASF.Application
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
+        [HttpPost]
         [Authorize(Roles = "self")]
         public async Task<Result> ModifyNameOrAvatar([FromQuery]AccountModifyNameOrAvatarRequestDto dto)
         {
@@ -335,7 +337,7 @@ namespace ASF.Application
         /// </summary>
         /// <param name="id">账号ID</param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<Result<AccountInfoDetailsResponseDto>> GetDetails([FromRoute]int id)
         {
             var account = await this._accountRepository.GetAsync(id);

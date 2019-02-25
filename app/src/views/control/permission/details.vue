@@ -113,7 +113,6 @@
     <!--</s-table>-->
   </a-card>
 </template>
-
 <script>
 import STable from '@/components/table/'
 import DetailList from '@/components/tools/DetailList'

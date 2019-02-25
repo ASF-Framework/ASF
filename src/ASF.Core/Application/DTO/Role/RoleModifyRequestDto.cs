@@ -34,7 +34,7 @@ namespace ASF.Application.DTO
         /// 分配的权限
         /// </summary>
         [Required]
-        public IList<string> Permissions { get;  set; } = new List<string>();
+        public List<string> Permissions { get;  set; } = new List<string>();
 
         public override string ToString()
         {

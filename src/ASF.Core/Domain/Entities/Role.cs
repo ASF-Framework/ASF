@@ -77,11 +77,11 @@ namespace ASF.Domain.Entities
         /// 设置分配的权限
         /// </summary>
         /// <param name="permissions">分配的权限</param>
-        public void SetPermissions(IList<string> permissions)
+        public void SetPermissions(List<string> permissions)
         {
             if (permissions == null)
                 permissions = new List<string>();
-            this.Permissions = permissions as List<string>;
+            this.Permissions = permissions ;
         }
         /// <summary>
         /// 是否包含对应的权限

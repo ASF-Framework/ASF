@@ -43,7 +43,7 @@ namespace ASF.Domain.Services
         /// <param name="createOfAccountId">创建的账户标识</param>
         /// <param name="pids">分配的角色</param>
         /// <returns></returns>
-        public async Task<Result<Role>> Create(string name, string description, int createOfAccountId, IList<string> pids)
+        public async Task<Result<Role>> Create(string name, string description, int createOfAccountId, List<string> pids)
         {
             var result = this.Create(name, description, createOfAccountId);
             if (!result.Success)

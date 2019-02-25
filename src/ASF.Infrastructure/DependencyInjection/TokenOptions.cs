@@ -11,7 +11,7 @@ namespace ASF.Infrastructure.DependencyInjection
         public static SecurityType DefaultSecurityType;
         public TokenOptions()
         {
-            this.Expires = 30;//默认30分钟
+            this.Expires = 30*4;//默认30分钟
             this.Audience = "ASF";
             this.Issuer = "ASF";
             this.DefaultScheme = "Bearer";

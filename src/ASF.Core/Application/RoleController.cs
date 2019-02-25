@@ -89,7 +89,7 @@ namespace ASF.Application
 
             //调用领域服务修改
             var modifyResult = this._serviceProvider.GetRequiredService<RoleInfoChangeService>()
-                    .Modify(dto.RoleId, dto.Name, dto.Enable, dto.Description);
+                    .Modify(dto.RoleId, dto.Name, dto.Enable, dto.Description, dto.Permissions);
             if (!modifyResult.Success)
                 return modifyResult;
 
@@ -166,7 +166,7 @@ namespace ASF.Application
                 .GetList(role.Permissions.ToList());
 
             var result = Mapper.Map<RoleInfoDetailsResponseDto>(role);
-            result.Permissions = permissions.OrderBy(f=>f.Sort).ToDictionary(k => k.Id, v => v.Name);
+            result.Permissions = permissions.OrderBy(f => f.Sort).ToDictionary(k => k.Id, v => v.Name);
             return Result<RoleInfoDetailsResponseDto>.ReSuccess(result);
         }
     }

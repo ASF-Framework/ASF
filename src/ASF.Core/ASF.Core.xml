@@ -232,7 +232,7 @@
         </member>
         <member name="P:ASF.Application.DTO.AccountInfoByLoginResponseDto.PermissionInfo.Actions">
             <summary>
-            操作集合
+            功能集合
             </summary>
         </member>
         <member name="P:ASF.Application.DTO.AccountInfoByLoginResponseDto.ActionInfo.Describe">
@@ -672,7 +672,7 @@
         </member>
         <member name="P:ASF.Application.DTO.PermissionActionModifyRequestDto.ApiTemplate">
             <summary>
-            权限服务地址
+            API模板
             </summary>
         </member>
         <member name="P:ASF.Application.DTO.PermissionActionModifyRequestDto.IsLogger">
@@ -762,7 +762,7 @@
         </member>
         <member name="P:ASF.Application.DTO.PermissionMenuInfoBaseResponseDto.Actions">
             <summary>
-            操作集合
+            功能集合
             </summary>
         </member>
         <member name="T:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto">
@@ -1222,7 +1222,6 @@
             </summary>
             <param name="username">账户</param>
             <param name="password">密码</param>
-            <param name="account">创建此账户管理员</param>
         </member>
         <member name="P:ASF.Domain.Entities.Account.Id">
             <summary>
@@ -1539,7 +1538,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:ASF.Domain.Entities.Role.SetPermissions(System.Collections.Generic.IList{System.String})">
+        <member name="M:ASF.Domain.Entities.Role.SetPermissions(System.Collections.Generic.List{System.String})">
             <summary>
             设置分配的权限
             </summary>
@@ -1777,7 +1776,6 @@
             </summary>
             <param name="pid">权限标识</param>
             <param name="name">权限名称</param>
-            <param name="parentId">分类</param>
             <param name="description">描述</param>
             <param name="enable">是否可用</param>
             <param name="apiAddress">api 地址</param>
@@ -1850,7 +1848,7 @@
             <param name="createOfAccountId">创建的账户标识</param>
             <returns></returns>
         </member>
-        <member name="M:ASF.Domain.Services.RoleCreateService.Create(System.String,System.String,System.Int32,System.Collections.Generic.IList{System.String})">
+        <member name="M:ASF.Domain.Services.RoleCreateService.Create(System.String,System.String,System.Int32,System.Collections.Generic.List{System.String})">
             <summary>
             创建角色
             </summary>
@@ -1875,7 +1873,7 @@
             <param name="description">角色描述</param>
             <returns></returns>
         </member>
-        <member name="M:ASF.Domain.Services.RoleInfoChangeService.Modify(System.Int32,System.String,System.Boolean,System.String,System.Collections.Generic.IList{System.String})">
+        <member name="M:ASF.Domain.Services.RoleInfoChangeService.Modify(System.Int32,System.String,System.Boolean,System.String,System.Collections.Generic.List{System.String})">
             <summary>
             修改角色信息
             </summary>
@@ -2019,12 +2017,12 @@
         </member>
         <member name="F:ASF.Domain.Values.PermissionType.Action">
             <summary>
-            操作行为
+            功能
             </summary>
         </member>
         <member name="F:ASF.Domain.Values.PermissionType.Menu">
             <summary>
-            导航
+            菜单
             </summary>
         </member>
         <member name="T:ASF.Domain.Values.PhoneNumber">
@@ -2231,9 +2229,9 @@
         </member>
         <member name="M:ASF.Infrastructure.Repositories.IPermissionRepository.GetListByParentId(System.String)">
             <summary>
-            根据父类获取权限集合
+            根据父类获取子级权限集合
             </summary>
-            <param name="ids"></param>
+            <param name="parentId"></param>
             <returns></returns>
         </member>
         <member name="M:ASF.Infrastructure.Repositories.IPermissionRepository.GetList">

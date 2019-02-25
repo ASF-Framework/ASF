@@ -51,7 +51,7 @@ namespace ASF.Domain.Services
         /// <param name="description">角色描述</param>
         /// <param name="pids">分配的角色</param>
         /// <returns></returns>
-        public Result<Role> Modify(int roleId, string name, bool enable, string description, IList<string> pids)
+        public Result<Role> Modify(int roleId, string name, bool enable, string description, List<string> pids)
         {
             var result = this.Modify(roleId, name, enable, description);
             if (!result.Success)

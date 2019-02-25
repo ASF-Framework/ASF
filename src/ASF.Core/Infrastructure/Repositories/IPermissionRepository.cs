@@ -26,11 +26,12 @@ namespace ASF.Infrastructure.Repositories
         /// <returns></returns>
         Task<IList<Permission>> GetList(IList<string> ids);
         /// <summary>
-        /// 根据父类获取权限集合
+        /// 根据父类获取子级权限集合
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="parentId"></param>
         /// <returns></returns>
         Task<IList<Permission>> GetListByParentId(string parentId);
+
         /// <summary>
         /// 获取所有权限集合
         /// </summary>

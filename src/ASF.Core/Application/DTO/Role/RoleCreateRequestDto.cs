@@ -22,7 +22,7 @@ namespace ASF.Application.DTO
         /// <summary>
         /// 分配的权限
         /// </summary>
-        public IList<string> Permissions { get;  set; } = new List<string>();
+        public List<string> Permissions { get;  set; } = new List<string>();
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this);

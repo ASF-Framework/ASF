@@ -161,11 +161,7 @@
           hasFeedback
           validateStatus="success"
         >
-<<<<<<< HEAD
-          <a-input placeholder="权限编码"  disabled="disabled"/>
-=======
           <a-input placeholder="权限编码" disabled="disabled"/>
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -174,11 +170,7 @@
           hasFeedback
           validateStatus="success"
         >
-<<<<<<< HEAD
-          <a-input placeholder="起一个名字" />
-=======
           <a-input placeholder="起一个名字"/>
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -193,11 +185,7 @@
           </a-select>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="描述" hasFeedback>
-<<<<<<< HEAD
-          <a-textarea :rows="5" v-model="mdl.describe" placeholder="..." />
-=======
           <a-textarea :rows="5" v-model="mdl.describe" placeholder="..."/>
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
         </a-form-item>
         <a-divider/>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予权限" hasFeedback>
@@ -227,11 +215,7 @@
           hasFeedback
           validateStatus="success"
         >
-<<<<<<< HEAD
-          <a-input placeholder="权限编码" />
-=======
           <a-input placeholder="权限编码,默认是code" v-model="addActine.code" />
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -240,11 +224,7 @@
           hasFeedback
           validateStatus="success"
         >
-<<<<<<< HEAD
-          <a-input placeholder="起一个名字" />
-=======
           <a-input placeholder="起一个名字" v-model="addActine.name"/>
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -271,15 +251,6 @@
           hasFeedback
           validateStatus="success"
         >
-<<<<<<< HEAD
-          <a-select >
-            <a-select-option value="1">启用</a-select-option>
-            <a-select-option value="0">停止</a-select-option>
-          </a-select>
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="排序" hasFeedback>
-          <a-input-number :min="1" :max="10"    />
-=======
           <a-input placeholder="权限服务地址" v-model="addActine.apiTemplate"/>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="是否日志记录">
@@ -287,7 +258,6 @@
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="排序" hasFeedback>
           <a-input-number :min="1" :max="10" v-model="addActine.sort"/>
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
         </a-form-item>
         <a-divider/>
         <a-form-item
@@ -519,21 +489,12 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-<<<<<<< HEAD
-        Vague:"",
-        Enable:-1,
-        PagedCount:10,
-        SkipPage:1,
-        IsLoad:true,
-        totalCount:0,
-=======
         Vague: '',
         Enable: -1,
         PagedCount: 10,
         SkipPage: 1,
         IsLoad: true,
         totalCount: 0
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
       },
       // 表头
       columns: [
@@ -579,17 +540,6 @@ export default {
       // 权限子级权限children:[]
       permissionchildren: {},
       // 加载数据方法 必须为 Promise 对象
-<<<<<<< HEAD
-      loadData: parameter => {    
-        return getPermissions(this.queryParam).then(res=>{    
-//           if(this.queryParam.Enable!="0")   {
-// this.queryParam.totalCount=5    
-//           }else{
-//             this.queryParam.totalCount=0    
-//           }
-          
-               return this.makePermissionList(res)
-=======
       loadData: parameter => {
         return getPermissions(this.queryParam).then(res => {
           console.log(res)
@@ -600,7 +550,6 @@ export default {
           //             this.queryParam.totalCount=0
           //           }
           return this.makePermissionList(res)
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
         })
       },
       selectedRowKeys: [],
@@ -721,15 +670,6 @@ export default {
               if (element.id === ele.parentId) {
                 result[index].children.push(ele)
               }
-<<<<<<< HEAD
-            });
-          }        
-        });
-         data.result=result;
-        
-      }    
-      console.log("Table-resource:",data)
-=======
             })
           }
         })
@@ -737,7 +677,6 @@ export default {
       }
       console.log('Table-resource:', data)
       this.dataLoad = data
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
       return data
     },
     handleBtn () {

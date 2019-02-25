@@ -4,7 +4,6 @@ const api = {
   admin: '/asf/account/getlist',
   userdetail: '/user/detail',
   role: '/asf/role/getlist',
-<<<<<<< HEAD
   addRole:'/asf/role/Create',
   editRole:'/asf/roe/Modify',
   roleAll:'/asf/role/getlistAll',
@@ -16,14 +15,6 @@ const api = {
   deleteAccount:'/asf/account/delete',
   modifyAccount:'/asf/account/midify',
   getAccountDetail:'/asf/account/GetDetails',
-=======
-  roleAll: '/asf/role/getlistAll',
-  createAccount: '/asf/account/create',
-  modifyStatusAccount: '/asf/account/midifystatus',
-  deleteAccount: '/asf/account/delete',
-  modifyAccount: '/asf/account/midify',
-  getAccountDetail: '/asf/account/GetDetails',
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
   service: '/service',
   permission: '/asf/permission/getmenulist',
   permissionAll:'/asf/permission/GetMenuAllList',
@@ -143,12 +134,6 @@ export function getActionList (parameter) {
   })
 }
 
-<<<<<<< HEAD
-//获取全部权限
-export function getPermissionAll (parameter) {
-  return new Promise((resolve, reject) => {
-    axios.get(api.permissionAll).then(res => {
-=======
 export function deleteAction (id) {
   return new Promise((resolve, reject) => {
     axios.post(api.deleteAction + `/${id}`).then(res => {
@@ -172,7 +157,6 @@ export function modifyAction (parameter) {
 export function modifySort (parameter) {
   return new Promise((resolve, reject) => {
     axios.post(api.modifySort, parameter).then(res => {
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
       resolve(res)
     }).catch(err => {
       reject(err)
@@ -180,12 +164,7 @@ export function modifySort (parameter) {
   })
 }
 
-<<<<<<< HEAD
-
-//新增管理员
-=======
 // 新增管理员
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
 export function createAccount (parameter) {
   return new Promise((resolve, reject) => {
     axios.post(api.createAccount, parameter).then(res => {
@@ -239,7 +218,6 @@ export function getAccountDetail (parameter) {
   })
 }
 
-<<<<<<< HEAD
 //----------角色管理-----------
 //添加角色
 export function addRole (parameter) {
@@ -296,9 +274,6 @@ export function getRoleDetail (parameter) {
 }
 
 //--------------下面是旧的 -------------------//
-=======
-// --------------下面是旧的 -------------------//
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
 export function getUserDetail (parameter) {
   return axios({
     url: api.userdetail,

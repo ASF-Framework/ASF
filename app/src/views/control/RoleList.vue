@@ -6,12 +6,12 @@
           <a-col :md="8" :sm="24">
             <a-tooltip>
               <template slot="title">新增角色</template>
-              <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px"></a-button>
+              <a-button type="primary" icon="plus" @click="$refs.modal.add()" style="margin-right:10px"></a-button>
             </a-tooltip>
             <a-radio-group defaultValue="-1" v-model="queryParam.Enable" buttonStyle="solid" @change="$refs.table.refresh(true)">
               <a-radio-button value="-1">全部</a-radio-button>
               <a-radio-button value="1">启用</a-radio-button>
-              <a-radio-button value="2">停用</a-radio-button>
+              <a-radio-button value="0">停用</a-radio-button>
             </a-radio-group>
           </a-col>
           <a-col
@@ -38,7 +38,8 @@
         </a-row>
       </a-form>
     </div>
-    <s-table ref="table" size="default" :columns="columns" :data="loadData">
+    <s-table ref="table" size="default" :columns="columns" :data="loadData">     
+      <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.modal.edit(record)">编辑</a>
         <a-divider type="vertical"/>
@@ -51,10 +52,10 @@
               <a href="javascript:;">详情</a>
             </a-menu-item>
             <a-menu-item>
-              <a href="javascript:;">禁用</a>
+              <a href="javascript:;" @click="handleStatus(record)">{{ShowStatus(record.enable)}}</a>
             </a-menu-item>
             <a-menu-item>
-              <a href="javascript:;">删除</a>
+              <a href="javascript:;" @click="handleDelete(record.id)">删除</a>
             </a-menu-item>
           </a-menu>
         </a-dropdown>
@@ -67,7 +68,7 @@
 <script>
 import STable from '@/components/table/'
 import RoleModal from './modules/RoleModal'
-import { getRoleList } from '@/api/manage'
+  import {    getRoleList,modifyStatusRole,deleteRole  } from '@/api/manage'
 export default {
   name: 'TableList',
   components: {
@@ -79,6 +80,7 @@ export default {
       description:
         '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
       visible: false,
+      visibleAdd :false,
       form: null,
       mdl: {},
       // 高级搜索 展开/关闭
@@ -94,7 +96,8 @@ export default {
       columns: [
         {
           title: '唯一识别码',
-          dataIndex: 'id'
+          dataIndex: 'id',
+          sorter: true
         },
         {
           title: '角色名称',
@@ -102,12 +105,19 @@ export default {
         },
         {
           title: '状态',
-          dataIndex: 'status'
+          dataIndex: 'enable',
+           scopedSlots: {
+            customRender: 'enable'
+          }
+        },
+        {
+          title: '描述',
+          dataIndex: 'description',
         },
         {
           title: '创建时间',
           dataIndex: 'createTime',
-          sorter: true
+          sorter: false
         },
         {
           title: '操作',
@@ -120,18 +130,43 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: () => {
-        return getRoleList(this.queryParam).then(res => {
-          const data = Object.assign(res, this.queryParam)
+        return getRoleList(this.queryParam).then(res=>{
+          console.log("Roles:",res)
+           let data =Object.assign(res,this.queryParam)
           return data
         })
       },
       selectedRowKeys: [],
-      selectedRows: []
+      selectedRows: [],
+      status: [{
+            value: -1,
+            label: "全部"
+          },
+          {
+            value: 1,
+            label: "启用"
+          },
+          {
+            value: 0,
+            label: "禁用"
+          }
+      ]
+    }
+  },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {        
+        1: '启用',
+        0: '禁用'
+      }
+      return statusMap[status?1:0]
     }
   },
   methods: {
-    handleAdd () {},
-    handleEdit (record) {
+    handleAdd() {
+       this.visibleAdd = true
+    },
+    handleEdit(record) {
       this.mdl = Object.assign({}, record)
       this.mdl.permissions.forEach(permission => {
         permission.actionsOptions = permission.actionEntitySet.map(action => {
@@ -147,9 +182,74 @@ export default {
     },
     handleOk () {
       // 新增/修改 成功时，重载列表
-      this.$refs.table.refresh()
+      this.$refs.table.refresh(true)
     },
-    onChange (selectedRowKeys, selectedRows) {
+     //显示状态
+      ShowStatus(value) {
+        let retValue = "";
+        this.status.forEach(function(opt) {
+          if (opt.value != value) {
+            retValue = opt.label;
+          }
+        });
+        return retValue;
+      },
+      //返回item状态的其它状态
+      ReturnStatus(value){
+        let retValue = "";
+        this.status.forEach(function(opt) {
+          if (opt.value != value) {
+            retValue = opt.value;
+          }
+        });
+        return retValue;
+      },
+     //禁用/启用方法
+      handleStatus(item){
+        
+        const that = this
+        let par={};
+        par.RoleId=item.id
+        par.Enable=this.ReturnStatus(item.enable)
+        let text=this.ShowStatus(item.enable)
+        console.log(par)
+        that.$confirm({
+          title: '提示',
+          content: '确定要修改角色状态为'+text+'吗 ?',
+          onOk() {
+            modifyStatusRole(par).then(res=>{
+              if(res.status==200){
+                 that.$refs.table.refresh(true)
+                 that.$message.success('修改成功')
+              }else{
+                that.$message.error(res.message)
+              }
+            })
+          },
+          onCancel() {}
+        })
+      },
+      //删除
+      handleDelete(id) {
+        const that = this
+        this.$confirm({
+          title: '提示',
+          content: '确定要删除吗 ?',
+          onOk() {
+           deleteRole(id).then(res=>{
+             if(res.status==200){
+               that.$refs.table.refresh(true)
+               that.$message.success('删除成功')
+             }else{
+               that.$message.error(res.message)
+             }
+           })
+            
+          },
+          onCancel() {}
+        })
+      },
+    onChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },

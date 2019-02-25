@@ -4,14 +4,20 @@ const api = {
   admin: '/asf/account/getlist',
   userdetail: '/user/detail',
   role: '/asf/role/getlist',
-  roleAll: '/asf/role/getlistAll',
-  createAccount: '/asf/account/create',
-  modifyStatusAccount: '/asf/account/midifystatus',
-  deleteAccount: '/asf/account/delete',
-  modifyAccount: '/asf/account/midify',
-  getAccountDetail: '/asf/account/GetDetails',
+  addRole:'/asf/role/Create',
+  editRole:'/asf/roe/Modify',
+  roleAll:'/asf/role/getlistAll',
+  modifyStatusRole:'/asf/role/ModifyStatus',
+  deleteRole:'/asf/role/delete',
+  getRoleDetail:'/asf/role/GetDetails',
+  createAccount:'/asf/account/create',
+  modifyStatusAccount:'/asf/account/midifystatus',
+  deleteAccount:'/asf/account/delete',
+  modifyAccount:'/asf/account/midify',
+  getAccountDetail:'/asf/account/GetDetails',
   service: '/service',
   permission: '/asf/permission/getmenulist',
+  permissionAll:'/asf/permission/GetMenuAllList',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
   getActionDetails: '/asf/Permission/GetActionDetails',
@@ -212,7 +218,62 @@ export function getAccountDetail (parameter) {
   })
 }
 
-// --------------下面是旧的 -------------------//
+//----------角色管理-----------
+//添加角色
+export function addRole (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.addRole,parameter,).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+//修改角色状态
+export function modifyStatusRole (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.modifyStatusRole, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+//删除角色
+export function deleteRole (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.deleteRole+'/'+parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+//编辑角色
+export function editRole (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.editRole,parameter,).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+//获取角色详情
+export function getRoleDetail (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.get(api.getRoleDetail+'/'+parameter,).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+//--------------下面是旧的 -------------------//
 export function getUserDetail (parameter) {
   return axios({
     url: api.userdetail,

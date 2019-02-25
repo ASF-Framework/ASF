@@ -46,14 +46,11 @@ namespace ASF.Domain.Services
                     string parentId = permission.ParentId;
                     while (true)
                     {
+                        await Task.Delay(1);
                         //如果没有父级停止循环
                         if (string.IsNullOrEmpty(parentId))
                             break;
-
-                        if (!pids.Contains(parentId))
-                        {
-                            continue;
-                        }
+             
                         var parent = await _permissionRepository.GetAsync(parentId);
                         if (parent == null)
                             break;

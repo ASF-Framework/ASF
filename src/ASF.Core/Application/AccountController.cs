@@ -184,6 +184,22 @@ namespace ASF.Application
                 });
             return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
         }
+        /// <summary>
+        /// 获取登录账户基本信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Roles = "self")]
+        public async Task<Result<AccountInfoBaseResponseDto>> Get()
+        {
+            int uid = this.User.UserId();
+            var account = await this._serviceProvider.GetRequiredService<IAccountRepository>().GetAsync(uid);
+            if (account == null)
+                return Result<AccountInfoBaseResponseDto>.ReFailure(ResultCodes.AccountNotExist);
+
+            var result = Mapper.Map<AccountInfoDetailsResponseDto>(account);
+            return Result<AccountInfoBaseResponseDto>.ReSuccess(result);
+        }
 
         /// <summary>
         /// 创建账号

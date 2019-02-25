@@ -41,7 +41,7 @@
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
-        </a-tab-pane>        
+        </a-tab-pane>
       </a-tabs>
       <a-form-item style="margin-top:24px">
         <a-button
@@ -166,7 +166,7 @@ export default {
         }
       })
     },
-    //手机登录获取验证码
+    // 手机登录获取验证码
     getCaptcha (e) {
       e.preventDefault()
       const { form: { validateFields }, state } = this

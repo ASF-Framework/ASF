@@ -38,12 +38,8 @@
         </a-row>
       </a-form>
     </div>
-<<<<<<< HEAD
     <s-table ref="table" size="default" :columns="columns" :data="loadData">     
       <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
-=======
-    <s-table ref="table" size="default" :columns="columns" :data="loadData">
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.modal.edit(record)">编辑</a>
         <a-divider type="vertical"/>
@@ -72,11 +68,7 @@
 <script>
 import STable from '@/components/table/'
 import RoleModal from './modules/RoleModal'
-<<<<<<< HEAD
   import {    getRoleList,modifyStatusRole,deleteRole  } from '@/api/manage'
-=======
-import { getRoleList } from '@/api/manage'
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
 export default {
   name: 'TableList',
   components: {
@@ -138,14 +130,9 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: () => {
-<<<<<<< HEAD
         return getRoleList(this.queryParam).then(res=>{
           console.log("Roles:",res)
            let data =Object.assign(res,this.queryParam)
-=======
-        return getRoleList(this.queryParam).then(res => {
-          const data = Object.assign(res, this.queryParam)
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
           return data
         })
       },
@@ -176,15 +163,10 @@ export default {
     }
   },
   methods: {
-<<<<<<< HEAD
     handleAdd() {
        this.visibleAdd = true
     },
     handleEdit(record) {
-=======
-    handleAdd () {},
-    handleEdit (record) {
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
       this.mdl = Object.assign({}, record)
       this.mdl.permissions.forEach(permission => {
         permission.actionsOptions = permission.actionEntitySet.map(action => {
@@ -202,7 +184,6 @@ export default {
       // 新增/修改 成功时，重载列表
       this.$refs.table.refresh(true)
     },
-<<<<<<< HEAD
      //显示状态
       ShowStatus(value) {
         let retValue = "";
@@ -269,9 +250,6 @@ export default {
         })
       },
     onChange(selectedRowKeys, selectedRows) {
-=======
-    onChange (selectedRowKeys, selectedRows) {
->>>>>>> 053153383f7ef70d55034f2e9988c2122c9e8299
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },

@@ -108,7 +108,7 @@
           hasFeedback
           validateStatus="success"
         >
-          <a-input placeholder="权限编码" v-model="mdl.id" id="no" disabled="disabled"/>
+          <a-input placeholder="权限编码"  disabled="disabled"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -117,7 +117,7 @@
           hasFeedback
           validateStatus="success"
         >
-          <a-input placeholder="起一个名字" v-model="mdl.name" id="permission_name"/>
+          <a-input placeholder="起一个名字" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -132,7 +132,7 @@
           </a-select>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="描述" hasFeedback>
-          <a-textarea :rows="5" v-model="mdl.describe" placeholder="..." id="describe"/>
+          <a-textarea :rows="5" v-model="mdl.describe" placeholder="..." />
         </a-form-item>
         <a-divider/>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予权限" hasFeedback>
@@ -155,7 +155,7 @@
           hasFeedback
           validateStatus="success"
         >
-          <a-input placeholder="权限编码" v-model="form.id"/>
+          <a-input placeholder="权限编码" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -164,7 +164,7 @@
           hasFeedback
           validateStatus="success"
         >
-          <a-input placeholder="起一个名字" v-model="form.name"/>
+          <a-input placeholder="起一个名字" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -173,13 +173,13 @@
           hasFeedback
           validateStatus="warning"
         >
-          <a-select v-model="form.enable">
+          <a-select >
             <a-select-option value="1">启用</a-select-option>
             <a-select-option value="0">停止</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="排序" hasFeedback>
-          <a-input-number :min="1" :max="10"  v-model="form.sort"  />
+          <a-input-number :min="1" :max="10"    />
         </a-form-item>
         <a-divider/>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予操作权限" hasFeedback>
@@ -244,7 +244,8 @@ export default {
         Enable:-1,
         PagedCount:10,
         SkipPage:1,
-        IsLoad:true
+        IsLoad:true,
+        totalCount:0,
       },
       // 表头
       columns: [
@@ -294,7 +295,13 @@ export default {
       },
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {    
-        return getPermissions(this.queryParam).then(res=>{           
+        return getPermissions(this.queryParam).then(res=>{    
+//           if(this.queryParam.Enable!="0")   {
+// this.queryParam.totalCount=5    
+//           }else{
+//             this.queryParam.totalCount=0    
+//           }
+          
                return this.makePermissionList(res)
         })
       },
@@ -331,8 +338,9 @@ export default {
           }        
         });
          data.result=result;
-        console.log("Table-resource:",data)
+        
       }    
+      console.log("Table-resource:",data)
       return data
     },
     handleBtn(){

@@ -307,7 +307,6 @@
             let data = Object.assign(res, this.queryParam)
             this.total = res.totalCount
             this.userList = res.result
-            console.log("this.userList:",this.userList)
         })
       },
       formatIsDelete(value) {

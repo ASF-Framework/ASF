@@ -224,10 +224,8 @@ export default {
     },
     handleSubmit (e) {
       e.preventDefault()
-      // this.visibleContrl = true
       const obj = this.controlFrom
       modifyAction(obj).then(res => {
-      // console.log(res)
         if (res.status === 200) {
           this.visibleContrl = !this.visibleContrl
         } else {
@@ -247,13 +245,19 @@ export default {
         okType: 'danger',
         cancelText: '取消',
         onOk () {
-          console.log(index)
           deleteAction(id).then(res => {
             console.log(res)
             if (res.status === 200) {
+              this.$notification.open({
+                message: '温馨提醒！',
+                description: '您的内容删除成功！',
+                onClick: () => {
+                }
+              })
               // 重新请求数据
-              // this.$refs.table.refresh(true)
-              this.tableDetails.splice(index, 1)
+              setTimeout(() => {
+                this.tableDetails.splice(index, 1)
+              }, 1000)
             }
           })
         },

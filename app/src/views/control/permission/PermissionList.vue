@@ -285,7 +285,7 @@
       v-model="addNevigate"
       @ok="addNevigateView"
     >
-      <a-form :autoFormCreate="(form)=>{this.form = form}">
+      <a-form>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -316,7 +316,7 @@
             </span>
             <a-menu slot="overlay">
               <a-sub-menu v-for="(items,index) in dataLoad.result" :key="index" :title="items.name">
-                <a-menu-item v-for="(list,index) in items.children" :key="index" @click="actionTrigger(index, list.id)">{{ list.name }}</a-menu-item>
+                <a-menu-item v-for="(list,index) in items.children" :key="index" @click="nevigateTrigger(index, list.id)">{{ list.name }}</a-menu-item>
               </a-sub-menu>
             </a-menu>
           </a-dropdown>
@@ -489,6 +489,9 @@ export default {
   methods: {
     actionTrigger (index, id) {
       this.addActine.parentId = id
+    },
+    nevigateTrigger (index, id) {
+      this.addNevigateData.parentId = id
     },
     NevigateView () {
       this.addNevigate = true

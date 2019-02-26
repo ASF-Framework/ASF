@@ -120,6 +120,15 @@ export const asyncRouterMap = [
                 }
               }
             ]
+          },
+          {
+            path: '/control/log/Logger',
+            name: 'Logtable',
+            component: () => import('@/views/control/log/Logger'),
+            meta: {
+              title: '日志管理',
+              permission: ['asf']
+            }
           }
           // {
           //   path: '/control/permission',

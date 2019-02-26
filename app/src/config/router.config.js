@@ -121,6 +121,7 @@ export const asyncRouterMap = [
               }
             ]
           },
+          // 日志管理
           {
             path: '/control/log/Logger',
             name: 'Logtable',

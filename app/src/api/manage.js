@@ -28,7 +28,9 @@ const api = {
   getActionList: '/asf/Permission/GetActionList',
   deleteAction: '/asf/Permission/Delete',
   CreateAction: '/asf/Permission/CreateAction',
-  CreateMenu: '/asf/Permission/CreateMenu'
+  CreateMenu: '/asf/Permission/CreateMenu',
+  getLogger: '/asf/Logger/GetList',
+  loggerDelete: 'asf/Logger/Delete'
 }
 
 export default api
@@ -168,6 +170,26 @@ export function modifySort (parameter) {
 export function createAccount (parameter) {
   return new Promise((resolve, reject) => {
     axios.post(api.createAccount, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+// 获取日志集合
+export function getLogger (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.getLogger, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+// 根据日期删除日志
+export function loggerDelete (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.loggerDelete, parameter).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)

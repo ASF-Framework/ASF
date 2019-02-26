@@ -43,6 +43,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:ASF.Application.AccountController.Get">
+            <summary>
+            获取登录账户基本信息
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:ASF.Application.AccountController.Create(ASF.Application.DTO.AccountCreateRequestDto)">
             <summary>
             创建账号

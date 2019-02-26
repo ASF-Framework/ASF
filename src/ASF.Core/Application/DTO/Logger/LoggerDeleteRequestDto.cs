@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ASF.Application.DTO
@@ -12,11 +14,13 @@ namespace ASF.Application.DTO
         /// 开始时间
         /// </summary>
         [Required]
+        [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime? BeginTime { get; set; }
         /// <summary>
         /// 结束时间
         /// </summary>
         [Required]
+        [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime? EndTime { get; set; }
 
        

@@ -125,7 +125,7 @@ namespace ASF.Application
         /// <returns></returns>
         [HttpPost]
         [Authorize(Roles = "self")]
-        public async Task<Result> ModifyNameOrAvatar([FromQuery]AccountModifyNameOrAvatarRequestDto dto)
+        public async Task<Result> ModifyNameOrAvatar([FromBody]AccountModifyNameOrAvatarRequestDto dto)
         {
             //验证请求数据合法性
             var result = dto.Valid();

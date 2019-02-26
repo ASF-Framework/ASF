@@ -14,10 +14,14 @@
       :columns="DetalisColumns"
       :dataSource="tableDetails"
       :pagination="false"
+      ref="table"
     >
       <span slot="isSystem" slot-scope="text"> {{ text | statusIsSystem }}</span>
       <span slot="isLogger" slot-scope="text"> {{ text | statusIsSystem }}</span>
       <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
+      <span slot="sort" slot-scope="text, record">
+        <editable-cell :text="text" ref="sortDom" @handleChange="editSortInput" @change="handerChange" @editBlurInput="handerChange( record, text)"/>
+      </span>
       <span slot="action" slot-scope="text, record, index">
         <!--<a @click="handleEdit(record)">编辑</a>-->
         <a @click="handerContrl('222', record.id)" v-if="!record.isSystem">编辑</a>
@@ -95,10 +99,11 @@
   </a-card>
 </template>
 <script>
+import EditableCell from '@/components/EditCell/EditableCell'
 import STable from '@/components/table/'
 import DetailList from '@/components/tools/DetailList'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
-import { getActionDetails, modifyAction, getMenuDetails, getActionList, deleteAction } from '@/api/manage'
+import { getActionDetails, modifyAction, getMenuDetails, getActionList, deleteAction, modifySort } from '@/api/manage'
 const DetailListItem = DetailList.Item
 const DetalisColumns = [
   {
@@ -155,7 +160,8 @@ export default {
     AFormItem,
     DetailList,
     DetailListItem,
-    STable
+    STable,
+    EditableCell
   },
   data () {
     return {
@@ -193,17 +199,7 @@ export default {
     }
   },
   created () {
-    getMenuDetails(this.$route.query.data).then(res => {
-      this.menuDetails = res.result
-      const obj = {
-        vague: '',
-        enable: '-1',
-        paramId: res.result.id
-      }
-      getActionList(obj).then(data => {
-        this.tableDetails = data.result
-      })
-    })
+    this.getData()
   },
   computed: {
     title () {
@@ -211,6 +207,42 @@ export default {
     }
   },
   methods: {
+    getData () {
+      getMenuDetails(this.$route.query.data).then(res => {
+        this.menuDetails = res.result
+        const obj = {
+          vague: '',
+          enable: '-1',
+          paramId: res.result.id
+        }
+        getActionList(obj).then(data => {
+          const list = data.result
+          for (const i in data.result) {
+            list[i].key = list[i].id
+          }
+          // console.log(list)
+          this.tableDetails = list
+        })
+      })
+    },
+    // 修改排序input，input失去焦点或者按Enter键触发此函数
+    handerChange (record, text) {
+      console.log(record, text)
+      const parameter = {
+        id: record.id,
+        sort: this.editSort
+      }
+      modifySort(parameter).then(res => {
+        if (res.status === 200) {
+          // 重新请求数据
+          this.getData()
+        }
+      })
+    },
+    editSortInput (e) {
+      this.editSort = e
+      console.log(e)
+    },
     handerContrl (action, key) {
       console.log(key)
       this.visibleContrl = true
@@ -238,6 +270,7 @@ export default {
       })
     },
     editDelete (id, index) {
+      const that = this
       this.$confirm({
         title: '您确定要删除此权限？',
         content: '删除权限！',
@@ -247,17 +280,14 @@ export default {
         onOk () {
           deleteAction(id).then(res => {
             console.log(res)
-            if (res.status === 200) {
-              this.$notification.open({
-                message: '温馨提醒！',
-                description: '您的内容删除成功！',
-                onClick: () => {
-                }
-              })
-              // 重新请求数据
-              setTimeout(() => {
-                this.tableDetails.splice(index, 1)
-              }, 1000)
+            if (res.message === 'Success') {
+              // this.$notification.open({
+              //   message: '温馨提醒！',
+              //   description: '您的内容删除成功！',
+              //   onClick: () => {
+              //   }
+              // })
+              that.getData()
             }
           })
         },

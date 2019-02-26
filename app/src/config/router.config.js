@@ -123,9 +123,9 @@ export const asyncRouterMap = [
           },
           // 日志管理
           {
-            path: '/control/log/Logger',
+            path: '/control/Logger',
             name: 'Logtable',
-            component: () => import('@/views/control/log/Logger'),
+            component: () => import('@/views/control/Logger'),
             meta: {
               title: '日志管理',
               permission: ['asf']

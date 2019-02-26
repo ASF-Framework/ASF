@@ -1,9 +1,6 @@
 ﻿using ASF.Domain.Entities;
 using ASF.Domain.Values;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace ASF.Application.DTO
 {
@@ -15,7 +12,7 @@ namespace ASF.Application.DTO
         /// <summary>
         /// 权限代码
         /// </summary>
-        [Required]
+        [Required, MaxLength(10)]
         public string Code { get;  set; }
         /// <summary>
         /// 上级权限编号

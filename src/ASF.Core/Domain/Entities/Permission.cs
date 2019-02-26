@@ -36,7 +36,7 @@ namespace ASF.Domain.Entities
         /// <summary>
         /// 权限代码
         /// </summary>
-        [Required]
+        [Required, MaxLength(10)]
         public string Code { get; private set; }
         /// <summary>
         /// 上级权限编号

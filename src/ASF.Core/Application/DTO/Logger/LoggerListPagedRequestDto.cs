@@ -11,16 +11,16 @@ namespace ASF.Application.DTO
         /// <summary>
         /// 标题
         /// </summary>
-        [Required, MaxLength(200)]
+        [MaxLength(200)]
         public string Subject { get; set; }
         /// <summary>
         /// 操作账号 操作账户ID 和 操作账号
         /// </summary>
+        [MaxLength(200)]
         public string Account { get;  set; }
         /// <summary>
         /// 日志类型 -1 全部，1:登录日志  2:操作日志
         /// </summary>
-        [Required]
         public int Type { get; set; } = -1;
         /// <summary>
         /// 开始时间

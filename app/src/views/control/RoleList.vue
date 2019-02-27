@@ -8,7 +8,7 @@
               <template slot="title">新增角色</template>
               <a-button type="primary" icon="plus" @click="$refs.modal.add()" style="margin-right:10px"></a-button>
             </a-tooltip>
-             <a-radio-group defaultValue="-1" v-model="queryParam.Enable"  buttonStyle="solid" @change="loadDataList()">
+             <a-radio-group defaultValue="-1" v-model="queryParam.Enable"  buttonStyle="solid" @change="handleSearch()">
               <a-radio-button value="-1">全部</a-radio-button>
               <a-radio-button value="1">启用</a-radio-button>
               <a-radio-button value="0">停用</a-radio-button>
@@ -26,7 +26,7 @@
               <a-button-group>
                 <a-tooltip>
                   <template slot="title">查询</template>
-                  <a-button type="primary" icon="search" @click="loadDataList()"></a-button>
+                  <a-button type="primary" icon="search" @click="handleSearch()"></a-button>
                 </a-tooltip>
                 <a-tooltip>
                   <template slot="title">清除查询条件</template>
@@ -229,6 +229,14 @@ export default {
         onCancel() {}
       })
     },   
+    //查询数据
+    handleSearch(){
+      //当有条件查询时查询页码必须等于1，后端才会从第一页数据开始查询并返回数据
+        if(this.queryParam.Vague!='' || this.queryParam.enable!=-1){
+          this.queryParam.skipPage=1
+        }
+        this.loadDataList()
+    },
     //加载数据
     loadDataList(){
       const _this=this

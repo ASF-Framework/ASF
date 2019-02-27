@@ -1,7 +1,7 @@
 <template>
   <a-card :bordered="false">
     <div class="table-page-search-wrapper">
-      <a-form layout="inline" :model="filters">
+      <a-form layout="inline" :model="queryParam">
         <a-row :gutter="0">
           <a-col :md="12" :sm="24">
             <a-tooltip>
@@ -166,9 +166,6 @@
         visibleEdit: false,
         visibleAdd: false,
         loadingAdd: false,
-        filters: {
-          name: ''
-        },
         labelCol: {
           xs: {
             span: 24
@@ -219,8 +216,14 @@
           onChange:(page)=>{
             this.handleChange(page)
           },
+          onShowSizeChange:(current,pageSize)=>{
+            this.handleChangePageSize(current,pageSize)
+          },
+          showSizeChanger:true,
           pageSizeOptions:['10','20','40','50'],
           showSizeChanger:true,
+          current: 1,
+          pageSize: 10,
           total:0
         },
       }
@@ -308,16 +311,21 @@
       },
       //查询
       handleSearch(){
-         this.makeList()
+        //当有条件查询时查询页码必须等于1，后端才会从第一页数据开始查询并返回数据
+        if(this.queryParam.Vague!='' || this.queryParam.Status!=-1){
+          this.queryParam.SkipPage=1
+        }
+        this.makeList()
       },
       //获取列表K
       makeList(){
         const _this=this
          getAdminList(this.queryParam).then(res => {
-          console.log(1111,this.queryParam)
+          console.log(1111,this.queryParam,res)
           let data = Object.assign(res, _this.queryParam)
           _this.userList = res.result
           const pager={... _this.pagination}
+          console.log("1111--pager:",pager)
           pager.total=res.totalCount
           _this.pagination=pager
         })
@@ -387,12 +395,18 @@
            }
          })
       },
+      //改变显示条数加载数据
+      handleChangePageSize(current,pageSize){
+        this.pagination.current=current
+        this.pagination.pageSize=pageSize
+        this.queryParam.SkipPage=current
+        this.queryParam.PagedCount=pageSize
+        this.makeList()
+      },
       //点击页码加载数据
       handleChange(page) {
-        const pager={... this.pagination}
-         pager.current=page
-         this.queryParam.SkipPage=pager.current
-         this.queryParam.PagedCount=pager.pageSize
+        this.pagination.current=page
+         this.queryParam.SkipPage=page
          this.makeList()
       },
     },

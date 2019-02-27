@@ -39,6 +39,7 @@
       </a-form>
     </div>
     <a-table
+      :loading="true"
       ref="table"
       :columns="columns"
       :dataSource="loadData"
@@ -620,7 +621,7 @@ export default {
       modifySort(parameter).then(res => {
         if (res.status === 200) {
           // 重新请求数据
-          this.$refs.table.refresh(true)
+          this.loadDataing()
         }
       })
     },

@@ -40,7 +40,11 @@ export default {
     handleChange (e) {
       const value = e.target.value
       this.value = value
-      this.$emit('handleChange', this.value)
+      if (value !== '') {
+        this.$emit('handleChange', this.value)
+      } else {
+        this.$emit('handleChange', '99')
+      }
     },
     check () {
       this.editable = false

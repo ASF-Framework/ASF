@@ -39,7 +39,6 @@
       </a-form>
     </div>
     <a-table
-      :loading="true"
       ref="table"
       :columns="columns"
       :dataSource="loadData"
@@ -56,7 +55,7 @@
       </span>
       <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
       <span slot="sort" slot-scope="text, record">
-        <editable-cell :text="text" ref="sortDom" @handleChange="editSortInput" @change="handerChange" @editBlurInput="handerChange(record)"/>
+        <editable-cell :text="text" ref="sortDom" @handleChange="editSortInput" @change="handerChange(record)" @editBlurInput="handerChange(record)"/>
       </span>
       <span slot="action" slot-scope="text, record">
         <!--<a @click="handleEdit(record)">编辑</a>-->
@@ -614,6 +613,9 @@ export default {
     // 修改排序input，input失去焦点或者按Enter键触发此函数
     handerChange (record) {
       console.log(record)
+      if (this.editSort === '') {
+        this.editSort = 99
+      }
       const parameter = {
         id: record.id,
         sort: this.editSort

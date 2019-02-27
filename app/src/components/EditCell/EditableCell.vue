@@ -38,13 +38,8 @@ export default {
     editFocus () {
     },
     handleChange (e) {
-      const value = e.target.value
-      this.value = value
-      if (value !== '') {
-        this.$emit('handleChange', this.value)
-      } else {
-        this.$emit('handleChange', '99')
-      }
+      this.value = e.target.value
+      this.$emit('handleChange', this.value)
     },
     check () {
       this.editable = false

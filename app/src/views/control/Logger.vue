@@ -14,7 +14,7 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-item label="操作账号">
-              <a-input placeholder="请输入操作账号'" v-model="tableParam.account" />
+              <a-input placeholder="请输入操作账号" v-model="tableParam.account" />
             </a-form-item>
           </a-col>
           <template v-if="advanced">
@@ -102,7 +102,7 @@
       :alert="{ show: true, clear: true }"
       @change="handleTableChange"
     >
-      <span slot="addTime" slot-scope="text">{{ text | dayFormat }}</span>
+      <span slot="addTime" slot-scope="text">{{ text | dayFormat('YYYY-MM-DD HH:mm:ss') }}</span>
     </a-table>
     <a-modal title="编辑" :width="1000" v-model="visible" @ok="handleOk">
       <a-form
@@ -156,11 +156,18 @@ export default {
       columns: [
         {
           title: '日志编号',
-          dataIndex: 'id'
+          dataIndex: 'id',
+          key: 'id'
+        },
+        {
+          title: '操作名称',
+          dataIndex: 'subject',
+          key: 'subject'
         },
         {
           title: '操作账户昵称',
-          dataIndex: 'accountName'
+          dataIndex: 'accountName',
+          key: 'accountName'
         },
         // {
         //   title: '日志类型',
@@ -168,26 +175,29 @@ export default {
         // },
         {
           title: '日志类型',
-          dataIndex: 'type'
+          dataIndex: 'type',
+          key: 'type'
         },
         {
           title: '日志记录时间',
           dataIndex: 'addTime',
           scopedSlots: {
             customRender: 'addTime'
-          }
+          },
+          key: 'addTime'
         },
         {
-          title: '日志记录时间',
-          dataIndex: 'apiAddress'
+          title: 'API请求数据',
+          dataIndex: 'apiAddress',
+          key: 'apiAddress'
         },
         {
           title: '备注',
           dataIndex: 'remark',
-          scopedSlots: { customRender: 'remark' }
+          scopedSlots: { customRender: 'remark' },
+          key: 'remark'
         }
       ],
-      // 加载数据方法 必须为 Promise 对象
       loadData: [],
       pagination: {
         pageSizeOptions: ['10', '20', '30', '40', '50'],
@@ -271,7 +281,12 @@ export default {
         // pagination.total = data.totalCount;
         pagination.total = data.totalCount
         this.loading = false
-        this.loadData = data.result
+        const list = data.result
+        for (const i in data.result) {
+          list[i].key = list[i].id
+        }
+        console.log(list)
+        this.loadData = list
         this.pagination = pagination
       })
     },

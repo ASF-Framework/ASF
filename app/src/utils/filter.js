@@ -19,7 +19,7 @@ Vue.filter('moment', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
   return moment(dataStr).format(pattern)
 })
 // 时间戳格式化
-Vue.filter('dayFormat', function (dataStr, pattern = 'YYYY-MM-DD') {
+Vue.filter('dayFormat', function (dataStr, pattern) {
   if (!dataStr) return ''
   const date = dataStr.toString().length
   if (date === 10) {

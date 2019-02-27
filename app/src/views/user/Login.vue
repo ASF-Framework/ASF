@@ -107,13 +107,13 @@ export default {
     }
   },
   created () {
-    get2step({ })
-      .then(res => {
-        this.requiredTwoStepCaptcha = res.result.stepCode
-      })
-      .catch(() => {
-        this.requiredTwoStepCaptcha = false
-      })
+    // get2step({ })
+    //   .then(res => {
+    //     this.requiredTwoStepCaptcha = res.result.stepCode
+    //   })
+    //   .catch(() => {
+    //     this.requiredTwoStepCaptcha = false
+    //   })
     // this.requiredTwoStepCaptcha = true
   },
   methods: {
@@ -133,6 +133,7 @@ export default {
       this.customActiveKey = key
       // this.form.resetFields()
     },
+    //登录提交方法
     handleSubmit (e) {
       e.preventDefault()
       const {
@@ -141,14 +142,10 @@ export default {
         customActiveKey,
         Login
       } = this
-
       state.loginBtn = true
-
       const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
-
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          console.log('login form', values)
           const loginParams = { ...values }
           delete loginParams.username
           loginParams[!state.loginType ? 'email' : 'username'] = values.username
@@ -210,8 +207,8 @@ export default {
         this.stepCaptchaVisible = false
       })
     },
-    loginSuccess (res) {
-      console.log(111111111)
+    //登录成功后
+    loginSuccess (res) {      
       this.$router.push({ name: 'dashboard' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {

@@ -659,22 +659,24 @@ export default {
       })
     },
     makePermissionList (res) {
-      const result = []
+      const result1 = []
       const data = Object.assign(res, this.queryParam)
-      if (this.queryParam.Vague === '' && this.queryParam.Enable === -1) {
-        data.result.forEach((element, index) => {
-          if (element.parentId === '' || element.parentId === ' ') {
-            result.push(element)
-            result[index].children = []
-            data.result.forEach(ele => {
-              if (element.id === ele.parentId) {
-                result[index].children.push(ele)
+      console.log(data)
+      // if (this.queryParam.Vague === '' && this.queryParam.Enable === -1) {
+       data.result.forEach((element, index) => {
+           if (element.parentId === '') {
+             result1.push(element)
+              element.children = []
+              for(let i in data.result){
+              if (element.id === data.result[i].parentId) {
+                 element.children.push(data.result[i])
+                console.log(element,data.result[i])
               }
-            })
-          }
-        })
-        data.result = result
-      }
+              }            
+           }    
+      })
+
+         data.result = result1
       console.log('Table-resource:', data)
       this.dataLoad = data
       return data

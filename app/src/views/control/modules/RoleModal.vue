@@ -38,17 +38,23 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="拥有权限"
           :colon="false"
           hasFeedback
-        ></a-form-item>        
+        >
+        <span slot="label">
+        拥有权限&nbsp;
+        <a-tooltip>
+          <a-icon type="check-square" />
+        </a-tooltip>
+      </span>
+        </a-form-item>        
         <a-divider style="margin:0"/>      
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol"  style="margin-left:135px">
-           <a-row :gutter="18"  v-for="(permission, index) in permissions" :key="index">
-            <a-col :span="6">
+ 
+           <a-row :gutter="16" class="row" v-for="(permission, index) in permissions" :key="index" type="flex" justify="center">
+            <a-col :span="6" class="col-text-right col-backgroud-color1" >
               {{ permission.name }}：
             </a-col>
-            <a-col :span="18">
+            <a-col :span="18" class="col-backgroud-color2" >
               <a-checkbox
                 :indeterminate="permission.indeterminate"
                 :checked="permission.checkedAll"
@@ -58,7 +64,7 @@
               <a-checkbox-group :options="permission.actionsOptions" v-model="permission.selected" @change="onChangeCheck($event,permission,index)" />
             </a-col>
           </a-row>
-        </a-form-item>
+
        
       </a-form>
     </a-spin>
@@ -82,26 +88,27 @@ export default {
         xs: { span: 24 },
         sm: { span: 16 }
       },
-      visible: false,
-      confirmLoading: false,
-      mdl: {},
-      //form:null,
-      form: this.$form.createForm(this),
-      permissions: [],
-      checkpermissions:[],
-      isAdd:false,
-      roleId:0,
-      tagList:[],
-      actionKeys:[]
+      visible: false,//弹框是否显示
+      confirmLoading: false,//弹框中的提交按钮是否加载中
+      mdl: {},//修改对象
+      form: this.$form.createForm(this),//表单对象
+      permissions: [],//全部权限集合
+      checkpermissions:[],//选择后的权限集合
+      isAdd:false,//是否添加
+      roleId:0,//角色ID
+      tagList:[],//checkbox选择后的权限集合（中间键）
+      actionKeys:[]//编辑对象的权限集
     }
   },
   created () {
     this.loadPermissions()
   },
   methods: {
+    //添加
     add () {
       this.edit({ id: 0 })
     },
+    //编辑
     edit (record) {
        this.visible = true
       if(record.id==0){
@@ -112,7 +119,6 @@ export default {
       }else{
          this.isAdd=false
          getRoleDetail(record.id).then(res=>{
-           console.log(res)
             if(res.status==200){
                 this.mdl = Object.assign({}, res.result)            
                 this.roleId=record.id 
@@ -133,12 +139,9 @@ export default {
               this.$message.success(res.message)
             }
         })      
-      }
-      
-     
-     
-      
+      }   
     },
+    //关闭方法
     close () {
       this.form=this.$form.createForm(this)
       this.mdl={}
@@ -148,9 +151,9 @@ export default {
       this.$emit('close')
       this.visible = false
     },
+    //弹框提交方法
     handleOk () {
       const _this = this
-      console.log(this.form)
       // 触发表单验证
       this.form.validateFields((err, values) => {
         // 验证表单没错误
@@ -158,16 +161,14 @@ export default {
            values.roleId=this.roleId
            this.loadCheck()
           values.permissions=this.checkpermissions
-          //console.log('form values', values)
+          console.log("form->values:",values)
            _this.confirmLoading = true
           // 模拟后端请求 2000 毫秒延迟
           new Promise((resolve) => {
             setTimeout(() => resolve(), 2000)
           }).then(() => {
             // Do something
-            //console.log('form add/edit',)
             if(this.isAdd){
-              console.log('form add')
               addRole(values).then(res=>{
                 if(res.status==200){
                 
@@ -176,11 +177,12 @@ export default {
                   _this.$emit('ok')
                 }else{
                   _this.confirmLoading = false
-                  _this.$message.success(res.message)
+                  _this.$message.error(res.message)
                 }
+              }).catch(error=>{
+                 _this.$message.error("服务器超时，请重新再试。")
               })
             }else{
-              console.log('form edit:',values)
               editRole(values).then(res=>{
                 if(res.status==200){                
                   _this.confirmLoading = false
@@ -188,8 +190,10 @@ export default {
                   _this.$emit('ok')
                 }else{
                   _this.confirmLoading = false
-                  _this.$message.success(res.message)
+                  _this.$message.error(res.message)
                 }
+              }).catch(error=>{
+                _this.$error({ title: '错误提示', content: '服务器超时，请重新再试。', });
               })
             }
           
@@ -205,6 +209,7 @@ export default {
         }
       })
     },
+    //弹框关闭
     handleCancel () {
       this.close()
     },
@@ -221,9 +226,7 @@ export default {
           var index1 = this.tagList.indexOf(permission);
           this.tagList.splice(index1, 1);
         }
-      }     
-      
-       console.log("tagList---------",this.tagList)
+      }   
     },
     //全选复选框check事件
     onChangeCheckAll (e, permission,index) {
@@ -242,34 +245,43 @@ export default {
           this.tagList.splice(index1, 1);
         }
       }      
-      console.log("tagList---------",this.tagList)
     },
+    //加载选择后的权限
     loadCheck(){
       this.tagList.forEach(ele=>{
-        this.checkpermissions.push(ele.id)
+        if(!this.checkpermissions.includes(ele.id)){
+          this.checkpermissions.push(ele.id)
+        } 
         ele.selected.forEach(sel=>{
-          this.checkpermissions.push(sel)
+          if(!this.checkpermissions.includes(sel)){
+            this.checkpermissions.push(sel)
+          }
+          
         })
       })
+      console.log("最后选择的权限集:",this.checkpermissions)
     },
+    //加载全部页面权限
     loadPermissions () {
       getPermissionAll().then(res => {
-        console.log("权限：",res.result)
-        const result = res.result       
-
+        const result = res.result      
         this.permissions = result.map(permission => {
-          let actions= Object.keys(permission.actions)
-          if(actions.length>0){
-            permission.checkedAll = false
-            permission.selected = []
-            permission.indeterminate = false
-            permission.actionsOptions=this.loadOptions(permission.actions)            
-          }
-          return permission
+          permission.checkedAll = false
+          permission.selected = []
+          permission.indeterminate = false
+          permission.actionsOptions=this.loadOptions(permission.actions)  
+          return permission        
+         
         })
-        //console.log('权限permissions:',this.permissions)
+        //移除没有子权限的页面权限（用途：筛选仪表盘、控制面板等顶级权限不显示于添加和编辑中）
+        for(let i in this.permissions){
+          if(Object.keys(this.permissions[i].actions).length === 0){
+            this.permissions.splice(i,1)
+          }
+        }        
       })
     },
+    //遍历键值对，返回包含了key与value为值的对象集
     loadOptions(actions){
       const options=[]
       for(var key in actions){
@@ -286,5 +298,16 @@ export default {
 </script>
 
 <style scoped>
-
+.row{
+  padding: 10px;
+}
+.col-text-right{
+  text-align: right
+}
+/* .col-backgroud-color1{
+   background: rgba(0, 160, 233, 0.7);
+}
+.col-backgroud-color2{
+   background: #00a0e9;
+} */
 </style>

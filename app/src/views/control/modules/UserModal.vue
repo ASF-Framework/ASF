@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { getPermissions ,getRoleListAll,modifyAccount,getAccountDetail} from '@/api/manage'
+import { getRoleListAll,modifyAccount,getAccountDetail} from '@/api/manage'
 import { actionToObject } from '@/utils/permissions'
 import pick from 'lodash.pick'
 
@@ -74,13 +74,11 @@ export default {
       mdl: {},
 
       form: this.$form.createForm(this),
-      permissions: [],
       roleList:[],
       accountId:0
     }
   },
   created () {
-    this.loadPermissions()
     this.loadRoles()
   },
   methods: {
@@ -152,25 +150,7 @@ export default {
         indeterminate: false,
         checkedAll: e.target.checked
       })
-    },
-    loadPermissions () {
-      getPermissions().then(res => {
-        const result = res.result
-        this.permissions = result.map(permission => {
-          const options = actionToObject(permission.actionData)
-          permission.checkedAll = false
-          permission.selected = []
-          permission.indeterminate = false
-          permission.actionsOptions = options.map(option => {
-            return {
-              label: option.describe,
-              value: option.action
-            }
-          })
-          return permission
-        })
-      })
-    },
+    },   
     //加载角色
     loadRoles(){
      getRoleListAll().then(res => {      

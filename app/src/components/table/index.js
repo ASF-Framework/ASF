@@ -65,6 +65,7 @@ export default {
   }),
   watch: {
     'localPagination.current' (val) {
+      console.log('pageNum:',val)
       this.$router.push({
         name: this.$route.name,
         params: Object.assign({}, this.$route.params, {
@@ -73,6 +74,7 @@ export default {
       })
     },
     pageNum (val) {
+      //console.log('pageNum:',val)
       Object.assign(this.localPagination, {
         current: val
       })
@@ -95,6 +97,7 @@ export default {
       showSizeChanger: this.showSizeChanger
     })
     this.needTotalList = this.initTotalList(this.columns)
+    console.log('this.localPagination:',this.localPagination)
     this.loadData()
   },
   methods: {
@@ -129,7 +132,7 @@ export default {
         ...filters
       }
       ))
-
+      console.log('改变后的：',result)
       // 对接自己的通用数据接口需要修改下方代码中的 r.pageNo, r.totalCount, r.data
       if (result instanceof Promise) {
         result.then(r => {
@@ -140,7 +143,7 @@ export default {
             pageSize: (pagination && pagination.pageSize) ||
               this.localPagination.pageSize
           })
-
+          
           // 为防止删除数据后导致页面当前页面数据长度为 0 ,自动翻页到上一页
           if (r.result.length === 0 && this.localPagination.current !== 1) {
             this.localPagination.current--

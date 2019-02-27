@@ -24,15 +24,15 @@
               />
               <a-button-group>
                 <a-tooltip>
-<template slot="title">
-   查询
-</template>
-                  <a-button type="primary" icon="search" @click="handleSearch"></a-button>
+                <template slot="title">
+                  查询
+                </template>
+                <a-button type="primary" icon="search" @click="handleSearch"></a-button>
                 </a-tooltip>
                 <a-tooltip>
-<template slot="title">
-   重置查询条件
-</template>
+                <template slot="title">
+                  重置查询条件
+                </template>
                   <a-button icon="undo" @click="() => queryParam = {Vague:'', Status:-1,PagedCount:10,SkipPage:1}"></a-button>
                 </a-tooltip>
               </a-button-group>
@@ -42,13 +42,13 @@
       </a-form>
     </div>
     <a-divider style="margin:0;"></a-divider>
-    <a-list size="large" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: queryParam.PagedCount, total: total}" >
+    <a-list size="large" :pagination="pagination">
         <a-list-item :key="index" v-for="(item, index) in userList">
           <a-list-item-meta>
             <a slot="description"><a-tag v-for="(role, index) in item.roles" :key="index">{{ role}}</a-tag></a>
             <a-avatar slot="avatar" size="large" shape="square" :src="item.avatar"/>
-            <a slot="title">{{item.name+'（'+item.id+'）'}}</a>
-          </a-list-item-meta>
+            <a slot="title">{{item.name+'（'+item.username+'/'+item.id+'）'}}</a>
+          </a-list-item-meta>         
           <div slot="actions"  >
             <a @click="$refs.modal.edit(item)" v-if="!item.isSystem">编辑</a>
             <a v-else disabled >编辑</a>
@@ -64,10 +64,10 @@
             <a v-else disabled >更多<a-icon type="down"/></a>
           </div>
           <div class="list-content">
-            <div class="list-content-item">
+            <!-- <div class="list-content-item">
               <span>登录名</span>
               <p>{{ item.username }}</p>
-            </div>
+            </div> -->
             <div class="list-content-item">
               <span>手机号码</span>
               <p>{{ item.telephone==null?"--":item.telephone }}</p>
@@ -82,11 +82,11 @@
             </div>
             <div class="list-content-item">
               <span>创建</span>
-              <p>{{ item.createTime }}</p>
+              <p>{{ item.createTime*1000 | moment('YYYY-MM-DD') }}</p>
             </div>
             <div class="list-content-item">
               <span>登录</span>
-              <p>{{ item.loginTime }}</p>
+              <p>{{ item.loginTime*1000 | moment }}</p>
             </div>          
           </div>
         </a-list-item>
@@ -98,6 +98,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="登录名"
+          hasFeedback
         >
           <a-input placeholder="登录名"  v-decorator="['username',{rules: [{ required: true, message: '请输入登录名' }]}]"/>
         </a-form-item>
@@ -105,6 +106,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="昵称"
+          hasFeedback
         >
           <a-input placeholder="昵称" v-decorator="['name',{rules: [{ required: true, message: '请输入昵称' }]}]"/>
         </a-form-item>
@@ -112,6 +114,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="登录密码"
+          hasFeedback
         >
           <a-input placeholder="登录密码"  type="password" v-decorator="['password',{rules: [{ required: true, message: '请输入密码' }]}]"/>
         </a-form-item>
@@ -120,11 +123,12 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="确认登录密码"
+          hasFeedback
         >
           <a-input placeholder="确认登录密码" type="password" v-decorator="['confPassword',{rules: [{ required: true, message: '请确认密码' }]}]"/>
         </a-form-item>
         <a-divider/>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予角色">
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予角色" hasFeedback>
           <a-select style="width: 100%" mode="multiple" :allowClear="true" v-decorator="['roles',{rules: [{ required: true, message: '请赋予角色' }]}]">
             <a-select-option
               v-for="(role, index) in roleList"
@@ -139,11 +143,11 @@
 </template>
 
 <script>
+  import md5 from 'md5'
   import STable from '@/components/table/'
   import UserModal from './modules/UserModal'
   import {
     getRoleListAll,
-    getServiceList,
     getAdminList,
     createAccount,
     modifyStatusAccount,
@@ -181,8 +185,6 @@
             span: 16
           }
         },
-        //formEdit:this.$form.createForm(this),
-        //mdl:this.$form.createForm(this),
         form: this.$form.createForm(this),
         mdl: {},
         // 高级搜索 展开/关闭
@@ -199,7 +201,6 @@
         selectedRowKeys: [],
         selectedRows: [],
         userList: [],
-        total: 0,
         status: [{
             value: -1,
             label: "全部"
@@ -212,7 +213,16 @@
             value: 2,
             label: "禁用"
           }
-        ]
+        ],
+        //分页对象
+        pagination:{
+          onChange:(page)=>{
+            this.handleChange(page)
+          },
+          pageSizeOptions:['10','20','40','50'],
+          showSizeChanger:true,
+          total:0
+        },
       }
     },
     filters: {
@@ -225,8 +235,7 @@
     }
     },
     created() {
-      getServiceList().then(res => {
-      })
+      //获取全部角色集合
       getRoleListAll().then(res => {      
         this.roleList = res.result        
       })
@@ -301,16 +310,17 @@
       handleSearch(){
          this.makeList()
       },
-      //获取列表
+      //获取列表K
       makeList(){
+        const _this=this
          getAdminList(this.queryParam).then(res => {
-            let data = Object.assign(res, this.queryParam)
-            this.total = res.totalCount
-            this.userList = res.result
+          console.log(1111,this.queryParam)
+          let data = Object.assign(res, _this.queryParam)
+          _this.userList = res.result
+          const pager={... _this.pagination}
+          pager.total=res.totalCount
+          _this.pagination=pager
         })
-      },
-      formatIsDelete(value) {
-        return value == true ? "启用" : "禁用";
       },
       //删除
       handleDelete(id) {
@@ -336,23 +346,7 @@
       handleAdd() {
         this.visibleAdd = true
       },
-      handleEdit(record) {
-        this.mdl = Object.assign({}, record)
-        this.$nextTick(() => {
-        this.form.setFieldsValue(pick(this.mdl, 'username', 'name'))
-        })
-        console.log(11111,this.mdl)
-        // this.mdl.permissions.forEach(permission => {
-        //   permission.actionsOptions = permission.actionEntitySet.map(action => {
-        //     return {
-        //       label: action.describe,
-        //       value: action.action,
-        //       defaultCheck: action.defaultCheck
-        //     }
-        //   })
-        // })
-        this.visibleEdit = true
-      },
+     //编辑提交方法
       handleEditSubmit(){
        this.makeList()
       },
@@ -372,7 +366,8 @@
                this.$message.error("输入的密码不一致，请重新输入");
                this.loadingAdd=false
               return false;
-             }            
+             }          
+            values.password = md5(values.password)     
              createAccount(values).then(res=>{               
                if(res.status==200){
                   setTimeout(() => {
@@ -380,6 +375,7 @@
                       this.loadingAdd=false
                    }, 2000);
                  this.makeList()
+                 this.form=this.$form.createForm(this)
                   this.$message.success('提交成功')
                }else{
                  this.loadingAdd=false
@@ -391,13 +387,14 @@
            }
          })
       },
-      onChange(selectedRowKeys, selectedRows) {
-        this.selectedRowKeys = selectedRowKeys
-        this.selectedRows = selectedRows
+      //点击页码加载数据
+      handleChange(page) {
+        const pager={... this.pagination}
+         pager.current=page
+         this.queryParam.SkipPage=pager.current
+         this.queryParam.PagedCount=pager.pageSize
+         this.makeList()
       },
-      toggleAdvanced() {
-        this.advanced = !this.advanced
-      }
     },
     watch: {
       /*

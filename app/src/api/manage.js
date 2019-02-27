@@ -28,7 +28,13 @@ const api = {
   getActionList: '/asf/Permission/GetActionList',
   deleteAction: '/asf/Permission/Delete',
   CreateAction: '/asf/Permission/CreateAction',
-  CreateMenu: '/asf/Permission/CreateMenu'
+  CreateMenu: '/asf/Permission/CreateMenu',
+  getUserDetail:'/asf/account/get',
+  modifyNameOrAvatar:'/asf/account/ModifyNameOrAvatar',
+  modifyTelephone:'/asf/account/ModifyTelephone',
+  modifyEmail:'/asf/account/ModifyEmail',
+  modifyPassword:'/asf/account/ModifyPassword'
+
 }
 
 export default api
@@ -43,6 +49,51 @@ export function getAdminList (parameter) {
     })
   })
 }
+
+// 修改管理员昵称与头像
+export function modifyNameOrAvatar (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.modifyNameOrAvatar, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+// 修改管理员手机号
+export function modifyTelephone (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.modifyTelephone, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+// 修改管理员邮箱
+export function modifyEmail (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.modifyEmail, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+// 修改管理员密码
+export function modifyPassword (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.modifyPassword, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
 
 // 角色列表
 export function getRoleList (parameter) {
@@ -284,15 +335,25 @@ export function getRoleDetail (parameter) {
     })
   })
 }
-
-//--------------下面是旧的 -------------------//
+//----------------个人信息------------
 export function getUserDetail (parameter) {
-  return axios({
-    url: api.userdetail,
-    method: 'get',
-    params: parameter
+  return new Promise((resolve, reject) => {
+    axios.get(api.getUserDetail).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
   })
 }
+
+//--------------下面是旧的 -------------------//
+// export function getUserDetail (parameter) {
+//   return axios({
+//     url: api.userdetail,
+//     method: 'get',
+//     params: parameter
+//   })
+// }
 
 export function getServiceList (parameter) {
   return axios({

@@ -12,7 +12,7 @@
               defaultValue="-1"
               v-model="queryParam.Enable"
               buttonStyle="solid"
-              @change="$refs.table.refresh(true)">
+              @change="loadDataing">
               <a-radio-button value="-1">全部</a-radio-button>
               <a-radio-button value="1">启用</a-radio-button>
               <a-radio-button value="0">停用</a-radio-button>
@@ -76,12 +76,10 @@
               <a href="javascript:;" @click="pushDetalis(record)">详情</a>
             </a-menu-item>
             <a-menu-item :disabled="record.isSystem">
-              <!--<a href="javascript:;">禁用</a>-->
               <a @click="handleEdit(record)" v-if="!record.isSystem">禁用</a>
               <a v-else disabled>禁用</a>
             </a-menu-item>
             <a-menu-item :disabled="record.isSystem">
-              <!--<a href="javascript:;">删除</a>-->
               <a @click="handleEdit(record)" v-if="!record.isSystem">删除</a>
               <a v-else disabled>删除</a>
             </a-menu-item>
@@ -489,7 +487,7 @@ export default {
   methods: {
     loadDataing () {
       getPermissions(this.queryParam).then(res => {
-        this.addActine.parentId = res.result[0].id
+        if (res.result.length > 0) this.addActine.parentId = res.result[0].id
         if (res.status === 200) {
           this.loadData = this.makePermissionList(res)
         }
@@ -521,7 +519,7 @@ export default {
     addAction () {
       CreateAction(this.addActine).then(res => {
         if (res.status === 200) {
-          this.$refs.table.refresh(true)
+          this.loadDataing()
           this.visibleAdd = false
         } else {
           this.$notification['error']({
@@ -574,7 +572,6 @@ export default {
     makePermissionList (res) {
       const result1 = []
       const data = Object.assign(res, this.queryParam)
-      console.log(data)
       data.result.forEach((element, index) => {
         if (element.parentId === '') {
           result1.push(element)

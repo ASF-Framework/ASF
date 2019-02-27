@@ -78,7 +78,7 @@
                     type="primary"
                     html-type="submit"
                   >查询</a-button>
-                  <a-button style="margin-left: 8px" @click="handleReset">重置</a-button>
+                  <!--<a-button style="margin-left: 8px" @click="handleReset">重置</a-button>-->
                   <a @click="toggleAdvanced" style="margin-left: 8px">
                     {{ advanced ? '收起' : '展开' }}
                     <a-icon :type="advanced ? 'up' : 'down'"/>
@@ -240,6 +240,8 @@ export default {
       ],
       loadData: [],
       pagination: {
+        current: 1,
+        pageSize: 10,
         pageSizeOptions: ['10', '20', '30', '40', '50'],
         showSizeChanger: true
       },
@@ -347,6 +349,7 @@ export default {
         console.log(list)
         this.loadData = list
         this.pagination = pagination
+        console.log(pagination)
       })
     },
     handleSearch  (e) {
@@ -355,6 +358,9 @@ export default {
       //   console.log('error', error)
       //   console.log('Received values of form: ', values)
       // })
+      if (this.tableParam.skipPage > 1) {
+        this.tableParam.skipPage = 1
+      }
       this.loadDataing()
     },
     handleChange (value, key, column, record) {

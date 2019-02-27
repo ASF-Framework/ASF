@@ -1,85 +1,98 @@
 <template>
   <a-card :bordered="false">
     <div class="table-page-search-wrapper">
-      <a-form
-        :form="form"
-        @submit="handleSearch"
-        layout="inline"
-      >
-        <a-row :gutter="48">
-          <a-col :md="8" :sm="24">
-            <a-form-item label="操作名称">
-              <a-input placeholder="请输入操作名称，比如'修改权限排序'" v-model="tableParam.subject"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="8" :sm="24">
-            <a-form-item label="操作账号">
-              <a-input placeholder="请输入操作账号" v-model="tableParam.account" />
-            </a-form-item>
-          </a-col>
-          <template v-if="advanced">
-            <!--<a-col :md="8" :sm="24">-->
-            <!--<a-form-item label="日志类型">-->
-            <!--<a-select placeholder="请选择" default-value="0">-->
-            <!--<a-select-option value="0">全部</a-select-option>-->
-            <!--<a-select-option value="1">登录日志</a-select-option>-->
-            <!--<a-select-option value="2">操作日志</a-select-option>-->
-            <!--</a-select>-->
-            <!--</a-form-item>-->
-            <!--</a-col>-->
-            <!--<a-col :md="8" :sm="24">-->
-            <!--<a-form-item label="调用次数">-->
-            <!--<a-input-number style="width: 100%"/>-->
-            <!--</a-form-item>-->
-            <!--</a-col>-->
-            <a-col :md="8" :sm="24">
-              <a-form-item label="开始时间">
-                <a-date-picker style="width: 100%" placeholder="请输入开始时间" @change="onChangebeginTime"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="8" :sm="24">
-              <a-form-item label="结束时间">
-                <a-date-picker style="width: 100%" placeholder="请输入结束时间" @change="onChangeEndTime"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="8" :sm="24">
-              <a-form-item label="使用状态">
-                <a-select placeholder="请选择" default-value="0">
-                  <a-select-option value="0">全部</a-select-option>
-                  <a-select-option value="1">关闭</a-select-option>
-                  <a-select-option value="2">运行中</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <!--<a-col :md="8" :sm="24">-->
-            <!--<a-form-item label="使用状态">-->
-            <!--<a-select placeholder="请选择" default-value="0">-->
-            <!--<a-select-option value="0">全部</a-select-option>-->
-            <!--<a-select-option value="1">关闭</a-select-option>-->
-            <!--<a-select-option value="2">运行中</a-select-option>-->
-            <!--</a-select>-->
-            <!--</a-form-item>-->
-            <!--</a-col>-->
-          </template>
-          <a-col :md="!advanced && 8 || 24" :sm="24">
-            <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-              <a-button
-                type="primary"
-                html-type="submit"
-              >查询</a-button>
-              <a-button style="margin-left: 8px" @click="handleReset">重置</a-button>
-              <a @click="toggleAdvanced" style="margin-left: 8px">
-                {{ advanced ? '收起' : '展开' }}
-                <a-icon :type="advanced ? 'up' : 'down'"/>
-              </a>
-            </span>
-          </a-col>
-        </a-row>
-      </a-form>
+      <a-row type="flex" justify="space-around">
+        <a-col :md="4" :sm="24">
+          <a-button type="primary" icon="delete" @click="deleteList">删除</a-button>
+        </a-col>
+        <a-col :span="20" :md="{span:20,offset:0}" :sm="{span:24,offset:0}" :xs="{span:24,offset:0}">
+          <a-form
+            :form="form"
+            @submit="handleSearch"
+            layout="inline"
+          >
+            <a-row :gutter="48">
+              <a-col :md="8" :sm="24">
+                <a-form-item label="操作名称">
+                  <a-input placeholder="请输入操作名称，比如'修改权限排序'" v-model="tableParam.subject"/>
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="操作账号">
+                  <a-input placeholder="请输入操作账号" v-model="tableParam.account" />
+                </a-form-item>
+              </a-col>
+              <template v-if="advanced">
+                <!--<a-col :md="8" :sm="24">-->
+                <!--<a-form-item label="日志类型">-->
+                <!--<a-select placeholder="请选择" default-value="0">-->
+                <!--<a-select-option value="0">全部</a-select-option>-->
+                <!--<a-select-option value="1">登录日志</a-select-option>-->
+                <!--<a-select-option value="2">操作日志</a-select-option>-->
+                <!--</a-select>-->
+                <!--</a-form-item>-->
+                <!--</a-col>-->
+                <!--<a-col :md="8" :sm="24">-->
+                <!--<a-form-item label="调用次数">-->
+                <!--<a-input-number style="width: 100%"/>-->
+                <!--</a-form-item>-->
+                <!--</a-col>-->
+                <a-col :md="8" :sm="24">
+                  <a-form-item label="客户端IP">
+                    <a-input placeholder="请输入客户端IP" v-model="tableParam.clientIp" />
+                  </a-form-item>
+                </a-col>
+                <a-col :md="8" :sm="24">
+                  <a-form-item label="权限ID">
+                    <a-input placeholder="请输入权限ID" v-model="tableParam.permissionId" />
+                  </a-form-item>
+                </a-col>
+                <a-col :md="8" :sm="24">
+                  <a-form-item label="操作账号">
+                    <a-input placeholder="请输入操作账号" v-model="tableParam.account" />
+                  </a-form-item>
+                </a-col>
+                <a-col :md="8" :sm="24">
+                  <a-form-item label="开始时间">
+                    <a-date-picker style="width: 100%" placeholder="请输入开始时间" @change="onChangebeginTime"/>
+                  </a-form-item>
+                </a-col>
+                <a-col :md="8" :sm="24">
+                  <a-form-item label="结束时间">
+                    <a-date-picker style="width: 100%" placeholder="请输入结束时间" @change="onChangeEndTime"/>
+                  </a-form-item>
+                </a-col>
+                <a-col :md="8" :sm="24">
+                  <a-form-item label="使用状态">
+                    <a-select placeholder="请选择" default-value="0">
+                      <a-select-option value="0">全部</a-select-option>
+                      <a-select-option value="1">登录日志 </a-select-option>
+                      <a-select-option value="2">操作日志</a-select-option>
+                    </a-select>
+                  </a-form-item>
+                </a-col>
+              </template>
+              <a-col :md="!advanced && 8 || 24" :sm="24">
+                <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
+                  <a-button
+                    type="primary"
+                    html-type="submit"
+                  >查询</a-button>
+                  <a-button style="margin-left: 8px" @click="handleReset">重置</a-button>
+                  <a @click="toggleAdvanced" style="margin-left: 8px">
+                    {{ advanced ? '收起' : '展开' }}
+                    <a-icon :type="advanced ? 'up' : 'down'"/>
+                  </a>
+                </span>
+              </a-col>
+            </a-row>
+          </a-form>
+        </a-col>
+      </a-row>
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="delete" @click="deleteList">删除</a-button>
+
       <!--<a-dropdown v-if="selectedRowKeys.length > 0">-->
       <!--<a-menu slot="overlay">-->
       <!--<a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>-->
@@ -103,6 +116,11 @@
       @change="handleTableChange"
     >
       <span slot="addTime" slot-scope="text">{{ text | dayFormat('YYYY-MM-DD HH:mm:ss') }}</span>
+      <span slot="logType" slot-scope="text, record">{{ text | loggerType }}</span>
+      <span slot="apiRequest" slot-scope="text, record">
+        <a @click="loggerApiData(record)" v-if="record.apiRequest != null">查看数据...</a>
+        <!--<a v-else disabled></a>-->
+      </span>
     </a-table>
     <a-modal title="编辑" :width="1000" v-model="visible" @ok="handleOk">
       <a-form
@@ -122,22 +140,37 @@
         </a-row>
       </a-form>
     </a-modal>
+    <a-modal title="编辑" :width="1000" v-model="loggerData" @cancel="loggerCancel">
+      <a-row>
+        <!--<tree-views :data="jsonSource" :options="{maxDepth: 3}"></tree-views>-->
+        <json-viewer
+          :value="jsonSource"
+          :expand-depth="5"
+          copyable
+          boxed
+          sort></json-viewer>
+      </a-row>
+    </a-modal>
   </a-card>
 </template>
 
 <script>
 import STable from '@/components/table/'
 import { getLogger, loggerDelete } from '@/api/manage'
+import jsonViewer from 'vue-json-viewer'
 export default {
   name: 'TableList',
   components: {
-    STable
+    STable,
+    jsonViewer
   },
   data () {
     return {
       // 高级搜索 展开/关闭
       advanced: false,
       visible: false,
+      loggerData: false,
+      jsonSource: [],
       form: this.$form.createForm(this),
       // 查询参数
       queryParam: {},
@@ -169,14 +202,13 @@ export default {
           dataIndex: 'accountName',
           key: 'accountName'
         },
-        // {
-        //   title: '日志类型',
-        //   dataIndex: 'type'
-        // },
         {
           title: '日志类型',
-          dataIndex: 'type',
-          key: 'type'
+          dataIndex: 'logType',
+          key: 'logType',
+          scopedSlots: {
+            customRender: 'logType'
+          }
         },
         {
           title: '日志记录时间',
@@ -190,6 +222,14 @@ export default {
           title: 'API请求数据',
           dataIndex: 'apiAddress',
           key: 'apiAddress'
+        },
+        {
+          title: '响应数据',
+          dataIndex: 'apiRequest',
+          key: 'apiRequest',
+          scopedSlots: {
+            customRender: 'apiRequest'
+          }
         },
         {
           title: '备注',
@@ -213,10 +253,28 @@ export default {
       selectedRows: []
     }
   },
+  filters: {
+    loggerType (status) {
+      const statusMap = {
+        1: '登陆日志',
+        2: '操作日志'
+      }
+      return statusMap[status ? 1 : 0]
+    }
+  },
   created () {
     this.loadDataing()
   },
   methods: {
+    loggerCancel () {
+      this.jsonSource = []
+    },
+    loggerApiData (record) {
+      console.log(record)
+      this.loggerData = !this.loggerData
+      const data = JSON.parse(record.apiRequest)
+      this.jsonSource = data
+    },
     onChangebeginTime (date, dateString) {
       console.log(date, dateString)
       this.tableParam.beginTime = dateString
@@ -284,6 +342,7 @@ export default {
         const list = data.result
         for (const i in data.result) {
           list[i].key = list[i].id
+          list[i].logType = list[i].type
         }
         console.log(list)
         this.loadData = list

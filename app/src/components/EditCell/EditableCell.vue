@@ -29,13 +29,13 @@ export default {
     // 失去焦点事件，触发父级函数
     editBlurInput () {
       this.$emit('editBlurInput', this.value)
+      // this.$notification.open({
+      //   message: '温馨提醒！',
+      //   description: '当失去input焦点或者修改完成按Enter键，使修改生效！',
+      //   icon: <a-icon type="smile" style="color: #108ee9" />
+      // })
     },
     editFocus () {
-      this.$notification.open({
-        message: '温馨提醒！',
-        description: '修改排序顺序只能接受数字，当失去input焦点或者修改完成按Enter键，使修改生效！',
-        icon: <a-icon type="smile" style="color: #108ee9" />
-      })
     },
     handleChange (e) {
       const value = e.target.value

@@ -38,11 +38,13 @@
         </a-row>
       </a-form>
     </div>
-    <s-table
+    <a-table
       ref="table"
       :columns="columns"
-      :data="loadData"
+      :dataSource="loadData"
       size="small"
+      :pagination="false"
+      :rowKey="record => record.id"
     >
       <span slot="actions" slot-scope="text, record">
         <a-tag
@@ -86,7 +88,7 @@
           </a-menu>
         </a-dropdown>
       </span>
-    </s-table>
+    </a-table>
 
     <!--点击操作权限弹出详情编辑框-->
     <a-modal
@@ -354,6 +356,13 @@ export default {
   },
   data () {
     return {
+      pagination: {
+        hideOnSinglePage: true,
+        pageSizeOptions: [],
+        onChange: (page) => {
+          console.log(page)
+        }
+      },
       editSort: '',
       addNevigate: false,
       addNevigateData: {
@@ -468,25 +477,24 @@ export default {
       // 权限子级权限children:[]
       permissionchildren: {},
       // 加载数据方法 必须为 Promise 对象
-      loadData: parameter => {
-        return getPermissions(this.queryParam).then(res => {
-          this.addActine.parentId = res.result[0].id
-          //           if(this.queryParam.Enable!="0")   {
-          // this.queryParam.totalCount=5
-          //           }else{
-          //             this.queryParam.totalCount=0
-          //           }
-          return this.makePermissionList(res)
-        })
-      },
+      loadData: [],
       selectedRowKeys: [],
       selectedRows: []
     }
   },
   created () {
     this.loadPermissionList()
+    this.loadDataing()
   },
   methods: {
+    loadDataing () {
+      getPermissions(this.queryParam).then(res => {
+        this.addActine.parentId = res.result[0].id
+        if (res.status === 200) {
+          this.loadData = this.makePermissionList(res)
+        }
+      })
+    },
     actionTrigger (index, id) {
       this.addActine.parentId = id
     },
@@ -564,24 +572,22 @@ export default {
       })
     },
     makePermissionList (res) {
-      const result = []
+      const result1 = []
       const data = Object.assign(res, this.queryParam)
-      if (this.queryParam.Vague === '' && this.queryParam.Enable === -1) {
-        data.result.forEach((element, index) => {
-          if (element.parentId === '' || element.parentId === ' ') {
-            result.push(element)
-            result[index].children = []
-            data.result.forEach(ele => {
-              if (element.id === ele.parentId) {
-                result[index].children.push(ele)
-              }
-            })
+      console.log(data)
+      data.result.forEach((element, index) => {
+        if (element.parentId === '') {
+          result1.push(element)
+          element.children = []
+          for (const i in data.result) {
+            if (element.id === data.result[i].parentId) {
+              element.children.push(data.result[i])
+            }
           }
-        })
-        data.result = result
-      }
-      this.dataLoad = data
-      return data
+        }
+      })
+      data.result = result1
+      return data.result
     },
     handleBtn () {
       this.makePermissionList()

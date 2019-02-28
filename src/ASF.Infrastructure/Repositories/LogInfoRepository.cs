@@ -49,7 +49,10 @@ namespace ASF.Infrastructure.Repository
                 .Where(w => w.Id > 0);
 
             if (!string.IsNullOrEmpty(dto.Subject))
-                queryable = queryable.Where(w => w.Subject == dto.Subject);
+            {
+                queryable = queryable.Where(w => EF.Functions.Like(w.Subject, "%" + dto.Subject + "%") 
+                || w.Id.ToString()==dto.Subject);
+            }
             if (!string.IsNullOrEmpty(dto.Account))
             {
                 queryable = queryable
@@ -61,10 +64,10 @@ namespace ASF.Infrastructure.Repository
                 queryable = queryable.Where(w => w.Type == LoggingType.Login);
             if (dto.Type == 2)
                 queryable = queryable.Where(w => w.Type == LoggingType.Operate);
-            if (dto.BeginTime != default(DateTime) && dto.BeginTime != null)
-                queryable.Where(w => w.AddTime >= dto.BeginTime);
-            if (dto.EndTime != default(DateTime) && dto.EndTime != null)
-                queryable.Where(w => w.AddTime <= dto.EndTime);
+            if (dto.BeginTime != null && dto.BeginTime != default(DateTime))
+                queryable = queryable.Where(w => w.AddTime >= dto.BeginTime);
+            if (dto.EndTime != null && dto.EndTime != default(DateTime))
+                queryable = queryable.Where(w => w.AddTime <= dto.EndTime);
 
             if (!string.IsNullOrEmpty(dto.PermissionId))
                 queryable = queryable.Where(w => w.PermissionId == dto.PermissionId);
@@ -81,9 +84,9 @@ namespace ASF.Infrastructure.Repository
         {
             var queryable = _dbContext.LogInfos.Where(w => w.Id > 0);
             if (dto.BeginTime != default(DateTime) && dto.BeginTime != null)
-                queryable.Where(w => w.AddTime >= dto.BeginTime);
+                queryable = queryable.Where(w => w.AddTime >= dto.BeginTime);
             if (dto.EndTime != default(DateTime) && dto.EndTime != null)
-                queryable.Where(w => w.AddTime <= dto.EndTime);
+                queryable = queryable.Where(w => w.AddTime <= dto.EndTime);
 
             _dbContext.LogInfos.RemoveRange(queryable);
             return Task.FromResult(0);

@@ -14,14 +14,12 @@ namespace ASF.Application.DTO
         /// 开始时间
         /// </summary>
         [Required]
-        [JsonConverter(typeof(UnixDateTimeConverter))]
-        public DateTime? BeginTime { get; set; }
+        public DateTime BeginTime { get; set; }
         /// <summary>
         /// 结束时间
         /// </summary>
         [Required]
-        [JsonConverter(typeof(UnixDateTimeConverter))]
-        public DateTime? EndTime { get; set; }
+        public DateTime EndTime { get; set; }
 
        
     }

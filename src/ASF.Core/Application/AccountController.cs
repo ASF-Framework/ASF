@@ -232,7 +232,7 @@ namespace ASF.Application
         /// </summary>
         /// <param name="id">账号标识</param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("{id}")]
         public async Task<Result> Delete([FromRoute]int id)
         {
             //删除账户

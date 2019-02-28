@@ -36,16 +36,16 @@ namespace ASF.Application
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ResultPagedList<AccountInfoBaseResponseDto>> GetList([FromBody]LoggerListPagedRequestDto dto)
+        public async Task<ResultPagedList<LoggerInfoDetailsResponseDto>> GetList([FromBody] LoggerListPagedRequestDto dto)
         {
             //验证请求数据合法性
             var result = dto.Valid();
             if (!result.Success)
-                return ResultPagedList<AccountInfoBaseResponseDto>.ReFailure(result);
+                return ResultPagedList<LoggerInfoDetailsResponseDto>.ReFailure(result);
 
             var logList = await _loggingRepository.GetList(dto);
-            var logings = Mapper.Map<IList<AccountInfoBaseResponseDto>>(logList.Loggings);
-            return ResultPagedList<AccountInfoBaseResponseDto>.ReSuccess(logings, logList.TotalCount);
+            var logings = Mapper.Map<IList<LoggerInfoDetailsResponseDto>>(logList.Loggings);
+            return ResultPagedList<LoggerInfoDetailsResponseDto>.ReSuccess(logings, logList.TotalCount);
         }
 
         /// <summary>

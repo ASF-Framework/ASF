@@ -22,7 +22,7 @@ namespace ASF.Application.DTO
         /// <summary>
         /// 登录密码
         /// </summary>
-        [Required, StringLength(20, MinimumLength = 6)]
+        [Required, StringLength(32, MinimumLength = 6)]
         public string Password { get; set; }
         /// <summary>
         /// 角色集

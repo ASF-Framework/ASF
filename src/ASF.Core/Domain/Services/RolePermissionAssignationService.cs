@@ -29,6 +29,8 @@ namespace ASF.Domain.Services
         {
             if (role == null)
                 return Result<Role>.ReFailure(ResultCodes.RoleNotExist);
+            if (pids.Count == 0)
+                return Result<Role>.ReFailure(ResultCodes.RolePermissionAssignationFailed);
 
             //获取所有的权限
             var permissions = await _permissionRepository.GetList(pids);
@@ -50,12 +52,12 @@ namespace ASF.Domain.Services
                         //如果没有父级停止循环
                         if (string.IsNullOrEmpty(parentId))
                             break;
-             
+
                         var parent = await _permissionRepository.GetAsync(parentId);
                         if (parent == null)
                             break;
-
-                        pids.Add(parentId);
+                        if (!pids.Contains(parentId))
+                            pids.Add(parentId);
                         parentId = parent.ParentId;
                     }
                 }

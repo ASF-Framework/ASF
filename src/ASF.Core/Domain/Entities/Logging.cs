@@ -10,7 +10,7 @@ namespace ASF.Domain.Entities
     public class Logging : IEntity
     {
         public Logging(Account account, LoggingType type, string subject, string clientIp)
-            :this(account.Id,account.Name,type,subject,clientIp)
+            :this(account.Id,account.Username,type,subject,clientIp)
         {
       
         }

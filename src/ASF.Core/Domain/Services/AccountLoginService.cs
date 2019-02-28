@@ -120,11 +120,7 @@ namespace ASF.Domain.Services
             claims.Add("nickname", account.Name);
             claims.Add("sub", account.Id.ToString());
             claims.Add("auth_mode", loginType);
-            //判断是否为超级管理员
-            if (account.IsSuperAdministrator())
-                claims.Add("roles", "ALL");
-            else
-                claims.Add("roles", string.Join(",", account.Roles.ToArray()));
+
             var accessToken = _tokenGenerate.Generate(claims);
 
             //生成访问Token

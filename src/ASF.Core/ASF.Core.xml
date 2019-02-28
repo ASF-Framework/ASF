@@ -1587,13 +1587,6 @@
             账号权限认证服务
             </summary>
         </member>
-        <member name="M:ASF.Domain.Services.AccountAuthorizationService.AnalysisRoleId(System.String)">
-            <summary>
-            解析Token中的角色集
-            </summary>
-            <param name="roles">角色集标识</param>
-            <returns></returns>
-        </member>
         <member name="M:ASF.Domain.Services.AccountAuthorizationService.MatchPermission(System.String)">
             <summary>
             匹配权限

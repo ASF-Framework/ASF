@@ -8,6 +8,7 @@ namespace ASF.Application.DTO
     /// </summary>
     public class LoggerListPagedRequestDto : ListPagedRequestDto
     {
+        
         /// <summary>
         /// 标题
         /// </summary>
@@ -25,12 +26,10 @@ namespace ASF.Application.DTO
         /// <summary>
         /// 开始时间
         /// </summary>
-        [Required]
         public DateTime? BeginTime { get; set; }
         /// <summary>
         /// 结束时间
         /// </summary>
-        [Required]
         public DateTime? EndTime { get; set; }
         /// <summary>
         /// 权限ID

@@ -26,7 +26,7 @@ namespace ASF
             this._serviceProvider = serviceProvider;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement)
         {
             HttpContext httpContext = _httpContextAccessor.HttpContext;
 
@@ -43,20 +43,20 @@ namespace ASF
                             if (atts.Where(f => f.Roles.ToLower() == "self").Count() > 0)
                             {
                                 context.Succeed(requirement);
-                                return Task.CompletedTask;
+                                return;
                             }
                         }
                     }
                 }
                 //验证登陆用户是否有权限
-                var result = this._serviceProvider.GetRequiredService<AccountAuthorizationService>().Authentication();
+                var result = await this._serviceProvider.GetRequiredService<AccountAuthorizationService>().Authentication();
                 var requestPath = httpContext.Request.PathBase + httpContext.Request.Path;
                 if (result.Success)
                 {
                     this._logger.LogInformation($"{requestPath} Permission authorization success");
                     httpContext.Items.Add("asf_parmission", result.Data);
                     context.Succeed(requirement);
-                    return Task.CompletedTask;
+                    return ;
                 }
                 else
                 {
@@ -65,7 +65,7 @@ namespace ASF
                 }
             }
 
-            return Task.CompletedTask;
+            return ;
         }
     }
 }

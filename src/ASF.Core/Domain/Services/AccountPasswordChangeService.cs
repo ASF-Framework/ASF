@@ -22,6 +22,8 @@ namespace ASF.Domain.Services
         /// </summary>
         /// <param name="accountId">账户标识</param>
         /// <param name="password">需要设置的密码</param>
+        /// <param name="adminAccountId">管理员账户ID</param>
+        /// <param name="adminPassword">管理员账户密码</param>
         /// <returns></returns>
         public async Task<Result<Account>> Reset(int accountId, string password, int adminAccountId,string adminPassword)
         {
@@ -32,9 +34,9 @@ namespace ASF.Domain.Services
 
             //获取管理员信息,需要验证管理员密码
             var admin =  await _accountRepository.GetAsync(adminAccountId);
-            if (account == null)
+            if (admin == null)
                 return Result<Account>.ReFailure(ResultCodes.AccountResetPasswordPasswordNotSame);
-            if (!account.HasPassword(adminPassword))
+            if (!admin.HasPassword(adminPassword))
                 return Result<Account>.ReFailure(ResultCodes.AccountResetPasswordPasswordNotSame);
 
             account.SetPassword(password);

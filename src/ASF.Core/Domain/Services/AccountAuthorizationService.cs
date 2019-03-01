@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ASF.Domain.Services
 {
@@ -30,7 +31,7 @@ namespace ASF.Domain.Services
             _logger = logger;
         }
 
-        public Result<Permission> Authentication()
+        public async Task<Result<Permission>> Authentication()
         {
             HttpContext context = _httpContextAccessor.HttpContext;
             HttpRequest request = context.Request;
@@ -46,13 +47,13 @@ namespace ASF.Domain.Services
             }
             if (!parmission.IsNormal())
             {
-                this._logger.LogWarning($"{parmission.Name} permissions are not available");
+                this._logger.LogWarning($"{parmission.Id} permissions are not available");
                 return Result<Permission>.ReFailure(ResultCodes.NotAcceptable);
             }
 
             //获取超级管理员账号
             int uid = context.User.UserId();
-            var account = this._serviceProvider.GetRequiredService<IAccountRepository>().GetAsync(uid).GetAwaiter().GetResult();
+            var account = await this._serviceProvider.GetRequiredService<IAccountRepository>().GetAsync(uid);
             if (account == null)
             {
                 this._logger.LogWarning($"{uid} Super administrator does not exist");
@@ -70,7 +71,7 @@ namespace ASF.Domain.Services
             }
 
             //根据ID获取角色
-            var roleList = this._roleRepository.GetList(account.Roles.ToList()).GetAwaiter().GetResult();
+            var roleList = await this._roleRepository.GetList(account.Roles.ToList());
             if (roleList == null)
             {
                 this._logger.LogWarning($"No authorized roles found");

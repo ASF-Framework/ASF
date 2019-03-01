@@ -9,6 +9,10 @@ namespace ASF.Infrastructure.Repository
         : base(options)
         {
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        }
         public DbSet<AccountModel> Accounts { get; set; }
         public DbSet<LogInfoModel> LogInfos { get; set; }
         public DbSet<PermissionModel> Permissions { get; set; }

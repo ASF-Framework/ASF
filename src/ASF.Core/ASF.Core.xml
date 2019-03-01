@@ -1704,6 +1704,8 @@
             </summary>
             <param name="accountId">账户标识</param>
             <param name="password">需要设置的密码</param>
+            <param name="adminAccountId">管理员账户ID</param>
+            <param name="adminPassword">管理员账户密码</param>
             <returns></returns>
         </member>
         <member name="M:ASF.Domain.Services.AccountPasswordChangeService.Modify(System.Int32,System.String,System.String)">

@@ -33,6 +33,7 @@ namespace ASF.Domain.Services
             if (account.IsSuperAdministrator())
             {
                 result.Item2 = await _permissionRepository.GetList();
+                result.Item2 = result.Item2.OrderBy(f => f.Sort).ToList();
                 return result;
             }
             else
@@ -50,13 +51,13 @@ namespace ASF.Domain.Services
                     .ToList()
                     .ForEach(p =>
                     {
-                        pids .AddRange(p);
+                        pids.AddRange(p);
                     });
                 result.Item2 = await _permissionRepository.GetList(pids);
                 result.Item2 = result.Item2.OrderBy(f => f.Sort).ToList();
                 return result;
             }
-           
+
         }
     }
 }

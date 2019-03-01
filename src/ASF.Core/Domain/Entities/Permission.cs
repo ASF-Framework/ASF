@@ -18,7 +18,7 @@ namespace ASF.Domain.Entities
         {
             code = code.ToLower();//code默认小写
             if (!string.IsNullOrEmpty(parentId))
-                this.Id = $"{parentId}.{code}";
+                this.Id = $"{parentId}_{code}";
             else
                 this.Id = code;
             this.Code = code;

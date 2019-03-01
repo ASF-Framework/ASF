@@ -54,7 +54,7 @@ namespace ASF.Application.DTO
             /// 功能集合
             /// </summary>
             [JsonProperty("actionEntitySet")]
-            public List<ActionInfo> Actions { get; set; } = new List<ActionInfo>();
+            public List<ActionInfo> Actions { get; private set; } = new List<ActionInfo>();
         }
 
         public class ActionInfo

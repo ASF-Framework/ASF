@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace ASF.Application
 {
@@ -166,23 +167,22 @@ namespace ASF.Application
 
             //组装响应数据
             result.Permissions
-                .Where(f => f.IsNormal())
+                .Where(f => f.IsNormal() && f.Type == PermissionType.Menu)
                 .ToList()
                 .ForEach(p =>
                 {
-                    if (p.Type != PermissionType.Menu)
-                        return;
                     var permissionInfo = new AccountInfoByLoginResponseDto.PermissionInfo(p);
-                    responseDto.Role.Permissions.Add(permissionInfo);
                     result.Permissions
-                        .Where(f => f.Type == PermissionType.Action && f.ParentId == p.Id)
+                        .Where(f => f.Type == PermissionType.Action && f.IsNormal() && f.ParentId == p.Id)
                         .ToList()
                         .ForEach(a =>
                         {
                             permissionInfo.Actions.Add(new AccountInfoByLoginResponseDto.ActionInfo(a));
                         });
+                    responseDto.Role.Permissions.Add(permissionInfo);
                 });
-            return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
+
+      return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
         }
         /// <summary>
         /// 获取登录账户基本信息

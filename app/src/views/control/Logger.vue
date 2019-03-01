@@ -23,35 +23,21 @@
                 </a-form-item>
               </a-col>
               <template v-if="advanced">
-                <!--<a-col :md="8" :sm="24">-->
-                <!--<a-form-item label="日志类型">-->
-                <!--<a-select placeholder="请选择" default-value="0">-->
-                <!--<a-select-option value="0">全部</a-select-option>-->
-                <!--<a-select-option value="1">登录日志</a-select-option>-->
-                <!--<a-select-option value="2">操作日志</a-select-option>-->
-                <!--</a-select>-->
-                <!--</a-form-item>-->
-                <!--</a-col>-->
-                <!--<a-col :md="8" :sm="24">-->
-                <!--<a-form-item label="调用次数">-->
-                <!--<a-input-number style="width: 100%"/>-->
-                <!--</a-form-item>-->
-                <!--</a-col>-->
                 <a-col :md="8" :sm="24">
                   <a-form-item label="客户端IP">
                     <a-input placeholder="请输入客户端IP" v-model="tableParam.clientIp" />
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
-                  <a-form-item label="权限ID">
+                  <a-form-item label="权限标识">
                     <a-input placeholder="请输入权限ID" v-model="tableParam.permissionId" />
                   </a-form-item>
                 </a-col>
-                <a-col :md="8" :sm="24">
-                  <a-form-item label="操作账号">
-                    <a-input placeholder="请输入操作账号" v-model="tableParam.account" />
-                  </a-form-item>
-                </a-col>
+                <!--<a-col :md="8" :sm="24">-->
+                <!--<a-form-item label="操作账号">-->
+                <!--<a-input placeholder="请输入操作账号" v-model="tableParam.account" />-->
+                <!--</a-form-item>-->
+                <!--</a-col>-->
                 <a-col :md="8" :sm="24">
                   <a-form-item label="开始时间">
                     <a-date-picker style="width: 100%" placeholder="请输入开始时间" @change="onChangebeginTime"/>
@@ -63,9 +49,9 @@
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
-                  <a-form-item label="使用状态">
-                    <a-select placeholder="请选择" default-value="0">
-                      <a-select-option value="0">全部</a-select-option>
+                  <a-form-item label="日志类型">
+                    <a-select placeholder="请选择" default-value="-1" @change="handleChanges">
+                      <a-select-option value="-1">全部</a-select-option>
                       <a-select-option value="1">登录日志 </a-select-option>
                       <a-select-option value="2">操作日志</a-select-option>
                     </a-select>
@@ -78,7 +64,7 @@
                     type="primary"
                     html-type="submit"
                   >查询</a-button>
-                  <!--<a-button style="margin-left: 8px" @click="handleReset">重置</a-button>-->
+                  <a-button style="margin-left: 8px" @click="handleReset">重置</a-button>
                   <a @click="toggleAdvanced" style="margin-left: 8px">
                     {{ advanced ? '收起' : '展开' }}
                     <a-icon :type="advanced ? 'up' : 'down'"/>
@@ -142,8 +128,10 @@
     </a-modal>
     <a-modal title="编辑" :width="1000" v-model="loggerData" @cancel="loggerCancel">
       <a-row>
-        <!--<tree-views :data="jsonSource" :options="{maxDepth: 3}"></tree-views>-->
+        <p>请求地址：{{ apiAddress }}</p>
+        <p v-if="jsonArray">请求返回数据: {{ jsonArray }}</p>
         <json-viewer
+          v-if="!jsonArray"
           :value="jsonSource"
           :expand-depth="5"
           copyable
@@ -171,6 +159,7 @@ export default {
       visible: false,
       loggerData: false,
       jsonSource: [],
+      jsonArray: '',
       form: this.$form.createForm(this),
       // 查询参数
       queryParam: {},
@@ -219,9 +208,9 @@ export default {
           key: 'addTime'
         },
         {
-          title: 'API请求数据',
-          dataIndex: 'apiAddress',
-          key: 'apiAddress'
+          title: '客户端IP',
+          dataIndex: 'clientIp',
+          key: 'clientIp'
         },
         {
           title: '响应数据',
@@ -249,6 +238,7 @@ export default {
         beginTime: '',
         endTime: ''
       },
+      apiAddress: '',
       // page: ['10', '20', '30', '40'],
       loading: false,
       selectedRowKeys: [],
@@ -261,7 +251,7 @@ export default {
         1: '登陆日志',
         2: '操作日志'
       }
-      return statusMap[status ? 1 : 0]
+      return statusMap[status === 1 ? 1 : 2]
     }
   },
   created () {
@@ -274,8 +264,15 @@ export default {
     loggerApiData (record) {
       console.log(record)
       this.loggerData = !this.loggerData
-      const data = JSON.parse(record.apiRequest)
-      this.jsonSource = data
+      try {
+        const data = JSON.parse(record.apiRequest)
+        this.jsonSource = data
+        this.jsonArray = false
+      } catch (err) {
+        this.jsonArray = record.apiRequest
+        console.error(err)
+      }
+      this.apiAddress = record.apiAddress
     },
     onChangebeginTime (date, dateString) {
       console.log(date, dateString)
@@ -300,6 +297,10 @@ export default {
       this.tableParam.pagedCount = pagination.pageSize
       this.tableParam.skipPage = pagination.current
       this.loadDataing()
+    },
+    handleChanges (value) {
+      this.tableParam.type = value
+      // console.log(`selected ${value}`)
     },
     handleOk () {
       if (this.deleteDate.beginTime !== '' && this.deleteDate.endTime !== '') {
@@ -349,7 +350,6 @@ export default {
         console.log(list)
         this.loadData = list
         this.pagination = pagination
-        console.log(pagination)
       })
     },
     handleSearch  (e) {
@@ -368,6 +368,7 @@ export default {
       record[column.dataIndex] = value
     },
     handleReset () {
+      console.log(this.form)
       this.form.resetFields()
     },
     edit (row) {
@@ -375,28 +376,28 @@ export default {
       // row = Object.assign({}, row)
     },
     // eslint-disable-next-line
-      del (row) {
-      this.$confirm({
-        title: '警告',
-        content: `真的要删除 ${row.no} 吗?`,
-        okText: '删除',
-        okType: 'danger',
-        cancelText: '取消',
-        onOk () {
-          console.log('OK')
-          // 在这里调用删除接口
-          return new Promise((resolve, reject) => {
-            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000)
-          }).catch(() => console.log('Oops errors!'))
-        },
-        onCancel () {
-          console.log('Cancel')
-        }
-      })
-    },
-    save (row) {
-      row.editable = false
-    },
+    //   del (row) {
+    //   this.$confirm({
+    //     title: '警告',
+    //     content: `真的要删除 ${row.no} 吗?`,
+    //     okText: '删除',
+    //     okType: 'danger',
+    //     cancelText: '取消',
+    //     onOk () {
+    //       console.log('OK')
+    //       // 在这里调用删除接口
+    //       return new Promise((resolve, reject) => {
+    //         setTimeout(Math.random() > 0.5 ? resolve : reject, 1000)
+    //       }).catch(() => console.log('Oops errors!'))
+    //     },
+    //     onCancel () {
+    //       console.log('Cancel')
+    //     }
+    //   })
+    // },
+    // save (row) {
+    //   row.editable = false
+    // },
     cancel (row) {
       row.editable = false
     },
@@ -410,18 +411,6 @@ export default {
     }
   },
   watch: {
-    /*
-        'selectedRows': function (selectedRows) {
-          this.needTotalList = this.needTotalList.map(item => {
-            return {
-              ...item,
-              total: selectedRows.reduce( (sum, val) => {
-                return sum + val[item.dataIndex]
-              }, 0)
-            }
-          })
-        }
-        */
   }
 }
 </script>

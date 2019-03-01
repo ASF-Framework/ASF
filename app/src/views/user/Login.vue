@@ -209,6 +209,7 @@ export default {
     },
     //登录成功后
     loginSuccess (res) {      
+      console.log(res)
       this.$router.push({ name: 'dashboard' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {

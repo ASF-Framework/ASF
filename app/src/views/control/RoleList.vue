@@ -6,7 +6,7 @@
           <a-col :md="8" :sm="24">
             <a-tooltip>
               <template slot="title">新增角色</template>
-              <a-button type="primary" icon="plus" @click="$refs.modal.add()" style="margin-right:10px"></a-button>
+              <a-button type="primary" icon="plus" @click="$refs.modal.add()" style="margin-right:10px" v-action:create></a-button>
             </a-tooltip>
              <a-radio-group defaultValue="-1" v-model="queryParam.Enable"  buttonStyle="solid" @change="handleSearch()">
               <a-radio-button value="-1">全部</a-radio-button>
@@ -42,7 +42,7 @@
       <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
       <span slot="createTime" slot-scope="text">{{ text*1000 | moment }}</span>
       <span slot="action" slot-scope="text, record">
-        <a @click="$refs.modal.edit(record)">编辑</a>
+        <a @click="$refs.modal.edit(record)" v-action:modify>编辑</a>
         <a-divider type="vertical"/>
         <a-dropdown>
           <a class="ant-dropdown-link">更多
@@ -50,10 +50,10 @@
           </a>
           <a-menu slot="overlay">
             <a-menu-item>
-              <a href="javascript:;" @click="handleStatus(record)">{{ShowStatus(record.enable)}}</a>
+              <a v-action:modify_status href="javascript:;" @click="handleStatus(record)">{{ShowStatus(record.enable)}}</a>
             </a-menu-item>
             <a-menu-item>
-              <a href="javascript:;" @click="handleDelete(record.id)">删除</a>
+              <a v-action:delete href="javascript:;" @click="handleDelete(record.id)">删除</a>
             </a-menu-item>
           </a-menu>
         </a-dropdown>
@@ -162,8 +162,9 @@ export default {
   methods: {
     //弹框点击确认后的方法
     handleOk() {
-      // 新增/修改 成功时，重载列表
-      this.$refs.table.refresh(true)
+      this.loadDataList()
+      // // 新增/修改 成功时，重载列表
+      // this.$refs.table.refresh(true)
     },
     //显示状态
     ShowStatus(value) {
@@ -199,7 +200,8 @@ export default {
         onOk() {
           modifyStatusRole(par).then(res=>{
             if(res.status==200){
-                that.$refs.table.refresh(true)
+              that.loadDataList()
+                //that.$refs.table.refresh(true)
                 that.$message.success('修改成功')
             }else{
               that.$message.error(res.message)

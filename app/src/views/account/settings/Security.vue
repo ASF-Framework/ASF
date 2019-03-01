@@ -22,7 +22,7 @@
               <span class="security-list-value">******</span>
               </span>
             </a-list-item-meta>
-            <a slot="actions" @click="$refs.modal.edit(userinfo,'oldPassword','旧登陆密码','请输入旧登录密码',true)">修改</a>
+            <a slot="actions" @click="$refs.modal.edit(userinfo,'oldPassword','旧登陆密码','请输入旧登录密码',true)" >修改</a>
           </a-list-item>
           <a-list-item>
             <a-list-item-meta>
@@ -34,8 +34,8 @@
               <span class="security-list-value">{{ userinfo.telephone }}</span>
               </span>
             </a-list-item-meta>
-            <a v-if="userinfo.telephone" slot="actions" @click="$refs.modal.edit(userinfo,'number','手机号码','请输入手机号码',false)">修改</a>
-             <a v-else slot="actions" @click="$refs.modal.edit(userinfo,'number','手机号码','请输入手机号码',false)">绑定</a>
+            <a v-if="userinfo.telephone" slot="actions" @click="$refs.modal.edit(userinfo,'number','手机号码','请输入手机号码',false)" >修改</a>
+             <a v-else slot="actions" @click="$refs.modal.edit(userinfo,'number','手机号码','请输入手机号码',false)" >绑定</a>
           </a-list-item>
           <a-list-item>
             <a-list-item-meta>

@@ -72,7 +72,7 @@ export const asyncRouterMap = [
             meta: {
               title: '管理员列表',
               keepAlive: true,
-              permission: ['asf']
+              permission: 'asf_account'
             }
           },
           {
@@ -81,7 +81,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/control/RoleList'),
             meta: {
               title: '角色列表',
-              permission: ['asf']
+              permission: 'asf_role'
             }
           },
           {
@@ -90,7 +90,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/control/PermissionList'),
             meta: {
               title: '权限列表',
-              permission: ['asf']
+              permission: 'asf_permission'
             }
           }
         ]

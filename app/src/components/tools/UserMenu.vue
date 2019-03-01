@@ -17,7 +17,7 @@
           </router-link>
         </a-menu-item>
         <a-menu-item key="1">
-          <router-link :to="{ name: 'settings' }">
+          <router-link :to="{ name: 'settings',params:{selectedKeys:'/account/settings/security'} }">
             <a-icon type="setting"/>
             <span>账户设置</span>
           </router-link>

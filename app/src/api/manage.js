@@ -14,6 +14,7 @@ const api = {
   modifyStatusAccount:'/asf/account/midifystatus',
   deleteAccount:'/asf/account/delete',
   modifyAccount:'/asf/account/midify',
+  resetPassword:'/asf/account/ResetPassword',
   getAccountDetail:'/asf/account/GetDetails',
   service: '/service',
   permission: '/asf/permission/getmenulist',
@@ -93,6 +94,19 @@ export function modifyPassword (parameter) {
     })
   })
 }
+
+// 设置管理员密码
+export function resetPassword (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.resetPassword, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+
 
 
 // 角色列表

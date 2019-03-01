@@ -15,15 +15,20 @@ router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
 
   if (Vue.ls.get(ACCESS_TOKEN)) {
+    console.log(111)
     /* has token */
     if (to.path === '/user/login') {
+      console.log(2222)
       next({ path: '/dashboard/workplace' })
       NProgress.done()
     } else {
+      console.log(3333)
       if (store.getters.roles.length === 0) {
+        console.log(4444)
         store
           .dispatch('GetInfo')
           .then(res => {
+            console.log("dispatch:",res)
             const roles = res.result && res.result.role
             store.dispatch('GenerateRoutes', { roles }).then(() => {
               // 根据roles权限生成可访问的路由表
@@ -49,6 +54,7 @@ router.beforeEach((to, from, next) => {
             })
           })
       } else {
+        console.log(5555)
         next()
       }
     }

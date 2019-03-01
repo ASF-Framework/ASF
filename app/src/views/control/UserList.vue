@@ -7,13 +7,18 @@
             <a-tooltip>
               <template slot="title">新建管理员
 </template>
-              <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px"></a-button>
+              <a-button type="primary" icon="plus" @click="handleAdd" style="margin-right:10px" v-action:create></a-button>
             </a-tooltip>
-             <a-radio-group defaultValue="-1" v-model="queryParam.status" buttonStyle="solid" @change="handleSearch">
-              <a-radio-button value="-1">全部</a-radio-button>
-              <a-radio-button value="1">正常</a-radio-button>
-              <a-radio-button value="2">禁用</a-radio-button>
+            <a-radio-group :defaultValue="0" v-model="queryParam.isDeleted" buttonStyle="solid" style="margin-right:10px" @change="handleSearch">
+              <a-radio-button :value="0">正常</a-radio-button>
+              <a-radio-button :value="1">已删除</a-radio-button>
             </a-radio-group>
+            <a-select placeholder="请选择" v-model="queryParam.status"  style="width:100px;" @change="handleSearch" >
+                <a-select-option value="-1">全部</a-select-option>
+                <a-select-option value="1">启用</a-select-option>
+                <a-select-option value="2">禁用</a-select-option>
+            </a-select>
+             
           </a-col>
           <a-col :md="12" :sm="24">
             <span class="table-page-search-submitButtons" style="float:right">
@@ -33,7 +38,7 @@
                 <template slot="title">
                   重置查询条件
                 </template>
-                  <a-button icon="undo" @click="() => queryParam = {Vague:'', Status:-1,PagedCount:10,SkipPage:1}"></a-button>
+                  <a-button icon="undo" @click="() => queryParam = {vague:'',isDeleted:0, status:-1,pagedCount:10,skipPage:1}"></a-button>
                 </a-tooltip>
               </a-button-group>
             </span>
@@ -50,14 +55,15 @@
             <a slot="title">{{item.name+'（'+item.username+'/'+item.id+'）'}}</a>
           </a-list-item-meta>         
           <div slot="actions"  >
-            <a @click="$refs.modal.edit(item)" v-if="!item.isSystem">编辑</a>
+            <a @click="$refs.modal.edit(item)" v-if="!item.isSystem" v-action:modify_info>编辑</a>
             <a v-else disabled >编辑</a>
           </div>
           <div slot="actions" >
             <a-dropdown v-if="!item.isSystem" >
               <a-menu slot="overlay">
-                <a-menu-item><a @click="handleStatus(item)">{{ShowStatus(item.status)}}</a></a-menu-item>
-                <a-menu-item><a @click="handleDelete(item.id)">删除</a></a-menu-item>
+                <a-menu-item><a @click="handleStatus(item)" v-action:modify_status>{{ShowStatus(item.status)}}</a></a-menu-item>
+                <a-menu-item><a @click="handleDelete(item.id)" v-action:delete>删除</a></a-menu-item>
+                <a-menu-item><a @click="openModalSetPwd(item.id)" v-action:set_password>重置密码</a></a-menu-item>
               </a-menu>
               <a>更多<a-icon type="down"/></a>
             </a-dropdown>
@@ -139,279 +145,354 @@
         </a-form-item>
       </a-form>
     </a-modal>
+    <a-modal title="重置密码" v-model="visibleSetPwd" :confirmLoading="loadingSetPwd" @ok="handleSetSubmit" @cancel="handleSetCancel">
+      <a-form :form="form">
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="管理员密码"
+          hasFeedback
+        >
+          <a-input type="password"  placeholder="管理员密码"  v-decorator="['adminPassword',{rules: [{ required: true, message: '验证管理员密码' }]}]"/>
+        </a-form-item>
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="新密码"
+          hasFeedback
+        >
+          <a-input type="password" placeholder="新密码" v-decorator="['password',{rules: [{ required: true, message: '请输入新密码' }]}]"/>
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </a-card>
 </template>
 
 <script>
-  import md5 from 'md5'
-  import STable from '@/components/table/'
-  import UserModal from './modules/UserModal'
-  import {
-    getRoleListAll,
-    getAdminList,
-    createAccount,
-    modifyStatusAccount,
-    deleteAccount
-  } from '@/api/manage'
-  import pick from 'lodash.pick'
-  export default {
-    name: 'TableList',
-    components: {
-      STable,
-      UserModal
-    },
-    data() {
-      return {
-        description: '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
-        visibleEdit: false,
-        visibleAdd: false,
-        loadingAdd: false,
-        labelCol: {
-          xs: {
-            span: 24
-          },
-          sm: {
-            span: 5
-          }
+import md5 from 'md5'
+import STable from '@/components/table/'
+import UserModal from './modules/UserModal'
+import {
+  getRoleListAll,
+  getAdminList,
+  createAccount,
+  modifyStatusAccount,
+  deleteAccount,
+  resetPassword
+} from '@/api/manage'
+import pick from 'lodash.pick'
+export default {
+  name: 'TableList',
+  components: {
+    STable,
+    UserModal
+  },
+  data() {
+    return {
+      description:
+        '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
+      visibleEdit: false,
+      visibleAdd: false,
+      loadingAdd: false,
+      visibleSetPwd: false,
+      loadingSetPwd: false,
+      setPwdAdminId: 0,
+      labelCol: {
+        xs: {
+          span: 24
         },
-        wrapperCol: {
-          xs: {
-            span: 24
-          },
-          sm: {
-            span: 16
-          }
+        sm: {
+          span: 5
+        }
+      },
+      wrapperCol: {
+        xs: {
+          span: 24
         },
-        form: this.$form.createForm(this),
-        mdl: {},
-        // 高级搜索 展开/关闭
-        advanced: false,
-        // 查询参数
-        queryParam: {
-          Vague: "",
-          Status: -1,
-          IsDeleted: false,
-          PagedCount: 10,
-          SkipPage: 1
+        sm: {
+          span: 16
+        }
+      },
+      form: this.$form.createForm(this),
+      mdl: {},
+      // 高级搜索 展开/关闭
+      advanced: false,
+      // 查询参数
+      queryParam: {
+        vague: '',
+        status: '-1',
+        isDeleted: 0,
+        pagedCount: 10,
+        skipPage: 1
+      },
+      roleList: [],
+      selectedRowKeys: [],
+      selectedRows: [],
+      userList: [],
+      status: [
+        {
+          value: -1,
+          label: '全部'
         },
-        roleList: [],
-        selectedRowKeys: [],
-        selectedRows: [],
-        userList: [],
-        status: [{
-            value: -1,
-            label: "全部"
-          },
-          {
-            value: 1,
-            label: "正常"
-          },
-          {
-            value: 2,
-            label: "禁用"
-          }
-        ],
-        //分页对象
-        pagination:{
-          onChange:(page)=>{
-            this.handleChange(page)
-          },
-          onShowSizeChange:(current,pageSize)=>{
-            this.handleChangePageSize(current,pageSize)
-          },
-          showSizeChanger:true,
-          pageSizeOptions:['10','20','40','50'],
-          showSizeChanger:true,
-          current: 1,
-          pageSize: 10,
-          total:0
+        {
+          value: 1,
+          label: '启用'
         },
+        {
+          value: 2,
+          label: '禁用'
+        }
+      ],
+      //分页对象
+      pagination: {
+        onChange: page => {
+          this.handleChange(page)
+        },
+        onShowSizeChange: (current, pageSize) => {
+          this.handleChangePageSize(current, pageSize)
+        },
+        showSizeChanger: true,
+        pageSizeOptions: ['10', '20', '40', '50'],
+        showSizeChanger: true,
+        current: 1,
+        pageSize: 10,
+        total: 0
       }
-    },
-    filters: {
+    }
+  },
+  filters: {
     statusFilter(status) {
-      const statusMap = {        
-        1: '正常',
+      const statusMap = {
+        1: '启用',
         0: '禁用'
       }
-      return statusMap[status?1:0]
+      return statusMap[status ? 1 : 0]
     }
-    },
-    created() {
-      //获取全部角色集合
-      getRoleListAll().then(res => {      
-        this.roleList = res.result        
+  },
+  created() {
+    //获取全部角色集合
+    getRoleListAll().then(res => {
+      this.roleList = res.result
+    })
+    this.makeList()
+  },
+  methods: {
+    //中文表示角色
+    formatRole(rid) {
+      let retValue = ''
+      this.roleList.forEach(element => {
+        if (element.id == rid) {
+          retValue = element.name
+        }
       })
+      return retValue
+    },
+    //中文表示状态
+    formatStatus(value) {
+      let retValue = ''
+      this.status.forEach(function(opt) {
+        if (opt.value == value) {
+          retValue = opt.label
+        }
+      })
+      return retValue
+    },
+    //显示状态
+    ShowStatus(value) {
+      let retValue = ''
+      this.status.forEach(function(opt) {
+        if (opt.value != value) {
+          retValue = opt.label
+        }
+      })
+      return retValue
+    },
+    //返回item状态的其它状态
+    ReturnStatus(value) {
+      let retValue = ''
+      this.status.forEach(function(opt) {
+        if (opt.value != value) {
+          retValue = opt.value
+        }
+      })
+      return retValue
+    },
+    //改变状态
+    handleStatus(item) {
+      const that = this
+      let par = {}
+      par.id = item.id
+      par.status = this.ReturnStatus(item.status)
+      let text = this.ShowStatus(item.status)
+      console.log(par)
+      that.$confirm({
+        title: '提示',
+        content: '确定要修改该管理员状态为' + text + '吗 ?',
+        onOk() {
+          modifyStatusAccount(par).then(res => {
+            if (res.status == 200) {
+              that.makeList()
+              that.$message.success('修改成功')
+            } else {
+              that.$message.error(res.message)
+            }
+          })
+        },
+        onCancel() {}
+      })
+    },
+    //查询
+    handleSearch() {
+      //当有条件查询时查询页码必须等于1，后端才会从第一页数据开始查询并返回数据
+      if (this.queryParam.vague != '' || this.queryParam.status != -1 || this.queryParam.isDeleted != 0) {
+        this.queryParam.skipPage = 1
+      }
+      console.log(1111, this.queryParam)
       this.makeList()
     },
-    methods: {
-      //中文表示角色
-      formatRole(rid){
-        let retValue=""
-         this.roleList.forEach(element => {
-            if(element.id==rid){
-                 retValue = element.name;
-            }
-         });
-         return retValue
-      },
-      //中文表示状态
-      formatStatus(value) {
-        let retValue = "";
-        this.status.forEach(function(opt) {
-          if (opt.value == value) {
-            retValue = opt.label;
-          }
-        });
-        return retValue;
-      },
-      //显示状态
-      ShowStatus(value) {
-        let retValue = "";
-        this.status.forEach(function(opt) {
-          if (opt.value != value) {
-            retValue = opt.label;
-          }
-        });
-        return retValue;
-      },
-      //返回item状态的其它状态
-      ReturnStatus(value){
-        let retValue = "";
-        this.status.forEach(function(opt) {
-          if (opt.value != value) {
-            retValue = opt.value;
-          }
-        });
-        return retValue;
-      },
-      //改变状态
-      handleStatus(item){
-        const that = this
-        let par={};
-        par.id=item.id
-        par.status=this.ReturnStatus(item.status)
-        let text=this.ShowStatus(item.status)
-        console.log(par)
-        that.$confirm({
-          title: '提示',
-          content: '确定要修改该管理员状态为'+text+'吗 ?',
-          onOk() {
-            modifyStatusAccount(par).then(res=>{
-              if(res.status==200){
-                that.makeList()
-                 that.$message.success('修改成功')
-              }else{
-                that.$message.error(res.message)
-              }
-            })
-          },
-          onCancel() {}
-        })
-      },
-      //查询
-      handleSearch(){
-        //当有条件查询时查询页码必须等于1，后端才会从第一页数据开始查询并返回数据
-        if(this.queryParam.Vague!='' || this.queryParam.Status!=-1){
-          this.queryParam.SkipPage=1
-        }
-        this.makeList()
-      },
-      //获取列表K
-      makeList(){
-        const _this=this
-         getAdminList(this.queryParam).then(res => {
-          console.log(1111,this.queryParam,res)
-          let data = Object.assign(res, _this.queryParam)
-          _this.userList = res.result
-          const pager={... _this.pagination}
-          console.log("1111--pager:",pager)
-          pager.total=res.totalCount
-          _this.pagination=pager
-        })
-      },
-      //删除
-      handleDelete(id) {
-        const that = this
-        this.$confirm({
-          title: '提示',
-          content: '确定要删除吗 ?',
-          onOk() {
-           deleteAccount(id).then(res=>{
-             if(res.status==200){
-               that.makeList()
-               that.$message.success('删除成功')
-             }else{
-               that.$message.error(res.message)
-             }
-           })
-            
-          },
-          onCancel() {}
-        })
-      },
-      //添加弹出框
-      handleAdd() {
-        this.visibleAdd = true
-      },
-     //编辑提交方法
-      handleEditSubmit(){
-       this.makeList()
-      },
-      
-      //添加框点击取消
-      handleAddCancel(){
-        this.visibleAdd = false
-         this.loadingAdd=false
-        this.form=this.$form.createForm(this)
-      },
-      //添加提交
-      handleAddSubmit() {
-        this.loadingAdd=true
-         this.form.validateFields((err, values) => {
-           if (!err) {            
-             if(values.password!=values.confPassword){
-               this.$message.error("输入的密码不一致，请重新输入");
-               this.loadingAdd=false
-              return false;
-             }          
-            values.password = md5(values.password)     
-             createAccount(values).then(res=>{               
-               if(res.status==200){
-                  setTimeout(() => {
-                      this.visibleAdd = false
-                      this.loadingAdd=false
-                   }, 2000);
-                 this.makeList()
-                 this.form=this.$form.createForm(this)
-                  this.$message.success('提交成功')
-               }else{
-                 this.loadingAdd=false
-                 this.$message.error(res.message)
-               }              
-             })
-           }else{
-             this.loadingAdd=false
-           }
-         })
-      },
-      //改变显示条数加载数据
-      handleChangePageSize(current,pageSize){
-        this.pagination.current=current
-        this.pagination.pageSize=pageSize
-        this.queryParam.SkipPage=current
-        this.queryParam.PagedCount=pageSize
-        this.makeList()
-      },
-      //点击页码加载数据
-      handleChange(page) {
-        this.pagination.current=page
-         this.queryParam.SkipPage=page
-         this.makeList()
-      },
+    //获取列表K
+    makeList() {
+      const _this = this
+      getAdminList(this.queryParam).then(res => {
+        let data = Object.assign(res, _this.queryParam)
+        _this.userList = res.result
+        const pager = { ..._this.pagination }
+        pager.total = res.totalCount
+        _this.pagination = pager
+      })
     },
-    watch: {
-      /*
+    //删除
+    handleDelete(id) {
+      const that = this
+      this.$confirm({
+        title: '提示',
+        content: '确定要删除吗 ?',
+        onOk() {
+          deleteAccount(id).then(res => {
+            if (res.status == 200) {
+              that.makeList()
+              that.$message.success('删除成功')
+            } else {
+              that.$message.error(res.message)
+            }
+          })
+        },
+        onCancel() {}
+      })
+    },
+    //重置密码
+    handleSetSubmit() {
+      this.loadingSetPwd = true
+      let param = {}
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          param.id = this.setPwdAdminId
+          param.password = md5(values.password)
+          param.adminPassword = md5(values.adminPassword)
+          // 模拟后端请求 2000 毫秒延迟
+          new Promise(resolve => {
+            setTimeout(() => resolve(), 2000)
+          })
+            .then(() => {
+              resetPassword(param).then(res => {
+                if (res.status == 200) {
+                  this.visibleSetPwd = false
+                  this.loadingSetPwd = false
+                  this.form = this.$form.createForm(this)
+                  this.$message.success('设置成功')
+                  this.makeList()
+                } else {
+                  this.loadingSetPwd = false
+                  this.$message.error(res.message)
+                }
+              })
+            })
+            .catch(() => {
+              // Do something
+            })
+            .finally(() => {
+              this.loadingSetPwd = false
+              this.handleSetCancel()
+            })
+        } else {
+          this.loadingSetPwd = false
+        }
+      })
+    },
+    //关闭设置密码弹框
+    handleSetCancel() {
+      this.setPwdAdminId = 0
+      this.visibleSetPwd = false
+      this.loadingSetPwd = false
+      this.form = this.$form.createForm(this)
+    },
+    //打开设置密码弹框
+    openModalSetPwd(id) {
+      this.setPwdAdminId = id
+      this.visibleSetPwd = true
+    },
+    //添加弹出框
+    handleAdd() {
+      this.visibleAdd = true
+    },
+    //编辑提交方法
+    handleEditSubmit() {
+      this.makeList()
+    },
+
+    //添加框点击取消
+    handleAddCancel() {
+      this.visibleAdd = false
+      this.loadingAdd = false
+      this.form = this.$form.createForm(this)
+    },
+    //添加提交
+    handleAddSubmit() {
+      this.loadingAdd = true
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          if (values.password != values.confPassword) {
+            this.$message.error('输入的密码不一致，请重新输入')
+            this.loadingAdd = false
+            return false
+          }
+          values.password = md5(values.password)
+          createAccount(values).then(res => {
+            if (res.status == 200) {
+              setTimeout(() => {
+                this.visibleAdd = false
+                this.loadingAdd = false
+              }, 2000)
+              this.makeList()
+              this.form = this.$form.createForm(this)
+              this.$message.success('提交成功')
+            } else {
+              this.loadingAdd = false
+              this.$message.error(res.message)
+            }
+          })
+        } else {
+          this.loadingAdd = false
+        }
+      })
+    },
+    //改变显示条数加载数据
+    handleChangePageSize(current, pageSize) {
+      this.pagination.current = current
+      this.pagination.pageSize = pageSize
+      this.queryParam.skipPage = current
+      this.queryParam.pagedCount = pageSize
+      this.makeList()
+    },
+    //点击页码加载数据
+    handleChange(page) {
+      this.pagination.current = page
+      this.queryParam.skipPage = page
+      this.makeList()
+    }
+  },
+  watch: {
+    /*
           'selectedRows': function (selectedRows) {
             this.needTotalList = this.needTotalList.map(item => {
               return {
@@ -423,28 +504,28 @@
             })
           }
           */
-    }
   }
+}
 </script>
 <style lang="less" scoped>
-  .ant-avatar-lg {
-    width: 48px;
-    height: 48px;
-    line-height: 48px;
+.ant-avatar-lg {
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
+}
+.list-content-item {
+  color: rgba(0, 0, 0, 0.45);
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  margin-left: 40px;
+  span {
+    line-height: 20px;
   }
-  .list-content-item {
-    color: rgba(0, 0, 0, .45);
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 14px;
-    margin-left: 40px;
-    span {
-      line-height: 20px;
-    }
-    p {
-      margin-top: 4px;
-      margin-bottom: 0;
-      line-height: 22px;
-    }
+  p {
+    margin-top: 4px;
+    margin-bottom: 0;
+    line-height: 22px;
   }
+}
 </style>

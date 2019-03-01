@@ -16,16 +16,12 @@
           hasFeedback >
           <a-input placeholder="角色名称" v-decorator="[ 'name', {rules: [{ required: true, message: '请输入角色名称' }] }]" />
         </a-form-item>      
-        <!-- <a-form-item
+        <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="状态"
-          hasFeedback >
-          <a-select v-decorator="[ 'status', {rules: []} ]">
-            <a-select-option :value="1">正常</a-select-option>
-            <a-select-option :value="2">禁用</a-select-option>
-          </a-select>
-        </a-form-item> -->
+          label="状态">        
+          <a-switch checkedChildren="启用" unCheckedChildren="禁用"  v-decorator="[ 'enable', { valuePropName: 'checked' }]"  />
+        </a-form-item>
 
         <a-form-item
           :labelCol="labelCol"
@@ -72,13 +68,13 @@
 </template>
 
 <script>
-import { getPermissionAll,addRole,editRole,getRoleDetail } from '@/api/manage'
+import { getPermissionAll, addRole, editRole, getRoleDetail } from '@/api/manage'
 import { actionToObject } from '@/utils/permissions'
 import pick from 'lodash.pick'
 
 export default {
   name: 'RoleModal',
-  data () {
+  data() {
     return {
       labelCol: {
         xs: { span: 24 },
@@ -88,221 +84,228 @@ export default {
         xs: { span: 24 },
         sm: { span: 16 }
       },
-      visible: false,//弹框是否显示
-      confirmLoading: false,//弹框中的提交按钮是否加载中
-      mdl: {},//修改对象
-      form: this.$form.createForm(this),//表单对象
-      permissions: [],//全部权限集合
-      checkpermissions:[],//选择后的权限集合
-      isAdd:false,//是否添加
-      roleId:0,//角色ID
-      tagList:[],//checkbox选择后的权限集合（中间键）
-      actionKeys:[]//编辑对象的权限集
+      isChecked:false,
+      visible: false, //弹框是否显示
+      confirmLoading: false, //弹框中的提交按钮是否加载中
+      mdl: {}, //修改对象
+      form: this.$form.createForm(this), //表单对象
+      permissions: [], //全部权限集合
+      checkpermissions: [], //选择后的权限集合
+      isAdd: false, //是否添加
+      roleId: 0, //角色ID
+      tagList: [], //checkbox选择后的权限集合（中间键）
+      actionKeys: [] //编辑对象的权限集
     }
   },
-  created () {
+  created() {
     this.loadPermissions()
   },
   methods: {
     //添加
-    add () {
+    add() {
       this.edit({ id: 0 })
     },
     //编辑
-    edit (record) {
-       this.visible = true
-      if(record.id==0){
-        this.isAdd=true
+    edit(record) {
+      this.visible = true
+      if (record.id == 0) {
+        this.isChecked=true
+        this.isAdd = true
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.mdl,'name', 'description'))
-      })
-      }else{
-         this.isAdd=false
-         getRoleDetail(record.id).then(res=>{
-            if(res.status==200){
-                this.mdl = Object.assign({}, res.result)            
-                this.roleId=record.id 
-                 // 有权限表，处理勾选
-                if (this.mdl.permissions && this.permissions) {
-                  for(let key in this.mdl.permissions){
-                    this.actionKeys.push(key)
+          this.form.setFieldsValue({"enable":true})
+        })
+      } else {
+        this.isAdd = false
+        getRoleDetail(record.id).then(res => {
+          if (res.status == 200) {
+            this.mdl = Object.assign({}, res.result)
+            this.roleId = record.id
+            // 有权限表，处理勾选
+            if (this.mdl.permissions && this.permissions) {
+              //console.log(this.permissions)
+              // 把权限表遍历一遍，设定要勾选的权限 action
+              this.permissions.forEach(permission => {
+                for (let key in this.mdl.permissions) {                  
+                  if(Object.keys(permission.actions).includes(key)){
+                      permission.selected.push(key)
+                      permission.indeterminate=true
                   }
-                  // 把权限表遍历一遍，设定要勾选的权限 action
-                  this.permissions.forEach(permission => {
-                    permission.selected = this.actionKeys
-                  })
-                }              
-                this.$nextTick(() => {
-                  this.form.setFieldsValue(pick(this.mdl,'name', 'description'))
-                })
-            }else{
-              this.$message.success(res.message)
+                  
+                }
+              })
             }
-        })      
-      }   
+            this.$nextTick(() => {
+              this.form.setFieldsValue(pick(this.mdl, 'name', 'enable','description'))
+            })
+          } else {
+            this.$message.success(res.message)
+          }
+        })
+      }
     },
     //关闭方法
-    close () {
-      this.form=this.$form.createForm(this)
-      this.mdl={}
-      this.tagList=[]
-      this.actionKeys=[]
+    close() {
+      this.form = this.$form.createForm(this)
+      this.mdl = {}
+      this.tagList = []
+      this.actionKeys = []
+      this.checkpermissions=[]
       this.loadPermissions()
       this.$emit('close')
       this.visible = false
+      this.isChecked=false
     },
     //弹框提交方法
-    handleOk () {
+    handleOk() {
       const _this = this
       // 触发表单验证
       this.form.validateFields((err, values) => {
         // 验证表单没错误
         if (!err) {
-           values.roleId=this.roleId
-           this.loadCheck()
-          values.permissions=this.checkpermissions
-          console.log("form->values:",values)
-           _this.confirmLoading = true
+          values.roleId = this.roleId
+          this.loadCheck()
+          values.permissions = this.checkpermissions
+          if (!this.checkHaveRoles(values)) {
+            return false
+          }
+          _this.confirmLoading = true
           // 模拟后端请求 2000 毫秒延迟
-          new Promise((resolve) => {
+          new Promise(resolve => {
             setTimeout(() => resolve(), 2000)
-          }).then(() => {
-            // Do something
-            if(this.isAdd){
-              addRole(values).then(res=>{
-                if(res.status==200){
-                
-                  _this.confirmLoading = false
-                  _this.$message.success('保存成功')
-                  _this.$emit('ok')
-                }else{
-                  _this.confirmLoading = false
-                  _this.$message.error(res.message)
-                }
-              }).catch(error=>{
-                 _this.$message.error("服务器超时，请重新再试。")
-              })
-            }else{
-              editRole(values).then(res=>{
-                if(res.status==200){                
-                  _this.confirmLoading = false
-                  _this.$message.success('保存成功')
-                  _this.$emit('ok')
-                }else{
-                  _this.confirmLoading = false
-                  _this.$message.error(res.message)
-                }
-              }).catch(error=>{
-                _this.$error({ title: '错误提示', content: '服务器超时，请重新再试。', });
-              })
-            }
-          
-          }).catch(() => {
-            // Do something
-          }).finally(() => {
-            _this.confirmLoading = false
-            _this.close()
           })
-        }else{
-          this.tagList=[]
+            .then(() => {
+              // Do something
+              if (this.isAdd) {
+                addRole(values)
+                  .then(res => {
+                    if (res.status == 200) {
+                      _this.confirmLoading = false
+                      this.checkpermissions=[]
+                      _this.$message.success('保存成功')
+                      _this.$emit('ok')
+                    } else {
+                      _this.confirmLoading = false
+                      _this.$message.error(res.message)
+                    }
+                  })
+                  .catch(error => {
+                    _this.$message.error('服务器超时，请重新再试。')
+                  })
+              } else {
+                editRole(values)
+                  .then(res => {
+                    if (res.status == 200) {
+                      _this.confirmLoading = false
+                      this.checkpermissions=[]
+                      _this.$message.success('保存成功')
+                      _this.$emit('ok')
+                    } else {
+                      _this.confirmLoading = false
+                      _this.$message.error(res.message)
+                    }
+                  })
+                  .catch(error => {
+                    _this.$error({ title: '错误提示', content: '服务器超时，请重新再试。' })
+                  })
+              }
+            })
+            .catch(() => {
+              // Do something
+            })
+            .finally(() => {
+              _this.confirmLoading = false
+              _this.close()
+            })
+        } else {
+          this.tagList = []
           this.loadPermissions()
         }
       })
     },
+    //检测是否选择了权限（添加/编辑的时候）
+    checkHaveRoles(values) {
+      if (this.isAdd) {
+        if (values.permissions.length <= 0) {
+          this.$message.warning('请给角色赋予权限，请勾选权限')
+          return false
+        } else {
+          return true
+        }
+      } else {
+        if (this.mdl && Object.keys(this.mdl.permissions).length === 0 && values.permissions.length <= 0) {
+          this.$message.warning('请给角色赋予权限，请勾选权限')
+          return false
+        } else {
+          return true
+        }
+      }
+    },
     //弹框关闭
-    handleCancel () {
+    handleCancel() {
       this.close()
     },
     //子级复选框check事件
-    onChangeCheck (e,permission,index) {
-      permission.indeterminate = !!permission.selected.length && (permission.selected.length < permission.actionsOptions.length)
+    onChangeCheck(e, permission, index) {
+      permission.indeterminate =
+        !!permission.selected.length && permission.selected.length < permission.actionsOptions.length
       permission.checkedAll = permission.selected.length === permission.actionsOptions.length
-      // 选择后的权限结果集
-      if(!this.tagList.includes(permission)){
-        this.tagList.push(permission)    
-      }      
-      if(!permission.indeterminate){
-        if(this.tagList.length!==0){
-          var index1 = this.tagList.indexOf(permission);
-          this.tagList.splice(index1, 1);
-        }
-      }   
     },
     //全选复选框check事件
-    onChangeCheckAll (e, permission,index) {
-      const checkPermission= Object.assign(permission, {
+    onChangeCheckAll(e, permission, index) {
+      const checkPermission = Object.assign(permission, {
         selected: e.target.checked ? permission.actionsOptions.map(obj => obj.value) : [],
         indeterminate: false,
-        checkedAll:e.target.checked
-        
+        checkedAll: e.target.checked
       })
-       if(!this.tagList.includes(permission)){
-        this.tagList.push(permission)    
-      }    
-      if(!checkPermission.checkedAll){
-        if(this.tagList.length!==0){
-          var index1 = this.tagList.indexOf(permission);
-          this.tagList.splice(index1, 1);
-        }
-      }      
     },
-    //加载选择后的权限
+    //选择后的权限
     loadCheck(){
-      this.tagList.forEach(ele=>{
-        if(!this.checkpermissions.includes(ele.id)){
-          this.checkpermissions.push(ele.id)
-        } 
+      this.permissions.forEach(ele=>{      
         ele.selected.forEach(sel=>{
-          if(!this.checkpermissions.includes(sel)){
-            this.checkpermissions.push(sel)
-          }
-          
+           this.checkpermissions.push(sel)             
         })
       })
-      console.log("最后选择的权限集:",this.checkpermissions)
     },
     //加载全部页面权限
-    loadPermissions () {
+    loadPermissions() {
       getPermissionAll().then(res => {
-        const result = res.result      
+        const result = res.result
         this.permissions = result.map(permission => {
           permission.checkedAll = false
           permission.selected = []
           permission.indeterminate = false
-          permission.actionsOptions=this.loadOptions(permission.actions)  
-          return permission        
-         
+          permission.actionsOptions = this.loadOptions(permission.actions)
+          return permission
         })
         //移除没有子权限的页面权限（用途：筛选仪表盘、控制面板等顶级权限不显示于添加和编辑中）
-        for(let i in this.permissions){
-          if(Object.keys(this.permissions[i].actions).length === 0){
-            this.permissions.splice(i,1)
+        for (let i in this.permissions) {
+          if (Object.keys(this.permissions[i].actions).length === 0) {
+            this.permissions.splice(i, 1)
           }
-        }        
+        }
       })
     },
     //遍历键值对，返回包含了key与value为值的对象集
-    loadOptions(actions){
-      const options=[]
-      for(var key in actions){
-               options.push({
-              label: actions[key],
-              value: key
-            })
+    loadOptions(actions) {
+      const options = []
+      for (var key in actions) {
+        options.push({
+          label: actions[key],
+          value: key
+        })
       }
       return options
     }
-
   }
 }
 </script>
 
 <style scoped>
-.row{
+.row {
   padding: 10px;
 }
-.col-text-right{
-  text-align: right
+.col-text-right {
+  text-align: right;
 }
 /* .col-backgroud-color1{
    background: rgba(0, 160, 233, 0.7);

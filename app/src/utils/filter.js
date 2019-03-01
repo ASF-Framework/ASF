@@ -18,3 +18,31 @@ Vue.filter('dayjs', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
 Vue.filter('moment', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
   return moment(dataStr).format(pattern)
 })
+// 时间戳格式化
+Vue.filter('dayFormat', function (dataStr, pattern) {
+  if (!dataStr) return ''
+  const date = dataStr.toString().length
+  if (date === 10) {
+    return moment(dataStr * 1000).format(pattern)
+  } else {
+    return moment(dataStr).format(pattern)
+  }
+})
+// 转换是否启用文字
+Vue.filter('statusFilter', function (value) {
+  if (!value) return ''
+  const statusMap = {
+    1: '启用',
+    0: '停止'
+  }
+  return statusMap[status ? 1 : 0]
+})
+
+Vue.filter('statusIsSystem', function (value) {
+  if (!value) return ''
+  const statusMap = {
+    1: '是',
+    0: '否'
+  }
+  return statusMap[value ? 1 : 0]
+})

@@ -117,9 +117,7 @@ import AvatarList from '@/components/AvatarList'
 import CountDown from '@/components/CountDown/CountDown'
 import Ellipsis from '@/components/Ellipsis'
 import NumberInfo from '@/components/NumberInfo'
-
 const AvatarListItem = AvatarList.AvatarItem
-
 export default {
   name: 'Home',
   components: {

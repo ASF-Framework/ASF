@@ -38,7 +38,11 @@
         </a-row>
       </a-form>
     </div>
+<<<<<<< HEAD
     <a-table ref="table" size="default" :pagination="pagination" :columns="columns" :dataSource="loadData" @change="handleChange" :rowKey="record => record.id">     
+=======
+    <s-table ref="table" size="default" :columns="columns" :data="loadData">
+>>>>>>> lcx_dev
       <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
       <span slot="createTime" slot-scope="text">{{ text*1000 | moment }}</span>
       <span slot="action" slot-scope="text, record">
@@ -50,7 +54,14 @@
           </a>
           <a-menu slot="overlay">
             <a-menu-item>
+<<<<<<< HEAD
               <a href="javascript:;" @click="handleStatus(record)">{{ShowStatus(record.enable)}}</a>
+=======
+              <a href="javascript:;">详情</a>
+            </a-menu-item>
+            <a-menu-item>
+              <a href="javascript:;" @click="handleStatus(record)">{{ ShowStatus(record.enable) }}</a>
+>>>>>>> lcx_dev
             </a-menu-item>
             <a-menu-item>
               <a href="javascript:;" @click="handleDelete(record.id)">删除</a>
@@ -66,7 +77,11 @@
 <script>
 import STable from '@/components/table/'
 import RoleModal from './modules/RoleModal'
+<<<<<<< HEAD
 import {    getRoleList,modifyStatusRole,deleteRole  } from '@/api/manage'
+=======
+import { getRoleList, modifyStatusRole, deleteRole } from '@/api/manage'
+>>>>>>> lcx_dev
 export default {
   name: 'TableList',
   components: {
@@ -77,7 +92,16 @@ export default {
     return {
       description:
         '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
+<<<<<<< HEAD
         filters:{},
+=======
+      visible: false,
+      visibleAdd: false,
+      form: null,
+      mdl: {},
+      // 高级搜索 展开/关闭
+      advanced: false,
+>>>>>>> lcx_dev
       // 查询参数
       queryParam: {
         vague:"",
@@ -99,13 +123,13 @@ export default {
         {
           title: '状态',
           dataIndex: 'enable',
-           scopedSlots: {
+          scopedSlots: {
             customRender: 'enable'
           }
         },
         {
           title: '描述',
-          dataIndex: 'description',
+          dataIndex: 'description'
         },
         {
           title: '创建时间',
@@ -124,26 +148,36 @@ export default {
           }
         }
       ],
+<<<<<<< HEAD
       //分页对象
       pagination:{
         pageSizeOptions:['10','20','40','50'],
         showSizeChanger:true,
         total:0
+=======
+      // 加载数据方法 必须为 Promise 对象
+      loadData: () => {
+        return getRoleList(this.queryParam).then(res => {
+          console.log('Roles:', res)
+          const data = Object.assign(res, this.queryParam)
+          return data
+        })
+>>>>>>> lcx_dev
       },
       loadData:[],
       //状态数据
       status: [{
-            value: -1,
-            label: "全部"
-          },
-          {
-            value: 1,
-            label: "启用"
-          },
-          {
-            value: 0,
-            label: "禁用"
-          }
+        value: -1,
+        label: '全部'
+      },
+      {
+        value: 1,
+        label: '启用'
+      },
+      {
+        value: 0,
+        label: '禁用'
+      }
       ]
     }
   },
@@ -151,15 +185,16 @@ export default {
     this.loadDataList()
   },
   filters: {
-    statusFilter(status) {
-      const statusMap = {        
+    statusFilter (status) {
+      const statusMap = {
         1: '启用',
         0: '禁用'
       }
-      return statusMap[status?1:0]
+      return statusMap[status ? 1 : 0]
     }
   },
   methods: {
+<<<<<<< HEAD
     //弹框点击确认后的方法
     handleOk() {
       // 新增/修改 成功时，重载列表
@@ -207,6 +242,21 @@ export default {
           })
         },
         onCancel() {}
+=======
+    handleAdd () {
+      this.visibleAdd = true
+    },
+    handleEdit (record) {
+      this.mdl = Object.assign({}, record)
+      this.mdl.permissions.forEach(permission => {
+        permission.actionsOptions = permission.actionEntitySet.map(action => {
+          return {
+            label: action.describe,
+            value: action.action,
+            defaultCheck: action.defaultCheck
+          }
+        })
+>>>>>>> lcx_dev
       })
     },
     //删除
@@ -237,6 +287,7 @@ export default {
         }
         this.loadDataList()
     },
+<<<<<<< HEAD
     //加载数据
     loadDataList(){
       const _this=this
@@ -250,6 +301,74 @@ export default {
           _this.$message.success(res.message)
         }
       })
+=======
+    // 显示状态
+    ShowStatus (value) {
+      let retValue = ''
+      this.status.forEach(function (opt) {
+        if (opt.value != value) {
+          retValue = opt.label
+        }
+      })
+      return retValue
+    },
+    // 返回item状态的其它状态
+    ReturnStatus (value) {
+      let retValue = ''
+      this.status.forEach(function (opt) {
+        if (opt.value != value) {
+          retValue = opt.value
+        }
+      })
+      return retValue
+    },
+    // 禁用/启用方法
+    handleStatus (item) {
+      const that = this
+      const par = {}
+      par.RoleId = item.id
+      par.Enable = this.ReturnStatus(item.enable)
+      const text = this.ShowStatus(item.enable)
+      console.log(par)
+      that.$confirm({
+        title: '提示',
+        content: '确定要修改角色状态为' + text + '吗 ?',
+        onOk () {
+          modifyStatusRole(par).then(res => {
+            if (res.status == 200) {
+              that.$refs.table.refresh(true)
+              that.$message.success('修改成功')
+            } else {
+              that.$message.error(res.message)
+            }
+          })
+        },
+        onCancel () {}
+      })
+    },
+    // 删除
+    handleDelete (id) {
+      const that = this
+      this.$confirm({
+        title: '提示',
+        content: '确定要删除吗 ?',
+        onOk () {
+          deleteRole(id).then(res => {
+            if (res.status == 200) {
+              that.$refs.table.refresh(true)
+              that.$message.success('删除成功')
+            } else {
+              that.$message.error(res.message)
+            }
+          })
+        },
+        onCancel () {}
+      })
+    },
+    onChange (selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
+>>>>>>> lcx_dev
     },
     //点击页码分页显示
     handleChange(pagination, filters, sorter){

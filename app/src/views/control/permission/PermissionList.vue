@@ -572,27 +572,6 @@ export default {
     makePermissionList (res) {
       const result1 = []
       const data = Object.assign(res, this.queryParam)
-<<<<<<< HEAD:app/src/views/control/PermissionList.vue
-      console.log(data)
-      // if (this.queryParam.Vague === '' && this.queryParam.Enable === -1) {
-       data.result.forEach((element, index) => {
-           if (element.parentId === '') {
-             result1.push(element)
-              element.children = []
-              for(let i in data.result){
-              if (element.id === data.result[i].parentId) {
-                 element.children.push(data.result[i])
-                console.log(element,data.result[i])
-              }
-              }            
-           }    
-      })
-
-         data.result = result1
-      console.log('Table-resource:', data)
-      this.dataLoad = data
-      return data
-=======
       data.result.forEach((element, index) => {
         if (element.parentId === '') {
           result1.push(element)
@@ -606,7 +585,6 @@ export default {
       })
       data.result = result1
       return data.result
->>>>>>> lcx_dev:app/src/views/control/permission/PermissionList.vue
     },
     handleBtn () {
       this.makePermissionList()

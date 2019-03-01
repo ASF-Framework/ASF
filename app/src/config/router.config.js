@@ -90,11 +90,8 @@ export const asyncRouterMap = [
             component: () => import('@/views/control/permission/index'),
             meta: {
               title: '权限列表',
-<<<<<<< HEAD
-              permission: 'asf_permission'
-=======
               keepAlive: true,
-              permission: ['asf']
+              permission: 'asf_permission'
             },
             redirect: '/control/permission/PermissionList',
             children: [
@@ -132,7 +129,6 @@ export const asyncRouterMap = [
             meta: {
               title: '日志管理',
               permission: ['asf']
->>>>>>> 8850ba99aadd0899e685bf5c02f23585bb3d817e
             }
           }
           // {

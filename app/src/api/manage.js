@@ -4,7 +4,6 @@ const api = {
   admin: '/asf/account/getlist',
   userdetail: '/user/detail',
   role: '/asf/role/getlist',
-<<<<<<< HEAD
   addRole:'/asf/role/Create',
   editRole:'/asf/role/Modify',
   roleAll:'/asf/role/getlistAll',
@@ -17,19 +16,6 @@ const api = {
   modifyAccount:'/asf/account/midify',
   resetPassword:'/asf/account/ResetPassword',
   getAccountDetail:'/asf/account/GetDetails',
-=======
-  addRole: '/asf/role/Create',
-  editRole: '/asf/roe/Modify',
-  roleAll: '/asf/role/getlistAll',
-  modifyStatusRole: '/asf/role/ModifyStatus',
-  deleteRole: '/asf/role/delete',
-  getRoleDetail: '/asf/role/GetDetails',
-  createAccount: '/asf/account/create',
-  modifyStatusAccount: '/asf/account/midifystatus',
-  deleteAccount: '/asf/account/delete',
-  modifyAccount: '/asf/account/midify',
-  getAccountDetail: '/asf/account/GetDetails',
->>>>>>> lcx_dev
   service: '/service',
   permission: '/asf/permission/getmenulist',
   permissionAll: '/asf/permission/GetMenuAllList',
@@ -44,17 +30,13 @@ const api = {
   deleteAction: '/asf/Permission/Delete',
   CreateAction: '/asf/Permission/CreateAction',
   CreateMenu: '/asf/Permission/CreateMenu',
-<<<<<<< HEAD
   getUserDetail:'/asf/account/get',
   modifyNameOrAvatar:'/asf/account/ModifyNameOrAvatar',
   modifyTelephone:'/asf/account/ModifyTelephone',
   modifyEmail:'/asf/account/ModifyEmail',
-  modifyPassword:'/asf/account/ModifyPassword'
-
-=======
+  modifyPassword:'/asf/account/ModifyPassword',
   getLogger: '/asf/Logger/GetList',
   loggerDelete: 'asf/Logger/Delete'
->>>>>>> lcx_dev
 }
 
 export default api
@@ -388,12 +370,7 @@ export function getRoleDetail (parameter) {
     })
   })
 }
-<<<<<<< HEAD
 //----------------个人信息------------
-=======
-
-// --------------下面是旧的 -------------------//
->>>>>>> lcx_dev
 export function getUserDetail (parameter) {
   return new Promise((resolve, reject) => {
     axios.get(api.getUserDetail).then(res => {
@@ -403,6 +380,8 @@ export function getUserDetail (parameter) {
     })
   })
 }
+
+
 
 //--------------下面是旧的 -------------------//
 // export function getUserDetail (parameter) {

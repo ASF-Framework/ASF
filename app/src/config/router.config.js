@@ -6,6 +6,8 @@ import {
   BlankLayout,
   PageView
 } from '@/components/layouts'
+import Forbidden from '@/views/exception/403'
+//import { reject, resolve } from 'node_modules/@types/q/index';
 
 export const asyncRouterMap = [
 
@@ -16,13 +18,13 @@ export const asyncRouterMap = [
     meta: {
       title: '首页'
     },
-    redirect: '/dashboard/workplace',
+    redirect: '/account/center',
     children: [
       // dashboard
       {
         path: '/dashboard',
         name: 'dashboard',
-        redirect: '/dashboard/workplace',
+        redirect: '/control/user-list',
         component: RouteView,
         meta: {
           title: '仪表盘',
@@ -157,28 +159,35 @@ export const asyncRouterMap = [
           // }
         ]
       },
-      // profile
-      // {
-      //   path: '/profile',
-      //   name: 'profile',
-      //   component: RouteView,
-      //   redirect: '/profile/basic',
-      //   meta: { title: '详情页', icon: 'profile', permission: [ 'asf' ] },
-      //   children: [
-      //     {
-      //       path: '/profile/basic',
-      //       name: 'ProfileBasic',
-      //       component: () => import('@/views/profile/basic/Index'),
-      //       meta: { title: '基础详情页', permission: [ 'asf' ] }
-      //     },
-      //     {
-      //       path: '/profile/advanced',
-      //       name: 'ProfileAdvanced',
-      //       component: () => import('@/views/profile/advanced/Advanced'),
-      //       meta: { title: '高级详情页', permission: [ 'asf' ] }
-      //     }
-      //   ]
-      // },
+      // Exception
+      {
+        path: '/exception',
+        name: 'exception',
+        hidden: true,
+        component: RouteView,
+        redirect: '/exception/403',
+        meta: { title: '异常页', icon: 'warning' },
+        children: [
+          {
+            path: '/exception/403',
+            name: 'Exception403',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/403'),
+            meta: { title: '403'}
+          },
+          {
+            path: '/exception/404',
+            name: 'Exception404',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404'),
+            meta: { title: '404'}
+          },
+          {
+            path: '/exception/500',
+            name: 'Exception500',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/500'),
+            meta: { title: '500' }
+          }
+        ]
+      },
       // account
       {
         path: '/account',
@@ -281,7 +290,7 @@ export const asyncRouterMap = [
  */
 export const constantRouterMap = [
   {
-    path: '/user',
+    path: '/user',    
     component: UserLayout,
     redirect: '/user/login',
     hidden: true,
@@ -289,17 +298,20 @@ export const constantRouterMap = [
       {
         path: 'login',
         name: 'login',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
+        component:resolve=>require(['@/views/user/Login'],resolve)
+        //component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
       },
       {
         path: 'register',
         name: 'register',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/Register')
+        component:resolve=>require(['@/views/user/Register'],resolve)
+        //component: () => import(/* webpackChunkName: "user" */ '@/views/user/Register')
       },
       {
         path: 'register-result',
         name: 'registerResult',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
+        component:resolve=>require(['@/views/user/RegisterResult'],resolve)
+        //component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
       }
     ]
   },

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
+import router from '@/router'
 import { VueAxios } from './axios'
 import notification from 'ant-design-vue/es/notification'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
@@ -16,7 +17,10 @@ const err = (error) => {
     const data = error.response.data
     const token = Vue.ls.get(ACCESS_TOKEN)
     if (error.response.status === 403) {
-      notification.error({ message: 'Forbidden', description: data.message })
+      //notification.warning({ message: '您没有使用该页面的权限', description: "如果有需要，请联系管理员进行设置",onClose:()=>{window.location.href="/403";} })
+      // window.location.href="/exception/403";
+      console.log(11111,router)
+      router.push({path:'/exception'})
     }
     if (error.response.status === 401) {
       notification.error({ message: 'Unauthorized', description: 'Authorization verification failed' })

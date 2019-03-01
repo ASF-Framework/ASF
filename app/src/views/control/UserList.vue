@@ -347,7 +347,6 @@ export default {
       if (this.queryParam.vague != '' || this.queryParam.status != -1 || this.queryParam.isDeleted != 0) {
         this.queryParam.skipPage = 1
       }
-      console.log(1111, this.queryParam)
       this.makeList()
     },
     //获取列表K

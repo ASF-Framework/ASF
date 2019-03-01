@@ -4,6 +4,7 @@ const api = {
   admin: '/asf/account/getlist',
   userdetail: '/user/detail',
   role: '/asf/role/getlist',
+<<<<<<< HEAD
   addRole:'/asf/role/Create',
   editRole:'/asf/role/Modify',
   roleAll:'/asf/role/getlistAll',
@@ -16,9 +17,22 @@ const api = {
   modifyAccount:'/asf/account/midify',
   resetPassword:'/asf/account/ResetPassword',
   getAccountDetail:'/asf/account/GetDetails',
+=======
+  addRole: '/asf/role/Create',
+  editRole: '/asf/roe/Modify',
+  roleAll: '/asf/role/getlistAll',
+  modifyStatusRole: '/asf/role/ModifyStatus',
+  deleteRole: '/asf/role/delete',
+  getRoleDetail: '/asf/role/GetDetails',
+  createAccount: '/asf/account/create',
+  modifyStatusAccount: '/asf/account/midifystatus',
+  deleteAccount: '/asf/account/delete',
+  modifyAccount: '/asf/account/midify',
+  getAccountDetail: '/asf/account/GetDetails',
+>>>>>>> lcx_dev
   service: '/service',
   permission: '/asf/permission/getmenulist',
-  permissionAll:'/asf/permission/GetMenuAllList',
+  permissionAll: '/asf/permission/GetMenuAllList',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
   getActionDetails: '/asf/Permission/GetActionDetails',
@@ -30,12 +44,17 @@ const api = {
   deleteAction: '/asf/Permission/Delete',
   CreateAction: '/asf/Permission/CreateAction',
   CreateMenu: '/asf/Permission/CreateMenu',
+<<<<<<< HEAD
   getUserDetail:'/asf/account/get',
   modifyNameOrAvatar:'/asf/account/ModifyNameOrAvatar',
   modifyTelephone:'/asf/account/ModifyTelephone',
   modifyEmail:'/asf/account/ModifyEmail',
   modifyPassword:'/asf/account/ModifyPassword'
 
+=======
+  getLogger: '/asf/Logger/GetList',
+  loggerDelete: 'asf/Logger/Delete'
+>>>>>>> lcx_dev
 }
 
 export default api
@@ -251,6 +270,26 @@ export function createAccount (parameter) {
     })
   })
 }
+// 获取日志集合
+export function getLogger (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.getLogger, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+// 根据日期删除日志
+export function loggerDelete (parameter) {
+  return new Promise((resolve, reject) => {
+    axios.post(api.loggerDelete, parameter).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
 
 // 修改管理员状态
 export function modifyStatusAccount (parameter) {
@@ -295,11 +334,11 @@ export function getAccountDetail (parameter) {
   })
 }
 
-//----------角色管理-----------
-//添加角色
+// ----------角色管理-----------
+// 添加角色
 export function addRole (parameter) {
   return new Promise((resolve, reject) => {
-    axios.post(api.addRole,parameter,).then(res => {
+    axios.post(api.addRole, parameter).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)
@@ -307,7 +346,7 @@ export function addRole (parameter) {
   })
 }
 
-//修改角色状态
+// 修改角色状态
 export function modifyStatusRole (parameter) {
   return new Promise((resolve, reject) => {
     axios.post(api.modifyStatusRole, parameter).then(res => {
@@ -318,10 +357,10 @@ export function modifyStatusRole (parameter) {
   })
 }
 
-//删除角色
+// 删除角色
 export function deleteRole (parameter) {
   return new Promise((resolve, reject) => {
-    axios.post(api.deleteRole+'/'+parameter).then(res => {
+    axios.post(api.deleteRole + '/' + parameter).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)
@@ -329,27 +368,32 @@ export function deleteRole (parameter) {
   })
 }
 
-//编辑角色
+// 编辑角色
 export function editRole (parameter) {
   return new Promise((resolve, reject) => {
-    axios.post(api.editRole,parameter,).then(res => {
+    axios.post(api.editRole, parameter).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)
     })
   })
 }
-//获取角色详情
+// 获取角色详情
 export function getRoleDetail (parameter) {
   return new Promise((resolve, reject) => {
-    axios.get(api.getRoleDetail+'/'+parameter,).then(res => {
+    axios.get(api.getRoleDetail + '/' + parameter).then(res => {
       resolve(res)
     }).catch(err => {
       reject(err)
     })
   })
 }
+<<<<<<< HEAD
 //----------------个人信息------------
+=======
+
+// --------------下面是旧的 -------------------//
+>>>>>>> lcx_dev
 export function getUserDetail (parameter) {
   return new Promise((resolve, reject) => {
     axios.get(api.getUserDetail).then(res => {

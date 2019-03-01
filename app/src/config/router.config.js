@@ -85,14 +85,80 @@ export const asyncRouterMap = [
             }
           },
           {
-            path: '/control/permission-list',
+            path: '/control/permission/index',
             name: 'PermissionList',
-            component: () => import('@/views/control/PermissionList'),
+            component: () => import('@/views/control/permission/index'),
             meta: {
               title: '权限列表',
+<<<<<<< HEAD
               permission: 'asf_permission'
+=======
+              keepAlive: true,
+              permission: ['asf']
+            },
+            redirect: '/control/permission/PermissionList',
+            children: [
+              {
+                path: '/control/permission/PermissionList',
+                name: 'PermissionTable',
+                // hidden: true,
+                component: () => import('@/views/control/permission/PermissionList'),
+                meta: {
+                  title: '权限列表',
+                  keepAlive: true
+                  // hidden: true,
+                  // hiddenHeaderContent: true
+                }
+              },
+              {
+                path: '/control/permission/details',
+                name: 'Details',
+                hidden: true,
+                component: () => import('@/views/control/permission/details'),
+                meta: {
+                  title: '详情',
+                  keepAlive: true,
+                  hidden: true,
+                  hiddenHeaderContent: true
+                }
+              }
+            ]
+          },
+          // 日志管理
+          {
+            path: '/control/Logger',
+            name: 'Logtable',
+            component: () => import('@/views/control/Logger'),
+            meta: {
+              title: '日志管理',
+              permission: ['asf']
+>>>>>>> 8850ba99aadd0899e685bf5c02f23585bb3d817e
             }
           }
+          // {
+          //   path: '/control/permission',
+          //   name: 'Details',
+          //   hidden: true,
+          //   component: () => import('@/views/control/permission/index'),
+          //   meta: {
+          //     title: '详情',
+          //     permission: ['asf'],
+          //     // keepAlive: true,
+          //     hiddenHeaderContent: true
+          //   },
+          //   children: [
+          //     {
+          //       path: '/account/settings/base',
+          //       name: 'BaseSettings',
+          //       component: () => import('@/views/account/settings/BaseSetting'),
+          //       meta: {
+          //         title: '基本设置',
+          //         hidden: true,
+          //         keepAlive: true
+          //       }
+          //     }
+          //   ]
+          // }
         ]
       },
       // profile

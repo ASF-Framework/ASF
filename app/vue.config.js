@@ -37,6 +37,21 @@ module.exports = {
       .set('@views', resolve('src/views'))
       .set('@layout', resolve('src/layout'))
       .set('@static', resolve('src/static'))
+    const svgRule = config.module.rule('svg')
+    svgRule.uses.clear()
+    svgRule
+      .oneOf('inline')
+      .resourceQuery(/inline/)
+      .use('vue-svg-icon-loader')
+      .loader('vue-svg-icon-loader')
+      .end()
+      .end()
+      .oneOf('external')
+      .use('file-loader')
+      .loader('file-loader')
+      .options({
+        name: 'assets/[name].[hash:8].[ext]'
+      })
   },
 
   css: {
@@ -76,5 +91,7 @@ module.exports = {
     }
   },
 
-  lintOnSave: undefined
+  lintOnSave: undefined,
+   // babel-loader no-ignore node_modules/*
+   transpileDependencies: []
 }

@@ -58,11 +58,17 @@ export default {
   },
   methods: {
     renderIcon: function (h, icon) {
-      return icon === 'none' || icon === undefined ? null : h(Icon, { props: { type: icon !== undefined ? icon : '' } })
+      if (icon === 'none' || icon === undefined) {
+        return null
+      }
+      const props = {}
+      typeof (icon) === 'object' ? props.component = icon : props.type = icon
+      return h(Icon, { props: { ...props } })
     },
     renderMenuItem: function (h, menu, pIndex, index) {
+      const target = menu.meta.target || null
       return h(Item, { key: menu.path ? menu.path : 'item_' + pIndex + '_' + index }, [
-        h('router-link', { attrs: { to: { name: menu.name } } }, [
+        h('router-link', { attrs: { to: { name: menu.name }, target: target } }, [
           this.renderIcon(h, menu.meta.icon),
           h('span', [menu.meta.title])
         ])
@@ -73,7 +79,8 @@ export default {
       const subItem = [h('span', { slot: 'title' }, [this.renderIcon(h, menu.meta.icon), h('span', [menu.meta.title])])]
       const itemArr = []
       const pIndex_ = pIndex + '_' + index
-      if (!menu.alwaysShow) {
+      console.log('menu', menu)
+      if (!menu.hideChildrenInMenu) {
         menu.children.forEach(function (item, i) {
           itemArr.push(this2_.renderItem(h, item, pIndex_, i))
         })
@@ -82,7 +89,7 @@ export default {
     },
     renderItem: function (h, menu, pIndex, index) {
       if (!menu.hidden) {
-        return menu.children && !menu.alwaysShow
+        return menu.children && !menu.hideChildrenInMenu
           ? this.renderSubMenu(h, menu, pIndex, index)
           : this.renderMenuItem(h, menu, pIndex, index)
       }

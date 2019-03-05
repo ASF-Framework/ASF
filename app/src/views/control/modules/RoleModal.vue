@@ -140,6 +140,7 @@ export default {
           } else {
             this.$message.success(res.message)
           }
+        }).catch(()=>{
         })
       }
     },

@@ -450,6 +450,12 @@
             验证码数据
             </summary>
         </member>
+        <member name="M:ASF.Application.DTO.AuthoriseByUsernameRequestDto.ToString">
+            <summary>
+            转换Json字符串
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:ASF.Application.DTO.LoggerDeleteRequestDto">
             <summary>
             批量删除日志请求
@@ -464,6 +470,12 @@
             <summary>
             结束时间
             </summary>
+        </member>
+        <member name="M:ASF.Application.DTO.LoggerDeleteRequestDto.ToString">
+            <summary>
+            转换Json字符串
+            </summary>
+            <returns></returns>
         </member>
         <member name="P:ASF.Application.DTO.LoggerInfoDetailsResponseDto.Id">
             <summary>
@@ -701,6 +713,12 @@
             是否启用
             </summary>
         </member>
+        <member name="M:ASF.Application.DTO.PermissionActionModifyRequestDto.ToString">
+            <summary>
+            转换Json字符串
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:ASF.Application.DTO.PermissionListRequestDto">
             <summary>
             权限信息列表查询请求Dto
@@ -750,6 +768,12 @@
             <summary>
             描述
             </summary>
+        </member>
+        <member name="M:ASF.Application.DTO.PermissionMenuCreateRequestDto.ToString">
+            <summary>
+            转换Json字符串
+            </summary>
+            <returns></returns>
         </member>
         <member name="P:ASF.Application.DTO.PermissionMenuInfoBaseResponseDto.Id">
             <summary>
@@ -1757,6 +1781,14 @@
             <param name="permission">记录的权限</param>
             <param name="requestData">请求参数</param>
             <param name="responseData">响应参数</param>
+        </member>
+        <member name="M:ASF.Domain.Services.LogOperateRecordService.Record(System.ValueTuple{System.String,System.String},System.Object,System.String)">
+            <summary>
+            记录
+            </summary>
+            <param name="permission">记录的权限 标识和权限名称</param>
+            <param name="requestData">请求数据</param>
+            <param name="responseData">响应数据</param>
         </member>
         <member name="M:ASF.Domain.Services.LogOperateRecordService.Record(System.ValueTuple{System.String,System.String},System.String,System.String)">
             <summary>

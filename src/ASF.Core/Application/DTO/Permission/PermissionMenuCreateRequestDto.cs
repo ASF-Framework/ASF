@@ -1,5 +1,6 @@
 ﻿using ASF.Domain.Entities;
 using ASF.Domain.Values;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace ASF.Application.DTO
@@ -38,6 +39,14 @@ namespace ASF.Application.DTO
             var p = new Permission(this.Code, this.ParentId, this.Name, PermissionType.Menu, this.Description);
             p.Sort = this.Sort;
             return p;
+        }
+        /// <summary>
+        /// 转换Json字符串
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
         }
     }
 }

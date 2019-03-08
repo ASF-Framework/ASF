@@ -67,7 +67,7 @@ namespace ASF.Application
                 return Result.ReFailure(ResultCodes.LogginDeletedCannoBeWithinThreeMonths);
 
             //数据持久化
-            _operateLog.Record(ASFPermissions.LoggingDelete, dto.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.LoggingDelete, dto, "Success");  //记录日志
             await _loggingRepository.Delete(dto);
             await _unitOfWork.CommitAsync();
             return Result.ReSuccess();

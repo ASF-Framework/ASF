@@ -20,7 +20,14 @@ namespace ASF.Application.DTO
         /// </summary>
         [Required]
         public DateTime EndTime { get; set; }
+        /// <summary>
+        /// 转换Json字符串
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
 
-       
     }
 }

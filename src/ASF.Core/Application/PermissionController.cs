@@ -55,7 +55,7 @@ namespace ASF.Application
                 return result;
 
             //数据持久化
-            _operateLog.Record(ASFPermissions.PermissionCreateAction, dto.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.PermissionCreateAction, dto, "Success");  //记录日志
             await _permissionRepository.AddAsync(permission);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
@@ -79,7 +79,7 @@ namespace ASF.Application
                 return result;
 
             //数据持久化
-            _operateLog.Record(ASFPermissions.PermissionCreateMenu, dto.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.PermissionCreateMenu, dto, "Success");  //记录日志
             await _permissionRepository.AddAsync(permission);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
@@ -104,7 +104,7 @@ namespace ASF.Application
                 return modifyResult;
 
             //数据持久化
-            _operateLog.Record(ASFPermissions.PermissionModifyAction, dto.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.PermissionModifyAction, dto, "Success");  //记录日志
             await _permissionRepository.ModifyAsync(modifyResult.Data);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
@@ -128,7 +128,7 @@ namespace ASF.Application
                 return modifyResult;
 
             //数据持久化
-            _operateLog.Record(ASFPermissions.PermissionModifyMenu, dto.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.PermissionModifyMenu, dto, "Success");  //记录日志
             await _permissionRepository.ModifyAsync(modifyResult.Data);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
@@ -146,7 +146,7 @@ namespace ASF.Application
             if (!result.Success)
                 return result;
 
-            _operateLog.Record(ASFPermissions.PermissionDelete, id.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.PermissionDelete, new { permissionId= id }, "Success");  //记录日志
             await _permissionRepository.RemoveAsync(id);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
@@ -283,7 +283,6 @@ namespace ASF.Application
                 return modifyResult;
 
             //数据持久化
-            _operateLog.Record(ASFPermissions.PermissionModifySort, dto.ToString(), "Success");  //记录日志
             await _permissionRepository.ModifyAsync(modifyResult.Data);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();

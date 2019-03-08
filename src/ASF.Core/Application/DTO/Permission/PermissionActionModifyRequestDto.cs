@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -43,5 +44,13 @@ namespace ASF.Application.DTO
         /// 是否启用
         /// </summary>
         public bool Enable { get; set; }
+        /// <summary>
+        /// 转换Json字符串
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }

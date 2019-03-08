@@ -56,7 +56,7 @@ namespace ASF.Application
                 return createResult;
 
             //数据持久化
-            _operateLog.Record(ASFPermissions.RoleCreate, dto.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.RoleCreate, dto, "Success");  //记录日志
             await _roleRepository.AddAsync(createResult.Data);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
@@ -69,7 +69,7 @@ namespace ASF.Application
         [HttpPost("{id}")]
         public async Task<Result> Delete([FromRoute]int id)
         {
-            _operateLog.Record(ASFPermissions.RoleDelete, id.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.RoleDelete, new { roleId = id }, "Success");  //记录日志
             await this._roleRepository.RemoveAsync(id);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
@@ -94,7 +94,7 @@ namespace ASF.Application
                 return modifyResult;
 
             //数据持久化
-            _operateLog.Record(ASFPermissions.RoleModify, dto.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.RoleModify, dto, "Success");  //记录日志
             await _roleRepository.ModifyAsync(modifyResult.Data);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();
@@ -111,7 +111,7 @@ namespace ASF.Application
                 return Result.ReFailure(Domain.ResultCodes.RoleNotExist);
 
             //数据持久化
-            _operateLog.Record(ASFPermissions.RoleModifyStatus, dto.ToString(), "Success");  //记录日志
+            _operateLog.Record(ASFPermissions.RoleModifyStatus, dto, "Success");  //记录日志
             await _roleRepository.ModifyAsync(dto.RoleId, dto.Enable);
             await _unitOfWork.CommitAsync(autoRollback: true);
             return Result.ReSuccess();

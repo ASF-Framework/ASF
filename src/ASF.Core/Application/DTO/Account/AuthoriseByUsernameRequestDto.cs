@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ASF.Application.DTO
@@ -27,5 +28,13 @@ namespace ASF.Application.DTO
         /// 验证码数据
         /// </summary>
         public Dictionary<string, string> Validate { get; set; } = new Dictionary<string, string>();
+        /// <summary>
+        /// 转换Json字符串
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 }

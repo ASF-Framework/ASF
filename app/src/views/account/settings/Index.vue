@@ -9,7 +9,7 @@
             :defaultSelectedKeys="defaultSelectedKeys"
             type="inner"
             @openChange="onOpenChange"
-          >          
+          >
             <a-menu-item key="/account/settings/security">
               <router-link :to="{ name: 'SecuritySettings' }">
                 账户设置
@@ -17,7 +17,7 @@
             </a-menu-item>
             <a-menu-item key="/account/settings/custom">
               <router-link :to="{ name: 'CustomSettings' }">
-                个性化
+                个性化设置
               </router-link>
             </a-menu-item>
             <a-menu-item key="/account/settings/notification">
@@ -86,6 +86,7 @@ export default {
       this.openKeys = openKeys
     },
     updateMenu () {
+      console.log(22222222222222)
       const routes = this.$route.matched.concat()
       this.defaultSelectedKeys = [ routes.pop().path ]
     }

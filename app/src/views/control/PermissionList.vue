@@ -6,13 +6,13 @@
           <a-col :md="8" :sm="24">
             <a-tooltip>
               <template slot="title">新增权限</template>
-              <a-button type="primary" @click="NevigateView" icon="plus"  style="margin-right:10px"></a-button>
+              <a-button type="primary" @click="NevigateView" icon="plus" style="margin-right:10px"></a-button>
             </a-tooltip>
             <a-radio-group
               defaultValue="-1"
-              v-model="queryParam.Enable"
+              v-model="queryParam.enable"
               buttonStyle="solid"
-              @change="$refs.table.refresh(true)">
+              @change="loadDataing">
               <a-radio-button value="-1">全部</a-radio-button>
               <a-radio-button value="1">启用</a-radio-button>
               <a-radio-button value="0">停用</a-radio-button>
@@ -20,29 +20,33 @@
           </a-col>
           <a-col :span="8" :md="{span:12,offset:4}" :sm="{span:24,offset:0}" :xs="{span:24,offset:0}" :offset="8">
             <span class="table-page-search-submitButtons" style="float:right">
-              <a-input placeholder="权限标识、名称" v-model="queryParam.Vague" style="width:300px;margin-right:10px"/>
+              <a-input-search placeholder="权限标识、名称"
+                              v-model="queryParam.Vague"
+                              enterButton="查询"
+                              @search="loadDataing"
+                              style="width:300px;margin-right:10px">
+              </a-input-search>      
+              <!-- <a-input placeholder="权限标识、名称" v-model="queryParam.Vague" style="width:300px;margin-right:10px"/>
               <a-button-group>
                 <a-tooltip>
                   <template slot="title">查询</template>
-                  <a-button type="primary" icon="search" @click="$refs.table.refresh(true)"></a-button>
+                  <a-button type="primary" icon="search" @click="loadDataing"></a-button>
                 </a-tooltip>
-                <a-tooltip>
-                  <template slot="title">清除查询条件</template>
-                  <a-button
-                    icon="undo"
-                    @click="() => queryParam = {Vague:'', Enable:-1,PagedCount:10,SkipPage:1}"></a-button>
-                </a-tooltip>
-              </a-button-group>
+                
+              </a-button-group> -->
             </span>
           </a-col>
         </a-row>
       </a-form>
     </div>
-    <s-table
+    <a-table
       ref="table"
       :columns="columns"
-      :data="loadData"
+      :dataSource="loadData"
       size="small"
+      :loading="loading"
+      :pagination="false"
+      :rowKey="record => record.id"
     >
       <span slot="actions" slot-scope="text, record">
         <a-tag
@@ -53,14 +57,17 @@
       </span>
       <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
       <span slot="sort" slot-scope="text, record">
-        <editable-cell :text="text" ref="sortDom" @handleChange="editSortInput" @change="handerChange" @editBlurInput="handerChange(record)"/>
+        <editable-cell :text="text" ref="sortDom" @handleChange="editSortInput" @change="handerChange(record)" @editBlurInput="handerChange(record)"/>
       </span>
       <span slot="action" slot-scope="text, record">
         <!--<a @click="handleEdit(record)">编辑</a>-->
         <a @click="handleEdit(record)" v-if="!record.isSystem">编辑</a>
         <a v-else disabled>编辑</a>
         <a-divider type="vertical"/>
-        <a @click="handleAdd">添加权限</a>
+        <a-tooltip>
+          <template slot="title">添加操作权限</template>
+          <a @click="handleAdd">添加</a>
+        </a-tooltip>
         <a-divider type="vertical"/>
         <a-dropdown>
           <a class="ant-dropdown-link">更多
@@ -71,25 +78,23 @@
               <a href="javascript:;" @click="pushDetalis(record)">详情</a>
             </a-menu-item>
             <a-menu-item :disabled="record.isSystem">
-              <!--<a href="javascript:;">禁用</a>-->
               <a @click="handleEdit(record)" v-if="!record.isSystem">禁用</a>
               <a v-else disabled>禁用</a>
             </a-menu-item>
             <a-menu-item :disabled="record.isSystem">
-              <!--<a href="javascript:;">删除</a>-->
               <a @click="handleEdit(record)" v-if="!record.isSystem">删除</a>
               <a v-else disabled>删除</a>
             </a-menu-item>
           </a-menu>
         </a-dropdown>
       </span>
-    </s-table>
+    </a-table>
 
     <!--点击操作权限弹出详情编辑框-->
     <a-modal
       title="操作权限编辑"
       :width="800"
-      v-model="visibleContrl"
+      v-model="visibleControl"
       @cancel="editModalCancel()"
       :centered="true"
       @ok="handleSubmit">
@@ -153,7 +158,7 @@
     </a-modal>
     <!--编辑弹窗-->
     <a-modal title="编辑" :width="800" v-model="visible" @ok="handleOk">
-      <a-form :autoFormCreate="(form)=>{this.form = form}">
+      <a-form>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -200,6 +205,7 @@
         </a-form-item>
       </a-form>
     </a-modal>
+    <!--添加操作权限弹窗-->
     <a-modal
       title="添加操作权限"
       :width="800"
@@ -233,16 +239,16 @@
         >
           <!--<a-input placeholder="上级权限编码" v-model="addActine.parentId"/>-->
           <a-dropdown>
-            <span class="ant-dropdown-link"  :trigger="['click']" href="#">
+            <span class="ant-dropdown-link" :trigger="['click']" href="#">
               点击选择父级 <a-icon type="down" />
             </span>
             <a-menu slot="overlay">
-              <a-sub-menu  v-for="(items,index) in dataLoad.result" :key="index" :title="items.name">
-                <a-menu-item v-for="(list,index) in items.children" :key="index" @click="actionTrigger(index, list.id)">{{list.name}}</a-menu-item>
+              <a-sub-menu v-for="(items,index) in dataLoad.result" :key="index" :title="items.name">
+                <a-menu-item v-for="(list,index1) in items.children" :key="index1" @click="actionTrigger(index1, list.id)">{{ list.name }}</a-menu-item>
               </a-sub-menu>
             </a-menu>
           </a-dropdown>
-          您的选择： {{addActine.parentId}}
+          您的选择： {{ addActine.parentId }}
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -271,6 +277,9 @@
         </a-form-item>
       </a-form>
     </a-modal>
+
+    <!--添加导航权限弹窗-->
+
     <a-modal
       title="添加导航权限"
       :width="800"
@@ -278,7 +287,7 @@
       v-model="addNevigate"
       @ok="addNevigateView"
     >
-      <a-form :autoFormCreate="(form)=>{this.form = form}">
+      <a-form>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -304,16 +313,16 @@
         >
           <!--<a-input placeholder="上级权限编码" v-model="addActine.parentId"/>-->
           <a-dropdown>
-            <span class="ant-dropdown-link"  :trigger="['click']">
+            <span class="ant-dropdown-link" :trigger="['click']">
               点击选择父级 <a-icon type="down" />
             </span>
             <a-menu slot="overlay">
-              <a-sub-menu  v-for="(items,index) in dataLoad.result" :key="index" :title="items.name">
-                <a-menu-item v-for="(list,index) in items.children" :key="index" @click="actionTrigger(index, list.id)">{{list.name}}</a-menu-item>
+              <a-sub-menu v-for="(items,index) in dataLoad.result" :key="index" :title="items.name">
+                <a-menu-item v-for="(list,index1) in items.children" :key="index1" @click="nevigateTrigger(index1, list.id)">{{ list.name }}</a-menu-item>
               </a-sub-menu>
             </a-menu>
           </a-dropdown>
-          您的选择： {{addNevigateData.parentId}}
+          您的选择： {{ addNevigateData.parentId }}
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="排序" hasFeedback>
           <a-input-number :min="1" :max="10" v-model="addNevigateData.sort"/>
@@ -330,89 +339,14 @@
         </a-form-item>
       </a-form>
     </a-modal>
-    <a-modal
-      title="详情"
-      :width="1000"
-      :centered="true"
-      v-model="detailsView"
-      @ok="handleOk">
-      <div>
-        <a-table
-          :columns="DetalisColumns"
-          :dataSource="tableDetails"
-          :pagination="false"
-        >
-          <span slot="isSystem" slot-scope="text"> {{ text | statusIsSystem }}</span>
-          <span slot="isLogger" slot-scope="text"> {{ text | statusIsSystem }}</span>
-          <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
-          <span slot="action" slot-scope="text, record, index">
-            <!--<a @click="handleEdit(record)">编辑</a>-->
-            <a @click="handerContrl('222', record.id)" v-if="!record.isSystem">编辑</a>
-            <a v-else disabled>编辑</a>
-            <a-divider type="vertical"/>
-            <a @click="editDelete(record.id, index)" v-if="!record.isSystem">删除</a>
-            <a v-else disabled>删除</a>
-          </span>
-        </a-table>
-      </div>
-    </a-modal>
   </a-card>
 </template>
 
 <script>
 import EditableCell from '@/components/EditCell/EditableCell'
 import STable from '@/components/table/'
-import { getPermissions, getActionDetails, modifyAction, modifySort, getMenuDetails, getActionList, deleteAction, CreateAction, CreateMenu } from '@/api/manage'
+import { getPermissions, getActionDetails, modifyAction, modifySort, CreateAction, CreateMenu } from '@/api/manage'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
-const DetalisColumns = [
-  {
-    title: '权限名称',
-    dataIndex: 'name'
-  },
-  // {
-  //   title: '是否系统权限',
-  //   dataIndex: 'isSystem',
-  //   scopedSlots: {
-  //     customRender: 'isSystem'
-  //   }
-  // },
-  {
-    title: '是否日志记录',
-    dataIndex: 'isLogger',
-    scopedSlots: {
-      customRender: 'isLogger'
-    }
-  },
-  {
-    title: '状态',
-    dataIndex: 'enable',
-    scopedSlots: {
-      customRender: 'enable'
-    }
-  },
-  {
-    title: '添加时间',
-    dataIndex: 'createTime'
-  },
-  {
-    title: '描述',
-    dataIndex: 'description'
-  },
-  {
-    title: '排序',
-    dataIndex: 'sort',
-    scopedSlots: {
-      customRender: 'sort'
-    }
-  },
-  {
-    title: '操作',
-    dataIndex: 'action',
-    scopedSlots: {
-      customRender: 'action'
-    }
-  }
-]
 export default {
   name: 'TableList',
   components: {
@@ -422,7 +356,12 @@ export default {
   },
   data () {
     return {
-      DetalisColumns,
+      pagination: {
+        hideOnSinglePage: true,
+        pageSizeOptions: [],
+        onChange: (page) => {
+        }
+      },
       editSort: '',
       addNevigate: false,
       addNevigateData: {
@@ -432,6 +371,7 @@ export default {
         sort: '',
         description: ''
       },
+      loading:false,
       addActine: {
         code: 'code',
         parentId: '',
@@ -444,15 +384,12 @@ export default {
       formLayout: 'horizontal',
       form: this.$form.createForm(this),
       defaultExpandAllRows: true,
-      description:
-          '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
+      description: '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
       visible: false,
       visibleAdd: false,
-      detailsView: false,
-      visibleContrl: false,
+      visibleControl: false,
       menuDetails: [],
       dataLoad: '',
-      tableDetails: '',
       labelCol: {
         xs: {
           span: 24
@@ -540,45 +477,34 @@ export default {
       // 权限子级权限children:[]
       permissionchildren: {},
       // 加载数据方法 必须为 Promise 对象
-      loadData: parameter => {
-        return getPermissions(this.queryParam).then(res => {
-          console.log(res)
-          this.addActine.parentId = res.result[0].id
-          //           if(this.queryParam.Enable!="0")   {
-          // this.queryParam.totalCount=5
-          //           }else{
-          //             this.queryParam.totalCount=0
-          //           }
-          return this.makePermissionList(res)
-        })
-      },
+      loadData: [],
       selectedRowKeys: [],
       selectedRows: []
     }
   },
-  filters: {
-    statusFilter (status) {
-      const statusMap = {
-        1: '启用',
-        0: '停止'
-      }
-      return statusMap[status ? 1 : 0]
-    },
-    statusIsSystem (status) {
-      const statusMap = {
-        1: '是',
-        0: '否'
-      }
-      return statusMap[status ? 1 : 0]
-    }
-  },
   created () {
     this.loadPermissionList()
-    console.log(this.loadData)
+    this.loadDataing()
   },
   methods: {
+    loadDataing () {      
+      console.log(this.queryParam)
+      this.loading=true
+      getPermissions(this.queryParam).then(res => {
+        if (res.result.length > 0) this.addActine.parentId = res.result[0].id
+        if (res.status === 200) {
+          this.loading=false
+          this.loadData = this.makePermissionList(res)
+        }else{
+          this.loading=false
+        }
+      })
+    },
     actionTrigger (index, id) {
       this.addActine.parentId = id
+    },
+    nevigateTrigger (index, id) {
+      this.addNevigateData.parentId = id
     },
     NevigateView () {
       this.addNevigate = true
@@ -600,7 +526,7 @@ export default {
     addAction () {
       CreateAction(this.addActine).then(res => {
         if (res.status === 200) {
-          this.$refs.table.refresh(true)
+          this.loadDataing()
           this.visibleAdd = false
         } else {
           this.$notification['error']({
@@ -612,19 +538,11 @@ export default {
       })
     },
     pushDetalis (record) {
-      this.detailsView = true
-      // console.log(record)
-      getMenuDetails(record.id).then(res => {
-        this.menuDetails = res.result
-        const obj = {
-          vague: '',
-          enable: '-1',
-          paramId: res.result.id
+      this.$router.push({
+        name: 'PermissionDetail',
+        query: {
+          data: record.id
         }
-        getActionList(obj).then(data => {
-          this.tableDetails = data.result
-          console.log(data.result)
-        })
       })
     },
     // 编辑权限弹窗关闭回调函数
@@ -643,12 +561,11 @@ export default {
     },
     handleSubmit (e) {
       e.preventDefault()
-      // this.visibleContrl = true
+      // this.visibleControl = true
       const obj = this.controlFrom
       modifyAction(obj).then(res => {
-        // console.log(res)
         if (res.status === 200) {
-          this.visibleContrl = !this.visibleContrl
+          this.visibleControl = !this.visibleControl
         } else {
           this.$notification['error']({
             message: '错误',
@@ -659,48 +576,30 @@ export default {
       })
     },
     makePermissionList (res) {
-      const result = []
+      const result1 = []
       const data = Object.assign(res, this.queryParam)
-      if (this.queryParam.Vague === '' && this.queryParam.Enable === -1) {
-        data.result.forEach((element, index) => {
-          if (element.parentId === '' || element.parentId === ' ') {
-            result.push(element)
-            result[index].children = []
-            data.result.forEach(ele => {
-              if (element.id === ele.parentId) {
-                result[index].children.push(ele)
-              }
-            })
+      data.result.forEach((element, index) => {
+        if (element.parentId === '') {
+          result1.push(element)
+          element.children = []
+          for (const i in data.result) {
+            if (element.id === data.result[i].parentId) {
+              element.children.push(data.result[i])
+            }
           }
-        })
-        data.result = result
-      }
-      console.log('Table-resource:', data)
-      this.dataLoad = data
-      return data
+        }
+      })
+      data.result = result1
+      this.dataLoad=data
+      return data.result
     },
     handleBtn () {
       this.makePermissionList()
     },
-    editDelete (id, index) {
-      console.log(index)
-      deleteAction(id).then(res => {
-        console.log(res)
-        if (res.status === 200) {
-          // 重新请求数据
-          // this.$refs.table.refresh(true)
-          this.tableDetails.splice(index, 1)
-        }
-      })
-    },
     handerContrl (action, key) {
-      // this.controlFrom = action
-      // console.log(222222222, action, key)
-      console.log(key)
-      this.visibleContrl = true
+      this.visibleControl = true
       const id = key
       getActionDetails(id).then(res => {
-        console.log(res)
         if (res.status === 200) {
           this.controlFrom = res.result
         }
@@ -713,7 +612,9 @@ export default {
     },
     // 修改排序input，input失去焦点或者按Enter键触发此函数
     handerChange (record) {
-      console.log(record)
+      if (this.editSort === '') {
+        this.editSort = 99
+      }
       const parameter = {
         id: record.id,
         sort: this.editSort
@@ -721,7 +622,7 @@ export default {
       modifySort(parameter).then(res => {
         if (res.status === 200) {
           // 重新请求数据
-          this.$refs.table.refresh(true)
+          this.loadDataing()
         }
       })
     },
@@ -778,7 +679,6 @@ export default {
     },
     handleEdit (record, text) {
       this.mdl = Object.assign({}, record)
-      console.log(this.mdl, record, text)
       this.visible = true
     },
     handleOk () {

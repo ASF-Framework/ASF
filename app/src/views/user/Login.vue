@@ -41,7 +41,7 @@
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
-        </a-tab-pane>        
+        </a-tab-pane>
       </a-tabs>
       <a-form-item style="margin-top:24px">
         <a-button
@@ -82,7 +82,7 @@ import md5 from 'md5'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step } from '@/api/login'
+import { getSmsCaptcha } from '@/api/login'
 
 export default {
   components: {
@@ -107,13 +107,13 @@ export default {
     }
   },
   created () {
-    get2step({ })
-      .then(res => {
-        this.requiredTwoStepCaptcha = res.result.stepCode
-      })
-      .catch(() => {
-        this.requiredTwoStepCaptcha = false
-      })
+    // get2step({ })
+    //   .then(res => {
+    //     this.requiredTwoStepCaptcha = res.result.stepCode
+    //   })
+    //   .catch(() => {
+    //     this.requiredTwoStepCaptcha = false
+    //   })
     // this.requiredTwoStepCaptcha = true
   },
   methods: {
@@ -133,6 +133,7 @@ export default {
       this.customActiveKey = key
       // this.form.resetFields()
     },
+    // 登录提交方法
     handleSubmit (e) {
       e.preventDefault()
       const {
@@ -141,14 +142,10 @@ export default {
         customActiveKey,
         Login
       } = this
-
       state.loginBtn = true
-
       const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
-
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          console.log('login form', values)
           const loginParams = { ...values }
           delete loginParams.username
           loginParams[!state.loginType ? 'email' : 'username'] = values.username
@@ -166,7 +163,7 @@ export default {
         }
       })
     },
-    //手机登录获取验证码
+    // 手机登录获取验证码
     getCaptcha (e) {
       e.preventDefault()
       const { form: { validateFields }, state } = this
@@ -210,8 +207,8 @@ export default {
         this.stepCaptchaVisible = false
       })
     },
+    // 登录成功后
     loginSuccess (res) {
-      console.log(111111111)
       this.$router.push({ name: 'dashboard' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {

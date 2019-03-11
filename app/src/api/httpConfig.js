@@ -44,7 +44,6 @@ instance.interceptors.request.use(
 // 响应拦截器即异常处理
 instance.interceptors.response.use(
   response => {
-      console.log('faefaefsaefefae')
     return response.data
   },
   err => {
@@ -110,7 +109,6 @@ http.post = function (url, data, options) {
     instance
       .post(url, data, options)
       .then(response => {
-          console.log(999999999)
         if (response.status === "success") {
           resolve(response)
         } else {

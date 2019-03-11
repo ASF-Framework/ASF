@@ -104,7 +104,10 @@ export default {
      * @param Boolean bool
      */
     refresh (bool = false) {
-      this.loadData(bool ? { current: 1 } : {})
+      bool && (this.localPagination = Object.assign({}, {
+        current: 1, pageSize: this.pageSize
+      }))
+      this.loadData()
     },
     /**
      * 加载数据方法
@@ -114,11 +117,11 @@ export default {
      */
     loadData (pagination, filters, sorter) {
       this.localLoading = true
-      var result = this.data(Object.assign({
+      const parameter = Object.assign({
         pageNo: (pagination && pagination.current) ||
-          this.localPagination.current,
+            this.localPagination.current,
         pageSize: (pagination && pagination.pageSize) ||
-          this.localPagination.pageSize
+            this.localPagination.pageSize
       },
       (sorter && sorter.field && {
         sortField: sorter.field
@@ -128,21 +131,21 @@ export default {
       }) || {}, {
         ...filters
       }
-      ))
-
+      )
+      const result = this.data(parameter)
       // 对接自己的通用数据接口需要修改下方代码中的 r.pageNo, r.totalCount, r.data
-      if (result instanceof Promise) {
+      // eslint-disable-next-line
+      if (result instanceof Promise || '[object Promise]' === result.toString()) {
         result.then(r => {
           this.localPagination = Object.assign({}, this.localPagination, {
-            current: r.SkipPage, // 返回结果中的当前分页数
+            current: r.pageNo, // 返回结果中的当前分页数
             total: r.totalCount, // 返回结果中的总记录数
             showSizeChanger: this.showSizeChanger,
             pageSize: (pagination && pagination.pageSize) ||
               this.localPagination.pageSize
           })
-
           // 为防止删除数据后导致页面当前页面数据长度为 0 ,自动翻页到上一页
-          if (r.result.length === 0 && this.localPagination.current !== 1) {
+          if (r.data.length === 0 && this.localPagination.current !== 1) {
             this.localPagination.current--
             this.loadData()
             return
@@ -151,7 +154,7 @@ export default {
           // 这里用于判断接口是否有返回 r.totalCount 或 this.showPagination = false
           // 当情况满足时，表示数据不满足分页大小，关闭 table 分页功能
           !r.totalCount && ['auto', false].includes(this.showPagination) && (this.localPagination = false)
-          this.localDataSource = r.result // 返回结果中的数组数据
+          this.localDataSource = r.data // 返回结果中的数组数据
           this.localLoading = false
         })
       }
@@ -271,7 +274,7 @@ export default {
     })
     const table = (
       <a-table {...{ props, scopedSlots: { ...this.$scopedSlots } }} onChange={this.loadData}>
-        {this.$slots.default}
+        { Object.keys(this.$slots).map(name => (<template slot={name}>{this.$slots[name]}</template>)) }
       </a-table>
     )
 

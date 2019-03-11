@@ -8,7 +8,7 @@
     @cancel="cancelHandel">
     <a-row>
       <a-col :xs="24" :md="12" :style="{height: '350px'}">
-        <vue-cropper
+        <!-- <vue-cropper
           ref="cropper"
           :img="options.img"
           :info="true"
@@ -18,7 +18,24 @@
           :fixedBox="options.fixedBox"
           @realTime="realTime"
         >
-        </vue-cropper>
+        </vue-cropper> -->
+        <vueCropper
+              ref="cropper"
+              :img="option.img"
+              :outputSize="option.size"
+              :outputType="option.outputType"
+              :info="true"
+              :full="option.full"
+              :canMove="option.canMove"
+              :canMoveBox="option.canMoveBox"
+              :original="option.original"
+              :autoCrop="option.autoCrop"
+              :autoCropWidth="option.autoCropWidth"
+              :autoCropHeight="option.autoCropHeight"
+              :fixedBox="option.fixedBox"
+              @realTime="realTime"
+              @imgLoad="imgLoad"
+            ></vueCropper>
       </a-col>
       <a-col :xs="24" :md="12" :style="{height: '350px'}">
         <div class="avatar-upload-preview">
@@ -46,13 +63,27 @@ export default {
       id: null,
       confirmLoading: false,
 
-      options: {
-        img: '/avatar2.jpg',
-        autoCrop: true,
-        autoCropWidth: 200,
-        autoCropHeight: 200,
-        fixedBox: true
-      },
+      // options: {
+      //   img: '/avatar2.jpg',
+      //   autoCrop: true,
+      //   autoCropWidth: 200,
+      //   autoCropHeight: 200,
+      //   fixedBox: true,        
+      // },
+
+      option: {
+          img: '/avatar2.jpg',
+          outputSize:1, //剪切后的图片质量（0.1-1）
+          full: false,//输出原图比例截图 props名full
+          outputType: 'png',
+          canMove: true, 
+          original: false, 
+          canMoveBox: true, 
+          autoCrop: true, 
+          autoCropWidth: 150, 
+          autoCropHeight: 150, 
+          fixedBox: true 
+        }, 
       previews: {}
     }
   },
@@ -83,7 +114,10 @@ export default {
     realTime (data) {
       this.previews = data
     }
-  }
+  },
+  imgLoad(){
+    
+  },
 }
 </script>
 

@@ -1,0 +1,8 @@
+/src/*.js
+/src/api/*.js
+/src/components/*.js
+/src/config/*.js
+/src/core/*.js
+/src/router/*.js
+/src/store/*.js
+/src/utils/*.js

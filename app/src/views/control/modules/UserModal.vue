@@ -1,7 +1,7 @@
 <template>
   <a-modal
     title="编辑管理员"
-    :width="800"
+    :width="640"
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleOk"
@@ -9,7 +9,7 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-         <a-form-item
+        <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="登录名"
@@ -20,25 +20,25 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="昵称"       
-          hasFeedback    
+          label="昵称"
+          hasFeedback
         >
-          <a-input placeholder="昵称"  v-decorator="['name',{rules: [{ required: true, message: '请输入昵称' }]}]"/>
+          <a-input placeholder="昵称" v-decorator="['name',{rules: [{ required: true, message: '请输入昵称' }]}]"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="状态"        
-          hasFeedback   
+          label="状态"
+          hasFeedback
         >
-          <a-select  v-decorator="['status',{rules: [{ required: true, message: '请选择状态' }]}]">
+          <a-select v-decorator="['status',{rules: [{ required: true, message: '请选择状态' }]}]">
             <a-select-option :value="1">正常</a-select-option>
             <a-select-option :value="2">禁用</a-select-option>
           </a-select>
         </a-form-item>
         <a-divider/>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="赋予角色" hasFeedback>
-          <a-select style="width: 100%" mode="multiple" :allowClear="true"   v-decorator="['roles',{rules: [{ required: true, message: '请赋予角色' }]}]">
+          <a-select style="width: 100%" mode="multiple" :allowClear="true" v-decorator="['roles',{rules: [{ required: true, message: '请赋予角色' }]}]">
             <a-select-option
               v-for="(role, index) in roleList"
               :key="index"
@@ -46,13 +46,14 @@
             >{{ role.name }}</a-select-option>
           </a-select>
         </a-form-item>
-        
+
       </a-form>
     </a-spin>
   </a-modal>
 </template>
 
 <script>
+/* eslint-disable */
 import { getRoleListAll,modifyAccount,getAccountDetail} from '@/api/manage'
 import { actionToObject } from '@/utils/permissions'
 import pick from 'lodash.pick'
@@ -108,8 +109,6 @@ export default {
         // 验证表单没错误
         if (!err) {
           values.accountId=this.accountId
-          console.log('form values', values)
-
           _this.confirmLoading = true
           // 模拟后端请求 2000 毫秒延迟
           new Promise((resolve) => {

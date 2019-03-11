@@ -82,7 +82,7 @@ import md5 from 'md5'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step } from '@/api/login'
+import { getSmsCaptcha } from '@/api/login'
 
 export default {
   components: {
@@ -133,7 +133,7 @@ export default {
       this.customActiveKey = key
       // this.form.resetFields()
     },
-    //登录提交方法
+    // 登录提交方法
     handleSubmit (e) {
       e.preventDefault()
       const {
@@ -207,9 +207,8 @@ export default {
         this.stepCaptchaVisible = false
       })
     },
-    //登录成功后
-    loginSuccess (res) {      
-      console.log(res)
+    // 登录成功后
+    loginSuccess (res) {
       this.$router.push({ name: 'dashboard' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {

@@ -17,7 +17,10 @@
 <script>
 export default {
   props: {
-    text: Number
+    text: {
+      type: Number,
+      default: 0
+    }
   },
   data () {
     return {

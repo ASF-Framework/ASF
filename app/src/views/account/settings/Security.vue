@@ -7,9 +7,9 @@
             <a-list-item-meta>
               <a slot="title">用户昵称</a>
               <span slot="description">
-              <span class="security-list-description">您的昵称</span>
-              <span v-if="userinfo.name"> : </span>
-              <span class="security-list-value">{{ userinfo.name }}</span>
+                <span class="security-list-description">您的昵称</span>
+                <span v-if="userinfo.name"> : </span>
+                <span class="security-list-value">{{ userinfo.name }}</span>
               </span>
             </a-list-item-meta>
             <a slot="actions" @click="$refs.modal.edit(userinfo,'name','昵称','请输入昵称',false)">修改</a>
@@ -18,8 +18,8 @@
             <a-list-item-meta>
               <a slot="title">登录密码</a>
               <span slot="description">
-              <span class="security-list-description">此密码只用来登录：</span>
-              <span class="security-list-value">******</span>
+                <span class="security-list-description">此密码只用来登录：</span>
+                <span class="security-list-value">******</span>
               </span>
             </a-list-item-meta>
             <a slot="actions" @click="$refs.modal.edit(userinfo,'oldPassword','旧登陆密码','请输入旧登录密码',true)" >修改</a>
@@ -28,27 +28,27 @@
             <a-list-item-meta>
               <a slot="title">绑定手机</a>
               <span slot="description">
-              <span v-if="userinfo.telephone" class="security-list-description">已绑定手机</span>
-              <span v-else class="security-list-description">请绑定手机</span>
-              <span v-if="userinfo.telephone"> : </span>
-              <span class="security-list-value">{{ userinfo.telephone }}</span>
+                <span v-if="userinfo.telephone" class="security-list-description">已绑定手机</span>
+                <span v-else class="security-list-description">请绑定手机</span>
+                <span v-if="userinfo.telephone"> : </span>
+                <span class="security-list-value">{{ userinfo.telephone }}</span>
               </span>
             </a-list-item-meta>
             <a v-if="userinfo.telephone" slot="actions" @click="$refs.modal.edit(userinfo,'number','手机号码','请输入手机号码',false)" >修改</a>
-             <a v-else slot="actions" @click="$refs.modal.edit(userinfo,'number','手机号码','请输入手机号码',false)" >绑定</a>
+            <a v-else slot="actions" @click="$refs.modal.edit(userinfo,'number','手机号码','请输入手机号码',false)" >绑定</a>
           </a-list-item>
           <a-list-item>
             <a-list-item-meta>
               <a slot="title">绑定邮箱</a>
               <span slot="description">
-              <span  v-if="userinfo.email" class="security-list-description">已绑定邮箱</span>
-               <span v-else class="security-list-description">请绑定邮箱</span>
-              <span v-if="userinfo.email"> : </span>
-              <span class="security-list-value">{{ userinfo.email }}</span>
+                <span v-if="userinfo.email" class="security-list-description">已绑定邮箱</span>
+                <span v-else class="security-list-description">请绑定邮箱</span>
+                <span v-if="userinfo.email"> : </span>
+                <span class="security-list-value">{{ userinfo.email }}</span>
               </span>
             </a-list-item-meta>
             <a v-if="userinfo.email" slot="actions" @click="$refs.modal.edit(userinfo,'email','邮箱','请输入邮箱',false)">修改</a>
-             <a v-else slot="actions" @click="$refs.modal.edit(userinfo,'email','邮箱','请输入邮箱',false)">绑定</a>
+            <a v-else slot="actions" @click="$refs.modal.edit(userinfo,'email','邮箱','请输入邮箱',false)">绑定</a>
           </a-list-item>
         </a-list>
       </a-col>
@@ -62,21 +62,23 @@
         </div>
       </a-col>
     </a-row>
-    <avatar-modal ref="modal">
-    </avatar-modal>
+    <test-modal ref="testModal">
+    </test-modal>
     <security-modal ref="modal" @ok="handleOk"></security-modal>
   </div>
 </template>
 
 <script>
+/* eslint-disable */
   import {
     getUserDetail
   } from '@/api/manage'
-  import AvatarModal from './AvatarModal'
+  //  import AvatarModal from './AvatarModal'
+  import TestModal from './TestModal'
   import SecurityModal from './SecurityModal'
   export default {
     components: {
-      AvatarModal,
+      TestModal,
       SecurityModal
     },
     data() {
@@ -116,7 +118,6 @@
         getUserDetail().then(res => {
         this.userinfo = res.result;
         this.option.img=this.userinfo.avatar
-        console.log("this.userinfo:",this.userinfo)
       })
       }
     }

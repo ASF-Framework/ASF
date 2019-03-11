@@ -10,7 +10,7 @@
             </a-tooltip>
             <a-radio-group
               defaultValue="-1"
-              v-model="queryParam.Enable"
+              v-model="queryParam.enable"
               buttonStyle="solid"
               @change="loadDataing">
               <a-radio-button value="-1">全部</a-radio-button>
@@ -20,19 +20,20 @@
           </a-col>
           <a-col :span="8" :md="{span:12,offset:4}" :sm="{span:24,offset:0}" :xs="{span:24,offset:0}" :offset="8">
             <span class="table-page-search-submitButtons" style="float:right">
-              <a-input placeholder="权限标识、名称" v-model="queryParam.Vague" style="width:300px;margin-right:10px"/>
+              <a-input-search placeholder="权限标识、名称"
+                              v-model="queryParam.Vague"
+                              enterButton="查询"
+                              @search="loadDataing"
+                              style="width:300px;margin-right:10px">
+              </a-input-search>      
+              <!-- <a-input placeholder="权限标识、名称" v-model="queryParam.Vague" style="width:300px;margin-right:10px"/>
               <a-button-group>
                 <a-tooltip>
                   <template slot="title">查询</template>
-                  <a-button type="primary" icon="search" @click="$refs.table.refresh(true)"></a-button>
+                  <a-button type="primary" icon="search" @click="loadDataing"></a-button>
                 </a-tooltip>
-                <a-tooltip>
-                  <template slot="title">清除查询条件</template>
-                  <a-button
-                    icon="undo"
-                    @click="() => queryParam = {Vague:'', Enable:-1,PagedCount:10,SkipPage:1}"></a-button>
-                </a-tooltip>
-              </a-button-group>
+                
+              </a-button-group> -->
             </span>
           </a-col>
         </a-row>
@@ -43,6 +44,7 @@
       :columns="columns"
       :dataSource="loadData"
       size="small"
+      :loading="loading"
       :pagination="false"
       :rowKey="record => record.id"
     >
@@ -242,7 +244,7 @@
             </span>
             <a-menu slot="overlay">
               <a-sub-menu v-for="(items,index) in dataLoad.result" :key="index" :title="items.name">
-                <a-menu-item v-for="(list,index) in items.children" :key="index" @click="actionTrigger(index, list.id)">{{ list.name }}</a-menu-item>
+                <a-menu-item v-for="(list,index1) in items.children" :key="index1" @click="actionTrigger(index1, list.id)">{{ list.name }}</a-menu-item>
               </a-sub-menu>
             </a-menu>
           </a-dropdown>
@@ -316,7 +318,7 @@
             </span>
             <a-menu slot="overlay">
               <a-sub-menu v-for="(items,index) in dataLoad.result" :key="index" :title="items.name">
-                <a-menu-item v-for="(list,index) in items.children" :key="index" @click="nevigateTrigger(index, list.id)">{{ list.name }}</a-menu-item>
+                <a-menu-item v-for="(list,index1) in items.children" :key="index1" @click="nevigateTrigger(index1, list.id)">{{ list.name }}</a-menu-item>
               </a-sub-menu>
             </a-menu>
           </a-dropdown>
@@ -358,7 +360,6 @@ export default {
         hideOnSinglePage: true,
         pageSizeOptions: [],
         onChange: (page) => {
-          console.log(page)
         }
       },
       editSort: '',
@@ -370,6 +371,7 @@ export default {
         sort: '',
         description: ''
       },
+      loading:false,
       addActine: {
         code: 'code',
         parentId: '',
@@ -485,11 +487,16 @@ export default {
     this.loadDataing()
   },
   methods: {
-    loadDataing () {
+    loadDataing () {      
+      console.log(this.queryParam)
+      this.loading=true
       getPermissions(this.queryParam).then(res => {
         if (res.result.length > 0) this.addActine.parentId = res.result[0].id
         if (res.status === 200) {
+          this.loading=false
           this.loadData = this.makePermissionList(res)
+        }else{
+          this.loading=false
         }
       })
     },
@@ -532,7 +539,7 @@ export default {
     },
     pushDetalis (record) {
       this.$router.push({
-        name: 'Details',
+        name: 'PermissionDetail',
         query: {
           data: record.id
         }
@@ -557,7 +564,6 @@ export default {
       // this.visibleControl = true
       const obj = this.controlFrom
       modifyAction(obj).then(res => {
-        // console.log(res)
         if (res.status === 200) {
           this.visibleControl = !this.visibleControl
         } else {
@@ -570,6 +576,7 @@ export default {
       })
     },
     makePermissionList (res) {
+      console.log(111,res)
       const result1 = []
       const data = Object.assign(res, this.queryParam)
       data.result.forEach((element, index) => {
@@ -584,19 +591,16 @@ export default {
         }
       })
       data.result = result1
+      console.log(2222,data.result)
       return data.result
     },
     handleBtn () {
       this.makePermissionList()
     },
     handerContrl (action, key) {
-      // this.controlFrom = action
-      // console.log(222222222, action, key)
-      console.log(key)
       this.visibleControl = true
       const id = key
       getActionDetails(id).then(res => {
-        console.log(res)
         if (res.status === 200) {
           this.controlFrom = res.result
         }
@@ -609,7 +613,6 @@ export default {
     },
     // 修改排序input，input失去焦点或者按Enter键触发此函数
     handerChange (record) {
-      console.log(record)
       if (this.editSort === '') {
         this.editSort = 99
       }
@@ -677,7 +680,6 @@ export default {
     },
     handleEdit (record, text) {
       this.mdl = Object.assign({}, record)
-      console.log(this.mdl, record, text)
       this.visible = true
     },
     handleOk () {

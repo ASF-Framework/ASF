@@ -220,14 +220,12 @@ export default {
           for (const i in data.result) {
             list[i].key = list[i].id
           }
-          // console.log(list)
           this.tableDetails = list
         })
       })
     },
     // 修改排序input，input失去焦点或者按Enter键触发此函数
     handerChange (record, text) {
-      console.log(record, text)
       const parameter = {
         id: record.id,
         sort: this.editSort
@@ -241,14 +239,11 @@ export default {
     },
     editSortInput (e) {
       this.editSort = e
-      console.log(e)
     },
     handerContrl (action, key) {
-      console.log(key)
       this.visibleContrl = true
       const id = key
       getActionDetails(id).then(res => {
-        console.log(res)
         if (res.status === 200) {
           this.controlFrom = res.result
         }
@@ -279,7 +274,6 @@ export default {
         cancelText: '取消',
         onOk () {
           deleteAction(id).then(res => {
-            console.log(res)
             if (res.message === 'Success') {
               // this.$notification.open({
               //   message: '温馨提醒！',
@@ -292,7 +286,6 @@ export default {
           })
         },
         onCancel () {
-          console.log('Cancel')
         }
       })
     },

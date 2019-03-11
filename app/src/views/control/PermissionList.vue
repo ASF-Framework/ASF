@@ -576,7 +576,6 @@ export default {
       })
     },
     makePermissionList (res) {
-      console.log(111,res)
       const result1 = []
       const data = Object.assign(res, this.queryParam)
       data.result.forEach((element, index) => {
@@ -591,7 +590,7 @@ export default {
         }
       })
       data.result = result1
-      console.log(2222,data.result)
+      this.dataLoad=data
       return data.result
     },
     handleBtn () {

@@ -26,14 +26,6 @@
                               @search="loadDataing"
                               style="width:300px;margin-right:10px">
               </a-input-search>      
-              <!-- <a-input placeholder="权限标识、名称" v-model="queryParam.Vague" style="width:300px;margin-right:10px"/>
-              <a-button-group>
-                <a-tooltip>
-                  <template slot="title">查询</template>
-                  <a-button type="primary" icon="search" @click="loadDataing"></a-button>
-                </a-tooltip>
-                
-              </a-button-group> -->
             </span>
           </a-col>
         </a-row>

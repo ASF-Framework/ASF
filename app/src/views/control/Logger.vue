@@ -1,96 +1,49 @@
 <template>
   <a-card :bordered="false">
     <div class="table-page-search-wrapper">
-      <a-row type="flex"
-             justify="space-around">
-        <a-col :md="4"
-               :sm="24">
-          <a-tooltip>
-            <template slot="title">删除日志
-            </template>
-            <a-button type="primary"
-                      icon="delete"
-                      style="margin-right:10px"
-                      @click="deleteList"></a-button>
-          </a-tooltip>
-          <a-radio-group :defaultValue="1"
-                           buttonStyle="solid"      
-                           v-model="tableParam.Type" 
-                           @change="handleChanges">
+      <a-form :form="form" @submit="handleSearch" layout="inline">
+        <a-row type="flex" justify="space-around">
+          <a-col :md="{span:8}" :sm="24">
+            <a-tooltip>
+              <template slot="title">删除日志
+              </template>
+              <a-button type="primary" icon="delete" style="margin-right:10px" @click="deleteList"></a-button>
+            </a-tooltip>
+            <a-radio-group :defaultValue="1" buttonStyle="solid" v-model="tableParam.Type" @change="handleChanges">
               <a-radio-button :value="1">登录日志</a-radio-button>
               <a-radio-button :value="2">操作日志</a-radio-button>
             </a-radio-group>
-        </a-col>
-        <a-col :span="20"
-               :md="{span:20,offset:0}"
-               :sm="{span:24,offset:0}"
-               :xs="{span:24,offset:0}">
-          <a-form :form="form"
-                  @submit="handleSearch"
-                  layout="inline">
-            <a-row :gutter="48">
-              <a-col :md="8"
-                     :sm="24">
-                <a-form-item label="操作名称">
-                  <a-input placeholder="请输入操作名称，比如'修改权限排序'"
-                           v-model="tableParam.subject" />
-                </a-form-item>
-              </a-col>
-              <a-col :md="8"
-                     :sm="24">
-                <a-form-item label="操作账号">
-                  <a-input placeholder="请输入操作账号"
-                           v-model="tableParam.account" />
-                </a-form-item>
-              </a-col>
-              <template v-if="advanced">
-                <a-col :md="8"
-                       :sm="24">
-                  <a-form-item label="客户端IP">
-                    <a-input placeholder="请输入客户端IP"
-                             v-model="tableParam.clientIp" />
-                  </a-form-item>
-                </a-col>
-                <a-col :md="8"
-                       :sm="24">
-                  <a-form-item label="权限标识">
-                    <a-input placeholder="请输入权限ID"
-                             v-model="tableParam.permissionId" />
-                  </a-form-item>
-                </a-col>
-                <a-col :md="8"
-                       :sm="24">
-                  <a-form-item label="开始时间">
-                    <a-date-picker style="width: 100%"
-                                   placeholder="请输入开始时间"
-                                   @change="onChangebeginTime" />
-                  </a-form-item>
-                </a-col>
-                <a-col :md="8"
-                       :sm="24">
-                  <a-form-item label="结束时间">
-                    <a-date-picker style="width: 100%"
-                                   placeholder="请输入结束时间"
-                                   @change="onChangeEndTime" />
-                  </a-form-item>
-                </a-col>                
-              </template>
-              <a-col :md="!advanced && 8 || 24"
-                     :sm="24">
-                <span class="table-page-search-submitButtons"
-                      :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                  <a-button type="primary"
-                            html-type="submit"
-                            icon="search"></a-button>
-                  <a @click="toggleAdvanced"
-                     style="margin-left: 8px"> {{ advanced ? '收起' : '展开' }}
-                    <a-icon :type="advanced ? 'up' : 'down'" /></a>
-                </span>
-              </a-col>
-            </a-row>
-          </a-form>
-        </a-col>
-      </a-row>
+          </a-col>
+          <a-col :md="{span:16,offset:0}" :sm="{span:24,offset:0}" :xs="{span:24,offset:0}" :offset="0">
+
+            <div class="table-page-search-submitButtons" style="float:right">
+              <a-range-picker name="buildTime" @change="onChangeBenginEndTime" />
+              <a-input-search placeholder="请输入操作名称，比如'修改权限排序'" v-model="tableParam.subject" enterButton="查询" html-type="submit" style="width:350px;margin:0px 10px 0px 10px">
+              </a-input-search>
+              <a-button type="primary" @click="toggleAdvanced">
+                <a-icon :type="advanced ? 'up' : 'down'" /></a-button>
+            </div>
+          </a-col>
+        </a-row>
+        <a-row v-if="advanced" type="flex" justify="end" :gutter="8">
+          <a-col :md="{span:5,offset:0}">
+            <a-form-item label="客户端IP">
+              <a-input placeholder="请输入客户端IP" v-model="tableParam.clientIp" />
+            </a-form-item>
+          </a-col>
+          <a-col :md="{span:5,offset:0}">
+            <a-form-item label="操作账号">
+              <a-input placeholder="请输入操作账号" v-model="tableParam.account" />
+            </a-form-item>
+          </a-col>
+
+          <a-col :md="{span:5}">
+            <a-form-item label="权限ID">
+              <a-input placeholder="请输入权限ID" v-model="tableParam.permissionId" />
+            </a-form-item>
+          </a-col>
+        </a-row>
+      </a-form>
     </div>
 
     <div class="table-operator">
@@ -107,43 +60,23 @@
       <!--</a-dropdown>-->
     </div>
 
-    <a-table ref="table"
-             size="default"
-             :columns="columns"
-             :dataSource="loadData"
-             :loading="loading"
-             :pagination="pagination"
-             :alert="{ show: true, clear: true }"
-             @change="handleTableChange">
-              <span slot="accountName"
-            slot-scope="text,record">{{ text +"&nbsp;&nbsp;"}}<a-tag color="blue">{{"ID："+record.accountId}}</a-tag></span>
-            <span slot="permissionId"
-            slot-scope="text">{{ (text===null?'--':text)}}</span>
-      <span slot="addTime"
-            slot-scope="text">{{ text | dayFormat('YYYY-MM-DD HH:mm:ss') }}</span>
-      <span slot="logType"
-            slot-scope="text, record">{{ text | loggerType }}</span>
-      <span slot="action"
-            slot-scope="text, record">
+    <a-table ref="table" size="default" :columns="columns" :dataSource="loadData" :loading="loading" :pagination="pagination" :alert="{ show: true, clear: true }" @change="handleTableChange">
+      <span slot="accountName" slot-scope="text,record">{{ text +"&nbsp;&nbsp;"}}
+        <a-tag color="blue">{{"ID："+record.accountId}}</a-tag>
+      </span>
+      <span slot="permissionId" slot-scope="text">{{ (text===null?'--':text)}}</span>
+      <span slot="addTime" slot-scope="text">{{ text | dayFormat('YYYY-MM-DD HH:mm:ss') }}</span>
+      <span slot="logType" slot-scope="text, record">{{ text | loggerType }}</span>
+      <span slot="action" slot-scope="text, record">
         <a @click="$refs.modal.showModal(record)">详情</a>
       </span>
     </a-table>
-    <a-modal title='删除日志'
-             :width="500"
-             v-model="visible"
-             @ok="handleOk">
-
-      <a-form layout="inline"
-              :form="deleteForm"
-              hideRequiredMark>
+    <a-modal title='删除日志' :width="500" v-model="visible" @ok="handleOk">
+      <a-form layout="inline" :form="deleteForm" hideRequiredMark>
         <a-row :gutter="48">
           <a-col>
             <a-form-item label="删除范围">
-              <a-range-picker name="buildTime"
-                              @change="deleteRangeTime"
-                              style="width: 100%"
-                              :disabledDate="disabledDate"
-                              v-decorator="['buildTime', {rules: [{ required: true, message: '请选择删除日期' }]}]" />
+              <a-range-picker name="buildTime" @change="deleteRangeTime" style="width: 100%" :disabledDate="disabledDate" v-decorator="['buildTime', {rules: [{ required: true, message: '请选择删除日期' }]}]" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -152,13 +85,13 @@
         <p>提示：</p>
         <p style="font-size:10px">&nbsp;&nbsp;&nbsp;&nbsp;三个月之内的管理日志不能删除</p>
       </div>
-    </a-modal>   
+    </a-modal>
     <loggerDetail-modal ref="modal"></loggerDetail-modal>
   </a-card>
 </template>
 
 <script>
-import moment from 'moment';
+import moment from 'moment'
 import STable from '@/components/table/'
 import LoggerDetailModal from './modules/LoggerDetailModal'
 import { getLogger, loggerDelete } from '@/api/manage'
@@ -204,7 +137,6 @@ export default {
           title: '操作名称',
           dataIndex: 'subject',
           key: 'subject'
-          
         },
         {
           title: '操作账户',
@@ -228,7 +160,7 @@ export default {
           key: 'permissionId',
           scopedSlots: {
             customRender: 'permissionId'
-          },
+          }
         },
         {
           title: '日志记录时间',
@@ -243,7 +175,6 @@ export default {
           dataIndex: 'clientIp',
           key: 'clientIp'
         },
-          
         {
           title: '操作',
           dataIndex: 'action',
@@ -293,6 +224,12 @@ export default {
       console.log(date, dateString)
       this.tableParam.endTime = dateString
     },
+    //查询条件开始和结束时间录入
+    onChangeBenginEndTime(date, dateStrings) {
+      this.tableParam.beginTime = dateStrings[0]
+      this.tableParam.endTime = dateStrings[1]
+    },
+
     //列表change事件
     handleTableChange(pagination, filters, sorter) {
       console.log(pagination)
@@ -319,6 +256,11 @@ export default {
               if (res.status === 200) {
                 this.loadDataing()
                 this.visible = !this.visible
+                this.$notification['success']({
+                  message: '温馨提醒',
+                  description: '删除成功',
+                  duration: 4
+                })
               } else {
                 this.$notification['error']({
                   message: '温馨提醒',
@@ -348,7 +290,7 @@ export default {
     },
     //筛选出3个月之后的日子的不能选择
     disabledDate(current) {
-      return current && current > moment().subtract(3, 'month');
+      return current && current > moment().subtract(3, 'month')
     },
     //加载列表集合事件
     loadDataing() {

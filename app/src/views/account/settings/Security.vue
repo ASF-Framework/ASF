@@ -62,8 +62,6 @@
         </div>
       </a-col>
     </a-row>
-    <test-modal ref="testModal">
-    </test-modal>
     <security-modal ref="modal" @ok="handleOk"></security-modal>
   </div>
 </template>
@@ -73,12 +71,11 @@
   import {
     getUserDetail
   } from '@/api/manage'
-  //  import AvatarModal from './AvatarModal'
-  import TestModal from './TestModal'
+  import AvatarModal from './AvatarModal'
   import SecurityModal from './SecurityModal'
   export default {
     components: {
-      TestModal,
+      AvatarModal,
       SecurityModal
     },
     data() {

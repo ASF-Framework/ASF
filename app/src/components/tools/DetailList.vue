@@ -9,6 +9,7 @@
 
 <script>
 import { Col } from 'ant-design-vue/es/grid/'
+
 const Item = {
   name: 'DetailListItem',
   props: {
@@ -32,12 +33,14 @@ const Item = {
     )
   }
 }
+
 const responsive = {
   1: { xs: 24 },
   2: { xs: 24, sm: 12 },
   3: { xs: 24, sm: 12, md: 8 },
   4: { xs: 24, sm: 12, md: 6 }
 }
+
 export default {
   name: 'DetailList',
   Item: Item,
@@ -75,13 +78,16 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
   .detail-list {
+
     .title {
       color: rgba(0,0,0,.85);
       font-size: 14px;
       font-weight: 500;
       margin-bottom: 16px;
     }
+
     /deep/ .term {
       color: rgba(0,0,0,.85);
       display: table-cell;
@@ -89,6 +95,7 @@ export default {
       margin-right: 8px;
       padding-bottom: 16px;
       white-space: nowrap;
+
       &:not(:empty):after {
         content: ":";
         margin: 0 8px 0 2px;
@@ -96,6 +103,7 @@ export default {
         top: -.5px;
       }
     }
+
     /deep/ .content {
       color: rgba(0,0,0,.65);
       display: table-cell;
@@ -109,7 +117,9 @@ export default {
         padding-bottom: 16px;
       }
     }
+
     &.small {
+
       .title {
         font-size: 14px;
         color: rgba(0, 0, 0, .65);
@@ -120,14 +130,17 @@ export default {
         padding-bottom: 8px;
       }
     }
+
     &.large {
       /deep/ .term, .content {
         padding-bottom: 16px;
       }
+
       .title {
         font-size: 16px;
       }
     }
+
     &.vertical {
       .term {
         padding-bottom: 8px;

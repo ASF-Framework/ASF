@@ -86,7 +86,6 @@ export default {
       this.openKeys = openKeys
     },
     updateMenu () {
-      console.log(22222222222222)
       const routes = this.$route.matched.concat()
       this.defaultSelectedKeys = [ routes.pop().path ]
     }

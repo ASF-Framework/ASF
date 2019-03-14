@@ -34,6 +34,7 @@ namespace ASF
         /// <param name="httpContext"></param>
         public Task Record()
         {
+
             var serviceProvider = context.RequestServices;
             var response = context.Response;
 

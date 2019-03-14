@@ -36,7 +36,7 @@ namespace ASF
         {
             var serviceProvider = context.RequestServices;
             var response = context.Response;
-
+             
             if (!response.Body.CanRead || !response.Body.CanSeek)
             {
                 response.Body = new MemoryWrappedHttpResponseStream(response.Body);

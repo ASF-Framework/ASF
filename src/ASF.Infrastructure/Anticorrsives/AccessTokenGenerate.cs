@@ -12,9 +12,9 @@ namespace ASF.Infrastructure.Anticorrsives
     {
         private readonly ASFOptions _options;
 
-        public AccessTokenGenerate( IOptions<ASFOptions> options)
+        public AccessTokenGenerate(ASFOptions options)
         {
-            _options = options.Value;
+            _options = options;
         }
 
         /// <summary>

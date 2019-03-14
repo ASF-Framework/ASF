@@ -14,10 +14,11 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ASFBuilderExtensions
     {
-        public static ASFBuilder AddSQLite(this ASFBuilder builder)
+        public static ASFBuilder AddSQLite(this ASFBuilder builder,string dbConnectionString)
         {
             var options = builder.Services.GetDefaultConfiguration();
-            builder.Services.AddRepositories();
+            options.DbConnectionString = dbConnectionString;
+            builder.Services.AddRepositories(options);
             builder.Services.AddAnticorrsives(options);
             return builder;
         }
@@ -26,16 +27,16 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             ASFOptions options = new ASFOptions();
             startupAction?.Invoke(options);
-            builder.Services.ConfigureOptions(startupAction);
-            builder.Services.AddRepositories();
+            builder.Services.AddRepositories(options);
             builder.Services.AddAnticorrsives(options);
             return builder;
         }
-        public static ASFBuilder AddSQLiteCache(this ASFBuilder builder)
+        public static ASFBuilder AddSQLiteCache(this ASFBuilder builder, string dbConnectionString)
         {
             var options = builder.Services.GetDefaultConfiguration();
+            options.DbConnectionString = dbConnectionString;
             builder.Services.AddAnticorrsives(options);
-            builder.AddRepositoriesCache();
+            builder.AddRepositoriesCache(options);
             return builder;
         }
 
@@ -43,18 +44,18 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             ASFOptions options = new ASFOptions();
             startupAction?.Invoke(options);
-            builder.Services.ConfigureOptions(startupAction);
             builder.Services.AddAnticorrsives(options);
-            builder.AddRepositoriesCache();
+            builder.AddRepositoriesCache(options);
             return builder;
         }
         /// <summary>
         /// 注入仓储层
         /// </summary>
         /// <param name="builder"></param>
-        private static void AddRepositories(this IServiceCollection services)
+        private static void AddRepositories(this IServiceCollection services, ASFOptions options)
         {
-            services.AddDbContext<RepositoryContext>(options => options.UseSqlite("Data Source=ASF.db"), ServiceLifetime.Scoped);
+           
+            services.AddDbContext<RepositoryContext>(opt => opt.UseSqlite(options.DbConnectionString), ServiceLifetime.Scoped);
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ILoggingRepository, LogInfoRepository>();
@@ -65,12 +66,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// 注入缓存仓储层
         /// </summary>
         /// <param name="builder"></param>
-        private static void AddRepositoriesCache(this ASFBuilder builder)
+        private static void AddRepositoriesCache(this ASFBuilder builder, ASFOptions options)
         {
-            builder.Services.AddDbContext<RepositoryContext>(options => options.UseSqlite("Data Source=ASF.db"), ServiceLifetime.Scoped);
+            builder.Services.AddDbContext<RepositoryContext>(opt => opt.UseSqlite(options.DbConnectionString), ServiceLifetime.Scoped);
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<ILoggingRepository, LogInfoRepository>();
-
             builder.AddAccountRepositoryCache<AccountRepository>();
             builder.AddPermissionRepositoryCache<PermissionRepository>();
             builder.AddRoleRepositoryCache<RoleRepository>();
@@ -81,7 +81,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder"></param>
         private static void AddAnticorrsives(this IServiceCollection services, ASFOptions options)
         {
-            services.AddSingleton<IAccessTokenGenerate, AccessTokenGenerate>();
+            services.AddSingleton<IAccessTokenGenerate>(new AccessTokenGenerate(options));
             services.AddAuthenticationJwtBearer(options);
         }
         /// <summary>
@@ -132,7 +132,6 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 options = new ASFOptions();
             }
-            services.Configure<ASFOptions>(configuration.GetSection("ASFOptions"));
             return options;
         }
     }

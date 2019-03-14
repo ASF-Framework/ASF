@@ -25,7 +25,7 @@ namespace ASF.Core.Test.Infrastructure
             services.AddOcelot()
                 .AddASF(build =>
                 {
-                    build.AddSQLite();
+                    build.AddSQLite("Data Source=ASF.db");
                 });
             services.AddLogging();
             services.AddAutoMapper(c =>

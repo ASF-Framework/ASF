@@ -19,14 +19,22 @@ namespace ASF.Web
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services, IHostingEnvironment env)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
   
             services.AddOcelot()
                 .AddASF(build =>
                 {
-                    build.AddSQLite("Data Source=AppData/ASF.db");
+                    string dbConnectionString = "Data Source=AppData/ASF.db";
+                    if (env.IsDevelopment())
+                    {
+                        build.AddSQLite(dbConnectionString);
+                    }
+                    else
+                    {
+                        build.AddSQLiteCache(dbConnectionString);
+                    }
                 });
         }
 

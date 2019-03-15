@@ -52,7 +52,7 @@ namespace ASF.Domain.Services
                 return Result<Permission>.ReFailure(ResultCodes.NotAcceptable);
             }
             //如果是开放性权限，只要登录就可以访问
-            if(parmission.Type== Values.PermissionType.Open)
+            if(parmission.Type== Values.PermissionType.OpenApi)
             {
                 this._logger.LogDebug($"{parmission.Id} Open API authorization succeeded");
                 return Result<Permission>.ReSuccess(parmission);

@@ -16,6 +16,6 @@
         /// <summary>
         /// 开放性Api
         /// </summary>
-        Open
+        OpenApi
     }
 }

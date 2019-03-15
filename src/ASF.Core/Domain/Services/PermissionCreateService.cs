@@ -72,5 +72,16 @@ namespace ASF.Domain.Services
             //验证权限聚合数据是否合法
             return permission.Valid();
         }
+        /// <summary>
+        /// 创建开放性API权限
+        /// </summary>
+        /// <param name="permission"></param>
+        /// <returns></returns>
+        public Result CreateOpenApi(Permission permission)
+        {
+            permission.Type = Values.PermissionType.OpenApi;
+            //验证权限聚合数据是否合法
+            return permission.Valid();
+        }
     }
 }

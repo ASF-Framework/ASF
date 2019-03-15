@@ -45,10 +45,17 @@ namespace ASF.Domain.Services
                 this._logger.LogWarning($"Did not find the corresponding permissions of {requestPath}");
                 return Result<Permission>.ReFailure(ResultCodes.NotAcceptable);
             }
+            this._logger.LogDebug($"{requestPath} matches to Permission with {parmission.Id} abc");
             if (!parmission.IsNormal())
             {
                 this._logger.LogWarning($"{parmission.Id} permissions are not available");
                 return Result<Permission>.ReFailure(ResultCodes.NotAcceptable);
+            }
+            //
+            if(parmission.Type== Values.PermissionType.Open)
+            {
+                this._logger.LogDebug($"{parmission.Id} Open API authorization succeeded");
+                return Result<Permission>.ReSuccess(parmission);
             }
 
             //获取超级管理员账号
@@ -84,6 +91,7 @@ namespace ASF.Domain.Services
             }
             else
             {
+                this._logger.LogDebug($"authorization successful");
                 return Result<Permission>.ReSuccess(parmission);
             }
         }

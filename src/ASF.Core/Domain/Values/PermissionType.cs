@@ -12,6 +12,10 @@
         /// <summary>
         /// 菜单
         /// </summary>
-        Menu = 2
+        Menu = 2,
+        /// <summary>
+        /// 开放性Api
+        /// </summary>
+        Open
     }
 }

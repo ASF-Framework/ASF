@@ -51,7 +51,7 @@ namespace ASF.Domain.Services
                 this._logger.LogWarning($"{parmission.Id} permissions are not available");
                 return Result<Permission>.ReFailure(ResultCodes.NotAcceptable);
             }
-            //
+            //如果是开放性权限，只要登录就可以访问
             if(parmission.Type== Values.PermissionType.Open)
             {
                 this._logger.LogDebug($"{parmission.Id} Open API authorization succeeded");

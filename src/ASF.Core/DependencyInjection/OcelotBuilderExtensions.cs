@@ -33,6 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static OcelotPipelineConfiguration AddASF(this OcelotPipelineConfiguration configuration)
         {
+            configuration.AuthorisationMiddleware = ASFPermissionAuthorizationMiddleware.Invoke;
             configuration.PreErrorResponderMiddleware = ASFRequestLoggerMiddleware.Invoke;
             return configuration;
         }

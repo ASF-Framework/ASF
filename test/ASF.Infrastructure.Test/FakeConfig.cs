@@ -14,7 +14,7 @@ namespace TestRepository
             {
                 c.RegisterAllMappings(typeof(LogInfoMapper).Assembly);
             });
-            new ASFBuilder(service).AddSQLite();
+            new ASFBuilder(service).AddSQLite("Data Source=ASF.db");
             return service.BuildServiceProvider();
         }
     }

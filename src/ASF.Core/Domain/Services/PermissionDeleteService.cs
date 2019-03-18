@@ -33,7 +33,6 @@ namespace ASF.Domain.Services
                 return Result<Permission>.ReFailure(ResultCodes.PermissionSystemNotDelete.ToFormat(permission.Name));
 
             return Result.ReSuccess();
-
         }
     }
 }

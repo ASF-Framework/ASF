@@ -87,6 +87,7 @@ export default {
       this.edit({ id: 0 })
     },
     edit (record) {
+      console.log(record)
         getAccountDetail(record.id).then(res=>{
             if(res.status==200){
                 this.mdl = Object.assign({}, res.result)     
@@ -152,7 +153,8 @@ export default {
     },   
     //加载角色
     loadRoles(){
-     getRoleListAll().then(res => {      
+     getRoleListAll().then(res => {    
+       console.log(res) 
         this.roleList = res.result        
       })
     }

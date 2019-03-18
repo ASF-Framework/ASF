@@ -15,6 +15,7 @@ const api = {
     getRoleDetail: '/asf/role/GetDetails',
     createAccount: '/asf/account/create',
     modifyStatusAccount: '/asf/account/midifystatus',
+    modifyMenu: '/asf/permission/ModifyMenu',
     deleteAccount: '/asf/account/delete',
     modifyAccount: '/asf/account/midify',
     resetPassword: '/asf/account/ResetPassword',
@@ -172,6 +173,18 @@ export function CreateAction(id) {
         })
     })
 }
+
+//修改导航权限
+export function modifyMenu(parameter) {
+    return new Promise((resolve, reject) => {
+        axios.post(api.modifyMenu, parameter).then(res => {
+            resolve(res)
+        }).catch(err => {
+            reject(err)
+        })
+    })
+}
+
 // 创建导航权限
 export function CreateMenu(id) {
     return new Promise((resolve, reject) => {

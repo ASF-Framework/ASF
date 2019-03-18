@@ -77,7 +77,7 @@ module.exports = {
             '/api': {
                 //target:'https://www.easy-mock.com/mock/5c3c53b5e477ea245d3601bc/example',
                 //target: 'http://localhost:60319',
-                target: 'http://192.168.1.117:60319',
+                target: 'http://192.168.1.117',
                 ws: false,
                 changeOrigin: true
             },

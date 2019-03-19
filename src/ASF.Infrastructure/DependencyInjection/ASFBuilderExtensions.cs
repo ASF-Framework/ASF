@@ -71,6 +71,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddDbContext<RepositoryContext>(opt => opt.UseSqlite(options.DbConnectionString), ServiceLifetime.Scoped);
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<ILoggingRepository, LogInfoRepository>();
+            builder.AddInMemoryCaching();
             builder.AddAccountRepositoryCache<AccountRepository>();
             builder.AddPermissionRepositoryCache<PermissionRepository>();
             builder.AddRoleRepositoryCache<RoleRepository>();

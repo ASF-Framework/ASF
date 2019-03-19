@@ -6,7 +6,7 @@
           <a-col :md="8" :sm="24">
             <a-tooltip>
               <template slot="title">新增权限</template>
-              <a-button type="primary" @click="NevigateView" icon="plus" style="margin-right:10px"></a-button>
+              <a-button type="primary" @click="$refs.PermissionModal.add()" icon="plus" style="margin-right:10px"></a-button>
             </a-tooltip>
             <a-radio-group defaultValue="-1" v-model="queryParam.enable" buttonStyle="solid" @change="loadDataing">
               <a-radio-button value="-1">全部</a-radio-button>
@@ -49,11 +49,7 @@
               <a href="javascript:;" @click="pushDetalis(record)">详情</a>
             </a-menu-item>
             <a-menu-item :disabled="record.isSystem">
-              <a @click="handleEdit(record)" v-if="!record.isSystem">禁用</a>
-              <a v-else disabled>禁用</a>
-            </a-menu-item>
-            <a-menu-item :disabled="record.isSystem">
-              <a @click="handleEdit(record)" v-if="!record.isSystem">删除</a>
+              <a @click="handleNavigationDelete(record.id)" v-if="!record.isSystem">删除</a>
               <a v-else disabled>删除</a>
             </a-menu-item>
           </a-menu>
@@ -95,7 +91,7 @@
     <a-modal title="添加操作权限" :width="640" :centered="true" v-model="visibleAdd" @ok="addAction">
       <a-form :autoFormCreate="(form)=>{this.form = form}">
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="权限编码" hasFeedback validateStatus="success">
-          <a-input placeholder="权限编码,默认是code" v-model="addActine.code" />
+          <a-input placeholder="权限编码" v-model="addActine.code" />
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="权限名称" hasFeedback validateStatus="success">
           <a-input placeholder="起一个名字" v-model="addActine.name" />
@@ -130,49 +126,26 @@
         </a-form-item>
       </a-form>
     </a-modal>
-    <!--添加导航权限弹窗-->
-    <a-modal title="添加导航权限" :width="640" :centered="true" v-model="addNevigate" @ok="addNevigateView">
-      <a-form>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="权限编码" hasFeedback validateStatus="success">
-          <a-input placeholder="权限编码,默认是code" v-model="addNevigateData.code" />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="权限名称" hasFeedback validateStatus="success">
-          <a-input placeholder="起一个名字" v-model="addNevigateData.name" />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="上级权限编码">
-          <!--<a-input placeholder="上级权限编码" v-model="addActine.parentId"/>-->
-          <a-dropdown>
-            <span class="ant-dropdown-link" :trigger="['click']">
-              点击选择父级
-              <a-icon type="down" />
-            </span>
-            <a-menu slot="overlay">
-              <a-sub-menu v-for="(items,index) in dataLoad.result" :key="index" :title="items.name" @titleClick="nevigateTrigger(index, items.id)">
-                <a-menu-item v-for="(list,index1) in items.children" :key="index1" @click="nevigateTrigger(index1, list.id)">{{ list.name }}</a-menu-item>
-              </a-sub-menu>
-            </a-menu>
-          </a-dropdown>
-          您的选择： {{ addNevigateData.parentId }}
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="排序" hasFeedback>
-          <a-input-number :min="1" :max="10" v-model="addNevigateData.sort" />
-        </a-form-item>
-        <a-divider/>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="描述" hasFeedback validateStatus="success">
-          <a-input placeholder="描述" v-model="addNevigateData.description" />
-        </a-form-item>
-      </a-form>
-    </a-modal>
 
+    <!--添加/编辑导航权限弹窗-->
     <permission-modal ref="PermissionModal" @ok="handleEditSubmit"></permission-modal>
   </a-card>
 </template>
 
 <script>
+/* eslint-disable */
 import EditableCell from '@/components/EditCell/EditableCell'
 import STable from '@/components/table/'
 import PermissionModal from './modules/PermissionModal'
-import { getPermissions, getActionDetails, modifyAction, modifySort, CreateAction, CreateMenu } from '@/api/manage'
+import {
+  getPermissions,
+  getActionDetails,
+  modifyAction,
+  modifySort,
+  CreateAction,
+  CreateMenu,
+  deleteMenu
+} from '@/api/manage'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
 export default {
   name: 'TableList',
@@ -189,18 +162,10 @@ export default {
         pageSizeOptions: [],
         onChange: page => {}
       },
-      editSort: '',
-      addNevigate: false,
-      addNevigateData: {
-        code: 'code',
-        parentId: '',
-        name: '',
-        sort: '',
-        description: ''
-      },
+      editSort: '',      
       loading: false,
       addActine: {
-        code: 'code',
+        code: '',
         parentId: '',
         name: '',
         apiTemplate: '',
@@ -315,9 +280,30 @@ export default {
     this.loadDataing()
   },
   methods: {
+    //格式化状态
     formatEnable(value) {
       return value ? '启用' : '停止'
     },
+    //删除导航权限
+    handleNavigationDelete(id) {
+      const that = this
+      this.$confirm({
+        title: '提示',
+        content: '确定要删除吗 ?',
+        onOk() {
+          deleteMenu(id).then(res => {
+            if (res.status === 200) {
+              that.loadDataing()
+              that.$message.success('删除成功')
+            } else {
+              that.$message.error(res.message)
+            }
+          })
+        },
+        onCancel() {}
+      })
+    },
+    //加载数据
     loadDataing() {
       this.loading = true
       getPermissions(this.queryParam).then(res => {
@@ -330,29 +316,11 @@ export default {
         }
       })
     },
+    //添加操作权限的父级选择触发事件
     actionTrigger(index, id) {
       this.addActine.parentId = id
     },
-    nevigateTrigger(index, id) {
-      this.addNevigateData.parentId = id
-    },
-    NevigateView() {
-      this.addNevigate = true
-    },
-    addNevigateView() {
-      CreateMenu(this.addNevigateData).then(res => {
-        if (res.status === 200) {
-          // this.$refs.table.refresh(true)
-          this.addNevigate = false
-        } else {
-          this.$notification['error']({
-            message: '错误',
-            description: res.message,
-            duration: 4
-          })
-        }
-      })
-    },
+    //添加操作权限事件
     addAction() {
       CreateAction(this.addActine).then(res => {
         if (res.status === 200) {
@@ -367,6 +335,7 @@ export default {
         }
       })
     },
+    //跳转到详情
     pushDetalis(record) {
       this.$router.push({
         name: 'PermissionDetail',
@@ -389,6 +358,7 @@ export default {
       }
       this.controlFrom = obj
     },
+    //编辑操作权限提交方法
     handleSubmit(e) {
       e.preventDefault()
       // this.visibleControl = true
@@ -405,6 +375,7 @@ export default {
         }
       })
     },
+    //加载导航权限数据
     makePermissionList(res) {
       const result1 = []
       const data = Object.assign(res, this.queryParam)
@@ -423,9 +394,7 @@ export default {
       this.dataLoad = data
       return data.result
     },
-    handleBtn() {
-      this.makePermissionList()
-    },
+    //点击操作权限tag标签事件
     handerContrl(action, key) {
       this.visibleControl = true
       const id = key
@@ -433,11 +402,6 @@ export default {
         if (res.status === 200) {
           this.controlFrom = res.result
         }
-      })
-    },
-    loadGetData() {
-      return getPermissions(this.queryParam).then(res => {
-        return this.makePermissionList(res)
       })
     },
     // 修改排序input，input失去焦点或者按Enter键触发此函数
@@ -456,12 +420,15 @@ export default {
         }
       })
     },
+    //修改排序input  --和上面的方法有点雷同（要查看是不是这里的问题）
     editSortInput(e) {
       this.editSort = e
     },
+    //添加操作权限弹框
     handleAdd() {
       this.visibleAdd = true
     },
+    //加载导航权限
     loadPermissionList() {
       // permissionList
       new Promise(resolve => {
@@ -507,23 +474,12 @@ export default {
         this.permissionList = res
       })
     },
-    handleEdit(record, text) {
-      this.mdl = Object.assign({}, record)
-      this.mdl.actions = []
-      let actionsList = []
-      this.visible = true
-      for (let i in record.actions) {
-      }
-    },
-    handleOk() {},
+    //分页change事件
     onChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    toggleAdvanced() {
-      this.advanced = !this.advanced
-    },
-    // 编辑提交方法
+    // 添加/编辑导航权限完成后的刷新列表
     handleEditSubmit() {
       this.loadDataing()
     }

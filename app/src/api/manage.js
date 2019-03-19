@@ -21,6 +21,7 @@ const api = {
     resetPassword: '/asf/account/ResetPassword',
     getAccountDetail: '/asf/account/GetDetails',
     service: '/service',
+    deleteMenu: '/asf/permission/delete',
     permission: '/asf/permission/getmenulist',
     permissionAll: '/asf/permission/GetMenuAllList',
     permissionNoPager: '/permission/no-pager',
@@ -195,6 +196,19 @@ export function CreateMenu(id) {
         })
     })
 }
+
+// 删除权限 
+export function deleteMenu(id) {
+    return new Promise((resolve, reject) => {
+        axios.post(api.deleteMenu + `/${id}`).then(res => {
+            resolve(res)
+        }).catch(err => {
+            reject(err)
+        })
+    })
+}
+
+
 // 根据ID获取导航权限详情
 export function getMenuDetails(id) {
     return new Promise((resolve, reject) => {

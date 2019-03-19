@@ -50,6 +50,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import STable from '@/components/table/'
 import RoleModal from './modules/RoleModal'
 import { getRoleList, modifyStatusRole, deleteRole } from '@/api/manage'

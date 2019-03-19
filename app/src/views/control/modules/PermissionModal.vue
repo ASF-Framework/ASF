@@ -3,7 +3,7 @@
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="权限编码" hasFeedback>
-          <a-input placeholder="权限编码" disabled="disabled" v-decorator="[ 'id', {rules: []} ]" />
+          <a-input placeholder="权限编码" :disabled="!isAdd" v-decorator="[ 'id', {rules: [{ required: true, message: '请输入权限编码' }]} ]" />
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="权限名称" hasFeedback>
           <a-input placeholder="权限名称" v-decorator="['name',{rules: [{ required: true, message: '请输入权限名称' }]}]" />
@@ -30,6 +30,9 @@
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="状态">
           <a-switch checkedChildren="启用" unCheckedChildren="停用" v-decorator="[ 'enable', { valuePropName: 'checked' }]" />
         </a-form-item>
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="排序">
+          <a-input-number :min="1" :max="99" placeholder="排序" v-decorator="['sort',{rules: [{ required: true, message: '请选择排序' }]}]" />
+        </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="描述" hasFeedback>
           <a-textarea :rows="5" placeholder="权限描述" v-decorator="[ 'description', {rules: [{ required: false, message: '请描述权限信息' }] }]" />
         </a-form-item>
@@ -40,7 +43,7 @@
 
 <script>
 /* eslint-disable */
-import { getActionList, getDetails, getMenuDetails, modifyMenu, getPermissionAll } from '@/api/manage'
+import { getActionList, getDetails, getMenuDetails, modifyMenu, getPermissionAll, CreateMenu } from '@/api/manage'
 import { actionToObject } from '@/utils/permissions'
 import pick from 'lodash.pick'
 
@@ -59,11 +62,12 @@ export default {
       visible: false,
       confirmLoading: false,
       mdl: {},
-
+      title:'',
       form: this.$form.createForm(this),
       permissionAll: [],
       menuId: 0,
-      parentId: ''
+      parentId: '',
+      isAdd: true
     }
   },
   created() {
@@ -75,28 +79,43 @@ export default {
     },
     edit(record) {
       this.menuId = record.id
-      getMenuDetails(record.id).then(res => {
-        if (res.status == 200) {
-          this.mdl = Object.assign({}, res.result)
-          let actions = []
-          if (res.result.actions) {
-            for (let i in res.result.actions) {
-              actions.push(res.result.actions[i])
+      if (record.id === 0) {
+        this.isAdd = true
+        this.visible = true
+        this.title='添加导航权限'
+        this.$nextTick(() => {
+          this.form.setFieldsValue({ enable: true })
+        })
+      } else {
+        this.isAdd = false
+        this.visible = true
+        this.title='编辑导航权限'
+        getMenuDetails(record.id).then(res => {
+          if (res.status == 200) {
+            this.mdl = Object.assign({}, res.result)
+            let actions = []
+            if (res.result.actions) {
+              for (let i in res.result.actions) {
+                actions.push(res.result.actions[i])
+              }
             }
+            this.parentId = this.mdl.parentId
+            this.mdl.opers = actions
+            this.$nextTick(() => {
+              this.form.setFieldsValue(pick(this.mdl, 'id', 'name', 'enable', 'sort', 'description'))
+            })
+          } else {
           }
-          this.parentId = this.mdl.parentId
-          this.mdl.opers = actions
-          this.visible = true
-          this.$nextTick(() => {
-            this.form.setFieldsValue(pick(this.mdl, 'id', 'name', 'enable', 'description'))
-          })
-        } else {
-        }
-      })
+        })
+      }
     },
     close() {
+      this.form = this.$form.createForm(this)
+      this.mdl = {}
+      this.parentId = ''
       this.$emit('close')
       this.visible = false
+      this.confirmLoading = false
     },
     handleOk() {
       const _this = this
@@ -104,8 +123,7 @@ export default {
       this.form.validateFields((err, values) => {
         // 验证表单没错误
         if (!err) {
-          values.id = this.menuId
-          values.parentId = this.parentId
+          values.parentId = _this.parentId
           _this.confirmLoading = true
           // 模拟后端请求 2000 毫秒延迟
           new Promise(resolve => {
@@ -113,17 +131,38 @@ export default {
           })
             .then(() => {
               // Do something
-              modifyMenu(values).then(res=>{
-                  if(res.status==200){
-                      this.visible = false
-                      this.confirmLoading=false
-                      _this.$message.success('提交成功')
-                      _this.$emit('ok')
-                  }else{
-                      this.confirmLoading=false
-                      this.$message.error(res.message)
+              if (_this.isAdd) {
+                values.code = values.id
+                console.log('IS-add:', values)
+                CreateMenu(values).then(res => {
+                  if (res.status === 200) {
+                    // this.$refs.table.refresh(true)
+                    _this.visible = false
+                    _this.confirmLoading = false
+                    _this.$message.success('提交成功')
+                    _this.$emit('ok')
+                  } else {
+                    this.$notification['error']({
+                      message: '错误',
+                      description: res.message,
+                      duration: 4
+                    })
                   }
-              })
+                })
+              } else {
+                values.id = this.menuId
+                modifyMenu(values).then(res => {
+                  if (res.status == 200) {
+                    _this.visible = false
+                    _this.confirmLoading = false
+                    _this.$message.success('提交成功')
+                    _this.$emit('ok')
+                  } else {
+                    _this.confirmLoading = false
+                    _this.$message.error(res.message)
+                  }
+                })
+              }
             })
             .catch(() => {
               // Do something

@@ -44,9 +44,13 @@ namespace ASF
             var responseData = await context.DownstreamResponse.Content.ReadAsStringAsync();
             var requestData = await context.DownstreamRequest.ToHttpRequestMessage().Content.ReadAsStringAsync();
 
-            serviceProvider.GetRequiredService<LogOperateRecordService>().Record(permission, requestData, responseData);
-            return ;
+            var _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
+            var _recordLogService = serviceProvider.GetRequiredService<LogOperateRecordService>();
+
+            _recordLogService.Record(permission, requestData, responseData);
+            await _unitOfWork.CommitAsync(autoRollback: true);
+            return;
         }
-       
+
     }
 }

@@ -29,7 +29,8 @@ namespace ASF.Domain.Services
         /// <param name="responseData">响应参数</param>
         public void Record(Permission permission, string requestData, string responseData)
         {
-            this.Record((permission.Id, permission.Name), requestData, responseData);
+            string subject = string.IsNullOrEmpty(permission.Description) ? permission.Name : permission.Description;
+            this.Record((permission.Id, subject), requestData, responseData);
         }
 
         /// <summary>

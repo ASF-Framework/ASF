@@ -1,0 +1,2471 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "ASF"
+  },
+  "paths": {
+    "/Account/ModifyPassword": {
+      "post": {
+        "tags": [ "Account" ],
+        "summary": "个人修改登录密码",
+        "operationId": "ModifyPassword",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "修改登录密码",
+            "required": false,
+            "schema": { "$ref": "#/definitions/AccountModifyPasswordRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Account/ModifyEmail": {
+      "post": {
+        "tags": [ "Account" ],
+        "summary": "个人修改邮箱地址",
+        "operationId": "ModifyEmail",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "邮箱地址",
+            "required": false,
+            "schema": { "$ref": "#/definitions/AccountModifyEmailRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Account/ModifyTelephone": {
+      "post": {
+        "tags": [ "Account" ],
+        "summary": "个人修改电话号码",
+        "operationId": "ModifyTelephone",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "电话号码",
+            "required": false,
+            "schema": { "$ref": "#/definitions/AccountModifyTelephoneRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Account/ModifyNameOrAvatar": {
+      "post": {
+        "tags": [ "Account" ],
+        "summary": "个人修改昵称或者头像",
+        "operationId": "ModifyNameOrAvatar",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "",
+            "required": false,
+            "schema": { "$ref": "#/definitions/AccountModifyNameOrAvatarRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Account/Info": {
+      "get": {
+        "tags": [ "Account" ],
+        "summary": "登录获取用户信息",
+        "operationId": "Info",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result[AccountInfoByLoginResponseDto]" }
+          }
+        }
+      }
+    },
+    "/Account/Get": {
+      "get": {
+        "tags": [ "Account" ],
+        "summary": "获取登录账户基本信息",
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result[AccountInfoBaseResponseDto]" }
+          }
+        }
+      }
+    },
+    "/Account/Create": {
+      "post": {
+        "tags": [ "Account" ],
+        "summary": "创建账号",
+        "operationId": "Create",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "账号对象",
+            "required": false,
+            "schema": { "$ref": "#/definitions/AccountCreateRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Account/Delete/{id}": {
+      "post": {
+        "tags": [ "Account" ],
+        "summary": "删除账号",
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "账号标识",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Account/Midify": {
+      "post": {
+        "tags": [ "Account" ],
+        "summary": "修改账户信息",
+        "operationId": "Midify",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "账户信息",
+            "required": false,
+            "schema": { "$ref": "#/definitions/AccountModifyInfoRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Account/MidifyStatus": {
+      "post": {
+        "tags": [ "Account" ],
+        "summary": "修改账号状态",
+        "operationId": "MidifyStatus",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "修改状态请求",
+            "required": false,
+            "schema": { "$ref": "#/definitions/AccountModifyStatusRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Account/ResetPassword": {
+      "post": {
+        "tags": [ "Account" ],
+        "summary": "设置登录密码",
+        "operationId": "ResetPassword",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "设置登录密码",
+            "required": false,
+            "schema": { "$ref": "#/definitions/AccountResetPasswordRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Account/GetList": {
+      "post": {
+        "tags": [ "Account" ],
+        "summary": "获取账户集合",
+        "operationId": "GetList",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/AccountListPagedRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/ResultPagedList[AccountInfoBaseResponseDto]" }
+          }
+        }
+      }
+    },
+    "/Account/GetDetails/{id}": {
+      "get": {
+        "tags": [ "Account" ],
+        "summary": "获取账号详细信息",
+        "operationId": "GetDetails",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "账号ID",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result[AccountInfoDetailsResponseDto]" }
+          }
+        }
+      }
+    },
+    "/Authorise/Login": {
+      "post": {
+        "tags": [ "Authorise" ],
+        "summary": "账户登录",
+        "operationId": "Login",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "",
+            "required": false,
+            "schema": { "$ref": "#/definitions/AuthoriseByUsernameRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result[AccessToken]" }
+          }
+        }
+      }
+    },
+    "/Authorise/Logout": {
+      "post": {
+        "tags": [ "Authorise" ],
+        "summary": "退出登录",
+        "operationId": "Logout",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/configuration": {
+      "get": {
+        "tags": [ "FileConfiguration" ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [],
+        "parameters": [],
+        "responses": { "200": { "description": "Success" } }
+      },
+      "post": {
+        "tags": [ "FileConfiguration" ],
+        "operationId": "Post",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "fileConfiguration",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/FileConfiguration" }
+          }
+        ],
+        "responses": { "200": { "description": "Success" } }
+      }
+    },
+    "/Logger/GetList": {
+      "post": {
+        "tags": [ "Logger" ],
+        "summary": "分页获取所有的日志集合",
+        "operationId": "GetList",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "",
+            "required": false,
+            "schema": { "$ref": "#/definitions/LoggerListPagedRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/ResultPagedList[LoggerInfoDetailsResponseDto]" }
+          }
+        }
+      }
+    },
+    "/Logger/Delete": {
+      "post": {
+        "tags": [ "Logger" ],
+        "summary": "根据指定时间删除日志（三个月之内的日志不能删除）",
+        "operationId": "Delete",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "",
+            "required": false,
+            "schema": { "$ref": "#/definitions/LoggerDeleteRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/outputcache/{region}": {
+      "delete": {
+        "tags": [ "OutputCache" ],
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "region",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": { "200": { "description": "Success" } }
+      }
+    },
+    "/Permission/CreateAction": {
+      "post": {
+        "tags": [ "Permission" ],
+        "summary": "创建功能权限",
+        "operationId": "CreateAction",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/PermissionActionCreateRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Permission/CreateMenu": {
+      "post": {
+        "tags": [ "Permission" ],
+        "summary": "创建菜单权限",
+        "operationId": "CreateMenu",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/PermissionMenuCreateRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Permission/ModifyAction": {
+      "post": {
+        "tags": [ "Permission" ],
+        "summary": "修改功能权限",
+        "operationId": "ModifyAction",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "",
+            "required": false,
+            "schema": { "$ref": "#/definitions/PermissionActionModifyRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Permission/ModifyMenu": {
+      "post": {
+        "tags": [ "Permission" ],
+        "summary": "修改菜单权限",
+        "operationId": "ModifyMenu",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "",
+            "required": false,
+            "schema": { "$ref": "#/definitions/PermissionMenuModifyRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Permission/Delete/{id}": {
+      "post": {
+        "tags": [ "Permission" ],
+        "summary": "删除权限",
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "权限标识",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Permission/GetMenuList": {
+      "post": {
+        "tags": [ "Permission" ],
+        "summary": "获取菜单权限集合",
+        "operationId": "GetMenuList",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/PermissionListRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/ResultList[PermissionMenuInfoDetailsResponseDto]" }
+          }
+        }
+      }
+    },
+    "/Permission/GetMenuAllList": {
+      "get": {
+        "tags": [ "Permission" ],
+        "summary": "获取所有菜单权限集合",
+        "operationId": "GetMenuAllList",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/ResultList[PermissionMenuInfoBaseResponseDto]" }
+          }
+        }
+      }
+    },
+    "/Permission/GetMenuDetails/{id}": {
+      "get": {
+        "tags": [ "Permission" ],
+        "summary": "根据ID获取菜单权限详情",
+        "operationId": "GetMenuDetails",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result[PermissionMenuInfoDetailsResponseDto]" }
+          }
+        }
+      }
+    },
+    "/Permission/GetActionList": {
+      "post": {
+        "tags": [ "Permission" ],
+        "summary": "获取功能权限集合",
+        "operationId": "GetActionList",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/PermissionListRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/ResultList[PermissionActionInfoDetailsResponseDto]" }
+          }
+        }
+      }
+    },
+    "/Permission/GetActionDetails/{id}": {
+      "get": {
+        "tags": [ "Permission" ],
+        "summary": "根据ID获取功能权限详情",
+        "operationId": "GetActionDetails",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result[PermissionActionInfoDetailsResponseDto]" }
+          }
+        }
+      }
+    },
+    "/Permission/ModifySort": {
+      "post": {
+        "tags": [ "Permission" ],
+        "summary": "修改权限排序",
+        "operationId": "ModifySort",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "",
+            "required": false,
+            "schema": { "$ref": "#/definitions/PermissionModifySortRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Role/Create": {
+      "post": {
+        "tags": [ "Role" ],
+        "summary": "获取所有的角色基本信息",
+        "operationId": "Create",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "",
+            "required": false,
+            "schema": { "$ref": "#/definitions/RoleCreateRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Role/Delete/{id}": {
+      "post": {
+        "tags": [ "Role" ],
+        "summary": "删除角色",
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "角色标识",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Role/Modify": {
+      "post": {
+        "tags": [ "Role" ],
+        "summary": "修改角色",
+        "operationId": "Modify",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "",
+            "required": false,
+            "schema": { "$ref": "#/definitions/RoleModifyRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Role/ModifyStatus": {
+      "post": {
+        "tags": [ "Role" ],
+        "summary": "修改角色状态",
+        "operationId": "ModifyStatus",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "description": "",
+            "required": false,
+            "schema": { "$ref": "#/definitions/RoleModifyStatusRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result" }
+          }
+        }
+      }
+    },
+    "/Role/GetListAll": {
+      "get": {
+        "tags": [ "Role" ],
+        "summary": "获取所有角色基本信息",
+        "operationId": "GetListAll",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/ResultList[RoleInfoSimpleResponseDto]" }
+          }
+        }
+      }
+    },
+    "/Role/GetList": {
+      "post": {
+        "tags": [ "Role" ],
+        "summary": "获取角色集合",
+        "operationId": "GetList",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/RoleListPagedRequestDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/ResultPagedList[RoleInfoBaseResponseDto]" }
+          }
+        }
+      }
+    },
+    "/Role/GetDetails/{id}": {
+      "get": {
+        "tags": [ "Role" ],
+        "summary": "获取角色详情",
+        "operationId": "GetDetails",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/Result[RoleInfoDetailsResponseDto]" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AccountModifyPasswordRequestDto": {
+      "description": "账户修改登录密码",
+      "required": [ "oldPassword", "password" ],
+      "type": "object",
+      "properties": {
+        "oldPassword": {
+          "description": "旧登录密码",
+          "maxLength": 32,
+          "minLength": 6,
+          "type": "string"
+        },
+        "password": {
+          "description": "登录密码",
+          "maxLength": 32,
+          "minLength": 6,
+          "type": "string"
+        }
+      }
+    },
+    "Result": {
+      "description": "结果对象",
+      "type": "object",
+      "properties": {
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "AccountModifyEmailRequestDto": {
+      "description": "修改账户邮箱地址",
+      "required": [ "email" ],
+      "type": "object",
+      "properties": {
+        "email": {
+          "description": "邮箱地址",
+          "type": "string"
+        }
+      }
+    },
+    "AccountModifyTelephoneRequestDto": {
+      "description": "修改账户手机号码",
+      "required": [ "number" ],
+      "type": "object",
+      "properties": {
+        "number": {
+          "description": "手机号码",
+          "maxLength": 20,
+          "type": "string"
+        },
+        "areaCode": {
+          "format": "int32",
+          "description": "手机号码区号",
+          "type": "integer"
+        }
+      }
+    },
+    "AccountModifyNameOrAvatarRequestDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "昵称",
+          "maxLength": 20,
+          "type": "string"
+        },
+        "avatar": {
+          "description": "头像地址",
+          "maxLength": 225,
+          "type": "string"
+        }
+      }
+    },
+    "Result[AccountInfoByLoginResponseDto]": {
+      "description": "实体结果对象",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/AccountInfoByLoginResponseDto",
+          "description": "返回对象"
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "AccountInfoByLoginResponseDto": {
+      "description": "账户登录之后返回信息",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "昵称",
+          "type": "string"
+        },
+        "avatar": {
+          "description": "头像",
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/definitions/RoleInfo",
+          "description": "角色",
+          "readOnly": true
+        }
+      }
+    },
+    "RoleInfo": {
+      "type": "object",
+      "properties": {
+        "permissions": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/PermissionInfo" },
+          "readOnly": true
+        }
+      }
+    },
+    "PermissionInfo": {
+      "type": "object",
+      "properties": {
+        "permissionId": {
+          "description": "权限ID",
+          "type": "string"
+        },
+        "permissionName": {
+          "description": "权限名称",
+          "type": "string"
+        },
+        "actionEntitySet": {
+          "description": "功能集合",
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/ActionInfo" }
+        }
+      }
+    },
+    "ActionInfo": {
+      "type": "object",
+      "properties": {
+        "action": { "type": "string" },
+        "describe": {
+          "description": "描述",
+          "type": "string"
+        }
+      }
+    },
+    "Result[AccountInfoBaseResponseDto]": {
+      "description": "实体结果对象",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/AccountInfoBaseResponseDto",
+          "description": "返回对象"
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "AccountInfoBaseResponseDto": {
+      "description": "账户基本信息",
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "description": "用户标识",
+          "type": "integer"
+        },
+        "name": {
+          "description": "昵称",
+          "type": "string"
+        },
+        "username": {
+          "description": "用户名",
+          "type": "string"
+        },
+        "avatar": {
+          "description": "头像",
+          "type": "string"
+        },
+        "telephone": {
+          "description": "手机号码",
+          "type": "string"
+        },
+        "email": {
+          "description": "邮箱地址",
+          "type": "string"
+        },
+        "status": {
+          "format": "int32",
+          "description": "状态",
+          "enum": [ 1, 2 ],
+          "type": "integer"
+        },
+        "createTime": {
+          "format": "date-time",
+          "description": "创建时间",
+          "type": "string"
+        },
+        "loginTime": {
+          "format": "date-time",
+          "description": "最后登录时间",
+          "type": "string"
+        },
+        "roles": {
+          "description": "角色集",
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "isSystem": {
+          "description": "是否为超级管理员",
+          "type": "boolean"
+        }
+      }
+    },
+    "AccountCreateRequestDto": {
+      "description": "账号创建Dto",
+      "required": [ "name", "username", "password", "roles" ],
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "昵称",
+          "maxLength": 20,
+          "type": "string"
+        },
+        "username": {
+          "description": "用户名",
+          "maxLength": 32,
+          "minLength": 2,
+          "type": "string"
+        },
+        "password": {
+          "description": "登录密码",
+          "maxLength": 32,
+          "minLength": 6,
+          "type": "string"
+        },
+        "roles": {
+          "description": "角色集",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "format": "int32",
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "AccountModifyInfoRequestDto": {
+      "description": "账户修改信息请求",
+      "required": [ "accountId", "name", "roles" ],
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "format": "int32",
+          "description": "账号编号",
+          "type": "integer"
+        },
+        "status": {
+          "format": "int32",
+          "description": "账户状态",
+          "enum": [ 1, 2 ],
+          "type": "integer"
+        },
+        "name": {
+          "description": "昵称",
+          "maxLength": 20,
+          "type": "string"
+        },
+        "roles": {
+          "description": "角色集",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "format": "int32",
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "AccountModifyStatusRequestDto": {
+      "description": "修改账户状态",
+      "required": [ "id" ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "description": "账户标识",
+          "type": "integer"
+        },
+        "status": {
+          "format": "int32",
+          "description": "账户状态",
+          "enum": [ 1, 2 ],
+          "type": "integer"
+        }
+      }
+    },
+    "AccountResetPasswordRequestDto": {
+      "description": "重置管理员密码请求",
+      "required": [ "id", "adminPassword", "password" ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "description": "账户标识",
+          "type": "integer"
+        },
+        "adminPassword": {
+          "description": "管理员密码",
+          "maxLength": 20,
+          "minLength": 6,
+          "type": "string"
+        },
+        "password": {
+          "description": "登录密码",
+          "maxLength": 20,
+          "minLength": 6,
+          "type": "string"
+        }
+      }
+    },
+    "AccountListPagedRequestDto": {
+      "description": "查询账户信息集合分页请求",
+      "type": "object",
+      "properties": {
+        "vague": {
+          "description": "模糊查询条件  用户名、ID、昵称",
+          "maxLength": 50,
+          "type": "string"
+        },
+        "status": {
+          "format": "int32",
+          "description": "状态 -1:全部 1:正常  2:不允许登录",
+          "type": "integer"
+        },
+        "isDeleted": {
+          "description": "是否删除",
+          "type": "boolean"
+        },
+        "pagedCount": {
+          "format": "int32",
+          "description": "每页显示数量",
+          "maximum": 2147483647.0,
+          "minimum": 1.0,
+          "type": "integer"
+        },
+        "skipPage": {
+          "format": "int32",
+          "description": "跳过页",
+          "maximum": 2147483647.0,
+          "minimum": 0.0,
+          "type": "integer"
+        }
+      }
+    },
+    "ResultPagedList[AccountInfoBaseResponseDto]": {
+      "description": "分页列表结果对象",
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "format": "int32",
+          "description": "Total count of Items.",
+          "type": "integer"
+        },
+        "result": {
+          "description": "返回对象",
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/AccountInfoBaseResponseDto" }
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "Result[AccountInfoDetailsResponseDto]": {
+      "description": "实体结果对象",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/AccountInfoDetailsResponseDto",
+          "description": "返回对象"
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "AccountInfoDetailsResponseDto": {
+      "description": "详细信息",
+      "type": "object",
+      "properties": {
+        "isDeleted": {
+          "description": "是否删除",
+          "type": "boolean"
+        },
+        "roles": {
+          "description": "角色集",
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "createUser": {
+          "description": "创建用户",
+          "type": "string"
+        },
+        "loginIp": {
+          "description": "最后登录IP",
+          "type": "string"
+        },
+        "id": {
+          "format": "int32",
+          "description": "用户标识",
+          "type": "integer"
+        },
+        "name": {
+          "description": "昵称",
+          "type": "string"
+        },
+        "username": {
+          "description": "用户名",
+          "type": "string"
+        },
+        "avatar": {
+          "description": "头像",
+          "type": "string"
+        },
+        "telephone": {
+          "description": "手机号码",
+          "type": "string"
+        },
+        "email": {
+          "description": "邮箱地址",
+          "type": "string"
+        },
+        "status": {
+          "format": "int32",
+          "description": "状态",
+          "enum": [ 1, 2 ],
+          "type": "integer"
+        },
+        "createTime": {
+          "format": "date-time",
+          "description": "创建时间",
+          "type": "string"
+        },
+        "loginTime": {
+          "format": "date-time",
+          "description": "最后登录时间",
+          "type": "string"
+        },
+        "isSystem": {
+          "description": "是否为超级管理员",
+          "type": "boolean"
+        }
+      }
+    },
+    "AuthoriseByUsernameRequestDto": {
+      "description": "管理员身份验证请求",
+      "required": [ "username", "password", "validType" ],
+      "type": "object",
+      "properties": {
+        "username": {
+          "description": "用户名",
+          "maxLength": 32,
+          "minLength": 2,
+          "type": "string"
+        },
+        "password": {
+          "description": "登录密码",
+          "maxLength": 32,
+          "minLength": 6,
+          "type": "string"
+        },
+        "validType": {
+          "description": "验证方式",
+          "type": "string"
+        },
+        "validate": {
+          "description": "验证码数据",
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "Result[AccessToken]": {
+      "description": "实体结果对象",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/AccessToken",
+          "description": "返回对象"
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "AccessToken": {
+      "description": "授权访问Token",
+      "type": "object",
+      "properties": {
+        "token": {
+          "description": "Token",
+          "type": "string",
+          "readOnly": true
+        },
+        "tokenType": {
+          "description": "Token 类型",
+          "type": "string",
+          "readOnly": true
+        },
+        "refreshToken": {
+          "description": "刷新令牌",
+          "type": "string",
+          "readOnly": true
+        },
+        "expired": {
+          "format": "date-time",
+          "description": "过期时间",
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "FileConfiguration": {
+      "type": "object",
+      "properties": {
+        "reRoutes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/FileReRoute" }
+        },
+        "dynamicReRoutes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/FileDynamicReRoute" }
+        },
+        "aggregates": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/FileAggregateReRoute" }
+        },
+        "globalConfiguration": { "$ref": "#/definitions/FileGlobalConfiguration" }
+      }
+    },
+    "FileReRoute": {
+      "type": "object",
+      "properties": {
+        "downstreamPathTemplate": { "type": "string" },
+        "upstreamPathTemplate": { "type": "string" },
+        "upstreamHttpMethod": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "addHeadersToRequest": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "upstreamHeaderTransform": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "downstreamHeaderTransform": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "addClaimsToRequest": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "routeClaimsRequirement": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "addQueriesToRequest": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "requestIdKey": { "type": "string" },
+        "fileCacheOptions": { "$ref": "#/definitions/FileCacheOptions" },
+        "reRouteIsCaseSensitive": { "type": "boolean" },
+        "serviceName": { "type": "string" },
+        "downstreamScheme": { "type": "string" },
+        "qoSOptions": { "$ref": "#/definitions/FileQoSOptions" },
+        "loadBalancerOptions": { "$ref": "#/definitions/FileLoadBalancerOptions" },
+        "rateLimitOptions": { "$ref": "#/definitions/FileRateLimitRule" },
+        "authenticationOptions": { "$ref": "#/definitions/FileAuthenticationOptions" },
+        "httpHandlerOptions": { "$ref": "#/definitions/FileHttpHandlerOptions" },
+        "downstreamHostAndPorts": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/FileHostAndPort" }
+        },
+        "upstreamHost": { "type": "string" },
+        "key": { "type": "string" },
+        "delegatingHandlers": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "priority": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "timeout": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "dangerousAcceptAnyServerCertificateValidator": { "type": "boolean" },
+        "securityOptions": { "$ref": "#/definitions/FileSecurityOptions" }
+      }
+    },
+    "FileDynamicReRoute": {
+      "type": "object",
+      "properties": {
+        "serviceName": { "type": "string" },
+        "rateLimitRule": { "$ref": "#/definitions/FileRateLimitRule" }
+      }
+    },
+    "FileAggregateReRoute": {
+      "type": "object",
+      "properties": {
+        "reRouteKeys": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "upstreamPathTemplate": { "type": "string" },
+        "upstreamHost": { "type": "string" },
+        "reRouteIsCaseSensitive": { "type": "boolean" },
+        "aggregator": { "type": "string" },
+        "upstreamHttpMethod": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" },
+          "readOnly": true
+        },
+        "priority": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "FileGlobalConfiguration": {
+      "type": "object",
+      "properties": {
+        "requestIdKey": { "type": "string" },
+        "serviceDiscoveryProvider": { "$ref": "#/definitions/FileServiceDiscoveryProvider" },
+        "rateLimitOptions": { "$ref": "#/definitions/FileRateLimitOptions" },
+        "qoSOptions": { "$ref": "#/definitions/FileQoSOptions" },
+        "baseUrl": { "type": "string" },
+        "loadBalancerOptions": { "$ref": "#/definitions/FileLoadBalancerOptions" },
+        "downstreamScheme": { "type": "string" },
+        "httpHandlerOptions": { "$ref": "#/definitions/FileHttpHandlerOptions" }
+      }
+    },
+    "FileCacheOptions": {
+      "type": "object",
+      "properties": {
+        "ttlSeconds": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "region": { "type": "string" }
+      }
+    },
+    "FileQoSOptions": {
+      "type": "object",
+      "properties": {
+        "exceptionsAllowedBeforeBreaking": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "durationOfBreak": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "timeoutValue": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "FileLoadBalancerOptions": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "key": { "type": "string" },
+        "expiry": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "FileRateLimitRule": {
+      "type": "object",
+      "properties": {
+        "clientWhitelist": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "enableRateLimiting": { "type": "boolean" },
+        "period": { "type": "string" },
+        "periodTimespan": {
+          "format": "double",
+          "type": "number"
+        },
+        "limit": {
+          "format": "int64",
+          "type": "integer"
+        }
+      }
+    },
+    "FileAuthenticationOptions": {
+      "type": "object",
+      "properties": {
+        "authenticationProviderKey": { "type": "string" },
+        "allowedScopes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "FileHttpHandlerOptions": {
+      "type": "object",
+      "properties": {
+        "allowAutoRedirect": { "type": "boolean" },
+        "useCookieContainer": { "type": "boolean" },
+        "useTracing": { "type": "boolean" },
+        "useProxy": { "type": "boolean" }
+      }
+    },
+    "FileHostAndPort": {
+      "type": "object",
+      "properties": {
+        "host": { "type": "string" },
+        "port": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "FileSecurityOptions": {
+      "type": "object",
+      "properties": {
+        "ipWhitelist": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "ipBlacklist": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "FileServiceDiscoveryProvider": {
+      "type": "object",
+      "properties": {
+        "host": { "type": "string" },
+        "port": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "type": { "type": "string" },
+        "token": { "type": "string" },
+        "configurationKey": { "type": "string" },
+        "pollingInterval": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "FileRateLimitOptions": {
+      "type": "object",
+      "properties": {
+        "clientIdHeader": { "type": "string" },
+        "quotaExceededMessage": { "type": "string" },
+        "rateLimitCounterPrefix": { "type": "string" },
+        "disableRateLimitHeaders": { "type": "boolean" },
+        "httpStatusCode": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "LoggerListPagedRequestDto": {
+      "description": "日志列表分页查询请求",
+      "type": "object",
+      "properties": {
+        "subject": {
+          "description": "标题",
+          "maxLength": 200,
+          "type": "string"
+        },
+        "account": {
+          "description": "操作账号 操作账户ID 和 操作账号",
+          "maxLength": 200,
+          "type": "string"
+        },
+        "type": {
+          "format": "int32",
+          "description": "日志类型 -1 全部，1:登录日志  2:操作日志",
+          "type": "integer"
+        },
+        "beginTime": {
+          "format": "date-time",
+          "description": "开始时间",
+          "type": "string"
+        },
+        "endTime": {
+          "format": "date-time",
+          "description": "结束时间",
+          "type": "string"
+        },
+        "permissionId": {
+          "description": "权限ID",
+          "maxLength": 150,
+          "type": "string"
+        },
+        "clientIp": {
+          "description": "客户端IP",
+          "type": "string"
+        },
+        "pagedCount": {
+          "format": "int32",
+          "description": "每页显示数量",
+          "maximum": 2147483647.0,
+          "minimum": 1.0,
+          "type": "integer"
+        },
+        "skipPage": {
+          "format": "int32",
+          "description": "跳过页",
+          "maximum": 2147483647.0,
+          "minimum": 0.0,
+          "type": "integer"
+        }
+      }
+    },
+    "ResultPagedList[LoggerInfoDetailsResponseDto]": {
+      "description": "分页列表结果对象",
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "format": "int32",
+          "description": "Total count of Items.",
+          "type": "integer"
+        },
+        "result": {
+          "description": "返回对象",
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/LoggerInfoDetailsResponseDto" }
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "LoggerInfoDetailsResponseDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int64",
+          "description": "日志编号",
+          "type": "integer"
+        },
+        "accountId": {
+          "format": "int32",
+          "description": "操作账号编号",
+          "type": "integer"
+        },
+        "accountName": {
+          "description": "操作账户昵称",
+          "type": "string"
+        },
+        "type": {
+          "format": "int32",
+          "description": "日志类型",
+          "enum": [ 1, 2 ],
+          "type": "integer"
+        },
+        "subject": {
+          "description": "登录方式",
+          "type": "string"
+        },
+        "clientIp": {
+          "description": "客户端IP",
+          "type": "string"
+        },
+        "permissionId": {
+          "description": "权限ID",
+          "type": "string"
+        },
+        "addTime": {
+          "format": "date-time",
+          "description": "日志记录时间",
+          "type": "string"
+        },
+        "apiAddress": {
+          "description": "请求地址",
+          "type": "string"
+        },
+        "apiRequest": {
+          "description": "API请求数据",
+          "type": "string"
+        },
+        "apiResponse": {
+          "description": "响应数据",
+          "type": "string"
+        },
+        "remark": {
+          "description": "备注",
+          "type": "string"
+        }
+      }
+    },
+    "LoggerDeleteRequestDto": {
+      "description": "批量删除日志请求",
+      "required": [ "beginTime", "endTime" ],
+      "type": "object",
+      "properties": {
+        "beginTime": {
+          "format": "date-time",
+          "description": "开始时间",
+          "type": "string"
+        },
+        "endTime": {
+          "format": "date-time",
+          "description": "结束时间",
+          "type": "string"
+        }
+      }
+    },
+    "PermissionActionCreateRequestDto": {
+      "description": "功能权限创建请求",
+      "required": [ "code", "parentId", "name", "apiTemplate" ],
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "权限代码",
+          "maxLength": 10,
+          "type": "string"
+        },
+        "parentId": {
+          "description": "上级权限编号",
+          "maxLength": 100,
+          "type": "string"
+        },
+        "name": {
+          "description": "名称",
+          "maxLength": 100,
+          "type": "string"
+        },
+        "apiTemplate": {
+          "description": "权限服务地址",
+          "maxLength": 500,
+          "type": "string"
+        },
+        "isLogger": {
+          "description": "是否日志记录",
+          "type": "boolean"
+        },
+        "sort": {
+          "format": "int32",
+          "description": "排序",
+          "type": "integer"
+        },
+        "description": {
+          "description": "描述",
+          "maxLength": 200,
+          "type": "string"
+        }
+      }
+    },
+    "PermissionMenuCreateRequestDto": {
+      "description": "菜单权限创建请求",
+      "required": [ "code", "name" ],
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "权限代码",
+          "maxLength": 10,
+          "type": "string"
+        },
+        "parentId": {
+          "description": "上级权限编号",
+          "maxLength": 100,
+          "type": "string"
+        },
+        "name": {
+          "description": "名称",
+          "maxLength": 100,
+          "type": "string"
+        },
+        "sort": {
+          "format": "int32",
+          "description": "排序",
+          "type": "integer"
+        },
+        "description": {
+          "description": "描述",
+          "maxLength": 200,
+          "type": "string"
+        }
+      }
+    },
+    "PermissionActionModifyRequestDto": {
+      "description": "修改功能权限请求",
+      "required": [ "id", "name", "apiTemplate" ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "权限标识",
+          "type": "string"
+        },
+        "name": {
+          "description": "名称",
+          "maxLength": 100,
+          "type": "string"
+        },
+        "apiTemplate": {
+          "description": "API模板",
+          "maxLength": 500,
+          "type": "string"
+        },
+        "isLogger": {
+          "description": "是否日志记录",
+          "type": "boolean"
+        },
+        "description": {
+          "description": "描述",
+          "maxLength": 200,
+          "type": "string"
+        },
+        "sort": {
+          "format": "int32",
+          "description": "排序",
+          "type": "integer"
+        },
+        "enable": {
+          "description": "是否启用",
+          "type": "boolean"
+        }
+      }
+    },
+    "PermissionMenuModifyRequestDto": {
+      "description": "修改菜单权限请求",
+      "required": [ "id", "name" ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "权限标识",
+          "type": "string"
+        },
+        "parentId": {
+          "description": "上级权限编号",
+          "maxLength": 100,
+          "type": "string"
+        },
+        "name": {
+          "description": "名称",
+          "maxLength": 100,
+          "type": "string"
+        },
+        "sort": {
+          "format": "int32",
+          "description": "排序",
+          "type": "integer"
+        },
+        "description": {
+          "description": "描述",
+          "maxLength": 200,
+          "type": "string"
+        },
+        "enable": {
+          "description": "是否启用",
+          "type": "boolean"
+        }
+      }
+    },
+    "PermissionListRequestDto": {
+      "description": "权限信息列表查询请求Dto",
+      "type": "object",
+      "properties": {
+        "vague": {
+          "description": "模糊查询条件  权限标识、名称",
+          "type": "string"
+        },
+        "enable": {
+          "format": "int32",
+          "description": "状态 -1:全部 1:启用  0:停止",
+          "type": "integer"
+        },
+        "paramId": {
+          "description": "父亲节点",
+          "type": "string"
+        }
+      }
+    },
+    "ResultList[PermissionMenuInfoDetailsResponseDto]": {
+      "description": "集合结果类",
+      "type": "object",
+      "properties": {
+        "result": {
+          "description": "返回对象",
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/PermissionMenuInfoDetailsResponseDto" }
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "PermissionMenuInfoDetailsResponseDto": {
+      "description": "权限基本信息响应对象",
+      "type": "object",
+      "properties": {
+        "isSystem": {
+          "description": "是否系统权限",
+          "type": "boolean"
+        },
+        "sort": {
+          "format": "int32",
+          "description": "排序",
+          "type": "integer"
+        },
+        "enable": {
+          "description": "是否启用",
+          "type": "boolean"
+        },
+        "createTime": {
+          "format": "date-time",
+          "description": "添加时间",
+          "type": "string"
+        },
+        "description": {
+          "description": "描述",
+          "type": "string"
+        },
+        "id": {
+          "description": "唯一标示",
+          "type": "string"
+        },
+        "parentId": {
+          "description": "上级权限编号",
+          "type": "string"
+        },
+        "name": {
+          "description": "名称",
+          "type": "string"
+        },
+        "actions": {
+          "description": "功能集合",
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "ResultList[PermissionMenuInfoBaseResponseDto]": {
+      "description": "集合结果类",
+      "type": "object",
+      "properties": {
+        "result": {
+          "description": "返回对象",
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/PermissionMenuInfoBaseResponseDto" }
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "PermissionMenuInfoBaseResponseDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "唯一标示",
+          "type": "string"
+        },
+        "parentId": {
+          "description": "上级权限编号",
+          "type": "string"
+        },
+        "name": {
+          "description": "名称",
+          "type": "string"
+        },
+        "actions": {
+          "description": "功能集合",
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "Result[PermissionMenuInfoDetailsResponseDto]": {
+      "description": "实体结果对象",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/PermissionMenuInfoDetailsResponseDto",
+          "description": "返回对象"
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "ResultList[PermissionActionInfoDetailsResponseDto]": {
+      "description": "集合结果类",
+      "type": "object",
+      "properties": {
+        "result": {
+          "description": "返回对象",
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/PermissionActionInfoDetailsResponseDto" }
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "PermissionActionInfoDetailsResponseDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "唯一标示",
+          "type": "string"
+        },
+        "parentId": {
+          "description": "上级权限编号",
+          "type": "string"
+        },
+        "name": {
+          "description": "名称",
+          "type": "string"
+        },
+        "apiTemplate": {
+          "description": "权限服务地址",
+          "type": "string"
+        },
+        "isSystem": {
+          "description": "是否系统权限",
+          "type": "boolean"
+        },
+        "isLogger": {
+          "description": "是否日志记录",
+          "type": "boolean"
+        },
+        "enable": {
+          "description": "是否启用",
+          "type": "boolean"
+        },
+        "createTime": {
+          "format": "date-time",
+          "description": "添加时间",
+          "type": "string"
+        },
+        "description": {
+          "description": "描述",
+          "type": "string"
+        },
+        "sort": {
+          "format": "int32",
+          "description": "排序",
+          "type": "integer"
+        }
+      }
+    },
+    "Result[PermissionActionInfoDetailsResponseDto]": {
+      "description": "实体结果对象",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/PermissionActionInfoDetailsResponseDto",
+          "description": "返回对象"
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "PermissionModifySortRequestDto": {
+      "description": "修改权限排序请求",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "唯一标示",
+          "type": "string"
+        },
+        "sort": {
+          "format": "int32",
+          "description": "排序",
+          "type": "integer"
+        }
+      }
+    },
+    "RoleCreateRequestDto": {
+      "description": "角色创建请求Dto",
+      "required": [ "name" ],
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "角色名称",
+          "maxLength": 20,
+          "type": "string"
+        },
+        "description": {
+          "description": "描述",
+          "maxLength": 200,
+          "type": "string"
+        },
+        "permissions": {
+          "description": "分配的权限",
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "RoleModifyRequestDto": {
+      "description": "角色修改请求",
+      "required": [ "roleId", "name", "permissions" ],
+      "type": "object",
+      "properties": {
+        "roleId": {
+          "format": "int32",
+          "description": "角色标识",
+          "type": "integer"
+        },
+        "name": {
+          "description": "角色名称",
+          "maxLength": 20,
+          "type": "string"
+        },
+        "description": {
+          "description": "描述",
+          "maxLength": 200,
+          "type": "string"
+        },
+        "enable": {
+          "description": "是否启用",
+          "type": "boolean"
+        },
+        "permissions": {
+          "description": "分配的权限",
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "RoleModifyStatusRequestDto": {
+      "description": "修改角色状态",
+      "required": [ "roleId" ],
+      "type": "object",
+      "properties": {
+        "roleId": {
+          "format": "int32",
+          "description": "角色标识",
+          "type": "integer"
+        },
+        "enable": {
+          "description": "是否启用",
+          "type": "boolean"
+        }
+      }
+    },
+    "ResultList[RoleInfoSimpleResponseDto]": {
+      "description": "集合结果类",
+      "type": "object",
+      "properties": {
+        "result": {
+          "description": "返回对象",
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/RoleInfoSimpleResponseDto" }
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "RoleInfoSimpleResponseDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "description": "角色编号",
+          "type": "integer"
+        },
+        "name": {
+          "description": "角色名称",
+          "type": "string"
+        }
+      }
+    },
+    "RoleListPagedRequestDto": {
+      "description": "角色信息集合查询请求",
+      "type": "object",
+      "properties": {
+        "vague": {
+          "description": "模糊查询条件  角色标识、名称",
+          "type": "string"
+        },
+        "enable": {
+          "format": "int32",
+          "description": "状态 -1:全部 1:启用  0:停止",
+          "type": "integer"
+        },
+        "pagedCount": {
+          "format": "int32",
+          "description": "每页显示数量",
+          "maximum": 2147483647.0,
+          "minimum": 1.0,
+          "type": "integer"
+        },
+        "skipPage": {
+          "format": "int32",
+          "description": "跳过页",
+          "maximum": 2147483647.0,
+          "minimum": 0.0,
+          "type": "integer"
+        }
+      }
+    },
+    "ResultPagedList[RoleInfoBaseResponseDto]": {
+      "description": "分页列表结果对象",
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "format": "int32",
+          "description": "Total count of Items.",
+          "type": "integer"
+        },
+        "result": {
+          "description": "返回对象",
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/RoleInfoBaseResponseDto" }
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "RoleInfoBaseResponseDto": {
+      "description": "角色基本信息",
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "是否启用",
+          "type": "boolean"
+        },
+        "description": {
+          "description": "描述",
+          "type": "string"
+        },
+        "createTime": {
+          "format": "date-time",
+          "description": "创建时间",
+          "type": "string"
+        },
+        "id": {
+          "format": "int32",
+          "description": "角色编号",
+          "type": "integer"
+        },
+        "name": {
+          "description": "角色名称",
+          "type": "string"
+        }
+      }
+    },
+    "Result[RoleInfoDetailsResponseDto]": {
+      "description": "实体结果对象",
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/RoleInfoDetailsResponseDto",
+          "description": "返回对象"
+        },
+        "status": {
+          "format": "int32",
+          "description": "业务返回码",
+          "type": "integer"
+        },
+        "message": {
+          "description": "执行返回消息",
+          "type": "string"
+        }
+      }
+    },
+    "RoleInfoDetailsResponseDto": {
+      "type": "object",
+      "properties": {
+        "permissions": {
+          "description": "分配的权限",
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "enable": {
+          "description": "是否启用",
+          "type": "boolean"
+        },
+        "description": {
+          "description": "描述",
+          "type": "string"
+        },
+        "createTime": {
+          "format": "date-time",
+          "description": "创建时间",
+          "type": "string"
+        },
+        "id": {
+          "format": "int32",
+          "description": "角色编号",
+          "type": "integer"
+        },
+        "name": {
+          "description": "角色名称",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

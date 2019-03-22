@@ -43,16 +43,14 @@
 </template>
 
 <script>
-import PageLayout from '@/components/page/PageLayout'
-import STable from '@/components/table/'
+import { PageView } from '@/layouts'
+import { STable } from '@/components'
 import DetailList from '@/components/tools/DetailList'
-import ABadge from 'ant-design-vue/es/badge/Badge'
 const DetailListItem = DetailList.Item
 
 export default {
   components: {
     PageLayout,
-    ABadge,
     DetailList,
     DetailListItem,
     STable

@@ -100,7 +100,7 @@
 </template>
 <script>
 import EditableCell from '@/components/EditCell/EditableCell'
-import STable from '@/components/table/'
+import STable from '@/components/Table/'
 import DetailList from '@/components/tools/DetailList'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
 import { getActionDetails, modifyAction, getMenuDetails, getActionList, deleteAction, modifySort } from '@/api/manage'

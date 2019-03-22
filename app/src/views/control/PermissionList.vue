@@ -135,7 +135,7 @@
 <script>
 /* eslint-disable */
 import EditableCell from '@/components/EditCell/EditableCell'
-import STable from '@/components/table/'
+import STable from '@/components/Table/'
 import PermissionModal from './modules/PermissionModal'
 import {
   getPermissions,

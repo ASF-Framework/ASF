@@ -51,7 +51,7 @@
 
 <script>
 /* eslint-disable */
-import STable from '@/components/table/'
+import STable from '@/components/Table/'
 import RoleModal from './modules/RoleModal'
 import { getRoleList, modifyStatusRole, deleteRole } from '@/api/manage'
 export default {

@@ -254,7 +254,7 @@
 
 <script>
 import md5 from 'md5'
-import STable from '@/components/table/'
+import STable from '@/components/Table/'
 import UserModal from './modules/UserModal'
 import {
   getRoleListAll,

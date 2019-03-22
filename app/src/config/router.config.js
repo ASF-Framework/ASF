@@ -1,13 +1,6 @@
-/* eslint-disable */
-import {
-    UserLayout,
-    BasicLayout,
-    RouteView,
-    BlankLayout,
-    PageView
-} from '@/components/layouts'
-import Forbidden from '@/views/exception/403'
-// import { reject, resolve } from 'node_modules/@types/q/index';
+// eslint-disable-next-line
+import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
+import { bxAnaalyse } from '@/core/icons'
 
 export const asyncRouterMap = [{
         path: '/',
@@ -280,7 +273,6 @@ export const constantRouterMap = [{
             }
         ]
     },
-
     {
         path: '/test',
         component: BlankLayout,

@@ -92,7 +92,7 @@
 
 <script>
 import moment from 'moment'
-import STable from '@/components/table/'
+import STable from '@/components/Table/'
 import LoggerDetailModal from './modules/LoggerDetailModal'
 import { getLogger, loggerDelete } from '@/api/manage'
 import jsonViewer from 'vue-json-viewer'

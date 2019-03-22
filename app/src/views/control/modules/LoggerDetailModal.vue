@@ -1,79 +1,81 @@
 <template>
-    <a-modal title="日志详情"
-             :width="800"
-             :visible="visible"
-             :confirmLoading="confirmLoading"
-             :footer="null"
-             @ok="handleOk"
-             @cancel="handleCancel">
-        <a-card :bordered="false">
-            <detail-list title="">
-                <detail-list-item term="操作名称"
-                                  style="width:50%">{{ detailData.subject }}</detail-list-item>
-                <detail-list-item term="日志类型"
-                                  style="width:50%">{{ detailData.logType | loggerType }}</detail-list-item>
-                <detail-list-item term="操作账户"
-                                  style="width:50%">{{ detailData.accountName}}
-                    <a-tag color="blue">{{"ID:"+detailData.accountId}}</a-tag>
-                </detail-list-item>
-                <detail-list-item term="客户端IP"
-                                  style="width:50%">{{ detailData.clientIp }}</detail-list-item>
-                <detail-list-item term="权限标识"
-                                  style="width:50%">{{ detailData.permissionId }}</detail-list-item>
-                <detail-list-item term="记录时间"
-                                  style="width:50%">{{ detailData.addTime | dayFormat('YYYY-MM-DD HH:mm:ss') }}</detail-list-item>
-
-                <detail-list-item term="备注"
-                                  style="width:100%">{{ (detailData.remark===null ? '--':detailData.remark) }}</detail-list-item>
-
-            </detail-list>
-            <a-divider style="margin-bottom: 32px" />
-
-            <detail-list title="">
-                <detail-list-item term="操作API"
-                                  style="width:100%">
-                    {{ (detailData.apiAddress===null ? '--':detailData.apiAddress) }}
-                </detail-list-item>
-            </detail-list>
-            <detail-list title="">
-                <detail-list-item term="请求数据"
-                                  style="width:100%">{{ (hidden ? '--':'') }}
-                    <a-row>
-                        <!-- <p v-if="jsonArray">{{ jsonArray }}</p> -->
-                        <json-viewer v-if="!jsonArray"
-                                     :value="jsonSource"
-                                     :expand-depth="5"
-                                     :hidden="hidden"
-                                     copyable
-                                     boxed
-                                     sort></json-viewer>
-                    </a-row>
-                </detail-list-item>
-            </detail-list>
-
-            <detail-list title="">
-                <detail-list-item term="响应数据"
-                                  style="width:100%">{{ (hiddenResp ? '--':'') }}
-                    <a-row>
-                        <json-viewer v-if="!jsonArrayResp"
-                                     :value="jsonSourceResp"
-                                     :expand-depth="5"
-                                     :hidden="hiddenResp"
-                                     copyable
-                                     boxed
-                                     sort></json-viewer>
-                    </a-row>
-                </detail-list-item>
-            </detail-list>
-
-        </a-card>
-    </a-modal>
+  <a-modal
+    title="日志详情"
+    :width="800"
+    :visible="visible"
+    :confirmLoading="confirmLoading"
+    :footer="null"
+    @ok="handleOk"
+    @cancel="handleCancel"
+  >
+    <a-card :bordered="false">
+      <detail-list title>
+        <detail-list-item term="操作名称" style="width:50%">{{ detailData.subject }}</detail-list-item>
+        <detail-list-item term="日志类型" style="width:50%">{{ detailData.logType | loggerType }}</detail-list-item>
+        <detail-list-item term="操作账户" style="width:50%">
+          <span>{{ detailData.accountName }}</span>
+          <a-tag color="blue">{{ "ID:"+detailData.accountId }}</a-tag>
+        </detail-list-item>
+        <detail-list-item term="客户端IP" style="width:50%">{{ detailData.clientIp }}</detail-list-item>
+        <detail-list-item term="权限标识" style="width:50%">{{ detailData.permissionId }}</detail-list-item>
+        <detail-list-item
+          term="记录时间"
+          style="width:50%"
+        >{{ detailData.addTime | dayFormat('YYYY-MM-DD HH:mm:ss') }}</detail-list-item>
+        <detail-list-item
+          term="备注"
+          style="width:100%"
+        >{{ (detailData.remark===null ? '--':detailData.remark) }}</detail-list-item>
+      </detail-list>
+      <a-divider style="margin-bottom: 32px"/>
+      <detail-list title>
+        <detail-list-item
+          term="操作API"
+          style="width:100%"
+        >{{ (detailData.apiAddress===null ? '--':detailData.apiAddress) }}</detail-list-item>
+      </detail-list>
+      <detail-list title>
+        <detail-list-item term="请求数据" style="width:100%">
+          {{ (hidden ? '--':'') }}
+          <a-row>
+            <!-- <p v-if="jsonArray">{{ jsonArray }}</p> -->
+            <json-viewer
+              v-if="!jsonArray"
+              :value="jsonSource"
+              :expand-depth="5"
+              :hidden="hidden"
+              copyable
+              boxed
+              sort
+            ></json-viewer>
+          </a-row>
+        </detail-list-item>
+      </detail-list>
+      <detail-list title>
+        <detail-list-item term="响应数据" style="width:100%">
+          {{ (hiddenResp ? '--':'') }}
+          <a-row>
+            <json-viewer
+              v-if="!jsonArrayResp"
+              :value="jsonSourceResp"
+              :expand-depth="5"
+              :hidden="hiddenResp"
+              copyable
+              boxed
+              sort
+            ></json-viewer>
+          </a-row>
+        </detail-list-item>
+      </detail-list>
+    </a-card>
+  </a-modal>
 </template>
 
 <script>
 import DetailList from '@/components/tools/DetailList'
 import jsonViewer from 'vue-json-viewer'
 const DetailListItem = DetailList.Item
+
 export default {
   name: 'LoggerDetailModal',
   components: {
@@ -81,21 +83,30 @@ export default {
     DetailListItem,
     jsonViewer
   },
-  data() {
+  data () {
     return {
       labelCol: {
-        xs: { span: 24 },
-        sm: { span: 5 }
+        xs: {
+          span: 24
+        },
+        sm: {
+          span: 5
+        }
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 }
+        xs: {
+          span: 24
+        },
+        sm: {
+          span: 16
+        }
       },
 
       visible: false, // 弹框是否显示
       confirmLoading: false, // 弹框中的提交按钮是否加载中
       detailData: {}, // 对象
       jsonSource: [],
+
       jsonArray: '',
 
       jsonSourceResp: [],
@@ -105,7 +116,7 @@ export default {
     }
   },
   filters: {
-    loggerType(status) {
+    loggerType (status) {
       const statusMap = {
         1: '登陆日志',
         2: '操作日志'
@@ -113,9 +124,9 @@ export default {
       return statusMap[status === 1 ? 1 : 2]
     }
   },
-  created() {},
+  created () {},
   methods: {
-    showModal(record) {
+    showModal (record) {
       this.visible = true
       this.detailData = record
       console.log(this.detailData)
@@ -124,7 +135,6 @@ export default {
       } else {
         this.hidden = true
       }
-
       if (this.detailData.apiResponse !== null) {
         this.makeJsonDataResp(this.detailData.apiResponse)
       } else {
@@ -132,7 +142,7 @@ export default {
       }
     },
     // 关闭方法
-    close() {
+    close () {
       this.detailData = {}
       this.jsonSource = []
       this.jsonArray = ''
@@ -145,14 +155,12 @@ export default {
       this.visible = false
     },
     // 弹框提交方法
-    handleOk() {},
-
-    // 弹框关闭
-    handleCancel() {
+    handleOk () {},
+    handleCancel () {
       this.close()
     },
-    //构建响应json数据
-    makeJsonDataResp(value) {
+    // 构建响应json数据
+    makeJsonDataResp (value) {
       try {
         if (this.isJson(value)) {
           const data = JSON.parse(value)
@@ -167,8 +175,8 @@ export default {
         console.error(err)
       }
     },
-    //构建请求json数据
-    makeJsonDataReq(value) {
+    // 构建请求json数据
+    makeJsonDataReq (value) {
       try {
         if (this.isJson(value)) {
           const data = JSON.parse(value)
@@ -183,12 +191,11 @@ export default {
         console.error(err)
       }
     },
-    //是否为json
-    isJson(value) {
-      if (typeof value == 'string') {
+    isJson (value) {
+      if (typeof value === 'string') {
         try {
           var obj = JSON.parse(value)
-          if (typeof obj == 'object' && obj) {
+          if (typeof obj === 'object' && obj) {
             return true
           } else {
             return false
@@ -210,9 +217,9 @@ export default {
   text-align: right;
 }
 /* .col-backgroud-color1{
-   background: rgba(0, 160, 233, 0.7);
-}
-.col-backgroud-color2{
-   background: #00a0e9;
-} */
+               background: rgba(0, 160, 233, 0.7);
+            }
+            .col-backgroud-color2{
+               background: #00a0e9;
+            } */
 </style>

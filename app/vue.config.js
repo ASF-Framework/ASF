@@ -92,7 +92,7 @@ module.exports = {
         }
     },
 
-    lintOnSave: undefined,
+    lintOnSave: true,
     // babel-loader no-ignore node_modules/*
     transpileDependencies: []
 }

@@ -1,4 +1,9 @@
+
 @import './index.less';
+
+html {
+  overflow: auto;
+}
 
 body {
   // 打开滚动条固定显示
@@ -6,6 +11,9 @@ body {
 
   &.colorWeak {
     filter: invert(80%);
+  }
+  &.userLayout {
+    overflow: auto;
   }
 }
 

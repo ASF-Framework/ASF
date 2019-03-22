@@ -1,34 +1,32 @@
 <template>
   <a-layout :class="['layout', device]">
     <!-- SideMenu -->
-    <template>
-      <a-drawer
-        v-if="isMobile()"
-        placement="left"
-        :wrapClassName="`drawer-sider ${navTheme}`"
-        :closable="false"
-        :visible="collapsed"
-        @close="drawerClose"
-      >
-        <side-menu
-          mode="inline"
-          :menus="menus"
-          :theme="navTheme"
-          :collapsed="false"
-          :collapsible="true"
-          @menuSelect="menuSelect"
-        ></side-menu>
-      </a-drawer>
-
+    <a-drawer
+      v-if="isMobile()"
+      placement="left"
+      :wrapClassName="`drawer-sider ${navTheme}`"
+      :closable="false"
+      :visible="collapsed"
+      @close="drawerClose"
+    >
       <side-menu
-        v-else-if="isSideMenu()"
         mode="inline"
         :menus="menus"
         :theme="navTheme"
-        :collapsed="collapsed"
+        :collapsed="false"
         :collapsible="true"
+        @menuSelect="menuSelect"
       ></side-menu>
-    </template>
+    </a-drawer>
+
+    <side-menu
+      v-else-if="isSideMenu()"
+      mode="inline"
+      :menus="menus"
+      :theme="navTheme"
+      :collapsed="collapsed"
+      :collapsible="true"
+    ></side-menu>
 
     <a-layout :class="[layoutMode, `content-width-${contentWidth}`]" :style="{ paddingLeft: contentPaddingLeft, minHeight: '100vh' }">
       <!-- layout header -->
@@ -66,14 +64,12 @@ import { triggerWindowResizeEvent } from '@/utils/util'
 import { mapState, mapActions } from 'vuex'
 import { mixin, mixinDevice } from '@/utils/mixin'
 import config from '@/config/defaultSettings'
-
 import RouteView from './RouteView'
 import MultiTab from '@/components/MultiTab'
 import SideMenu from '@/components/Menu/SideMenu'
 import GlobalHeader from '@/components/GlobalHeader'
 import GlobalFooter from '@/components/GlobalFooter'
 import SettingDrawer from '@/components/SettingDrawer'
-
 export default {
   name: 'BasicLayout',
   mixins: [mixin, mixinDevice],
@@ -157,7 +153,6 @@ export default {
 
 <style lang="less">
 @import url('../components/global.less');
-
 /*
  * The following styles are auto-applied to elements with
  * transition="page-transition" when their visibility is toggled
@@ -166,15 +161,12 @@ export default {
  * You can easily play with the page transition by editing
  * these styles.
  */
-
 .page-transition-enter {
   opacity: 0;
 }
-
 .page-transition-leave-active {
   opacity: 0;
 }
-
 .page-transition-enter .page-transition-container,
 .page-transition-leave-active .page-transition-container {
   -webkit-transform: scale(1.1);

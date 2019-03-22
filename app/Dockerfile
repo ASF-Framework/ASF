@@ -3,7 +3,7 @@ WORKDIR /app
 EXPOSE 80
 
 # 开始构建nodejs环境进行发布asf
-FROM yarn AS build
+FROM aqa510415008/yarn:1.0.0 AS build
 ## 指定一个源代码存放工作空间
 WORKDIR /src
 COPY . .

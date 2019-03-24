@@ -26,6 +26,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IOcelotBuilder AddASF(this IOcelotBuilder builder, Action<ASFBuilder> startupAction)
         {
+            builder.MvcCoreBuilder
+                .AddApplicationPart(typeof(ASFBuilder).Assembly)
+                .AddApiExplorer();
             builder.Services.AddASFCore(startupAction);
             builder.Services.AddSingleton<OcelotMiddlewareConfigurationDelegate>(ASFMiddlewareConfigurationProvider.Get);
             return builder;

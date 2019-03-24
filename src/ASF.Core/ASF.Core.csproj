@@ -13,7 +13,7 @@
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
-    <PackageReference Include="Ocelot" Version="13.0.0" />
+    <PackageReference Include="Ocelot" Version="13.4.1" />
   </ItemGroup>
 
 </Project>

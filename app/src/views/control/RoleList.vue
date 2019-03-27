@@ -24,7 +24,15 @@
         </a-row>
       </a-form>
     </div>
-    <a-table ref="table" size="default" :pagination="pagination" :columns="columns" :dataSource="loadData" :loading="loading" @change="handleChange" :rowKey="record => record.id">
+    <a-table
+      ref="table"
+      size="default"
+      :pagination="pagination"
+      :columns="columns"
+      :dataSource="loadData"
+      :loading="loading"
+      @change="handleChange"
+      :rowKey="record => record.id">
       <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
       <span slot="createTime" slot-scope="text">{{ text*1000 | moment }}</span>
       <span slot="action" slot-scope="text, record">

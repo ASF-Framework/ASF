@@ -41,7 +41,10 @@
       <div class="page-header-index-wide">
         <slot>
           <!-- keep-alive  -->
-          <router-view ref="content"></router-view>
+          <keep-alive v-if="multiTab">
+            <router-view ref="content" />
+          </keep-alive>
+          <router-view v-else ref="content" />
         </slot>
       </div>
     </div>
@@ -49,8 +52,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import PageHeader from '@/components/PageHeader'
-
 export default {
   name: 'PageView',
   components: {
@@ -80,25 +83,32 @@ export default {
       tabs: {}
     }
   },
+  computed: {
+    ...mapState({
+      multiTab: state => state.app.multiTab
+    })
+  },
   mounted () {
-    this.getPageHeaderInfo()
+    this.getPageMeta()
   },
   updated () {
-    this.getPageHeaderInfo()
+    this.getPageMeta()
   },
   methods: {
-    getPageHeaderInfo () {
+    getPageMeta () {
       // eslint-disable-next-line
       this.pageTitle = (typeof(this.title) === 'string' || !this.title) ? this.title : this.$route.meta.title
-
-      // 因为套用了一层 route-view 所以要取 ref 对象下的子节点的第一个对象
       const content = this.$refs.content
       if (content) {
-        this.description = content.description
-        this.linkList = content.linkList
-        this.extraImage = content.extraImage
-        this.search = content.search === true
-        this.tabs = content.tabs
+        if (content.pageMeta) {
+          Object.assign(this, content.pageMeta)
+        } else {
+          this.description = content.description
+          this.linkList = content.linkList
+          this.extraImage = content.extraImage
+          this.search = content.search === true
+          this.tabs = content.tabs
+        }
       }
     }
   }
@@ -139,23 +149,19 @@ export default {
   .page-menu-tabs {
     margin-top: 48px;
   }
-
   .extra-img {
     margin-top: -60px;
     text-align: center;
     width: 195px;
-
     img {
       width: 100%;
     }
   }
-
   .mobile {
     .extra-img{
       margin-top: 0;
       text-align: center;
       width: 96px;
-
       img{
         width: 100%;
       }

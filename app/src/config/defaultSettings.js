@@ -1,3 +1,4 @@
+
 /**
  * 项目默认配置项
  * primaryColor - 默认主题色
@@ -23,7 +24,7 @@ export default {
   autoHideHeader: false, //  auto hide header
   colorWeak: false,
   multiTab: false,
-  production: process.env.NODE_ENV === 'production',
+  production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
   // vue-ls options
   storageOptions: {
     namespace: 'pro__', // key prefix

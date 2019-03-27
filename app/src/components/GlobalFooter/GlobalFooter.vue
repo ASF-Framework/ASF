@@ -2,7 +2,7 @@
   <div class="footer">
     <div class="links">
       <a
-        href="https://pro.ant.design/"
+        href="https://pro.loacg.com/"
         target="_blank"
       >Pro 首页</a>
       <a
@@ -35,17 +35,13 @@ export default {
   padding: 0 16px;
   margin: 48px 0 24px;
   text-align: center;
-
   .links {
     margin-bottom: 8px;
-
     a {
       color: rgba(0, 0, 0, 0.45);
-
       &:hover {
         color: rgba(0, 0, 0, 0.65);
       }
-
       &:not(:last-child) {
         margin-right: 40px;
       }

@@ -60,18 +60,27 @@
       <!--</a-dropdown>-->
     </div>
 
-    <a-table ref="table" size="default" :columns="columns" :dataSource="loadData" :loading="loading" :pagination="pagination" :alert="{ show: true, clear: true }" @change="handleTableChange">
-      <span slot="accountName" slot-scope="text,record">{{ text +"&nbsp;&nbsp;"}}
-        <a-tag color="blue">{{"ID："+record.accountId}}</a-tag>
+    <a-table
+      ref="table"
+      size="default"
+      :columns="columns"
+      :dataSource="loadData"
+      :loading="loading"
+      :pagination="pagination"
+      :alert="{ show: true, clear: true }"
+      @change="handleTableChange">
+      <span slot="accountName" slot-scope="text,record">{{ text +"&nbsp;&nbsp;" }}
+        <a-tag color="blue">{{ "ID："+record.accountId }}</a-tag>
       </span>
-      <span slot="permissionId" slot-scope="text">{{ (text===null?'--':text)}}</span>
+      <span slot="permissionId" slot-scope="text">{{ (text===null?'--':text) }}</span>
       <span slot="addTime" slot-scope="text">{{ text | dayFormat('YYYY-MM-DD HH:mm:ss') }}</span>
+      // eslint-disable-next-line vue/no-unused-vars
       <span slot="logType" slot-scope="text, record">{{ text | loggerType }}</span>
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.modal.showModal(record)">详情</a>
       </span>
     </a-table>
-    <a-modal title='删除日志' :width="500" v-model="visible" @ok="handleOk">
+    <a-modal title="删除日志" :width="500" v-model="visible" @ok="handleOk">
       <a-form layout="inline" :form="deleteForm" hideRequiredMark>
         <a-row :gutter="48">
           <a-col>
@@ -103,7 +112,7 @@ export default {
     jsonViewer,
     LoggerDetailModal
   },
-  data() {
+  data () {
     return {
       // 高级搜索 展开/关闭
       advanced: false,
@@ -202,7 +211,7 @@ export default {
     }
   },
   filters: {
-    loggerType(status) {
+    loggerType (status) {
       const statusMap = {
         1: '登陆日志',
         2: '操作日志'
@@ -210,28 +219,28 @@ export default {
       return statusMap[status === 1 ? 1 : 2]
     }
   },
-  created() {
+  created () {
     this.loadDataing()
   },
   methods: {
-    //开始时间录入
-    onChangebeginTime(date, dateString) {
+    // 开始时间录入
+    onChangebeginTime (date, dateString) {
       console.log(date, dateString)
       this.tableParam.beginTime = dateString
     },
-    //结束时间录入
-    onChangeEndTime(date, dateString) {
+    // 结束时间录入
+    onChangeEndTime (date, dateString) {
       console.log(date, dateString)
       this.tableParam.endTime = dateString
     },
-    //查询条件开始和结束时间录入
-    onChangeBenginEndTime(date, dateStrings) {
+    // 查询条件开始和结束时间录入
+    onChangeBenginEndTime (date, dateStrings) {
       this.tableParam.beginTime = dateStrings[0]
       this.tableParam.endTime = dateStrings[1]
     },
 
-    //列表change事件
-    handleTableChange(pagination, filters, sorter) {
+    // 列表change事件
+    handleTableChange (pagination, filters, sorter) {
       console.log(pagination)
       const pager = {
         ...this.pagination
@@ -242,12 +251,12 @@ export default {
       this.tableParam.skipPage = pagination.current
       this.loadDataing()
     },
-    //日志类型改变事件
-    handleChanges(value) {
+    // 日志类型改变事件
+    handleChanges (value) {
       this.loadDataing()
     },
-    //删除日志点击确认事件
-    handleOk() {
+    // 删除日志点击确认事件
+    handleOk () {
       this.deleteForm.validateFields((err, values) => {
         if (!err) {
           if (this.deleteDate.beginTime !== '' && this.deleteDate.endTime !== '') {
@@ -279,21 +288,21 @@ export default {
         }
       })
     },
-    //删除日志显示框
-    deleteList() {
+    // 删除日志显示框
+    deleteList () {
       this.visible = true
     },
-    //范围时间控件的change事件
-    deleteRangeTime(date, dateStrings) {
+    // 范围时间控件的change事件
+    deleteRangeTime (date, dateStrings) {
       this.deleteDate.beginTime = dateStrings[0]
       this.deleteDate.endTime = dateStrings[1]
     },
-    //筛选出3个月之后的日子的不能选择
-    disabledDate(current) {
+    // 筛选出3个月之后的日子的不能选择
+    disabledDate (current) {
       return current && current > moment().subtract(3, 'month')
     },
-    //加载列表集合事件
-    loadDataing() {
+    // 加载列表集合事件
+    loadDataing () {
       this.loading = true
       getLogger(this.tableParam).then(data => {
         // this.loadData = res.result
@@ -314,8 +323,8 @@ export default {
         this.pagination = pagination
       })
     },
-    //条件搜索事件
-    handleSearch(e) {
+    // 条件搜索事件
+    handleSearch (e) {
       e.preventDefault()
       // this.form.validateFields((error, values) => {
       //   console.log('error', error)
@@ -326,8 +335,8 @@ export default {
       }
       this.loadDataing()
     },
-    //多条件展开事件
-    toggleAdvanced() {
+    // 多条件展开事件
+    toggleAdvanced () {
       this.advanced = !this.advanced
     }
   },

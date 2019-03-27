@@ -15,7 +15,6 @@
 
 <script>
 import types from './type'
-
 export default {
   name: 'Exception',
   props: {
@@ -71,13 +70,11 @@ export default {
       }
     }
   }
-
   .mobile {
     .exception {
       margin-top: 30px;
       .img {
         padding-right: unset;
-
         img {
           height: 40%;
           max-width: 80%;

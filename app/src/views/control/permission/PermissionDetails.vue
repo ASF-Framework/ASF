@@ -99,7 +99,7 @@
   </a-card>
 </template>
 <script>
-import EditableCell from '@/components/EditCell/EditableCell'
+import EditableCell from '@/components/ASF/EditCell/EditableCell'
 import STable from '@/components/Table/'
 import DetailList from '@/components/tools/DetailList'
 import AFormItem from 'ant-design-vue/es/form/FormItem'

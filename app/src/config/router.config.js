@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
-import { bxAnaalyse } from '@/core/icons'
+import { RoleList, PermissionList, PermissionDetails, AuditList, AdminList } from '@/views/control'
 
 export const asyncRouterMap = [{
   path: '/',
@@ -26,8 +26,7 @@ export const asyncRouterMap = [{
       children: [{
         path: '/dashboard/analysis',
         name: 'Analysis',
-        component: () =>
-                            import('@/views/dashboard/Analysis'),
+        component: () => import('@/views/dashboard/Analysis'),
         meta: {
           title: '分析页',
           keepAlive: true,
@@ -37,22 +36,20 @@ export const asyncRouterMap = [{
       {
         path: '/dashboard/workplace',
         name: 'Workplace',
-        component: () =>
-                            import('@/views/dashboard/Workplace'),
+        component: () => import('@/views/dashboard/Workplace'),
         meta: {
           title: '工作台',
           keepAlive: true,
           permission: ['asf']
         }
-      }
-      ]
+      }]
     },
     // control
     {
       path: '/control',
       name: 'control',
+      redirect: '/control/administrator',
       component: PageView,
-      redirect: '/control/user-list',
       meta: {
         title: '控制面板',
         icon: 'table',
@@ -61,107 +58,53 @@ export const asyncRouterMap = [{
       children: [
         // 管理员列表
         {
-          path: '/control/user-list',
-          name: 'UserList',
-          component: () =>
-                            import('@/views/control/UserList'),
-          meta: {
-            title: '管理员列表',
-            keepAlive: true,
-            permission: ['asf_account']
+          path: '/control/administrator',
+          name: 'administrator',
+          component: AdminList,
+          meta: { title: '管理员', keepAlive: true, permission: ['asf_account']
           }
         },
         // 角色列表
         {
-          path: '/control/role-list',
-          name: 'RoleList',
-          component: () =>
-                            import('@/views/control/RoleList'),
-          meta: {
-            title: '角色列表',
-            permission: ['asf_role']
+          path: '/control/role',
+          name: 'role',
+          component: RoleList,
+          meta: { title: '角色管理', keepAlive: true, permission: ['asf_role']
           }
         },
         // 权限列表
         {
-          path: '/control/permission-list',
-          name: 'PermissionList',
-          component: () =>
-                            import('@/views/control/PermissionList'),
-          meta: {
-            title: '权限列表',
-            permission: 'asf_permission'
-          }
+          path: '/control/permission',
+          name: 'permission',
+          redirect: '/control/permission/list',
+          component: RouteView,
+          hideChildrenInMenu: true,
+          meta: { title: '权限管理', permission: 'asf_permission', keepAlive: true },
+          children: [
+            {
+              path: '/control/permission/details',
+              name: 'permissionDetail',
+              hidden: true,
+              component: PermissionDetails,
+              meta: { title: '权限详情', keepAlive: true, hidden: true, permission: 'asf_permission' }
+            },
+            {
+              path: '/control/permission/list',
+              name: 'PermissionList',
+              hidden: true,
+              component: PermissionList,
+              meta: { title: '权限列表', keepAlive: true, hidden: true, permission: 'asf_permission' }
+            }
+          ]
         },
-
+        // 审计管理
         {
-          path: '/control/permission/details',
-          name: 'PermissionDetail',
-
-          hidden: true,
-          component: () =>
-                            import('@/views/control/permission/details'),
-          meta: {
-
-            title: '权限详情',
-            keepAlive: true,
-            hidden: true,
-            hiddenHeaderContent: true
-          }
-        },
-
-        // 日志管理
-        {
-          path: '/control/Logger',
-          name: 'Logtable',
-          component: () =>
-                            import('@/views/control/Logger'),
-          meta: {
-            title: '日志管理',
-            permission: ['asf']
+          path: '/control/audit',
+          name: 'Audit',
+          component: AuditList,
+          meta: { title: '审计管理', keepAlive: true, permission: ['asf_logging']
           }
         }
-
-      ]
-    },
-    // Exception
-    {
-      path: '/exception',
-      name: 'exception',
-      hidden: true,
-      component: RouteView,
-      redirect: '/exception/403',
-      meta: {
-        title: '异常页',
-        icon: 'warning'
-      },
-      children: [{
-        path: '/exception/403',
-        name: 'Exception403',
-        component: () =>
-                            import(/* webpackChunkName: "fail" */ '@/views/exception/403'),
-        meta: {
-          title: '403'
-        }
-      },
-      {
-        path: '/exception/404',
-        name: 'Exception404',
-        component: () =>
-                            import(/* webpackChunkName: "fail" */ '@/views/exception/404'),
-        meta: {
-          title: '404'
-        }
-      },
-      {
-        path: '/exception/500',
-        name: 'Exception500',
-        component: () =>
-                            import(/* webpackChunkName: "fail" */ '@/views/exception/500'),
-        meta: {
-          title: '500'
-        }
-      }
       ]
     },
     // account
@@ -178,8 +121,7 @@ export const asyncRouterMap = [{
       children: [{
         path: '/account/center',
         name: 'center',
-        component: () =>
-                            import('@/views/account/center/Index'),
+        component: () => import('@/views/account/center/Index'),
         meta: {
           title: '个人中心',
           keepAlive: true
@@ -188,8 +130,7 @@ export const asyncRouterMap = [{
       {
         path: '/account/settings',
         name: 'settings',
-        component: () =>
-                            import('@/views/account/settings/Index'),
+        component: () => import('@/views/account/settings/Index'),
         meta: {
           title: '个人设置',
           hideHeader: true,
@@ -200,8 +141,7 @@ export const asyncRouterMap = [{
         children: [{
           path: '/account/settings/Security',
           name: 'SecuritySettings',
-          component: () =>
-                                    import('@/views/account/settings/Security'),
+          component: () => import('@/views/account/settings/Security'),
           meta: {
             title: '账户设置',
             hidden: true,
@@ -211,38 +151,31 @@ export const asyncRouterMap = [{
         {
           path: '/account/settings/custom',
           name: 'CustomSettings',
-          component: () =>
-                                    import('@/views/account/settings/Custom'),
+          component: () => import('@/views/account/settings/Custom'),
           meta: {
             title: '个性化设置',
             hidden: true,
             keepAlive: true
           }
         },
-
         {
           path: '/account/settings/notification',
           name: 'NotificationSettings',
-          component: () =>
-                                    import('@/views/account/settings/Notification'),
+          component: () => import('@/views/account/settings/Notification'),
           meta: {
             title: '新消息通知',
             hidden: true,
             keepAlive: true
           }
-        }
-        ]
-      }
-      ]
-    }
-  ]
+        }]
+      }]
+    }]
 },
 {
   path: '*',
   redirect: '/404',
   hidden: true
-}
-]
+}]
 
 /**
  * 基础路由
@@ -258,36 +191,9 @@ export const constantRouterMap = [{
     name: 'login',
     component: resolve => require(['@/views/user/Login'], resolve)
     // component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
-  },
-  {
-    path: 'register',
-    name: 'register',
-    component: resolve => require(['@/views/user/Register'], resolve)
-    // component: () => import(/* webpackChunkName: "user" */ '@/views/user/Register')
-  },
-  {
-    path: 'register-result',
-    name: 'registerResult',
-    component: resolve => require(['@/views/user/RegisterResult'], resolve)
-    // component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
-  }
-  ]
-},
-{
-  path: '/test',
-  component: BlankLayout,
-  redirect: '/test/home',
-  children: [{
-    path: 'home',
-    name: 'TestHome',
-    component: () =>
-                import('@/views/Home')
   }]
 },
-
 {
   path: '/404',
-  component: () =>
-            import(/* webpackChunkName: "fail" */ '@/views/exception/404')
-}
-]
+  component: () => import(/* webpackChunkName: "fail" */ '@/views/404')
+}]

@@ -7,16 +7,14 @@
       :wrapClassName="`drawer-sider ${navTheme}`"
       :closable="false"
       :visible="collapsed"
-      @close="drawerClose"
-    >
+      @close="drawerClose">
       <side-menu
         mode="inline"
         :menus="menus"
         :theme="navTheme"
         :collapsed="false"
         :collapsible="true"
-        @menuSelect="menuSelect"
-      ></side-menu>
+        @menuSelect="menuSelect"></side-menu>
     </a-drawer>
 
     <side-menu

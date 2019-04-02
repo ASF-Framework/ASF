@@ -1,5 +1,11 @@
 <template>
-  <a-modal title="编辑导航权限" :width="640" :visible="visible" :confirmLoading="confirmLoading" @ok="handleOk" @cancel="handleCancel">
+  <a-modal
+    title="编辑导航权限"
+    :width="640"
+    :visible="visible"
+    :confirmLoading="confirmLoading"
+    @ok="handleOk"
+    @cancel="handleCancel">
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="权限编码" hasFeedback>
@@ -24,7 +30,7 @@
             <a-select-option v-for="(item,index) in permissionAll" :key="index">{{ item.name }}</a-select-option>
           </a-select> -->
           您的选择：
-          <span>{{parentId}}</span>
+          <span>{{ parentId }}</span>
         </a-form-item>
 
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="状态">

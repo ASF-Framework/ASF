@@ -1,3 +1,4 @@
+/* eslint-disable vue/no-unused-vars */
 <template>
   <a-card :bordered="false">
     <div class="table-page-search-wrapper">
@@ -5,13 +6,13 @@
         <a-row type="flex" justify="space-around">
           <a-col :md="{span:8}" :sm="24">
             <a-tooltip>
-              <template slot="title">删除日志
+              <template slot="title">删除审计
               </template>
               <a-button type="primary" icon="delete" style="margin-right:10px" @click="deleteList"></a-button>
             </a-tooltip>
             <a-radio-group :defaultValue="1" buttonStyle="solid" v-model="tableParam.Type" @change="handleChanges">
-              <a-radio-button :value="1">登录日志</a-radio-button>
-              <a-radio-button :value="2">操作日志</a-radio-button>
+              <a-radio-button :value="1">登录审计</a-radio-button>
+              <a-radio-button :value="2">操作审计</a-radio-button>
             </a-radio-group>
           </a-col>
           <a-col :md="{span:16,offset:0}" :sm="{span:24,offset:0}" :xs="{span:24,offset:0}" :offset="0">
@@ -46,20 +47,6 @@
       </a-form>
     </div>
 
-    <div class="table-operator">
-
-      <!--<a-dropdown v-if="selectedRowKeys.length > 0">-->
-      <!--<a-menu slot="overlay">-->
-      <!--<a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>-->
-      <!--&lt;!&ndash; lock | unlock &ndash;&gt;-->
-      <!--<a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>-->
-      <!--</a-menu>-->
-      <!--<a-button style="margin-left: 8px">-->
-      <!--批量操作 <a-icon type="down" />-->
-      <!--</a-button>-->
-      <!--</a-dropdown>-->
-    </div>
-
     <a-table
       ref="table"
       size="default"
@@ -75,12 +62,14 @@
       <span slot="permissionId" slot-scope="text">{{ (text===null?'--':text) }}</span>
       <span slot="addTime" slot-scope="text">{{ text | dayFormat('YYYY-MM-DD HH:mm:ss') }}</span>
       // eslint-disable-next-line vue/no-unused-vars
-      <span slot="logType" slot-scope="text, record">{{ text | loggerType }}</span>
+      <span slot="logType" slot-scope="text, record">
+        <spen>  {{ text | loggerType }}</spen>
+      </span>
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.modal.showModal(record)">详情</a>
       </span>
     </a-table>
-    <a-modal title="删除日志" :width="500" v-model="visible" @ok="handleOk">
+    <a-modal title="删除审计" :width="500" v-model="visible" @ok="handleOk">
       <a-form layout="inline" :form="deleteForm" hideRequiredMark>
         <a-row :gutter="48">
           <a-col>
@@ -92,7 +81,7 @@
       </a-form>
       <div style="margin-top:20px">
         <p>提示：</p>
-        <p style="font-size:10px">&nbsp;&nbsp;&nbsp;&nbsp;三个月之内的管理日志不能删除</p>
+        <p style="font-size:10px">&nbsp;&nbsp;&nbsp;&nbsp;三个月之内的审计日志不能删除</p>
       </div>
     </a-modal>
     <loggerDetail-modal ref="modal"></loggerDetail-modal>
@@ -102,7 +91,7 @@
 <script>
 import moment from 'moment'
 import STable from '@/components/Table/'
-import LoggerDetailModal from './modules/LoggerDetailModal'
+import AuditDetail from './AuditDetail'
 import { getLogger, loggerDelete } from '@/api/manage'
 import jsonViewer from 'vue-json-viewer'
 export default {
@@ -110,7 +99,7 @@ export default {
   components: {
     STable,
     jsonViewer,
-    LoggerDetailModal
+    AuditDetail
   },
   data () {
     return {

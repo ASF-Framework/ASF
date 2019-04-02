@@ -4,15 +4,11 @@
       <img alt="Vue logo" style="width: 64px; height: 64px" src="../assets/logo.png">
       <h3 style="margin-top: 1rem">Welcome to Your Vue.js App</h3>
     </div>
-
     <br/>
-
     <h2># Trend 组件 </h2>
-
     <a-divider> 正常 </a-divider>
 
     <a-card>
-
       <trend flag="up" style="margin-right: 16px;">
         <span slot="term">工资</span>
         5%
@@ -25,13 +21,10 @@
         <span slot="term">身体状态</span>
         50%
       </trend>
-
     </a-card>
 
     <a-divider> 颜色反转 </a-divider>
-
     <a-card style="margin-bottom: 3rem">
-
       <trend flag="up" :reverse-color="true" style="margin-right: 16px;">
         <span slot="term">工资</span>
         5%
@@ -40,11 +33,8 @@
         <span slot="term">工作量</span>
         50%
       </trend>
-
     </a-card>
-
     <h2># AvatarList 组件 </h2>
-
     <a-divider> AvatarList </a-divider>
     <a-card style="margin-bottom: 3rem">
       <avatar-list :max-length="3">
@@ -55,11 +45,8 @@
         <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
         <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
         <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
-
       </avatar-list>
-
       <a-divider type="vertical" style="margin: 0 16px" />
-
       <avatar-list size="mini">
         <avatar-list-item tips="Jake" src="https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png" />
         <avatar-list-item tips="Andy" src="https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png" />

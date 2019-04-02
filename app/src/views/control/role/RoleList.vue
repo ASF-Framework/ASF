@@ -53,20 +53,20 @@
         </a-dropdown>
       </span>
     </a-table>
-    <role-modal ref="modal" @ok="handleOk"></role-modal>
+    <role-edit ref="modal" @ok="handleOk"></role-edit>
   </a-card>
 </template>
 
 <script>
 /* eslint-disable */
 import STable from '@/components/Table/'
-import RoleModal from './modules/RoleModal'
+import RoleEdit from './RoleEdit'
 import { getRoleList, modifyStatusRole, deleteRole } from '@/api/manage'
 export default {
   name: 'TableList',
   components: {
     STable,
-    RoleModal
+    RoleEdit
   },
   data() {
     return {

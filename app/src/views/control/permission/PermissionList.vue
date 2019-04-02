@@ -1,6 +1,7 @@
 <template>
-  <a-card :bordered="false">
-    <div class="table-page-search-wrapper">
+  <a-card :bordered="false" >
+    <router-view></router-view>
+    <div class="table-page-search-wrapper" >
       <a-form layout="inline">
         <a-row type="flex" justify="space-around">
           <a-col :md="8" :sm="24">
@@ -23,7 +24,14 @@
         </a-row>
       </a-form>
     </div>
-    <a-table ref="table" :columns="columns" :dataSource="loadData" size="small" :loading="loading" :pagination="false" :rowKey="record => record.id">
+    <a-table
+      ref="table"
+      :columns="columns"
+      :dataSource="loadData"
+      size="small"
+      :loading="loading"
+      :pagination="false"
+      :rowKey="record => record.id">
       <span slot="actions" slot-scope="text, record">
         <a-tag v-for="(val,key) in record.actions" :key="key" @click="handerContrl(val,key)">{{ val }}</a-tag>
       </span>
@@ -46,7 +54,7 @@
           </a>
           <a-menu slot="overlay">
             <a-menu-item>
-              <a href="javascript:;" @click="pushDetalis(record)">详情</a>
+              <router-link :to="{ name: 'permissionDetail', query: {data: record.id }}" >详情</router-link>
             </a-menu-item>
             <a-menu-item :disabled="record.isSystem">
               <a @click="handleNavigationDelete(record.id)" v-if="!record.isSystem">删除</a>
@@ -58,7 +66,13 @@
     </a-table>
 
     <!--点击操作权限弹出详情编辑框-->
-    <a-modal title="操作权限编辑" :width="640" v-model="visibleControl" @cancel="editModalCancel()" :centered="true" @ok="handleSubmit">
+    <a-modal
+      title="操作权限编辑"
+      :width="640"
+      v-model="visibleControl"
+      @cancel="editModalCancel()"
+      :centered="true"
+      @ok="handleSubmit">
       <a-form :form="form">
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="父级权限" hasFeedback>
           <a-input placeholder="父级权限" v-model="controlFrom.parentId" disabled="disabled" />
@@ -126,34 +140,26 @@
         </a-form-item>
       </a-form>
     </a-modal>
-
     <!--添加/编辑导航权限弹窗-->
-    <permission-modal ref="PermissionModal" @ok="handleEditSubmit"></permission-modal>
-  </a-card>
+    <permission-edit ref="PermissionModal" @ok="handleEditSubmit"></permission-edit></a-card>
 </template>
 
 <script>
 /* eslint-disable */
-import EditableCell from '@/components/EditCell/EditableCell'
+import EditableCell from '@/components/ASF/EditCell/EditableCell'
 import STable from '@/components/Table/'
-import PermissionModal from './modules/PermissionModal'
-import {
-  getPermissions,
-  getActionDetails,
-  modifyAction,
-  modifySort,
-  CreateAction,
-  CreateMenu,
-  deleteMenu
-} from '@/api/manage'
+import {RouteView} from '@/layouts/'
+import PermissionEdit from './PermissionEdit'
+import { getPermissions,getActionDetails,modifyAction,modifySort,CreateAction,CreateMenu, deleteMenu} from '@/api/manage'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
 export default {
   name: 'TableList',
   components: {
-    PermissionModal,
+    PermissionEdit,
     AFormItem,
     STable,
-    EditableCell
+    EditableCell,
+    RouteView
   },
   data() {
     return {
@@ -335,15 +341,7 @@ export default {
         }
       })
     },
-    //跳转到详情
-    pushDetalis(record) {
-      this.$router.push({
-        name: 'PermissionDetail',
-        query: {
-          data: record.id
-        }
-      })
-    },
+
     // 编辑权限弹窗关闭回调函数
     editModalCancel() {
       const obj = {

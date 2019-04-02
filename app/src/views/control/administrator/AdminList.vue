@@ -141,9 +141,9 @@
         </div>
       </a-list-item>
     </a-list>
-    <user-modal
+    <admin-edit
       ref="modal"
-      @ok="handleEditSubmit"></user-modal>
+      @ok="handleEditSubmit"></admin-edit>
     <a-modal
       title="添加管理员"
       style="top: 20px;"
@@ -255,7 +255,7 @@
 <script>
 import md5 from 'md5'
 import STable from '@/components/Table/'
-import UserModal from './modules/UserModal'
+import AdminEdit from './AdminEdit'
 import {
   getRoleListAll,
   getAdminList,
@@ -268,7 +268,7 @@ export default {
   name: 'TableList',
   components: {
     STable,
-    UserModal
+    AdminEdit
   },
   data () {
     return {

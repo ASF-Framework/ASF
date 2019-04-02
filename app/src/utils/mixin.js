@@ -5,7 +5,6 @@ import { mapState } from 'vuex'
 // const mixinsComputed = Vue.config.optionMergeStrategies.computed
 // const mixinsMethods = Vue.config.optionMergeStrategies.methods
 
-// eslint-disable-next-line no-unused-vars
 const mixin = {
   computed: {
     ...mapState({
@@ -31,7 +30,7 @@ const mixin = {
     }
   }
 }
-// eslint-disable-next-line no-unused-vars
+
 const mixinDevice = {
   computed: {
     ...mapState({
@@ -50,7 +49,7 @@ const mixinDevice = {
     }
   }
 }
-// eslint-disable-next-line no-unused-vars
+
 const AppDeviceEnquire = {
   mounted () {
     const { $store } = this
@@ -73,3 +72,5 @@ const AppDeviceEnquire = {
     })
   }
 }
+
+export { mixin, AppDeviceEnquire, mixinDevice }

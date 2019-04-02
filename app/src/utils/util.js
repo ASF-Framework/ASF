@@ -20,7 +20,6 @@ export function triggerWindowResizeEvent () {
   window.dispatchEvent(event)
 }
 
-
 export function handleScrollHeader (callback) {
   let timer = 0
 
@@ -45,7 +44,6 @@ export function handleScrollHeader (callback) {
     false
   )
 }
-
 
 /**
  * Remove loading animate

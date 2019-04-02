@@ -4,11 +4,15 @@
       <img alt="Vue logo" style="width: 64px; height: 64px" src="../assets/logo.png">
       <h3 style="margin-top: 1rem">Welcome to Your Vue.js App</h3>
     </div>
+
     <br/>
+
     <h2># Trend 组件 </h2>
+
     <a-divider> 正常 </a-divider>
 
     <a-card>
+
       <trend flag="up" style="margin-right: 16px;">
         <span slot="term">工资</span>
         5%
@@ -21,10 +25,13 @@
         <span slot="term">身体状态</span>
         50%
       </trend>
+
     </a-card>
 
     <a-divider> 颜色反转 </a-divider>
+
     <a-card style="margin-bottom: 3rem">
+
       <trend flag="up" :reverse-color="true" style="margin-right: 16px;">
         <span slot="term">工资</span>
         5%
@@ -33,8 +40,11 @@
         <span slot="term">工作量</span>
         50%
       </trend>
+
     </a-card>
+
     <h2># AvatarList 组件 </h2>
+
     <a-divider> AvatarList </a-divider>
     <a-card style="margin-bottom: 3rem">
       <avatar-list :max-length="3">
@@ -45,8 +55,11 @@
         <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
         <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
         <avatar-list-item tips="Niko" src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png" />
+
       </avatar-list>
+
       <a-divider type="vertical" style="margin: 0 16px" />
+
       <avatar-list size="mini">
         <avatar-list-item tips="Jake" src="https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png" />
         <avatar-list-item tips="Andy" src="https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png" />
@@ -108,6 +121,19 @@
         <tag-select-option value="cat7">类目7</tag-select-option>
       </tag-select>
     </a-card>
+
+    <h2># DescriptionList 组件 </h2>
+
+    <a-divider> DescriptionList </a-divider>
+    <a-card style="margin-bottom: 3rem">
+      <description-list title="组名称" size="small">
+        <description-list-item term="负责人">林东东</description-list-item>
+        <description-list-item term="角色码">1234567</description-list-item>
+        <description-list-item term="所属部门">XX公司-YY部</description-list-item>
+        <description-list-item term="过期时间">2018-08-08</description-list-item>
+        <description-list-item term="描述">这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...</description-list-item>
+      </description-list>
+    </a-card>
   </div>
 </template>
 
@@ -119,8 +145,10 @@ import CountDown from '@/components/CountDown/CountDown'
 import Ellipsis from '@/components/Ellipsis'
 import NumberInfo from '@/components/NumberInfo'
 import TagSelect from '@/components/TagSelect'
+import { DescriptionList } from '@/components/'
 const AvatarListItem = AvatarList.AvatarItem
 const TagSelectOption = TagSelect.Option
+const DescriptionListItem = DescriptionList.Item
 export default {
   name: 'Home',
   components: {
@@ -131,7 +159,9 @@ export default {
     AvatarList,
     AvatarListItem,
     TagSelect,
-    TagSelectOption
+    TagSelectOption,
+    DescriptionList,
+    DescriptionListItem
   },
   data () {
     return {

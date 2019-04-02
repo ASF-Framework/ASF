@@ -20,7 +20,7 @@
       <span slot="isLogger" slot-scope="text"> {{ text | statusIsSystem }}</span>
       <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
       <span slot="sort" slot-scope="text, record">
-        <editable-cell :text="text" ref="sortDom" @handleChange="editSortInput" @change="handerChange" @editBlurInput="handerChange( record, text)"/>
+        <modify-sort :text="text" :id="record.id" @modifyComplete="getData"></modify-sort>
       </span>
       <span slot="action" slot-scope="text, record, index">
         <!--<a @click="handleEdit(record)">编辑</a>-->
@@ -98,12 +98,13 @@
     </a-modal>
   </a-card>
 </template>
+
 <script>
-import EditableCell from '@/components/ASF/EditCell/EditableCell'
+import ModifySort from './modules/ModifySortModule'
 import STable from '@/components/Table/'
 import DetailList from '@/components/tools/DetailList'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
-import { getActionDetails, modifyAction, getMenuDetails, getActionList, deleteAction, modifySort } from '@/api/manage'
+import { getActionDetails, modifyAction, getMenuDetails, getActionList, deleteAction } from '@/api/manage'
 const DetailListItem = DetailList.Item
 const DetalisColumns = [
   {
@@ -161,7 +162,7 @@ export default {
     DetailList,
     DetailListItem,
     STable,
-    EditableCell
+    ModifySort
   },
   data () {
     return {
@@ -224,22 +225,7 @@ export default {
         })
       })
     },
-    // 修改排序input，input失去焦点或者按Enter键触发此函数
-    handerChange (record, text) {
-      const parameter = {
-        id: record.id,
-        sort: this.editSort
-      }
-      modifySort(parameter).then(res => {
-        if (res.status === 200) {
-          // 重新请求数据
-          this.getData()
-        }
-      })
-    },
-    editSortInput (e) {
-      this.editSort = e
-    },
+
     handerContrl (action, key) {
       this.visibleContrl = true
       const id = key

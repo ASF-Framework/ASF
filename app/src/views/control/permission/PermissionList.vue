@@ -37,7 +37,7 @@
       </span>
       <span slot="enable" slot-scope="text">{{ formatEnable(text) }}</span>
       <span slot="sort" slot-scope="text, record">
-        <editable-cell :text="text" ref="sortDom" @handleChange="editSortInput" @change="handerChange(record)" @editBlurInput="handerChange(record)" />
+        <modify-sort :text="text" :id="record.id" @modifyComplete="loadDataing"></modify-sort>
       </span>
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.PermissionModal.edit(record)" v-if="!record.isSystem">编辑</a>
@@ -146,11 +146,11 @@
 
 <script>
 /* eslint-disable */
-import EditableCell from '@/components/ASF/EditCell/EditableCell'
+import ModifySort from './modules/ModifySortModule'
 import STable from '@/components/Table/'
 import {RouteView} from '@/layouts/'
 import PermissionEdit from './PermissionEdit'
-import { getPermissions,getActionDetails,modifyAction,modifySort,CreateAction,CreateMenu, deleteMenu} from '@/api/manage'
+import { getPermissions,getActionDetails,modifyAction,CreateAction,CreateMenu, deleteMenu} from '@/api/manage'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
 export default {
   name: 'TableList',
@@ -158,7 +158,7 @@ export default {
     PermissionEdit,
     AFormItem,
     STable,
-    EditableCell,
+    ModifySort,
     RouteView
   },
   data() {
@@ -167,8 +167,7 @@ export default {
         hideOnSinglePage: true,
         pageSizeOptions: [],
         onChange: page => {}
-      },
-      editSort: '',      
+      }, 
       loading: false,
       addActine: {
         code: '',
@@ -402,26 +401,7 @@ export default {
         }
       })
     },
-    // 修改排序input，input失去焦点或者按Enter键触发此函数
-    handerChange(record) {
-      if (this.editSort === '') {
-        this.editSort = 99
-      }
-      const parameter = {
-        id: record.id,
-        sort: this.editSort
-      }
-      modifySort(parameter).then(res => {
-        if (res.status === 200) {
-          // 重新请求数据
-          this.loadDataing()
-        }
-      })
-    },
-    //修改排序input  --和上面的方法有点雷同（要查看是不是这里的问题）
-    editSortInput(e) {
-      this.editSort = e
-    },
+   
     //添加操作权限弹框
     handleAdd() {
       this.visibleAdd = true

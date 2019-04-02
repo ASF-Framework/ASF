@@ -1,10 +1,11 @@
 // import Vue from 'vue'
-import { DEVICE_TYPE } from '@/utils/device'
+import { deviceEnquire, DEVICE_TYPE } from '@/utils/device'
 import { mapState } from 'vuex'
 
 // const mixinsComputed = Vue.config.optionMergeStrategies.computed
 // const mixinsMethods = Vue.config.optionMergeStrategies.methods
 
+// eslint-disable-next-line no-unused-vars
 const mixin = {
   computed: {
     ...mapState({
@@ -30,7 +31,7 @@ const mixin = {
     }
   }
 }
-
+// eslint-disable-next-line no-unused-vars
 const mixinDevice = {
   computed: {
     ...mapState({
@@ -49,5 +50,26 @@ const mixinDevice = {
     }
   }
 }
-
-export { mixin, mixinDevice }
+// eslint-disable-next-line no-unused-vars
+const AppDeviceEnquire = {
+  mounted () {
+    const { $store } = this
+    deviceEnquire(deviceType => {
+      switch (deviceType) {
+        case DEVICE_TYPE.DESKTOP:
+          $store.commit('TOGGLE_DEVICE', 'desktop')
+          $store.dispatch('setSidebar', true)
+          break
+        case DEVICE_TYPE.TABLET:
+          $store.commit('TOGGLE_DEVICE', 'tablet')
+          $store.dispatch('setSidebar', false)
+          break
+        case DEVICE_TYPE.MOBILE:
+        default:
+          $store.commit('TOGGLE_DEVICE', 'mobile')
+          $store.dispatch('setSidebar', true)
+          break
+      }
+    })
+  }
+}

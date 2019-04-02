@@ -99,25 +99,56 @@
     <h2># NumberInfo 组件 </h2>
 
     <a-divider> NumberInfo </a-divider>
-    <a-card>
+    <a-card style="margin-bottom: 3rem">
       <number-info
         :sub-title="() => { return 'Visits this week' }"
         :total="12321"
         status="up"
         :sub-total="17.1"></number-info>
     </a-card>
+
+    <h2># TagSelect 组件 </h2>
+
+    <a-divider> TagSelect </a-divider>
+    <a-card style="margin-bottom: 3rem">
+      <tag-select>
+        <tag-select-option value="cat1">类目1</tag-select-option>
+        <tag-select-option value="cat2">类目2</tag-select-option>
+        <tag-select-option value="cat3">类目3</tag-select-option>
+        <tag-select-option value="cat4">类目4</tag-select-option>
+        <tag-select-option value="cat5">类目5</tag-select-option>
+        <tag-select-option value="cat6">类目6</tag-select-option>
+        <tag-select-option value="cat7">类目7</tag-select-option>
+      </tag-select>
+    </a-card>
+
+    <h2># DescriptionList 组件 </h2>
+
+    <a-divider> DescriptionList </a-divider>
+    <a-card style="margin-bottom: 3rem">
+      <description-list title="组名称" size="small">
+        <description-list-item term="负责人">林东东</description-list-item>
+        <description-list-item term="角色码">1234567</description-list-item>
+        <description-list-item term="所属部门">XX公司-YY部</description-list-item>
+        <description-list-item term="过期时间">2018-08-08</description-list-item>
+        <description-list-item term="描述">这段描述很长很长很长很长很长很长很长很长很长很长很长很长很长很长...</description-list-item>
+      </description-list>
+    </a-card>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-
 import Trend from '@/components/Trend'
 import AvatarList from '@/components/AvatarList'
 import CountDown from '@/components/CountDown/CountDown'
 import Ellipsis from '@/components/Ellipsis'
 import NumberInfo from '@/components/NumberInfo'
+import TagSelect from '@/components/TagSelect'
+import { DescriptionList } from '@/components/'
 const AvatarListItem = AvatarList.AvatarItem
+const TagSelectOption = TagSelect.Option
+const DescriptionListItem = DescriptionList.Item
 export default {
   name: 'Home',
   components: {
@@ -126,7 +157,11 @@ export default {
     CountDown,
     Trend,
     AvatarList,
-    AvatarListItem
+    AvatarListItem,
+    TagSelect,
+    TagSelectOption,
+    DescriptionList,
+    DescriptionListItem
   },
   data () {
     return {

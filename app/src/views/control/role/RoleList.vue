@@ -165,23 +165,11 @@ export default {
     },
     // 显示状态
     ShowStatus(value) {
-      let retValue = ''
-      this.status.forEach(function(opt) {
-        if (opt.value !== value) {
-          retValue = opt.label
-        }
-      })
-      return retValue
+      return !value?"启用":"禁用"
     },
     // 返回item状态的其它状态
     ReturnStatus(value) {
-      let retValue = ''
-      this.status.forEach(function(opt) {
-        if (opt.value !== value) {
-          retValue = opt.value
-        }
-      })
-      return retValue
+      return !value?1:0
     },
     // 禁用/启用方法
     handleStatus(item) {

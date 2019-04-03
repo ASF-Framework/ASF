@@ -18,7 +18,7 @@
     >
       <span slot="isSystem" slot-scope="text"> {{ text | statusIsSystem }}</span>
       <span slot="isLogger" slot-scope="text"> {{ text | statusIsSystem }}</span>
-      <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
+      <span slot="enable" slot-scope="text">{{ text?"启用":"停止" }}</span>
       <span slot="sort" slot-scope="text, record">
         <modify-sort :text="text" :id="record.id" @modifyComplete="getData"></modify-sort>
       </span>

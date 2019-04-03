@@ -1,16 +1,9 @@
 ﻿using ASF.Domain.Entities;
 using ASF.Domain.Services;
-using ASF.Internal;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Ocelot.Middleware;
 using System;
-using System.IO;
-using System.Net;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ASF

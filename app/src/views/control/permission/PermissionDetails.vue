@@ -4,8 +4,8 @@
       <detail-list-item term="名称">{{ menuDetails.name }}</detail-list-item>
       <detail-list-item term="状态">{{ menuDetails.enable | statusFilter }}</detail-list-item>
       <detail-list-item term="权限ID">{{ menuDetails.id }}</detail-list-item>
-      <detail-list-item term="创建时间">{{ menuDetails.createTime | dayFormat }}</detail-list-item>
-      <detail-list-item term="父级权限ID">{{ menuDetails.parentId }}</detail-list-item>
+      <detail-list-item term="创建时间">{{ menuDetails.createTime | dayFormat('YYYY-MM-DD HH:mm:ss') }}</detail-list-item>
+      <detail-list-item term="父级权限ID">{{ menuDetails.parentId===''?'--':menuDetails.parentId }}</detail-list-item>
       <detail-list-item term="排序">{{ menuDetails.sort }}</detail-list-item>
       <detail-list-item term="描述">{{ menuDetails.description }}</detail-list-item>
     </detail-list>

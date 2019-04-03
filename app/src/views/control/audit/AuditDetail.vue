@@ -38,16 +38,8 @@
         <detail-list-item term="请求数据" style="width:100%">
           {{ (hidden ? '--':'') }}
           <a-row>
-            <!-- <p v-if="jsonArray">{{ jsonArray }}</p> -->
-            <json-viewer
-              v-if="!jsonArray"
-              :value="jsonSource"
-              :expand-depth="5"
-              :hidden="hidden"
-              copyable
-              boxed
-              sort
-            ></json-viewer>
+            <p v-if="isStr">{{ jsonArray }}</p>
+            <JsonView v-else :hidden="hidden" :json="jsonSource" :closed="true"></JsonView>
           </a-row>
         </detail-list-item>
       </detail-list>
@@ -55,15 +47,8 @@
         <detail-list-item term="响应数据" style="width:100%">
           {{ (hiddenResp ? '--':'') }}
           <a-row>
-            <json-viewer
-              v-if="!jsonArrayResp"
-              :value="jsonSourceResp"
-              :expand-depth="5"
-              :hidden="hiddenResp"
-              copyable
-              boxed
-              sort
-            ></json-viewer>
+            <p v-if="isStrResp">{{ jsonArrayResp }}</p>
+            <JsonView v-else :hidden="hiddenResp" :json="jsonSourceResp" :closed="true"></JsonView>
           </a-row>
         </detail-list-item>
       </detail-list>
@@ -72,16 +57,16 @@
 </template>
 
 <script>
+import JsonView from '@/components/JsonView/JsonView'
 import DetailList from '@/components/tools/DetailList'
-import jsonViewer from 'vue-json-viewer'
 const DetailListItem = DetailList.Item
 
 export default {
-  name: 'LoggerDetailModal',
+  name: 'AuditDetail',
   components: {
     DetailList,
     DetailListItem,
-    jsonViewer
+    JsonView
   },
   data () {
     return {
@@ -106,12 +91,13 @@ export default {
       confirmLoading: false, // 弹框中的提交按钮是否加载中
       detailData: {}, // 对象
       jsonSource: [],
-
+      isStr: false,
       jsonArray: '',
 
       jsonSourceResp: [],
       hiddenResp: false,
       jsonArrayResp: '',
+      isStrResp: false,
       hidden: false
     }
   },
@@ -165,10 +151,11 @@ export default {
         if (this.isJson(value)) {
           const data = JSON.parse(value)
           this.jsonSourceResp = data
-          this.jsonArrayResp = false
+          this.isStrResp = false
         } else {
           this.jsonSourceResp = value
-          this.jsonArrayResp = false
+          this.jsonArrayResp = value
+          this.isStrResp = true
         }
       } catch (err) {
         this.jsonArrayResp = value
@@ -181,10 +168,11 @@ export default {
         if (this.isJson(value)) {
           const data = JSON.parse(value)
           this.jsonSource = data
-          this.jsonArray = false
+          this.isStr = false
         } else {
           this.jsonSource = value
-          this.jsonArray = false
+          this.jsonArray = value
+          this.isStr = true
         }
       } catch (err) {
         this.jsonArray = value

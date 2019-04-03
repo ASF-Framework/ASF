@@ -61,10 +61,7 @@
       </span>
       <span slot="permissionId" slot-scope="text">{{ (text===null?'--':text) }}</span>
       <span slot="addTime" slot-scope="text">{{ text | dayFormat('YYYY-MM-DD HH:mm:ss') }}</span>
-      // eslint-disable-next-line vue/no-unused-vars
-      <span slot="logType" slot-scope="text, record">
-        <spen>  {{ text | loggerType }}</spen>
-      </span>
+      <span slot="logType" slot-scope="text">{{ text | loggerType }}</span>
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.modal.showModal(record)">详情</a>
       </span>
@@ -84,21 +81,18 @@
         <p style="font-size:10px">&nbsp;&nbsp;&nbsp;&nbsp;三个月之内的审计日志不能删除</p>
       </div>
     </a-modal>
-    <loggerDetail-modal ref="modal"></loggerDetail-modal>
+    <audit-detail ref="modal"></audit-detail>
   </a-card>
 </template>
 
 <script>
 import moment from 'moment'
-import STable from '@/components/Table/'
 import AuditDetail from './AuditDetail'
 import { getLogger, loggerDelete } from '@/api/manage'
-import jsonViewer from 'vue-json-viewer'
+
 export default {
-  name: 'TableList',
+  name: 'AuditList',
   components: {
-    STable,
-    jsonViewer,
     AuditDetail
   },
   data () {
@@ -292,24 +286,25 @@ export default {
     },
     // 加载列表集合事件
     loadDataing () {
-      this.loading = true
-      getLogger(this.tableParam).then(data => {
+      const _this = this
+      _this.loading = true
+      getLogger(_this.tableParam).then(data => {
         // this.loadData = res.result
         const pagination = {
-          ...this.pagination
+          ..._this.pagination
         }
         // Read total count from server
         // pagination.total = data.totalCount;
         pagination.total = data.totalCount
-        this.loading = false
+        _this.loading = false
         const list = data.result
         for (const i in data.result) {
           list[i].key = list[i].id
           list[i].logType = list[i].type
         }
         console.log('LogList:', list)
-        this.loadData = list
-        this.pagination = pagination
+        _this.loadData = list
+        _this.pagination = pagination
       })
     },
     // 条件搜索事件

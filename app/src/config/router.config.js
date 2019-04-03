@@ -65,7 +65,7 @@ export const asyncRouterMap = [{
               name: 'permissionDetail',
               hidden: true,
               component: PermissionDetails,
-              meta: { title: '权限详情', hidden: true, permission: 'asf_permission' }
+              meta: { title: '权限详情', hidden: true, permission: 'asf_permission', keepAlive: false }
             },
             {
               path: '/control/permission/list',

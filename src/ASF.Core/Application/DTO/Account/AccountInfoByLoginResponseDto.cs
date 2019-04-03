@@ -41,6 +41,7 @@ namespace ASF.Application.DTO
             {
                 this.PermissionId = permission.Id;
                 this.PermissionName = permission.Name;
+                this.Sort = permission.Sort;
             }
             /// <summary>
             /// 权限ID
@@ -50,6 +51,10 @@ namespace ASF.Application.DTO
             /// 权限名称
             /// </summary>
             public string PermissionName { get; set; }
+            /// <summary>
+            /// 排序
+            /// </summary>
+            public int Sort { get; set; }
             /// <summary>
             /// 功能集合
             /// </summary>

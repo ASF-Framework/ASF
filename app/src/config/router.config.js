@@ -58,21 +58,21 @@ export const asyncRouterMap = [{
           redirect: '/control/permission/list',
           component: RouteView,
           hideChildrenInMenu: true,
-          meta: { title: '权限管理', permission: 'asf_permission', keepAlive: true },
+          meta: { title: '权限管理', permission: ['asf_permission'], keepAlive: true },
           children: [
             {
               path: '/control/permission/details',
               name: 'permissionDetail',
               hidden: true,
               component: PermissionDetails,
-              meta: { title: '权限详情', hidden: true, permission: 'asf_permission', keepAlive: false }
+              meta: { title: '权限详情', hidden: true, permission: ['asf_permission'], keepAlive: false }
             },
             {
               path: '/control/permission/list',
               name: 'PermissionList',
               hidden: true,
               component: PermissionList,
-              meta: { title: '权限列表', keepAlive: true, hidden: true, permission: 'asf_permission' }
+              meta: { title: '权限列表', keepAlive: true, hidden: true, permission: ['asf_permission'] }
             }
           ]
         },

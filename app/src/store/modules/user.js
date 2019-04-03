@@ -62,7 +62,7 @@ const user = {
                                 per.actionList = action
                             }
                         })
-                        role.permissionList = role.permissions.map(permission => { return permission.permissionId })
+                        role.permissionList = role.permissions.map(permission => { return { id : permission.permissionId , sort : permission.sort }})
                         commit('SET_ROLES', result.role)
                         commit('SET_INFO', result)
                     } else {

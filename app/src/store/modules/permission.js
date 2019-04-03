@@ -5,20 +5,27 @@ import { asyncRouterMap, constantRouterMap } from '@/config/router.config'
  *
  * @param permission
  * @param route
- * @returns {boolean}
+ * @returns {boolean,object}
  */
 function hasPermission (permission, route) {
+  const res = {
+    success: false,
+    permission: null
+  }
   if (route.meta && route.meta.permission) {
     let flag = false
     for (let i = 0, len = permission.length; i < len; i++) {
-      flag = route.meta.permission.includes(permission[i])
+      const permissionId = route.meta.permission instanceof String && [route.meta.permission] || route.meta.permission
+      flag = permissionId.includes(permission[i].id)
       if (flag) {
-        return true
+        res.permission = permission[i]
+        res.success = true
       }
     }
-    return false
+  } else {
+    res.success = true
   }
-  return true
+  return res
 }
 
 /**
@@ -39,7 +46,9 @@ function hasRole(roles, route) {
 
 function filterAsyncRouter (routerMap, roles) {
   const accessedRouters = routerMap.filter(route => {
-    if (hasPermission(roles.permissionList, route)) {
+    const res = hasPermission(roles.permissionList, route)
+    if (res.success) {
+      route.sort = res.permission ? res.permission.sort : 0
       if (route.children && route.children.length) {
         route.children = filterAsyncRouter(route.children, roles)
       }
@@ -47,7 +56,32 @@ function filterAsyncRouter (routerMap, roles) {
     }
     return false
   })
+  accessedRouters.sort(by('sort'))
+  console.log(accessedRouters)
   return accessedRouters
+}
+
+// by函数接受一个成员名字符串和一个可选的次要比较函数做为参数
+// 并返回一个可以用来包含该成员的对象数组进行排序的比较函数
+// 当o[age] 和 p[age] 相等时，次要比较函数被用来决出高下
+var by = function (name, minor) {
+  return function (o, p) {
+    var a, b
+    if (o && p && typeof o === 'object' && typeof p === 'object') {
+      a = o[name]
+      b = p[name]
+      if (a === b) {
+        return typeof minor === 'function' ? minor(o, p) : 0
+      }
+      if (typeof a === typeof b) {
+        return a < b ? -1 : 1
+      }
+      return typeof a < typeof b ? -1 : 1
+    } else {
+      // eslint-disable-next-line no-undef
+      thro('error')
+    }
+  }
 }
 
 const permission = {
@@ -63,6 +97,7 @@ const permission = {
   },
   actions: {
     GenerateRoutes ({ commit }, data) {
+      console.log(data)
       return new Promise(resolve => {
         const { roles } = data
         const accessedRouters = filterAsyncRouter(asyncRouterMap, roles)

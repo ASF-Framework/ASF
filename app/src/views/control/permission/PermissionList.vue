@@ -33,7 +33,7 @@
       :pagination="false"
       :rowKey="record => record.id">
       <span slot="actions" slot-scope="text, record">
-        <a-tag v-for="(val,key) in record.actions" :key="key" @click="handerContrl(val,key)">{{ val }}</a-tag>
+        <a-tag v-for="(val,key) in record.actions" :key="key" @click="$refs.ActionEdit.edit(val,key)">{{ val }}</a-tag>
       </span>
       <span slot="enable" slot-scope="text">{{ formatEnable(text) }}</span>
       <span slot="sort" slot-scope="text, record">
@@ -45,7 +45,7 @@
         <a-divider type="vertical" />
         <a-tooltip>
           <template slot="title">添加操作权限</template>
-          <a @click="handleAdd">添加</a>
+          <a @click="$refs.ActionAdd.add(dataLoad)">添加</a>
         </a-tooltip>
         <a-divider type="vertical" />
         <a-dropdown>
@@ -65,83 +65,13 @@
       </span>
     </a-table>
 
-    <!--点击操作权限弹出详情编辑框-->
-    <a-modal
-      title="操作权限编辑"
-      :width="640"
-      v-model="visibleControl"
-      @cancel="editModalCancel()"
-      :centered="true"
-      @ok="handleSubmit">
-      <a-form :form="form">
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="父级权限" hasFeedback>
-          <a-input placeholder="父级权限" v-model="controlFrom.parentId" disabled="disabled" />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="标识" hasFeedback>
-          <a-input placeholder="标识" v-model="controlFrom.id" disabled="disabled" />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="API地址模板" hasFeedback validateStatus="success">
-          <a-input placeholder="请输入API地址模板" v-model="controlFrom.apiTemplate" />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="权限名称" hasFeedback validateStatus="success">
-          <a-input placeholder="权限描述" v-model="controlFrom.name" />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="添加时间" hasFeedback>
-          <a-input placeholder="添加时间" v-model="controlFrom.createTime" disabled="disabled" />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="系统权限">
-          <a-switch :checked="controlFrom.isSystem" :disabled="true" />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="记录日志">
-          <a-switch :checked="controlFrom.isLogger" />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="是否启用">
-          <a-switch :checked="controlFrom.enable" />
-        </a-form-item>
-      </a-form>
-    </a-modal>
-
-    <!--添加操作权限弹窗-->
-    <a-modal title="添加操作权限" :width="640" :centered="true" v-model="visibleAdd" @ok="addAction">
-      <a-form :autoFormCreate="(form)=>{this.form = form}">
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="权限编码" hasFeedback validateStatus="success">
-          <a-input placeholder="权限编码" v-model="addActine.code" />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="权限名称" hasFeedback validateStatus="success">
-          <a-input placeholder="起一个名字" v-model="addActine.name" />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="上级权限编码">
-          <!--<a-input placeholder="上级权限编码" v-model="addActine.parentId"/>-->
-          <a-dropdown>
-            <span class="ant-dropdown-link" :trigger="['click']" href="#">
-              点击选择父级
-              <a-icon type="down" />
-            </span>
-            <a-menu slot="overlay">
-              <a-sub-menu v-for="(items,index) in dataLoad.result" :key="index" :title="items.name">
-                <a-menu-item v-for="(list,index1) in items.children" :key="index1" @click="actionTrigger(index1, list.id)">{{ list.name }}</a-menu-item>
-              </a-sub-menu>
-            </a-menu>
-          </a-dropdown>
-          您的选择： {{ addActine.parentId }}
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="权限服务地址" hasFeedback validateStatus="success">
-          <a-input placeholder="权限服务地址" v-model="addActine.apiTemplate" />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="是否日志记录">
-          <a-switch :checked="addActine.isLogger" />
-        </a-form-item>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="排序" hasFeedback>
-          <a-input-number :min="1" :max="10" v-model="addActine.sort" />
-        </a-form-item>
-        <a-divider/>
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="描述" hasFeedback validateStatus="success">
-          <a-input placeholder="描述" v-model="addActine.description" />
-        </a-form-item>
-      </a-form>
-    </a-modal>
     <!--添加/编辑导航权限弹窗-->
-    <permission-edit ref="PermissionModal" @ok="handleEditSubmit"></permission-edit></a-card>
+    <permission-edit ref="PermissionModal" @ok="handleEditSubmit"></permission-edit>
+    <!--点击操作权限弹出详情编辑框-->
+    <action-edit ref="ActionEdit" @ok="handleEditSubmit"></action-edit>
+    <!--添加操作权限弹窗-->
+    <action-add ref="ActionAdd" @ok="handleEditSubmit"></action-add>
+  </a-card>
 </template>
 
 <script>
@@ -150,7 +80,9 @@ import ModifySort from './modules/ModifySortModule'
 import STable from '@/components/Table/'
 import {RouteView} from '@/layouts/'
 import PermissionEdit from './PermissionEdit'
-import { getPermissions,getActionDetails,modifyAction,CreateAction,CreateMenu, deleteMenu} from '@/api/manage'
+import ActionEdit from './modules/ActionEdit'
+import ActionAdd from './modules/ActionAdd'
+import { getPermissions,getActionDetails,CreateAction,CreateMenu, deleteMenu} from '@/api/manage'
 import AFormItem from 'ant-design-vue/es/form/FormItem'
 export default {
   name: 'TableList',
@@ -159,7 +91,9 @@ export default {
     AFormItem,
     STable,
     ModifySort,
-    RouteView
+    RouteView,
+    ActionEdit,
+    ActionAdd
   },
   data() {
     return {
@@ -168,6 +102,7 @@ export default {
         pageSizeOptions: [],
         onChange: page => {}
       }, 
+      confirmLoading:false,
       loading: false,
       addActine: {
         code: '',
@@ -180,13 +115,9 @@ export default {
       },
       formLayout: 'horizontal',
       form: this.$form.createForm(this),
-      defaultExpandAllRows: true,
       description:
         '列表使用场景：后台管理中的权限管理以及角色管理，可用于基于 RBAC 设计的角色权限控制，颗粒度细到每一个操作类型。',
       visible: false,
-      visibleAdd: false,
-      visibleControl: false,
-      menuDetails: [],
       dataLoad: '',
       labelCol: {
         xs: {
@@ -203,23 +134,7 @@ export default {
         sm: {
           span: 16
         }
-      },
-      alert: {
-        show: true,
-        clear: true
-      },
-      controlFrom: {
-        id: '',
-        parentId: '',
-        name: '',
-        apiTemplate: '',
-        isSystem: '',
-        isLogger: '',
-        enable: '',
-        createTime: ''
-      },
-      // form: null,
-      mdl: {},
+      }, 
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
@@ -321,57 +236,6 @@ export default {
         }
       })
     },
-    //添加操作权限的父级选择触发事件
-    actionTrigger(index, id) {
-      this.addActine.parentId = id
-    },
-    //添加操作权限事件
-    addAction() {
-      CreateAction(this.addActine).then(res => {
-        if (res.status === 200) {
-          this.loadDataing()
-          this.visibleAdd = false
-        } else {
-          this.$notification['error']({
-            message: '错误',
-            description: res.message,
-            duration: 4
-          })
-        }
-      })
-    },
-
-    // 编辑权限弹窗关闭回调函数
-    editModalCancel() {
-      const obj = {
-        id: '',
-        parentId: '',
-        name: '',
-        apiTemplate: '',
-        isSystem: '',
-        isLogger: '',
-        enable: '',
-        createTime: ''
-      }
-      this.controlFrom = obj
-    },
-    //编辑操作权限提交方法
-    handleSubmit(e) {
-      e.preventDefault()
-      // this.visibleControl = true
-      const obj = this.controlFrom
-      modifyAction(obj).then(res => {
-        if (res.status === 200) {
-          this.visibleControl = !this.visibleControl
-        } else {
-          this.$notification['error']({
-            message: '错误',
-            description: res.message,
-            duration: 4
-          })
-        }
-      })
-    },
     //加载导航权限数据
     makePermissionList(res) {
       const result1 = []
@@ -390,22 +254,7 @@ export default {
       data.result = result1
       this.dataLoad = data
       return data.result
-    },
-    //点击操作权限tag标签事件
-    handerContrl(action, key) {
-      this.visibleControl = true
-      const id = key
-      getActionDetails(id).then(res => {
-        if (res.status === 200) {
-          this.controlFrom = res.result
-        }
-      })
-    },
-   
-    //添加操作权限弹框
-    handleAdd() {
-      this.visibleAdd = true
-    },
+    }, 
     //加载导航权限
     loadPermissionList() {
       // permissionList

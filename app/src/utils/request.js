@@ -14,20 +14,30 @@ const service = axios.create({
 
 const err = (error) => {
   if (error.response) {
-    const token = Vue.ls.get(ACCESS_TOKEN)
-    if (error.response.status === 403) {
-      // notification.warning({ message: '您没有使用该页面的权限', description: "如果有需要，请联系管理员进行设置",onClose:()=>{window.location.href="/403";} })
-      // window.location.href="/exception/403";
-      router.push({ path: '/exception' })
-    }
-    if (error.response.status === 401) {
-      notification.error({ message: 'Unauthorized', description: 'Authorization verification failed' })
-      if (token) {
-        store.dispatch('Logout').then(() => {
-          setTimeout(() => {
-            window.location.reload()
-          }, 1500)
-        })
+    if (error.response.config && error.response.config.errorIntercept) {
+      switch (error.response.status) {
+        case 500:
+          notification.warning({ message: '请求失败', description: '抱歉，服务器出错了' })
+          router.push({ path: '/500' })
+          break
+        case 404:
+          notification.warning({ message: '404', description: '抱歉，你访问的页面不存在或仍在开发中' })
+          router.push({ path: '/404' })
+          break
+        case 403:
+          notification.warning({ message: '拒绝访问', description: '抱歉，你无权访问该页面' })
+          router.push({ path: '/403' })
+          break
+        case 401:
+          notification.error({ message: '登录过期', description: '登录已经过期，请重新登录' })
+          store.dispatch('Logout').then(() => {
+            setTimeout(() => {
+              window.location.reload()
+            }, 1500)
+          })
+          break
+        default:
+          break
       }
     }
   }

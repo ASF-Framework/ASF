@@ -20,6 +20,7 @@ import DescriptionList from '@/components/DescriptionList'
 import Tree from '@/components/Tree/Tree'
 import Trend from '@/components/Trend'
 import STable from '@/components/Table'
+import SModal from '@/components/Modal'
 import MultiTab from '@/components/MultiTab'
 import Result from '@/components/Result'
 import IconSelector from '@/components/IconSelector'
@@ -47,6 +48,7 @@ export {
   DescriptionList as DetailList,
   Tree,
   STable,
+  SModal,
   MultiTab,
   Result,
   ExceptionPage,

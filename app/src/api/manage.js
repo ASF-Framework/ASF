@@ -41,7 +41,7 @@ const api = {
     modifyEmail: '/asf/account/ModifyEmail',
     modifyPassword: '/asf/account/ModifyPassword',
     getLogger: '/asf/Logger/GetList',
-    loggerDelete: 'asf/Logger/Delete'
+    auditDelete: 'asf/Logger/Delete'
 }
 
 export default api
@@ -49,7 +49,7 @@ export default api
 // 管理员列表
 export function getAdminList(parameter) {
     return new Promise((resolve, reject) => {
-        axios.post(api.admin, parameter).then(res => {
+        axios.post(api.admin, parameter,{errorIntercept:true}).then(res => {
             resolve(res)
         }).catch(err => {
             reject(err)
@@ -115,7 +115,7 @@ export function resetPassword(parameter) {
 // 角色列表
 export function getRoleList(parameter) {
     return new Promise((resolve, reject) => {
-        axios.post(api.role, parameter).then(res => {
+        axios.post(api.role, parameter,{errorIntercept:true}).then(res => {
             resolve(res)
         }).catch(err => {
             reject(err)
@@ -136,7 +136,7 @@ export function getRoleListAll() {
 // 权限列表
 export function getPermissions(parameter) {
     return new Promise((resolve, reject) => {
-        axios.post(api.permission, parameter).then(res => {
+        axios.post(api.permission, parameter,{errorIntercept:true}).then(res => {
             resolve(res)
         }).catch(err => {
             reject(err)
@@ -282,7 +282,7 @@ export function createAccount(parameter) {
 // 获取日志集合
 export function getLogger(parameter) {
     return new Promise((resolve, reject) => {
-        axios.post(api.getLogger, parameter).then(res => {
+        axios.post(api.getLogger, parameter,{errorIntercept:true}).then(res => {
             resolve(res)
         }).catch(err => {
             reject(err)
@@ -291,9 +291,9 @@ export function getLogger(parameter) {
 }
 
 // 根据日期删除日志
-export function loggerDelete(parameter) {
+export function auditDelete(parameter) {
     return new Promise((resolve, reject) => {
-        axios.post(api.loggerDelete, parameter).then(res => {
+        axios.post(api.auditDelete, parameter).then(res => {
             resolve(res)
         }).catch(err => {
             reject(err)

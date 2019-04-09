@@ -167,4 +167,16 @@ export const constantRouterMap = [{
 {
   path: '/404',
   component: () => import('@/views/404')
+},
+{
+  path: '/403',
+  component: () => import('@/views/403')
+},
+{
+  path: '/500',
+  component: () => import('@/views/500')
+},
+{
+  path: '/test1',
+  component: () => import('@/views/test')
 }]

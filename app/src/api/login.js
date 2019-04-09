@@ -16,7 +16,6 @@ import { axios } from '@/utils/request'
 export function login(parameter) {
     return axios({
         url: '/asf/authorise/login',
-        //url: '/auth/login',
         method: 'post',
         data: parameter
     })

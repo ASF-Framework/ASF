@@ -204,10 +204,4 @@ export default {
 .col-text-right {
   text-align: right;
 }
-/* .col-backgroud-color1{
-               background: rgba(0, 160, 233, 0.7);
-            }
-            .col-backgroud-color2{
-               background: #00a0e9;
-            } */
 </style>

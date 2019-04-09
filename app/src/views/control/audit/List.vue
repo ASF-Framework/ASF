@@ -76,7 +76,7 @@
       </span>
       <span slot="permissionId" slot-scope="text">{{ (text===null?'--':text) }}</span>
       <span slot="addTime" slot-scope="text">{{ text | dayFormat('YYYY-MM-DD HH:mm:ss') }}</span>
-      <span slot="logType" slot-scope="text">{{ text | loggerType }}</span>
+      <span slot="type" slot-scope="text">{{ text | loggerType }}</span>
       <span slot="clientIp" slot-scope="text">{{ text | replaceA(/::ffff:/, "") }}</span>
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.detail.show(record)">详情</a>
@@ -143,10 +143,10 @@ export default {
           },
           {
             title: '日志类型',
-            dataIndex: 'logType',
-            key: 'logType',
+            dataIndex: 'type',
+            key: 'type',
             scopedSlots: {
-              customRender: 'logType'
+              customRender: 'type'
             }
           },
           {
@@ -185,15 +185,16 @@ export default {
     }
   },
   filters: {
-    loggerType (type) {
+    replaceA (text, substr, replacement) {
+      return text.replace(substr, replacement)
+    },
+    loggerType (status) {
       const statusMap = {
         1: '登录日志',
         2: '操作审计'
       }
-      return statusMap[type === 1 ? 1 : 2]
-    },
-    replaceA (text, substr, replacement) {
-      return text.replace(substr, replacement)
+      console.log(status)
+      return statusMap[status === 1 ? 1 : 2]
     }
   },
   methods: {

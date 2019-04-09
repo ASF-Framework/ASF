@@ -10,7 +10,7 @@
       <a-card :bordered="false">
         <detail-list title="基本信息">
           <detail-list-item term="操作名称" style="width:50%">{{ detailData.subject }}</detail-list-item>
-          <detail-list-item term="日志类型" style="width:50%">{{ detailData.logType | loggerType }}</detail-list-item>
+          <detail-list-item term="日志类型" style="width:50%">{{ detailData.type | loggerType }}</detail-list-item>
           <detail-list-item term="操作账户" style="width:50%">
             <span>{{ detailData.accountName }}</span>
             <a-tag color="blue">{{ "ID:"+detailData.accountId }}</a-tag>

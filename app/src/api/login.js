@@ -17,7 +17,8 @@ export function login(parameter) {
     return axios({
         url: '/asf/authorise/login',
         method: 'post',
-        data: parameter
+        data: parameter,
+        errorIntercept:false
     })
 }
 

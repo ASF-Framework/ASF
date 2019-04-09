@@ -14,31 +14,46 @@ const service = axios.create({
 
 const err = (error) => {
   if (error.response) {
-    if (error.response.config && error.response.config.errorIntercept) {
-      switch (error.response.status) {
-        case 500:
-          notification.warning({ message: '请求失败', description: '抱歉，服务器出错了' })
-          router.push({ path: '/500' })
-          break
-        case 404:
-          notification.warning({ message: '404', description: '抱歉，你访问的页面不存在或仍在开发中' })
-          router.push({ path: '/404' })
-          break
-        case 403:
-          notification.warning({ message: '拒绝访问', description: '抱歉，你无权访问该页面' })
-          router.push({ path: '/403' })
-          break
-        case 401:
-          notification.error({ message: '登录过期', description: '登录已经过期，请重新登录' })
-          store.dispatch('Logout').then(() => {
-            setTimeout(() => {
-              window.location.reload()
-            }, 1500)
-          })
-          break
-        default:
-          break
-      }
+    let errorIntercept = error.response.config.errorIntercept
+    // 默认开启错误拦截
+    if (errorIntercept === null || errorIntercept === '' || errorIntercept === undefined) {
+      errorIntercept = true
+    }
+    // 不开启错误拦截
+    if (!errorIntercept) {
+      return Promise.reject(error)
+    }
+
+    // 开启错误重定向
+    const errorRedirect = error.response.config.errorRedirect ? error.response.config.errorRedirect : false
+    let redirectPath = ''
+    switch (error.response.status) {
+      case 500:
+        notification.warning({ message: '请求失败', description: '抱歉，服务器出错了' })
+        redirectPath = '/500'
+        break
+      case 404:
+        notification.warning({ message: '404', description: '抱歉，你访问的页面不存在或仍在开发中' })
+        redirectPath = '/404'
+        break
+      case 403:
+        notification.warning({ message: '拒绝访问', description: '抱歉，你无权访问该页面' })
+        redirectPath = '/403'
+        break
+      case 401:
+        notification.error({ message: '登录过期', description: '登录已经过期，请重新登录' })
+        store.dispatch('Logout').then(() => {
+          setTimeout(() => {
+            window.location.reload()
+          }, 1500)
+        })
+        break
+      default:
+        this.$notification.warning({ message: '处理失败', description: '处理失败，服务器繁忙' })
+        break
+    }
+    if (errorRedirect && redirectPath) {
+      router.push({ path: '/' + redirectPath })
     }
   }
   return Promise.reject(error)

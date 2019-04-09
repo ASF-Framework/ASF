@@ -35,12 +35,7 @@ export default {
     },
     submit (e) {
       // this.$refs.model.success('修改用户成功')
-      // this.$refs.model.error('修改用户失败')
-      this.$refs.model.exception({
-        response: {
-          status: 500
-        }
-      })
+      this.$refs.model.error('修改用户失败')
     },
     cancel (e) {
       this.visible = false

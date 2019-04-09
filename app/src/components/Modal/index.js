@@ -1,6 +1,5 @@
 import M from 'ant-design-vue/es/modal/Modal'
 import { Result } from '@/components'
-import store from '@/store'
 
 export default {
   name: 'SModal',
@@ -37,46 +36,23 @@ export default {
       this.$emit('ok', e)
     },
     /**
-     * 异常处理
-     * @param {*} error Http 请求异常
-     */
-    exception (error) {
-      this.cancel()
-      if (error.response) {
-        switch (error.response.status) {
-          case 500:
-            this.$notification.warning({ message: '请求失败', description: '抱歉，服务器出错了' })
-            break
-          case 404:
-            this.$notification.warning({ message: '404', description: '抱歉，你访问的页面不存在或仍在开发中' })
-            break
-          case 403:
-            this.$notification.warning({ message: '拒绝访问', description: '抱歉，你无权访问该页面' })
-            break
-          case 401:
-            this.$notification.error({ message: '登录过期', description: '登录已经过期，请重新登录' })
-            store.dispatch('Logout').then(() => {
-              setTimeout(() => {
-                window.location.reload()
-              }, 1500)
-            })
-            break
-          default:
-            this.$notification.warning({ message: '处理失败', description: '处理失败，服务器繁忙' })
-            break
-        }
-      }
-    },
-    /**
-     * 执行成功
-     * @param {*} title
-     * @param {*} description
-     */
-    success (title, description) {
+    *执行成功
+    * @param {*} title
+    * @param {*} description
+    * @param {*} autoDown 是否自动关闭对话框  true：自动关闭  false:手动关闭
+    */
+    success (title, description, autoDown = true) {
       this.complete = true
       this.result.isSuccess = true
       this.result.title = title
       this.result.description = description
+
+      // 自动关闭对话框
+      if (autoDown) {
+        new Promise(resolve => {
+          setTimeout(() => { this.cancel() }, 1800)
+        }).then()
+      }
     },
     /**
      * 执行失败

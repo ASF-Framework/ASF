@@ -49,7 +49,7 @@ export default api
 // 管理员列表
 export function getAdminList(parameter) {
     return new Promise((resolve, reject) => {
-        axios.post(api.admin, parameter,{errorIntercept:true}).then(res => {
+        axios.post(api.admin, parameter,{errorRedirect:true}).then(res => {
             resolve(res)
         }).catch(err => {
             reject(err)
@@ -115,7 +115,7 @@ export function resetPassword(parameter) {
 // 角色列表
 export function getRoleList(parameter) {
     return new Promise((resolve, reject) => {
-        axios.post(api.role, parameter,{errorIntercept:true}).then(res => {
+        axios.post(api.role, parameter,{errorRedirect:true}).then(res => {
             resolve(res)
         }).catch(err => {
             reject(err)
@@ -136,7 +136,7 @@ export function getRoleListAll() {
 // 权限列表
 export function getPermissions(parameter) {
     return new Promise((resolve, reject) => {
-        axios.post(api.permission, parameter,{errorIntercept:true}).then(res => {
+        axios.post(api.permission, parameter,{errorRedirect:true}).then(res => {
             resolve(res)
         }).catch(err => {
             reject(err)
@@ -282,7 +282,7 @@ export function createAccount(parameter) {
 // 获取日志集合
 export function getLogger(parameter) {
     return new Promise((resolve, reject) => {
-        axios.post(api.getLogger, parameter,{errorIntercept:true}).then(res => {
+        axios.post(api.getLogger, parameter,{errorRedirect:true}).then(res => {
             resolve(res)
         }).catch(err => {
             reject(err)

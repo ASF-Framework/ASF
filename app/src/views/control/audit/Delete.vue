@@ -3,6 +3,7 @@
     ref="modal"
     title="删除审计"
     :width="500"
+    :confirmLoading="this.confirmLoading"
     @ok="submit"
     @cancel="close"
     :visible="visible">
@@ -40,6 +41,7 @@ export default {
   data () {
     return {
       visible: false,
+      confirmLoading: false,
       form: this.$form.createForm(this),
 
       beginTime: moment().subtract(4, 'month'),
@@ -71,14 +73,16 @@ export default {
       this.form.validateFields((err, values) => {
         if (err) { return }
         const reqData = { beginTime: this.beginTime.format(), endTime: this.endTime.format() }
+        this.confirmLoading = true
         auditDelete(reqData).then(res => {
+          this.confirmLoading = false
           if (res.status === 200) {
             this.$refs.modal.success('删除审计日志成功')
             this.$emit('complete')
           } else {
             this.$refs.modal.error('删除失败', res.message)
           }
-        }).catch(error => this.$refs.modal.exception(error))
+        }).catch(() => { this.close() })
       })
     }
   }

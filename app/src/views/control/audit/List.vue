@@ -79,7 +79,7 @@
       <span slot="logType" slot-scope="text">{{ text | loggerType }}</span>
       <span slot="clientIp" slot-scope="text">{{ text | replaceA(/::ffff:/, "") }}</span>
       <span slot="action" slot-scope="text, record">
-        <a @click="$refs.detail.showModal(record)">详情</a>
+        <a @click="$refs.detail.show(record)">详情</a>
       </span>
     </s-table>
 

@@ -233,7 +233,7 @@ export default {
     },
     // 条件搜索事件
     Search () {
-      this.table.pagination.current = 1
+      this.queryParam.skipPage = 1
       this.LoadDataing()
     }
 

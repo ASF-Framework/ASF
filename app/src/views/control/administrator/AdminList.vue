@@ -30,9 +30,9 @@
             <a-select
               placeholder="请选择"
               v-model="queryParam.status"
-              style="width:100px;"
+              style="width:120px;"
               @change="handleSearch">
-              <a-select-option value="-1">全部状态</a-select-option>
+              <a-select-option value="-1">管理员状态</a-select-option>
               <a-select-option value="1">启用</a-select-option>
               <a-select-option value="2">禁用</a-select-option>
             </a-select>

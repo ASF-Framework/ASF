@@ -39,12 +39,6 @@ export default {
       type: String,
       default: 'default'
     },
-    /**
-     * {
-     *   show: true,
-     *   clear: Function
-     * }
-     */
     alert: {
       type: [Object, Boolean],
       default: null
@@ -133,6 +127,7 @@ export default {
       }
       )
       const result = this.data(parameter)
+
       // 对接自己的通用数据接口需要修改下方代码中的 r.pageNo, r.totalCount, r.data
       // eslint-disable-next-line
       if ((typeof result === 'object' || typeof result === 'function') && typeof result.then === 'function') {
@@ -147,7 +142,7 @@ export default {
           // 为防止删除数据后导致页面当前页面数据长度为 0 ,自动翻页到上一页
           if (r.data.length === 0 && this.localPagination.current !== 1) {
             this.localPagination.current--
-            this.loadData()
+            // this.loadData()
             return
           }
 

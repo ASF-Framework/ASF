@@ -35,7 +35,7 @@
 <script>
 import moment from 'moment'
 import { SModal } from '@/components'
-import { auditDelete } from '@/api/manage'
+import { auditDelete } from '@/api/control'
 export default {
   name: 'AuditDelete',
   data () {
@@ -57,6 +57,7 @@ export default {
       this.visible = true
     },
     close () {
+      this.confirmLoading = false
       this.visible = false
     },
     // 筛选出3个月之后的日子的不能选择

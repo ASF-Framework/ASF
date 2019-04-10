@@ -12,7 +12,7 @@
           </a-col>
           <a-col :md="6" :sm="24">
             <a-form-item label="记录时间">
-              <a-range-picker name="buildTime" @change="changeBenginEndTime" />
+              <a-range-picker name="buildTime" @change="ChangeBenginEndTime" />
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
@@ -28,7 +28,6 @@
                 enterButton="查询"
                 @search="Search" >
               </a-input-search>
-
             </div>
           </a-col></a-row>
         <a-row v-if="advanced" justify="end" :gutter="48">
@@ -62,13 +61,13 @@
     </div>
 
     <!--列表-->
-    <s-table
+    <a-table
       ref="table"
-      :pagination="{showTotal: (total) => `总计 ${total} 条`}"
+      :pagination="table.pagination"
       :columns="table.columns"
-      :pageNum="queryParam.skipPage"
-      :pageSize="queryParam.pagedCount"
-      :data="loadData">
+      :loading="table.loading"
+      :dataSource="table.dataSource"
+      @change="LoadDataing">
       <span
         slot="accountName"
         slot-scope="text,record">{{ text +"&nbsp;&nbsp;" }}
@@ -81,10 +80,10 @@
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.detail.show(record)">详情</a>
       </span>
-    </s-table>
+    </a-table>
 
     <!--批量删除-->
-    <audit-delete ref="delete" @complete="$refs.table.refresh()"></audit-delete>
+    <audit-delete ref="delete" @complete="LoadDataing"></audit-delete>
     <!--详情-->
     <audit-detail ref="detail"></audit-detail>
   </a-card>
@@ -92,7 +91,7 @@
 
 <script>
 import { STable } from '@/components'
-import { getLogger } from '@/api/manage'
+import { getAuditList } from '@/api/control'
 import AuditDetail from './Detail'
 import AuditDelete from './Delete'
 
@@ -107,7 +106,6 @@ export default {
     return {
       // 高级搜索 展开/关闭
       advanced: false,
-      loading: false,
       // 查询参数
       queryParam: {
         subject: '',
@@ -121,22 +119,28 @@ export default {
         skipPage: 1
       },
       table: {
+        loading: false,
+        dataSource: [],
+        pagination: {
+          showTotal: (total) => `总计 ${total} 条`,
+          hideOnSinglePage: true,
+          showSizeChanger: true,
+          current: 1,
+          total: 0
+        },
         // 表头
         columns: [
           {
             title: '日志编号',
-            dataIndex: 'id',
-            key: 'id'
+            dataIndex: 'id'
           },
           {
             title: '操作名称',
-            dataIndex: 'subject',
-            key: 'subject'
+            dataIndex: 'subject'
           },
           {
             title: '操作账户',
             dataIndex: 'accountName',
-            key: 'accountName',
             scopedSlots: {
               customRender: 'accountName'
             }
@@ -144,7 +148,6 @@ export default {
           {
             title: '日志类型',
             dataIndex: 'type',
-            key: 'type',
             scopedSlots: {
               customRender: 'type'
             }
@@ -152,7 +155,6 @@ export default {
           {
             title: '权限标识',
             dataIndex: 'permissionId',
-            key: 'permissionId',
             scopedSlots: {
               customRender: 'permissionId'
             }
@@ -162,13 +164,11 @@ export default {
             dataIndex: 'addTime',
             scopedSlots: {
               customRender: 'addTime'
-            },
-            key: 'addTime'
+            }
           },
           {
             title: '客户端IP',
             dataIndex: 'clientIp',
-            key: 'clientIp',
             scopedSlots: {
               customRender: 'clientIp'
             }
@@ -193,33 +193,55 @@ export default {
         1: '登录日志',
         2: '操作审计'
       }
-      console.log(status)
       return statusMap[status === 1 ? 1 : 2]
     }
   },
+  watch: {
+    'queryParam.skipPage' () {
+      this.table.pagination.current = this.queryParam.skipPage
+    }
+  },
   methods: {
-    loadData (parameter) {
-      this.queryParam.pagedCount = parameter.pageSize
-      this.queryParam.skipPage = parameter.pageNo
-      return getLogger(this.queryParam).then(res => {
-        res.pageNo = this.queryParam.skipPage
-        res.data = res.result
-        return res
+    /**
+     * 加载数据方法
+     * @param {Object} pagination 分页选项器
+     * @param {Object} filters 过滤条件
+     * @param {Object} sorter 排序条件
+     */
+    LoadDataing (pagination, filters, sorter) {
+      this.table.loading = true
+      if (pagination) {
+        this.queryParam.skipPage = pagination.current
+        this.queryParam.pagedCount = pagination.pageSize
+      }
+      getAuditList(this.queryParam).then(res => {
+        this.table.loading = false
+        if (res.status === 200) {
+          this.table.pagination.total = res.totalCount
+          this.table.dataSource = res.result
+        } else {
+          this.$notification('加载失败', res.message)
+        }
+      }).catch(() => {
+        this.table.loading = false
       })
     },
     // 查询条件开始和结束时间录入
-    changeBenginEndTime (date, dateStrings) {
+    ChangeBenginEndTime (date, dateStrings) {
       this.queryParam.beginTime = dateStrings[0]
       this.queryParam.endTime = dateStrings[1]
     },
     // 条件搜索事件
     Search () {
-      this.$refs.table.localPagination.current = 1
-      this.$refs.table.loadData()
+      this.table.pagination.current = 1
+      this.LoadDataing()
     }
 
   },
-  watch: {}
+  created () {
+    this.LoadDataing()
+  }
+
 }
 </script>
 

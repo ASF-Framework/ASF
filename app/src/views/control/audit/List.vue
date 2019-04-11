@@ -45,7 +45,7 @@
       <a-tooltip>
         <template slot="title">批量删除
         </template>
-        <a-button type="primary" icon="delete" class="right10" @click="$refs.delete.show()"></a-button>
+        <a-button type="primary" icon="delete" class="right10" @click="$refs.delete.show()" v-action:delete></a-button>
       </a-tooltip>
       <a-radio-group :defaultValue="2" buttonStyle="solid" class="right10" v-model="queryParam.Type" @change="Search">
         <a-radio-button :value="2">操作审计</a-radio-button>
@@ -63,22 +63,22 @@
     <!--列表-->
     <a-table
       ref="table"
+      rowKey="id"
       :pagination="table.pagination"
       :columns="table.columns"
       :loading="table.loading"
       :dataSource="table.dataSource"
       @change="LoadDataing">
-      <span
-        slot="accountName"
-        slot-scope="text,record">{{ text +"&nbsp;&nbsp;" }}
-        <a-tag color="blue">{{ "ID："+record.accountId }}</a-tag>
+      <span slot="accountName" slot-scope="text, record">
+        {{ text }}
+        <a-badge :count="record.accountId" :overflowCount="999999" :numberStyle="{backgroundColor: '#52c41a'} "/>
       </span>
       <span slot="permissionId" slot-scope="text">{{ (text===null?'--':text) }}</span>
       <span slot="addTime" slot-scope="text">{{ text | dayFormat('YYYY-MM-DD HH:mm:ss') }}</span>
       <span slot="type" slot-scope="text">{{ text | loggerType }}</span>
       <span slot="clientIp" slot-scope="text">{{ text | replaceA(/::ffff:/, "") }}</span>
       <span slot="action" slot-scope="text, record">
-        <a @click="$refs.detail.show(record)">详情</a>
+        <a @click="$refs.detail.show(record)" v-action:query>详情</a>
       </span>
     </a-table>
 
@@ -132,15 +132,18 @@ export default {
         columns: [
           {
             title: '日志编号',
-            dataIndex: 'id'
+            dataIndex: 'id',
+            key: 'id'
           },
           {
             title: '操作名称',
-            dataIndex: 'subject'
+            dataIndex: 'subject',
+            key: 'subject'
           },
           {
             title: '操作账户',
             dataIndex: 'accountName',
+            key: 'accountName',
             scopedSlots: {
               customRender: 'accountName'
             }
@@ -148,6 +151,7 @@ export default {
           {
             title: '日志类型',
             dataIndex: 'type',
+            key: 'type',
             scopedSlots: {
               customRender: 'type'
             }
@@ -155,6 +159,7 @@ export default {
           {
             title: '权限标识',
             dataIndex: 'permissionId',
+            key: 'permissionId',
             scopedSlots: {
               customRender: 'permissionId'
             }
@@ -162,6 +167,7 @@ export default {
           {
             title: '记录时间',
             dataIndex: 'addTime',
+            key: 'addTime',
             scopedSlots: {
               customRender: 'addTime'
             }
@@ -169,6 +175,7 @@ export default {
           {
             title: '客户端IP',
             dataIndex: 'clientIp',
+            key: 'clientIp',
             scopedSlots: {
               customRender: 'clientIp'
             }
@@ -176,6 +183,7 @@ export default {
           {
             title: '操作',
             dataIndex: 'action',
+            key: 'action',
             scopedSlots: {
               customRender: 'action'
             }
@@ -202,6 +210,14 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * 条件搜索事件
+     */
+    Search () {
+      this.queryParam.skipPage = 1
+      this.LoadDataing()
+    },
     /**
      * 加载数据方法
      * @param {Object} pagination 分页选项器
@@ -220,7 +236,7 @@ export default {
           this.table.pagination.total = res.totalCount
           this.table.dataSource = res.result
         } else {
-          this.$notification('加载失败', res.message)
+          this.$notification.error({ message: '加载失败', description: res.message })
         }
       }).catch(() => {
         this.table.loading = false
@@ -230,13 +246,7 @@ export default {
     ChangeBenginEndTime (date, dateStrings) {
       this.queryParam.beginTime = dateStrings[0]
       this.queryParam.endTime = dateStrings[1]
-    },
-    // 条件搜索事件
-    Search () {
-      this.queryParam.skipPage = 1
-      this.LoadDataing()
     }
-
   },
   created () {
     this.LoadDataing()

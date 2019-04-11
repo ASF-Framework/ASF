@@ -37,9 +37,9 @@ export default {
     },
     /**
     *执行成功
-    * @param {*} title
-    * @param {*} description
-    * @param {*} autoDown 是否自动关闭对话框  true：自动关闭  false:手动关闭
+    * @param {String} title
+    * @param {String} description
+    * @param {Boolean} autoDown 是否自动关闭对话框  true：自动关闭  false:手动关闭
     */
     success (title, description, autoDown = true) {
       this.complete = true
@@ -56,8 +56,8 @@ export default {
     },
     /**
      * 执行失败
-     * @param {*} title
-     * @param {*} description
+     * @param {String} title
+     * @param {String} description
      */
     error (title, description) {
       this.complete = true
@@ -65,11 +65,15 @@ export default {
       this.result.title = title
       this.result.description = description
     },
-    // 上一步(重新操作)
+    /**
+     *  上一步(重新操作)
+     */
     previous () {
       this.complete = false
     },
-    // 绘制结果页面
+    /**
+     * 绘制结果页面
+     */
     renderResultContext () {
       const props = {}
       Object.keys(Result.props).forEach(k => {
@@ -78,7 +82,8 @@ export default {
         }
         return props[k]
       })
-      props['content'] = false
+
+      this.result.isSuccess ? props['type'] = 'success' : props['type'] = 'error'
 
       return (
         <Result v-show={this.complete} { ...{ props }}>
@@ -89,7 +94,9 @@ export default {
         </Result>
       )
     },
-    // 绘制操作对话框
+    /**
+     * 绘制结果页面
+     */
     renderOperateContext () {
       return (
         Object.keys(this.$slots).map(name => (
@@ -105,9 +112,7 @@ export default {
   render () {
     const props = {}
     Object.keys(M.props).forEach(k => {
-      if (this[k]) {
-        props[k] = this[k]
-      }
+      props[k] = this[k]
       return props[k]
     })
     this.complete ? props['footer'] = null : props['footer'] = this.modal.footer

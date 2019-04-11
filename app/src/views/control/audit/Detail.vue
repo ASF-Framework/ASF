@@ -103,7 +103,6 @@ export default {
       this.responseJson = this.makeJsonData(this.detailData.apiResponse)
       this.loading = false
     },
-
     // 关闭方法
     close () {
       this.visible = false

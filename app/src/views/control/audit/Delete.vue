@@ -2,6 +2,7 @@
   <s-modal
     ref="modal"
     title="删除审计"
+    :maskClosable="false"
     :width="500"
     :confirmLoading="this.confirmLoading"
     @ok="submit"
@@ -35,7 +36,7 @@
 <script>
 import moment from 'moment'
 import { SModal } from '@/components'
-import { auditDelete } from '@/api/control'
+import { deleteAudit } from '@/api/control'
 export default {
   name: 'AuditDelete',
   data () {
@@ -75,7 +76,7 @@ export default {
         if (err) { return }
         const reqData = { beginTime: this.beginTime.format(), endTime: this.endTime.format() }
         this.confirmLoading = true
-        auditDelete(reqData).then(res => {
+        deleteAudit(reqData).then(res => {
           this.confirmLoading = false
           if (res.status === 200) {
             this.$refs.modal.success('删除审计日志成功')

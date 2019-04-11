@@ -88,7 +88,7 @@ export const asyncRouterMap = [{
           path: '/control/publicapi',
           name: 'PublicApi',
           component: PublicApiList,
-          meta: { title: '公共API管理', keepAlive: true, permission: ['asf_publicapi'] }
+          meta: { title: '公共 API', keepAlive: true, permission: ['asf_publicapi'] }
         }
       ]
     },

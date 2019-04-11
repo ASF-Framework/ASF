@@ -85,3 +85,23 @@ export {
   installer as VueAxios,
   service as axios
 }
+
+export function post (apiPath, parameter, config) {
+  return new Promise((resolve, reject) => {
+    service.post(apiPath, parameter, config).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function get (apiPath, config) {
+  return new Promise((resolve, reject) => {
+    service.get(apiPath, config).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}

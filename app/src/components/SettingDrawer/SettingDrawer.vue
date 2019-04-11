@@ -3,8 +3,8 @@
     <a-drawer
       width="300"
       placement="right"
-      :closable="false"
       @close="onClose"
+      :closable="false"
       :visible="visible"
       :getContainer="() => $refs.settingDrawer"
       :style="{}"
@@ -111,7 +111,10 @@
               <a-list-item>
                 <a-switch slot="actions" size="small" :disabled="!fixedHeader" :defaultChecked="autoHideHeader" @change="handleFixedHeaderHidden" />
                 <a-list-item-meta>
-                  <div slot="title" :style="{ textDecoration: !fixedHeader ? 'line-through' : 'unset' }">下滑时隐藏 Header</div>
+                  <a-tooltip slot="title" placement="left">
+                    <template slot="title">固定 Header 时可配置</template>
+                    <div :style="{ opacity: !fixedHeader ? '0.5' : '1' }">下滑时隐藏 Header</div>
+                  </a-tooltip>
                 </a-list-item-meta>
               </a-list-item>
               <a-list-item >
@@ -173,7 +176,6 @@ import SettingItem from './SettingItem'
 import config from '@/config/defaultSettings'
 import { updateTheme, updateColorWeak, colorList } from './settingConfig'
 import { mixin, mixinDevice } from '@/utils/mixin'
-
 export default {
   components: {
     DetailList,
@@ -188,7 +190,6 @@ export default {
     }
   },
   watch: {
-
   },
   mounted () {
     const vm = this
@@ -237,6 +238,7 @@ export default {
   autoHideHeader: ${this.baseConfig.autoHideHeader}, //  auto hide header
   colorWeak: ${this.baseConfig.colorWeak},
   multiTab: ${this.baseConfig.multiTab},
+  production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
   // vue-ls options
   storageOptions: {
     namespace: 'pro__',
@@ -292,22 +294,17 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
   .setting-drawer-index-content {
-
     .setting-drawer-index-blockChecbox {
       display: flex;
-
       .setting-drawer-index-item {
         margin-right: 16px;
         position: relative;
         border-radius: 4px;
         cursor: pointer;
-
         img {
           width: 48px;
         }
-
         .setting-drawer-index-selectIcon {
           position: absolute;
           top: 0;
@@ -334,13 +331,11 @@ export default {
       text-align: center;
       color: #fff;
       font-weight: 700;
-
       i {
         font-size: 14px;
       }
     }
   }
-
   .setting-drawer-index-handle {
     position: absolute;
     top: 240px;
@@ -357,7 +352,6 @@ export default {
     text-align: center;
     font-size: 16px;
     border-radius: 4px 0 0 4px;
-
     i {
       color: rgb(255, 255, 255);
       font-size: 20px;

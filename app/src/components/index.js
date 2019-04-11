@@ -23,6 +23,7 @@ import STable from '@/components/Table'
 import SModal from '@/components/Modal'
 import MultiTab from '@/components/MultiTab'
 import Result from '@/components/Result'
+import TagSelect from '@/components/TagSelect'
 import IconSelector from '@/components/IconSelector'
 import ExceptionPage from '@/components/Exception'
 
@@ -52,5 +53,6 @@ export {
   MultiTab,
   Result,
   ExceptionPage,
-  IconSelector
+  IconSelector,
+  TagSelect
 }

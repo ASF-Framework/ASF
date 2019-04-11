@@ -1,41 +1,38 @@
-import { axios } from '@/utils/request'
+import { post } from '@/utils/request'
 
 const api = {
-  getPublicApiList: '/asf/permission/getOpenApiList',
+  getPublicApiList: '/asf/permission/GetOpenApiList',
+  createPublicApi: '/asf/permission/CreateOpenApi',
+  editPublicApi: '/asf/permission/ModifyOpenApi',
+  deletePublicApi: '/asf/permission/Delete',
+
   getAuditList: '/asf/Logger/GetList',
-  auditDelete: 'asf/Logger/Delete'
+  deleteAudit: 'asf/Logger/Delete'
 }
 export default api
 
 // 公共API列表
 export function getPublicApiList (parameter) {
-  return new Promise((resolve, reject) => {
-    axios.post(api.getPublicApiList, parameter, { errorRedirect: true }).then(res => {
-      resolve(res)
-    }).catch(err => {
-      reject(err)
-    })
-  })
+  return post(api.getPublicApiList, parameter, { errorRedirect: true })
+}
+// 创建 公共API
+export function createPublicApi (parameter) {
+  return post(api.createPublicApi, parameter)
+}
+// 删除 公共API
+export function deletePublicApi (parameter) {
+  return post(api.deletePublicApi + `/${parameter}`)
+}
+// 修改 公共API
+export function editPublicApi (parameter) {
+  return post(api.editPublicApi, parameter)
 }
 
 // 获取审计集合
 export function getAuditList (parameter) {
-  return new Promise((resolve, reject) => {
-    axios.post(api.getAuditList, parameter, { errorRedirect: true }).then(res => {
-      resolve(res)
-    }).catch(err => {
-      reject(err)
-    })
-  })
+  return post(api.getAuditList, parameter, { errorRedirect: true })
 }
-
 // 根据日期删除日志
-export function auditDelete (parameter) {
-  return new Promise((resolve, reject) => {
-    axios.post(api.auditDelete, parameter).then(res => {
-      resolve(res)
-    }).catch(err => {
-      reject(err)
-    })
-  })
+export function deleteAudit (parameter) {
+  return post(api.deleteAudit, parameter)
 }

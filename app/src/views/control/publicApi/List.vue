@@ -56,11 +56,19 @@
         <template>
           <a @click="$refs.detail.show(record)">详情</a>
           <a-divider type="vertical" />
-          <a @click="$refs.edit.show(record)" v-if="!record.isSystem">编辑</a>
-          <a v-else disabled>编辑</a>
-          <a-divider type="vertical" />
-          <a href="javascript:;" @click="handleDelete(record.id,record.name)" v-if="!record.isSystem">删除</a>
-          <a v-else disabled>删除</a>
+          <a-dropdown>
+            <a class="ant-dropdown-link">更多
+              <a-icon type="down" />
+            </a>
+            <a-menu slot="overlay">
+              <a-menu-item :disabled="record.isSystem" @click="$refs.edit.show(record)" >
+                编辑
+              </a-menu-item>
+              <a-menu-item :disabled="record.isSystem" @click="handleDelete(record.id,record.name)" >
+                删除
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown>
         </template>
       </span>
     </a-table>
@@ -100,17 +108,10 @@ export default {
           },
           {
             title: '名称',
-            width: 120,
+            width: 200,
             dataIndex: 'name'
           },
-          {
-            title: 'Api 地址',
-            dataIndex: 'apiTemplate',
-            width: 250,
-            scopedSlots: {
-              customRender: 'apiTemplate'
-            }
-          },
+
           {
             title: '状态',
             align: 'center',
@@ -118,6 +119,20 @@ export default {
             dataIndex: 'enable',
             scopedSlots: {
               customRender: 'enable'
+            }
+          },
+          {
+            title: 'Api 地址',
+            dataIndex: 'apiTemplate',
+            scopedSlots: {
+              customRender: 'apiTemplate'
+            }
+          },
+          {
+            title: '描述',
+            dataIndex: 'description',
+            scopedSlots: {
+              customRender: 'description'
             }
           },
           {
@@ -129,12 +144,6 @@ export default {
             }
           },
           {
-            title: '描述',
-            dataIndex: 'description',
-            scopedSlots: {
-              customRender: 'description'
-            }
-          }, {
             title: '操作',
             width: 150,
             dataIndex: 'action',

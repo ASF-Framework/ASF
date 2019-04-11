@@ -81,7 +81,7 @@ export const asyncRouterMap = [{
           path: '/control/audit',
           name: 'Audit',
           component: AuditList,
-          meta: { title: '审计管理', keepAlive: true, permission: ['asf_logging'] }
+          meta: { title: '审计管理', keepAlive: true, permission: ['asf_audit'] }
         },
         // 公共API管理
         {

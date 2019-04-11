@@ -131,30 +131,14 @@ export default {
         // 表头
         columns: [
           {
-            title: '日志编号',
+            title: '编号',
             dataIndex: 'id',
-            key: 'id'
+            width: 80
           },
           {
             title: '操作名称',
             dataIndex: 'subject',
-            key: 'subject'
-          },
-          {
-            title: '操作账户',
-            dataIndex: 'accountName',
-            key: 'accountName',
-            scopedSlots: {
-              customRender: 'accountName'
-            }
-          },
-          {
-            title: '日志类型',
-            dataIndex: 'type',
-            key: 'type',
-            scopedSlots: {
-              customRender: 'type'
-            }
+            width: 200
           },
           {
             title: '权限标识',
@@ -165,23 +149,45 @@ export default {
             }
           },
           {
-            title: '记录时间',
-            dataIndex: 'addTime',
-            key: 'addTime',
+            title: '日志类型',
+            align: 'center',
+            dataIndex: 'type',
+            width: 100,
             scopedSlots: {
-              customRender: 'addTime'
+              customRender: 'type'
             }
           },
           {
             title: '客户端IP',
             dataIndex: 'clientIp',
-            key: 'clientIp',
+            width: 150,
             scopedSlots: {
               customRender: 'clientIp'
             }
           },
+
+          {
+            title: '操作账户',
+            dataIndex: 'accountName',
+            width: 150,
+            scopedSlots: {
+              customRender: 'accountName'
+            }
+          },
+          {
+            title: '记录时间',
+            dataIndex: 'addTime',
+            align: 'center',
+            width: 180,
+            scopedSlots: {
+              customRender: 'addTime'
+            }
+          },
+
           {
             title: '操作',
+            align: 'center',
+            width: 70,
             dataIndex: 'action',
             key: 'action',
             scopedSlots: {
@@ -210,7 +216,6 @@ export default {
     }
   },
   methods: {
-
     /**
      * 条件搜索事件
      */

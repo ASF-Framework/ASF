@@ -4,29 +4,31 @@
     title="删除审计"
     :maskClosable="false"
     :width="500"
-    :confirmLoading="this.confirmLoading"
+    :confirmLoading="confirmLoading"
     @ok="submit"
     @cancel="close"
     :visible="visible">
-    <a-form layout="inline" :form="form" hideRequiredMark>
-      <a-row :gutter="48">
-        <a-col>
-          <a-form-item label="删除范围">
-            <a-range-picker
-              name="buildTime"
-              @change="changeDeleteTimeRange"
-              :disabledDate="initDisabledDate"
-              v-decorator="['buildTime', {rules: [{ required: true, message: '请选择删除日期' }] ,initialValue:[beginTime,endTime]}]" >
-              <template slot="dateRender" slot-scope="current">
-                <div class="ant-calendar-date" >
-                  {{ current.date() }}
-                </div>
-              </template>
-            </a-range-picker>
-          </a-form-item>
-        </a-col>
-      </a-row>
-    </a-form>
+    <a-spin :spinning="confirmLoading">
+      <a-form layout="inline" :form="form" hideRequiredMark>
+        <a-row :gutter="48">
+          <a-col>
+            <a-form-item label="删除范围">
+              <a-range-picker
+                name="buildTime"
+                @change="changeDeleteTimeRange"
+                :disabledDate="initDisabledDate"
+                v-decorator="['buildTime', {rules: [{ required: true, message: '请选择删除日期' }] ,initialValue:[beginTime,endTime]}]" >
+                <template slot="dateRender" slot-scope="current">
+                  <div class="ant-calendar-date" >
+                    {{ current.date() }}
+                  </div>
+                </template>
+              </a-range-picker>
+            </a-form-item>
+          </a-col>
+        </a-row>
+      </a-form>
+    </a-spin>
     <div style="margin-top:30px;">
       <a-alert message="三个月之内的审计日志不能删除。" type="warning" showIcon />
     </div>

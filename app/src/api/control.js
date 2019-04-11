@@ -1,15 +1,44 @@
-import { post } from '@/utils/request'
+import { post, get } from '@/utils/request'
 
 const api = {
+  // 管理员
+  createAccount: '/asf/account/create',
+  modifyAccount: '/asf/account/midify',
+  getAccountDetail: '/asf/account/GetDetails',
+
+  // 角色
+  getRoleSimpleList: '/asf/role/GetListAll',
+
+  // 公共API
   getPublicApiList: '/asf/permission/GetOpenApiList',
   createPublicApi: '/asf/permission/CreateOpenApi',
-  editPublicApi: '/asf/permission/ModifyOpenApi',
+  modifyPublicApi: '/asf/permission/ModifyOpenApi',
   deletePublicApi: '/asf/permission/Delete',
 
+  // 审计
   getAuditList: '/asf/Logger/GetList',
   deleteAudit: 'asf/Logger/Delete'
+
 }
 export default api
+
+// 创建 管理员
+export function createAccount (parameter) {
+  return post(api.createAccount, parameter)
+}
+// 修改 管理员
+export function modifyAccount (parameter) {
+  return post(api.modifyAccount, parameter)
+}
+// 获取 管理员详情
+export function getAccountDetail (parameter) {
+  return get(api.getAccountDetail + '/' + parameter)
+}
+
+// 获取简单角色计划
+export function getRoleSimpleList () {
+  return get(api.getRoleSimpleList)
+}
 
 // 公共API列表
 export function getPublicApiList (parameter) {
@@ -24,8 +53,8 @@ export function deletePublicApi (parameter) {
   return post(api.deletePublicApi + `/${parameter}`)
 }
 // 修改 公共API
-export function editPublicApi (parameter) {
-  return post(api.editPublicApi, parameter)
+export function modifyPublicApi (parameter) {
+  return post(api.modifyPublicApi, parameter)
 }
 
 // 获取审计集合

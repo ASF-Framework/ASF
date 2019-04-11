@@ -14,7 +14,7 @@
               <a-button
                 type="primary"
                 icon="plus"
-                @click="handleAdd"
+                @click="$refs.add.show()"
                 style="margin-right:10px"
                 v-action:create></a-button>
             </a-tooltip>
@@ -79,7 +79,7 @@
         </a-list-item-meta>
         <div slot="actions">
           <a
-            @click="$refs.modal.edit(item)"
+            @click="$refs.edit.show(item.id)"
             v-if="!item.isSystem"
             v-action:modify_info>编辑</a>
           <a
@@ -141,9 +141,7 @@
         </div>
       </a-list-item>
     </a-list>
-    <admin-edit
-      ref="modal"
-      @ok="handleEditSubmit"></admin-edit>
+
     <a-modal
       title="添加管理员"
       style="top: 20px;"
@@ -249,13 +247,17 @@
         </a-form-item>
       </a-form>
     </a-modal>
+
+    <admin-edit ref="edit" @complete="handleSearch"></admin-edit>
+    <admin-add ref="add" @complete="handleSearch"></admin-add>
   </a-card>
 </template>
 
 <script>
 import md5 from 'md5'
 import STable from '@/components/Table/'
-import AdminEdit from './AdminEdit'
+import AdminEdit from './Edit'
+import AdminAdd from './Add'
 import {
   getRoleListAll,
   getAdminList,
@@ -267,8 +269,7 @@ import {
 export default {
   name: 'TableList',
   components: {
-    STable,
-    AdminEdit
+    STable, AdminEdit, AdminAdd
   },
   data () {
     return {

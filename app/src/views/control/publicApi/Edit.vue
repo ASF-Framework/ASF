@@ -5,34 +5,36 @@
     :maskClosable="false"
     :destroyOnClose="true"
     :width="500"
-    :confirmLoading="this.confirmLoading"
+    :confirmLoading="confirmLoading"
     :visible="visible"
     @ok="submit"
     @cancel="close">
-    <a-form :form="form" >
-      <a-form-item label="编号" v-bind="layout">
-        <a-input disabled v-decorator="formDecorator.id" style="width: 50%"/>
-      </a-form-item>
-      <a-form-item label="API 名称" v-bind="layout">
-        <a-input placeholder="请输入公共 API 名称 " v-decorator="formDecorator.name" style="width: 50%"/>
-      </a-form-item>
-      <a-form-item label="API 地址" v-bind="layout">
-        <a-input placeholder="API 地址" v-decorator="formDecorator.apiTemplate"/>
-      </a-form-item>
-      <a-form-item label="状态" v-bind="layout">
-        <a-switch checkedChildren="启用" unCheckedChildren="停止" v-decorator="formDecorator.enable"/>
-      </a-form-item>
-      <a-form-item label="描述" v-bind="layout" >
-        <a-textarea placeholder="请输入公共 API 描述" v-decorator="formDecorator.description">
-        </a-textarea>
-      </a-form-item>
-    </a-form>
+    <a-spin :spinning="confirmLoading">
+      <a-form :form="form" >
+        <a-form-item label="编号" v-bind="layout" hasFeedback>
+          <a-input disabled v-decorator="formDecorator.id" style="width: 50%"/>
+        </a-form-item>
+        <a-form-item label="API 名称" v-bind="layout" hasFeedback>
+          <a-input placeholder="请输入公共 API 名称 " v-decorator="formDecorator.name" style="width: 50%"/>
+        </a-form-item>
+        <a-form-item label="API 地址" v-bind="layout" hasFeedback>
+          <a-input placeholder="API 地址" v-decorator="formDecorator.apiTemplate"/>
+        </a-form-item>
+        <a-form-item label="状态" v-bind="layout">
+          <a-switch checkedChildren="启用" unCheckedChildren="停止" v-decorator="formDecorator.enable"/>
+        </a-form-item>
+        <a-form-item label="描述" v-bind="layout" >
+          <a-textarea placeholder="请输入公共 API 描述" v-decorator="formDecorator.description">
+          </a-textarea>
+        </a-form-item>
+      </a-form>
+    </a-spin>
   </s-modal>
 </template>
 <script>
 import { SModal } from '@/components'
 import pick from 'lodash.pick'
-import { editPublicApi } from '@/api/control'
+import { modifyPublicApi } from '@/api/control'
 export default {
   data () {
     return {
@@ -76,7 +78,8 @@ export default {
   },
   methods: {
     /**
-     *显示添加对话框
+     * 显示添加对话框
+     * @param {object} data 编辑数据
      */
     show (data) {
       this.visible = true
@@ -100,7 +103,7 @@ export default {
           return
         }
         this.confirmLoading = true
-        editPublicApi(values).then(res => {
+        modifyPublicApi(values).then(res => {
           this.confirmLoading = false
           if (res.status === 200) {
             this.$refs.modal.success(`修改公共API 成功`)

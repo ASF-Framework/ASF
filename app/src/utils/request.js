@@ -49,7 +49,7 @@ const err = (error) => {
         })
         break
       default:
-        this.$notification.warning({ message: '处理失败', description: '处理失败，服务器繁忙' })
+        notification.error({ message: '处理失败', description: '处理失败，服务器繁忙' })
         break
     }
     if (errorRedirect && redirectPath) {

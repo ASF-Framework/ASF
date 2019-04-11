@@ -60,7 +60,6 @@ module.exports = {
             less: {
                 modifyVars: {
                     /* less 变量覆盖，用于自定义 ant design 主题 */
-
                     /*
                     'primary-color': '#F5222D',
                     'link-color': '#F5222D',
@@ -75,7 +74,7 @@ module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://127.0.0.1:801',
+                target: 'http://127.0.0.1',
                 ws: false,
                 changeOrigin: true
             },

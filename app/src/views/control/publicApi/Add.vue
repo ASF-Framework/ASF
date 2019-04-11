@@ -5,22 +5,24 @@
     :maskClosable="false"
     :destroyOnClose="true"
     :width="500"
-    :confirmLoading="this.confirmLoading"
+    :confirmLoading="confirmLoading"
     :visible="visible"
     @ok="submit"
     @cancel="close">
-    <a-form :form="form" >
-      <a-form-item label="API 名称" v-bind="layout">
-        <a-input placeholder="请输入公共 API 名称 " v-decorator="formDecorator.name" style="width: 50%"/>
-      </a-form-item>
-      <a-form-item label="API 地址" v-bind="layout">
-        <a-input placeholder="API 地址" v-decorator="formDecorator.apiTemplate"/>
-      </a-form-item>
-      <a-form-item label="描述" v-bind="layout" >
-        <a-textarea placeholder="请输入公共 API 描述" v-decorator="formDecorator.description">
-        </a-textarea>
-      </a-form-item>
-    </a-form>
+    <a-spin :spinning="confirmLoading">
+      <a-form :form="form" >
+        <a-form-item label="API 名称" v-bind="layout">
+          <a-input placeholder="请输入公共 API 名称 " v-decorator="formDecorator.name" style="width: 50%"/>
+        </a-form-item>
+        <a-form-item label="API 地址" v-bind="layout">
+          <a-input placeholder="API 地址" v-decorator="formDecorator.apiTemplate"/>
+        </a-form-item>
+        <a-form-item label="描述" v-bind="layout" >
+          <a-textarea placeholder="请输入公共 API 描述" v-decorator="formDecorator.description">
+          </a-textarea>
+        </a-form-item>
+      </a-form>
+    </a-spin>
   </s-modal>
 </template>
 
@@ -55,6 +57,7 @@ export default {
           ]
         }]
       },
+      // 布局
       layout: {
         labelCol: {
           xs: { span: 5 }

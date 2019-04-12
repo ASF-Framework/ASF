@@ -4,7 +4,11 @@ const api = {
   // 管理员
   createAccount: '/asf/account/create',
   modifyAccount: '/asf/account/midify',
+  modifyStatusAccount: '/asf/account/midifystatus',
   getAccountDetail: '/asf/account/GetDetails',
+  getAccountList: '/asf/account/getlist',
+  resetPassword: '/asf/account/ResetPassword',
+  deleteAccount: '/asf/account/delete',
 
   // 角色
   getRoleSimpleList: '/asf/role/GetListAll',
@@ -30,9 +34,25 @@ export function createAccount (parameter) {
 export function modifyAccount (parameter) {
   return post(api.modifyAccount, parameter)
 }
+// 重置 管理员密码
+export function resetPassword (parameter) {
+  return post(api.resetPassword, parameter)
+}
 // 获取 管理员详情
 export function getAccountDetail (parameter) {
   return get(api.getAccountDetail + '/' + parameter)
+}
+// 获取 管理员集合
+export function getAccountList (parameter) {
+  return post(api.getAccountList, parameter, { errorRedirect: true })
+}
+// 修改 管理员状态
+export function modifyStatusAccount (parameter) {
+  return post(api.modifyStatusAccount, parameter)
+}
+// 删除 管理员
+export function deleteAccount (parameter) {
+  return post(api.deleteAccount + '/' + parameter)
 }
 
 // 获取简单角色计划

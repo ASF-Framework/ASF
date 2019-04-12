@@ -45,7 +45,7 @@
       <a-tooltip>
         <template slot="title">批量删除
         </template>
-        <a-button type="primary" icon="delete" class="right10" @click="$refs.delete.show()" v-action:delete></a-button>
+        <a-button v-action:delete type="primary" icon="delete" class="right10" @click="$refs.delete.show()"></a-button>
       </a-tooltip>
       <a-radio-group :defaultValue="2" buttonStyle="solid" class="right10" v-model="queryParam.Type" @change="Search">
         <a-radio-button :value="2">操作审计</a-radio-button>
@@ -183,13 +183,11 @@ export default {
               customRender: 'addTime'
             }
           },
-
           {
             title: '操作',
             align: 'center',
             width: 70,
             dataIndex: 'action',
-            key: 'action',
             scopedSlots: {
               customRender: 'action'
             }

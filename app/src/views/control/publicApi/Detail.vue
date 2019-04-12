@@ -8,8 +8,8 @@
         <a-badge v-if="detailData.enable" status="success" :text="detailData.enable | statusFilter"/>
         <a-badge v-else status="error" :text="detailData.enable | statusFilter"/>
       </description-item>
-      <description-item term="创建时间">{{ detailData.createTime | dayFormat('YYYY-MM-DD HH:mm') }}</description-item>
       <description-item term="API 地址">{{ detailData.apiTemplate }}</description-item>
+      <description-item term="创建时间">{{ detailData.createTime | dayFormat('YYYY-MM-DD HH:mm') }}</description-item>
       <description-item term="描述">{{ detailData.description }}</description-item>
     </description-list>
   </a-drawer>

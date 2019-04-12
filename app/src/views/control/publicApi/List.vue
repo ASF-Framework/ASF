@@ -6,7 +6,7 @@
         <a-col :md="18" :sm="24">
           <a-tooltip>
             <template slot="title">新增公共 API</template>
-            <a-button type="primary" @click="$refs.add.show()" icon="plus" class="right10"></a-button>
+            <a-button v-action:create type="primary" @click="$refs.add.show()" icon="plus" class="right10"></a-button>
           </a-tooltip>
           <a-select placeholder="请选择" v-model="queryParam.enable" style="width:100px;" @change="loadDataing">
             <a-select-option :value="-1">API 状态</a-select-option>
@@ -61,10 +61,10 @@
               <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
-              <a-menu-item :disabled="record.isSystem" @click="$refs.edit.show(record)" >
+              <a-menu-item v-action:modify :disabled="record.isSystem" @click="$refs.edit.show(record)">
                 编辑
               </a-menu-item>
-              <a-menu-item :disabled="record.isSystem" @click="handleDelete(record.id,record.name)" >
+              <a-menu-item v-action:delete :disabled="record.isSystem" @click="handleDelete(record.id,record.name)" >
                 删除
               </a-menu-item>
             </a-menu>

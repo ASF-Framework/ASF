@@ -42,11 +42,14 @@ Vue.filter('statusFilter', function (value) {
   return statusMap[value ? 1 : 0]
 })
 
-Vue.filter('statusIsSystem', function (value) {
-  if (!value) return ''
+Vue.filter('statusIsFilter', function (value) {
+  if (value === null) return ''
   const statusMap = {
     1: '是',
     0: '否'
+  }
+  if (typeof value === 'boolean') {
+    value = value ? 1 : 0
   }
   return statusMap[value ? 1 : 0]
 })

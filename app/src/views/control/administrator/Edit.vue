@@ -11,7 +11,7 @@
     @cancel="close">
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-        <a-form-item v-bind="layout" label="用户名" hasFeedback>
+        <a-form-item v-bind="layout" label="用户名" >
           <a-input disabled="disabled" v-decorator="formDecorator.username" style="width: 50%"/>
         </a-form-item>
         <a-form-item v-bind="layout" label="昵称" hasFeedback >
@@ -125,7 +125,9 @@ export default {
      * @param {Number} id 管理账户ID
      */
     loadAccountDetail (id) {
+      this.confirmLoading = true
       getAccountDetail(id).then(res => {
+        this.confirmLoading = false
         if (res.status === 200) {
           this.accountId = res.result.id
           this.$nextTick(() => {
@@ -134,19 +136,21 @@ export default {
         } else {
           this.$refs.modal.error('获取管理账户详情失败', res.message)
         }
-      })
+      }).catch(() => { this.confirmLoading = false })
     },
     /**
      *加载角色数据
      */
     loadRoleList () {
+      this.confirmLoading = true
       getRoleSimpleList().then(res => {
+        this.confirmLoading = false
         if (res.status === 200) {
           this.roleList = res.result
         } else {
           this.$refs.modal.error('获取角色失败', res.message)
         }
-      })
+      }).catch(() => { this.confirmLoading = false })
     }
 
   }

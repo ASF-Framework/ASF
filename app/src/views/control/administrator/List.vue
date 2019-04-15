@@ -8,11 +8,11 @@
             <template slot="title">新建管理员</template>
             <a-button v-action:create type="primary" @click="$refs.add.show()" icon="plus" class="right10"></a-button>
           </a-tooltip>
-          <a-radio-group :defaultValue="0" v-model="queryParam.isDeleted" buttonStyle="solid" class="right10" @change="loadDataing">
+          <a-radio-group :defaultValue="0" v-model="queryParam.isDeleted" buttonStyle="solid" class="right10" @change="search">
             <a-radio-button :value="0">正常</a-radio-button>
             <a-radio-button :value="1">已删除</a-radio-button>
           </a-radio-group>
-          <a-select v-model="queryParam.status" style="width:120px;" class="right10" @change="loadDataing">
+          <a-select v-model="queryParam.status" style="width:120px;" class="right10" @change="search">
             <a-select-option value="-1">管理员状态</a-select-option>
             <a-select-option value="1">正常</a-select-option>
             <a-select-option value="2">禁用</a-select-option>
@@ -56,7 +56,7 @@
       </span>
       <span slot="roles" slot-scope="text, record">
         <a-tag v-if="record.isSystem"> 超级管理员</a-tag>
-        <a-tag v-else v-for="role in text" :key="role">{{ role }}</a-tag>
+        <a-tag v-else v-for="role in text" :key="role" color="cyan">  {{ role }}</a-tag>
       </span>
       <span slot="createTime" slot-scope="text">{{ text | dayFormat('YYYY-MM-DD HH:mm:ss') }}</span>
       <span slot="loginTime" slot-scope="text">{{ text | dayFormat('YYYY-MM-DD HH:mm:ss') }}</span>
@@ -106,7 +106,7 @@ import AdminEdit from './Edit'
 import AdminAdd from './Add'
 import AdminDetail from './Detail'
 import AdminResetPassword from './ResetPassword'
-import { getAdminList, modifyStatusAccount, deleteAccount } from '@/api/manage'
+import { getAccountList, modifyStatusAccount, deleteAccount } from '@/api/control'
 export default {
   components: {
     STable, AdminEdit, AdminAdd, AdminResetPassword, AdminDetail
@@ -230,7 +230,7 @@ export default {
         this.queryParam.skipPage = pagination.current
         this.queryParam.pagedCount = pagination.pageSize
       }
-      getAdminList(this.queryParam).then(res => {
+      getAccountList(this.queryParam).then(res => {
         this.table.loading = false
         if (res.status === 200) {
           this.table.pagination.total = res.totalCount

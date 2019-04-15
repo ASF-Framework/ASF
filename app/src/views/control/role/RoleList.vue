@@ -18,7 +18,6 @@
             <span class="table-page-search-submitButtons" style="float:right">
               <a-input-search placeholder="角色标识、名称" v-model="queryParam.vague" enterButton="查询" @search="handleSearch()" style="width:300px;margin-right:10px">
               </a-input-search>
-
             </span>
           </a-col>
         </a-row>

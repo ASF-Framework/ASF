@@ -4,7 +4,9 @@
       <p :style="[layout.title]"> 管理员详情</p>
       <p><a-avatar :size="64" :src="detailData.avatar" /></p>
       <description-list title="基本信息" size="small" :col="2">
-        <description-item term="标识">{{ detailData.id }}</description-item>
+        <description-item term="标识">
+          {{ detailData.id }}
+        </description-item>
         <description-item term="用户名">{{ detailData.username }}</description-item>
         <description-item term="昵称">{{ detailData.name }}</description-item>
         <description-item term="状态">
@@ -30,7 +32,7 @@
       <description-list title="拥有角色" size="small" :col="1">
         <description-item>
           <a-tag v-if="detailData.isSystem">超级管理员</a-tag>
-          <a-tag v-else v-for="role in detailData.rules" :key="role" >{{ role }}</a-tag>
+          <a-tag v-else v-for="role in detailData.rules" :key="role" color="cyan">{{ role }}</a-tag>
         </description-item>
       </description-list>
     </a-spin>

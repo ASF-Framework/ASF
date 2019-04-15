@@ -40,20 +40,21 @@ export default {
       formDecorator: {
         name: ['name', {
           rules: [
-            { required: true, message: '公共 API 名称不能为空' },
+            { required: true, message: '名称不能为空' },
             { max: 100 }
           ]
         }],
         apiTemplate: ['apiTemplate',
           {
             rules: [
-              { required: true, message: '公共 API 地址不能为空' },
+              { required: true, message: 'API 地址不能为空' },
               { max: 500 }
             ]
           }],
         description: ['description', {
           rules: [
-            { max: 200, message: '公共 API 描述不能超过 200 个字符' }
+            { required: true, message: '描述不能为空' },
+            { max: 200, message: '描述不能超过 200 个字符' }
           ]
         }]
       },

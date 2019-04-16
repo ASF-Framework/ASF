@@ -53,7 +53,7 @@ const err = (error) => {
         break
     }
     if (errorRedirect && redirectPath) {
-      router.push({ path: '/' + redirectPath })
+      router.push({ path: redirectPath })
     }
   }
   return Promise.reject(error)

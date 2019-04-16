@@ -31,7 +31,7 @@
       <a-divider/>
       <description-list title="拥有角色" size="small" :col="1">
         <description-item>
-          <a-tag v-if="detailData.isSystem">超级管理员</a-tag>
+          <a-tag v-if="detailData.isSystem" color="cyan">超级管理员</a-tag>
           <a-tag v-else v-for="role in detailData.rules" :key="role" color="cyan">{{ role }}</a-tag>
         </description-item>
       </description-list>

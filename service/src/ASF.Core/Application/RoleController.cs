@@ -130,7 +130,7 @@ namespace ASF.Application
             if (roelList.Count == 0)
                 return ResultList<RoleInfoSimpleResponseDto>.ReSuccess();
 
-            var roles = Mapper.Map<IList<RoleInfoSimpleResponseDto>>(roelList);
+            var roles = Mapper.Map<IList<RoleInfoSimpleResponseDto>>(roelList.Where(f=>f.Enable).ToList());
             return ResultList<RoleInfoSimpleResponseDto>.ReSuccess(roles);
         }
         /// <summary>

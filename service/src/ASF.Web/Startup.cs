@@ -30,6 +30,7 @@ namespace ASF.Web
                 {
                     string dbConnectionString = "Data Source=AppData/ASF.db";
                     build.AddSQLite(dbConnectionString);
+
                     //if (_env.IsDevelopment())
                     //{
                     //    build.AddSQLite(dbConnectionString);

@@ -32,7 +32,10 @@
       :loading="tables.loading"
       :dataSource="tables.dataSource"
       @change="loadDataing">
-      <span slot="enable" slot-scope="text">{{ text | statusFilter }}</span>
+      <span slot="enable" slot-scope="text">
+        <a-badge v-if="text" status="success" text="正常"/>
+        <a-badge v-else status="error" text="禁用"/>
+      </span>
       <span slot="createTime" slot-scope="text">{{ text*1000 | moment }}</span>
       <span slot="action" slot-scope="text, record">
         <a @click="$refs.edit.show(record.id)" v-action:modify>编辑</a>

@@ -55,7 +55,7 @@
         <a-icon type="mail" fontSize="14/" theme="twoTone" style=" margin-right:5px;" v-show="record.email"/> {{ record.email }}
       </span>
       <span slot="roles" slot-scope="text, record">
-        <a-tag v-if="record.isSystem"> 超级管理员</a-tag>
+        <a-tag v-if="record.isSystem" color="cyan"> 超级管理员</a-tag>
         <a-tag v-else v-for="role in text" :key="role" color="cyan">  {{ role }}</a-tag>
       </span>
       <span slot="createTime" slot-scope="text">{{ text | dayFormat('YYYY-MM-DD HH:mm:ss') }}</span>

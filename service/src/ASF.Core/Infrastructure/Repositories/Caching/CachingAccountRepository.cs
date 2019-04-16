@@ -1,68 +1,55 @@
 ﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
 using ASF.Domain.Values;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ASF.Infrastructure.Repositories
 {
-    public class CachingAccountRepository<T> : IAccountRepository where T : IAccountRepository
+    public class CachingAccountRepository<TImplRepository> : IAccountRepository where TImplRepository : IAccountRepository
     {
-        private readonly T _repository;
-        private readonly ICache<Account> _accountCache;
-        private readonly string _cacheKey = "GetList";
-        private readonly ILogger<CachingAccountRepository<T>> _logger;
-        private TimeSpan _duration = new TimeSpan(1000, 0, 0, 0);
-        public CachingAccountRepository(T repository, ICache<Account> accountCache, ILogger<CachingAccountRepository<T>> logger)
+        private static readonly ConcurrentDictionary<int, Account> cache = new ConcurrentDictionary<int, Account>();
+        private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger _logger;
+        public CachingAccountRepository(IServiceProvider serviceProvider, ILogger<CachingAccountRepository<TImplRepository>> logger)
         {
-            _repository = repository;
-            _accountCache = accountCache;
+            _serviceProvider = serviceProvider;
             _logger = logger;
-        }
-
-
-        public async Task<Account> AddAsync(Account entity)
-        {
-            var account = await _repository.AddAsync(entity);
-            //更新缓存
-            var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            list.Add(account);
-            await _accountCache.SetAsync(_cacheKey, list, _duration);
-            return account;
         }
 
         public async Task<Account> GetAsync(PhoneNumber telephone)
         {
-            var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            return list.FirstOrDefault(w => w.Telephone.ToString() == telephone.ToString());
+            var list = await this.GetList();
+            return list.Where(f => f.Telephone == telephone).FirstOrDefault();
         }
 
         public async Task<Account> GetAsync(int id)
         {
-            var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
+            var list = await this.GetList();
             return list.FirstOrDefault(w => w.Id == id);
         }
 
         public async Task<Account> GetByEmailAsync(string email)
         {
-            var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
+            var list = await this.GetList();
             return list.FirstOrDefault(w => w.Email == email);
         }
 
         public async Task<Account> GetByUsernameAsync(string username)
         {
-            var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
+            var list = await this.GetList();
             return list.FirstOrDefault(w => w.Username == username);
         }
 
         public async Task<(IList<Account> Accounts, int TotalCount)> GetList(AccountListPagedRequestDto requestDto)
         {
-            var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
+            var list = await this.GetList();
             var queryable = list.Where(w => w.IsDeleted == requestDto.IsDeleted);
-
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {
                 queryable = queryable
@@ -79,63 +66,82 @@ namespace ASF.Infrastructure.Repositories
             var result = queryable.OrderByDescending(p => p.CreateInfo.CreateTime);
             return (result.Skip((requestDto.SkipPage - 1) * requestDto.PagedCount).Take(requestDto.PagedCount).ToList(), result.Count());
         }
-        public async Task<IList<Account>> GetList()
+        public Task<IList<Account>> GetList()
         {
-            var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            return list;
+            IList<Account> list = cache.Values.ToList();
+            if (list.Count > 0)
+                return Task.FromResult(list);
+            else
+            {
+                return this.Do(repository =>
+                {
+                    var _list = repository.GetList().GetAwaiter().GetResult();
+                    foreach (var data in _list)
+                    {
+                        cache.GetOrAdd(data.Id, data);
+                    }
+                    return Task.FromResult(_list);
+                });
+            }
         }
-        public async Task<bool> HasByEmail(string email)
+        public Task<bool> HasByEmail(string email)
         {
-            var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            var model = list.FirstOrDefault(w => w.Email == email);
-            return model == null ? false : true;
+            return this.Do(repository =>
+            {
+                return repository.HasByEmail(email);
+            });
         }
-        public async Task<bool> HasByTelephone(PhoneNumber telephone)
+        public Task<bool> HasByTelephone(PhoneNumber telephone)
         {
-            var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            var model = list.FirstOrDefault(w => w.Telephone.ToString() == telephone.ToString());
-            return model == null ? false : true;
+            return this.Do(repository =>
+            {
+                return repository.HasByTelephone(telephone);
+            });
         }
 
-        public async Task<bool> HasByUsername(string username)
+        public Task<bool> HasByUsername(string username)
         {
-            var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            var model = list.FirstOrDefault(w => w.Username == username);
-            return model == null ? false : true;
+            return this.Do(repository =>
+            {
+                return repository.HasByUsername(username);
+            });
         }
 
         public async Task ModifyAsync(Account account)
         {
-            await _repository.ModifyAsync(account);
-
-            //更新缓存
-            var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            var entity = list.FirstOrDefault(f => f.Id == account.Id);
-            if (entity != null)
+            var repository = this._serviceProvider.GetRequiredService<TImplRepository>();
+            await repository.ModifyAsync(account);
+            cache.AddOrUpdate(account.Id, account, (key, r) =>
             {
-                list.Remove(entity);
-                var model = await _repository.GetAsync(account.Id);
-                if (model != null)
-                    list.Add(model);
-                await _accountCache.SetAsync(_cacheKey, list, _duration);
-            }
+                return account;
+            });
         }
 
-        public async Task RemoveAsync(int primaryKey)
+        public Task<Account> AddAsync(Account entity)
         {
-            await _repository.RemoveAsync(primaryKey);
-
-            //更新缓存
-            var list = await _accountCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            var entity = list.FirstOrDefault(f => f.Id == primaryKey);
-            if (entity != null)
+            entity = cache.GetOrAdd(entity.Id, key =>
             {
-                list.Remove(entity);
-                var model = await _repository.GetAsync(primaryKey);
-                if (model != null)
-                    list.Add(model);
-                await _accountCache.SetAsync(_cacheKey, list, _duration);
-            }
+                return this.Do(repository =>
+                {
+                    return repository.AddAsync(entity).GetAwaiter().GetResult();
+                });
+            });
+            return Task.FromResult(entity);
+        }
+        public Task RemoveAsync(int primaryKey)
+        {
+            return this.Do(repository =>
+            {
+                repository.RemoveAsync(primaryKey).GetAwaiter().GetResult();
+                cache.TryRemove(primaryKey, out var role);
+                return Task.CompletedTask;
+            });
+        }
+
+        public TRes Do<TRes>(Func<TImplRepository, TRes> action)
+        {
+            var repository = this._serviceProvider.GetRequiredService<TImplRepository>();
+            return action.Invoke(repository);
         }
     }
 }

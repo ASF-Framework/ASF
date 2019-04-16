@@ -136,21 +136,19 @@ export default {
         } else {
           this.$notification.error({ message: '获取管理账户详情失败', description: res.message })
         }
-      }).catch(() => { this.confirmLoading = false })
+      }).catch(() => { this.close() })
     },
     /**
      *加载角色数据
      */
     loadRoleList () {
-      this.confirmLoading = true
       getRoleSimpleList().then(res => {
-        this.confirmLoading = false
         if (res.status === 200) {
           this.roleList = res.result
         } else {
           this.$notification.error({ message: '获取角色失败', description: res.message })
         }
-      }).catch(() => { this.confirmLoading = false })
+      })
     }
 
   }

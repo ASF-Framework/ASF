@@ -45,7 +45,7 @@
       </span>
       <span slot="username" slot-scope="text, record">
         {{ text }}
-        <a-badge :count="record.id" :overflowCount="999999" :numberStyle="{backgroundColor: '#52c41a'} "/>
+        <a-badge :count="record.id" :overflowCount="9999999999999" :numberStyle="{backgroundColor: '#52c41a'} "/>
         <br>
         {{ record.name }}
       </span>

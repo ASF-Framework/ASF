@@ -98,7 +98,7 @@ export default {
             this.tables.dataSource = this.buildDataSource(res.result)
           })
         } else {
-          this.$refs.modal.error('获取需要分配权限失败', res.message)
+          this.$notification.error({ message: `获取需要分配权限失败`, description: res.message })
         }
       }).catch(() => { this.loading = false })
     },

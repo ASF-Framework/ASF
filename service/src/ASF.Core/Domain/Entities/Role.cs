@@ -16,7 +16,7 @@ namespace ASF.Domain.Entities
         {
 
         }
-        public Role(string name, string description, int createOfAccountId)
+        public Role(int id, string name, string description, int createOfAccountId)
         {
             if (createOfAccountId == 0)
                 throw new ArgumentNullException("创建用户不能为空");
@@ -81,7 +81,7 @@ namespace ASF.Domain.Entities
         {
             if (permissions == null)
                 permissions = new List<string>();
-            this.Permissions = permissions ;
+            this.Permissions = permissions;
         }
         /// <summary>
         /// 是否包含对应的权限

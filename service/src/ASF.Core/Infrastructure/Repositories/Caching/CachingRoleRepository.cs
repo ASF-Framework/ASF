@@ -1,55 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ASF.Application.DTO;
+﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ASF.Infrastructure.Repositories
 {
-    public class CachingRoleRepository<T> : IRoleRepository where T : IRoleRepository
+    public class CachingRoleRepository<TImplRepository> : IRoleRepository where TImplRepository : IRoleRepository
     {
-        private readonly T _repository;
-        private readonly ICache<Role> _roleCache;
-        private readonly string _cacheKey = "GetList";
-        private readonly ILogger<CachingRoleRepository<T>> _logger;
-        private TimeSpan _duration = new TimeSpan(1000, 0, 0, 0);
-        public CachingRoleRepository(T repository, ICache<Role> roleCache, ILogger<CachingRoleRepository<T>> logger)
+        private static readonly ConcurrentDictionary<int, Role> cache = new ConcurrentDictionary<int, Role>();
+        private readonly ILogger _logger;
+        private readonly IServiceProvider _serviceProvider;
+        public CachingRoleRepository(IServiceProvider serviceProvider, ILogger<CachingRoleRepository<TImplRepository>> logger)
         {
-            _repository = repository;
-            _roleCache = roleCache;
+            _serviceProvider = serviceProvider;
             _logger = logger;
         }
-        public async Task<Role> AddAsync(Role entity)
-        {
-            return await _repository.AddAsync(entity);
-        }
+
 
         public async Task<Role> GetAsync(int id)
         {
-            var list = await _roleCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            return list.FirstOrDefault(w => w.Id == id);
+            var list = await this.GetList();
+            return list.Where(f => f.Id == id).FirstOrDefault();
         }
-
         public async Task<IList<Role>> GetList(IList<int> ids)
         {
-            var list = await _roleCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
+            var list = await this.GetList();
             return list.Where(w => ids.Contains(w.Id)).ToList();
         }
-
-        public async Task<IList<Role>> GetList()
-        {
-            return await _roleCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-        }
-
         public async Task<(IList<Role> Roles, int TotalCount)> GetList(RoleListPagedRequestDto requestDto)
         {
-            var list = await _roleCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
+            var list = await this.GetList();
             var queryable = list.Where(w => w.Id > 0);
-
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {
                 queryable = queryable
@@ -64,52 +50,83 @@ namespace ASF.Infrastructure.Repositories
             return (queryable.Skip((requestDto.SkipPage - 1) * requestDto.PagedCount).Take(requestDto.PagedCount).ToList(), queryable.Count());
         }
 
-        public async Task ModifyAsync(Role role)
+        public Task<IList<Role>> GetList()
         {
-            await _repository.ModifyAsync(role);
-
-            //更新缓存
-            var list = await _roleCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            var entity = list.FirstOrDefault(f => f.Id == role.Id);
-            if (entity != null)
+            IList<Role> list = cache.Values.ToList();
+            if (list.Count > 0)
+                return Task.FromResult(list);
+            else
             {
-                list.Remove(entity);
-                var model = await _repository.GetAsync(role.Id);
-                if (model != null)
-                    list.Add(model);
-                await _roleCache.SetAsync(_cacheKey, list, _duration);
+                return this.Do(repository =>
+                 {
+                     var _list = repository.GetList().GetAwaiter().GetResult();
+                     foreach (var role in _list)
+                     {
+                         cache.GetOrAdd(role.Id, role);
+                     }
+                     return Task.FromResult(_list);
+                 });
             }
         }
 
-        public async Task ModifyAsync(int roleId, bool enable)
-        {
-            await _repository.ModifyAsync(roleId, enable);
 
-            //更新缓存
-            var list = await _roleCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            var entity = list.FirstOrDefault(f => f.Id == roleId);
-            if (entity != null)
+        public Task<Role> AddAsync(Role entity)
+        {
+            entity = cache.GetOrAdd(entity.Id, key =>
             {
-                list.Remove(entity);
-                var model = await _repository.GetAsync(roleId);
-                if (model != null)
-                    list.Add(model);
-                await _roleCache.SetAsync(_cacheKey, list, _duration);
-            }
+                return this.Do(repository =>
+                 {
+                     return repository.AddAsync(entity).GetAwaiter().GetResult();
+                 });
+            });
+            return Task.FromResult(entity);
+        }
+        public Task ModifyAsync(Role role)
+        {
+            return this.Do(repository =>
+            {
+                repository.ModifyAsync(role).GetAwaiter().GetResult();
+                cache.AddOrUpdate(role.Id, role, (key, r) =>
+                {
+                    return role;
+                });
+                return Task.CompletedTask;
+            });
         }
 
-        public async Task RemoveAsync(int primaryKey)
+        public Task ModifyAsync(int roleId, bool enable)
         {
-            await _repository.RemoveAsync(primaryKey);
-
-            //更新缓存
-            var list = await _roleCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            var entity = list.FirstOrDefault(f => f.Id == primaryKey);
-            if (entity != null)
+            return this.Do(repository =>
             {
-                list.Remove(entity);
-                await _roleCache.SetAsync(_cacheKey, list, _duration);
-            }
+                repository.ModifyAsync(roleId, enable).GetAwaiter().GetResult();
+                var role = this.GetAsync(roleId).GetAwaiter().GetResult();
+                cache.AddOrUpdate(role.Id, role, (key, r) =>
+                {
+                    r.Enable = enable;
+                    return r;
+                });
+                return Task.CompletedTask;
+            });
+           
         }
+
+        public Task RemoveAsync(int primaryKey)
+        {
+            return this.Do(repository =>
+             {
+                 repository.RemoveAsync(primaryKey).GetAwaiter().GetResult();
+                 cache.TryRemove(primaryKey, out var role);
+                 return Task.CompletedTask;
+             });
+
+        }
+
+        public TRes Do<TRes>(Func<TImplRepository, TRes> action)
+        {
+            var repository = this._serviceProvider.GetRequiredService<TImplRepository>();
+            return action.Invoke(repository);
+        }
+
+
     }
 }

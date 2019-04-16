@@ -1,60 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ASF.Application.DTO;
+﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ASF.Infrastructure.Repositories
 {
-    public class CachingPermissionRepository<T> : IPermissionRepository where T : IPermissionRepository
+    public class CachingPermissionRepository<TImplRepository> : IPermissionRepository where TImplRepository : IPermissionRepository
     {
-        private readonly T _repository;
-        private readonly ICache<Permission> _permissionCache;
-        private readonly string _cacheKey = "GetList";
-        private readonly ILogger<CachingPermissionRepository<T>> _logger;
-        private TimeSpan _duration = new TimeSpan(1000, 0, 0, 0);
-        public CachingPermissionRepository(T repository, ICache<Permission> permissionCache, ILogger<CachingPermissionRepository<T>> logger)
+        private static readonly ConcurrentDictionary<string, Permission> cache = new ConcurrentDictionary<string, Permission>();
+        private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger _logger;
+        public CachingPermissionRepository(IServiceProvider serviceProvider, ILogger<CachingPermissionRepository<TImplRepository>> logger)
         {
-            _repository = repository;
-            _permissionCache = permissionCache;
+            _serviceProvider = serviceProvider;
             _logger = logger;
-        }
-        public async Task<Permission> AddAsync(Permission entity)
-        {
-            var permission = await _repository.AddAsync(entity);
-
-            //更新缓存
-            var list = await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            list.Add(permission);
-            await _permissionCache.SetAsync(_cacheKey, list, _duration);
-            return permission;
         }
 
         public async Task<Permission> GetAsync(string id)
         {
-            var list = await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            return list.FirstOrDefault(w => w.Id == id);
+            var list = await this.GetList();
+            return list.Where(f => f.Id == id).FirstOrDefault();
         }
 
         public async Task<IList<Permission>> GetList(IList<string> ids)
         {
-            var list = await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
+            var list = await this.GetList();
             return list.Where(w => ids.Contains(w.Id)).ToList();
         }
 
-        public async Task<IList<Permission>> GetList()
+        public Task<IList<Permission>> GetList()
         {
-            return await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
+            IList<Permission> list = cache.Values.ToList();
+            if (list.Count > 0)
+                return Task.FromResult(list);
+            else
+            {
+                return this.Do(repository =>
+                {
+                    var _list = repository.GetList().GetAwaiter().GetResult();
+                    foreach (var data in _list)
+                    {
+                        cache.GetOrAdd(data.Id, data);
+                    }
+                    return Task.FromResult(_list);
+                });
+            }
         }
 
         public async Task<IList<Permission>> GetList(PermissionListRequestDto requestDto)
         {
-            var list = await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-
+            var list = await this.GetList();
             var queryable = list.Where(w => w.Id != "");
             if (!string.IsNullOrEmpty(requestDto.Vague))
             {
@@ -73,47 +73,63 @@ namespace ASF.Infrastructure.Repositories
             return queryable.ToList();
         }
 
-        public Task<IList<Permission>> GetListByParentId(string parentId)
+        public async Task<IList<Permission>> GetListByParentId(string parentId)
         {
-            throw new NotImplementedException();
+            var list = await this.GetList();
+            return list.Where(f => f.ParentId == parentId).ToList();
         }
 
-        public async Task<bool> HasById(string id)
+        public Task<bool> HasById(string id)
         {
-            var list = await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            var model = list.FirstOrDefault(w => w.Id == id);
-            return model == null ? false : true;
+            return this.Do(repository =>
+             {
+                 return repository.HasById(id);
+             });
         }
 
-        public async Task ModifyAsync(Permission permission)
+        public Task<Permission> AddAsync(Permission entity)
         {
-            await _repository.ModifyAsync(permission);
-
-            //更新缓存
-            var list = await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            var entity = list.FirstOrDefault(f => f.Id == permission.Id);
-            if (entity != null)
+            entity = cache.GetOrAdd(entity.Id, key =>
             {
-                list.Remove(entity);
-                var model = await _repository.GetAsync(permission.Id);
-                if (model != null)
-                    list.Add(model);
-                await _permissionCache.SetAsync(_cacheKey, list, _duration);
-            }
+                return this.Do(repository =>
+                {
+                    return repository.AddAsync(entity).GetAwaiter().GetResult();
+                });
+            });
+            return Task.FromResult(entity);
         }
 
-        public async Task RemoveAsync(string primaryKey)
+
+        public Task ModifyAsync(Permission permission)
         {
-            await _repository.RemoveAsync(primaryKey);
-
-            //更新缓存
-            var list = await _permissionCache.GetAsync(_cacheKey, _duration, async () => await _repository.GetList(), _logger);
-            var entity = list.FirstOrDefault(f => f.Id == primaryKey);
-            if (entity != null)
+            return this.Do(repository =>
             {
-                list.Remove(entity);
-                await _permissionCache.SetAsync(_cacheKey, list, _duration);
-            }
+                repository.ModifyAsync(permission).GetAwaiter().GetResult();
+                cache.AddOrUpdate(permission.Id, permission, (key, r) =>
+                {
+                    return permission;
+                });
+                return Task.CompletedTask;
+            });
+
         }
+
+        public Task RemoveAsync(string primaryKey)
+        {
+            return this.Do(repository =>
+             {
+                 repository.RemoveAsync(primaryKey).GetAwaiter().GetResult();
+                 cache.TryRemove(primaryKey, out var role);
+                 return Task.CompletedTask;
+             });
+        }
+
+        public TRes Do<TRes>(Func<TImplRepository, TRes> action)
+        {
+            var repository = this._serviceProvider.GetRequiredService<TImplRepository>();
+            return action.Invoke(repository);
+        }
+
+
     }
 }

@@ -157,7 +157,7 @@ export default {
           this.$notification.error({ message: '获取管理账户详情失败', description: res.message })
         }
         this.confirmLoading = false
-      }).catch(() => { this.confirmLoading = false })
+      }).catch(() => { this.onClose() })
     }
   }
 }

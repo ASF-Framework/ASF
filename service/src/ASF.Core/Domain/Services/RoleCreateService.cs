@@ -29,9 +29,8 @@ namespace ASF.Domain.Services
             //创建管理员不能为空
             if (createOfAccountId == 0)
                 return Result<Role>.ReFailure(ResultCodes.RoleCreateFailed);
-
-            var role = new Role(name, description, createOfAccountId);
-
+            var id = DateTime.Now.ToUnixTime32();
+            var role = new Role(id,name, description, createOfAccountId);
             //验证角色聚合的数据合法性
             return role.Valid<Role>();
         }
@@ -52,7 +51,7 @@ namespace ASF.Domain.Services
             //分配角色
             var role = result.Data;
             return await _serviceProvider.GetRequiredService<RolePermissionAssignationService>().Assignation(role, pids);
-         
+
         }
     }
 }

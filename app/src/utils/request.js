@@ -19,6 +19,7 @@ const err = (error) => {
     if (errorIntercept === null || errorIntercept === '' || errorIntercept === undefined) {
       errorIntercept = true
     }
+
     // 不开启错误拦截
     if (!errorIntercept) {
       return Promise.reject(error)
@@ -52,9 +53,11 @@ const err = (error) => {
         notification.error({ message: '处理失败', description: '处理失败，服务器繁忙' })
         break
     }
-    if (errorRedirect && redirectPath) {
+    if (errorRedirect && redirectPath !== '') {
       router.push({ path: redirectPath })
     }
+  } else if (error.request) {
+    notification.error({ message: '处理失败', description: error.toString() })
   }
   return Promise.reject(error)
 }

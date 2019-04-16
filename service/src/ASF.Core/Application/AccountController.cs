@@ -22,7 +22,6 @@ namespace ASF.Application
     /// </summary>
     [Authorize]
     [Route("[controller]/[action]")]
-    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly IServiceProvider _serviceProvider;

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
 
 namespace ASF.DependencyInjection
 {
@@ -100,16 +101,6 @@ namespace ASF.DependencyInjection
             return this;
         }
 
-        /// <summary>
-        /// Adds the in memory caching.
-        /// </summary>
-        /// <returns></returns>
-        public ASFBuilder AddInMemoryCaching()
-        {
-            Services.TryAddSingleton<IMemoryCache, MemoryCache>();
-            Services.TryAddTransient(typeof(ICache<>), typeof(DefaultCache<>));
-
-            return this;
-        }
+       
     }
 }

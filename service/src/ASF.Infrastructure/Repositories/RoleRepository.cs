@@ -4,6 +4,7 @@ using ASF.Infrastructure.Model;
 using ASF.Infrastructure.Repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ namespace ASF.Infrastructure.Repository
             return Mapper.Map<Role>(model);
         }
 
+       
         public async Task<Role> GetAsync(int id)
         {
             var model = await _dbContext.Roles.FirstOrDefaultAsync(w => w.Id == id);

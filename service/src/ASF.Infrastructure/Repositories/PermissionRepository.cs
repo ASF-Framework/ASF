@@ -4,6 +4,7 @@ using ASF.Infrastructure.Model;
 using ASF.Infrastructure.Repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace ASF.Infrastructure.Repository
             await _dbContext.AddAsync(model);
             return Mapper.Map<Permission>(model);
         }
+
+       
 
         public async Task<Permission> GetAsync(string id)
         {

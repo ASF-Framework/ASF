@@ -91,5 +91,7 @@ namespace ASF.Infrastructure.Repository
             _dbContext.LogInfos.RemoveRange(queryable);
             return Task.FromResult(0);
         }
+
+     
     }
 }

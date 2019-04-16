@@ -117,7 +117,7 @@ export default {
           } else {
             this.$error({ title: '创建角色失败', content: res.message })
           }
-        }).catch(() => { this.close() })
+        }).catch(() => { this.onClose() })
       })
     }
   }

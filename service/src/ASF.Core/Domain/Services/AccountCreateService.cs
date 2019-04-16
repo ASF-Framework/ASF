@@ -37,7 +37,7 @@ namespace ASF.Domain.Services
             //获取创建账户的用户
             int uid = this._httpContextAccessor.HttpContext.User.UserId();
             account.SetCreateOfAccount(uid);
-
+            account.Id = DateTime.Now.ToUnixTime32();
             //如果分配了角色需要验证角色
             var roles = (List<int>)account.Roles;
             if (roles.Count > 0)

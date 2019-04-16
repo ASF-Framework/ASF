@@ -76,6 +76,7 @@ export default {
      * 关闭对话框
      */
     close () {
+      this.confirmLoading = false
       this.visible = false
     },
     /**
@@ -93,7 +94,7 @@ export default {
         } else {
           this.$notification.error({ message: '获取管理账户详情失败', description: res.message })
         }
-      }).catch(() => { this.confirmLoading = false })
+      }).catch(() => { this.close() })
     }
   }
 }

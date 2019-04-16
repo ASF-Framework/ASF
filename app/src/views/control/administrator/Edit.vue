@@ -54,7 +54,7 @@ export default {
         name: ['name', {
           rules: [
             { required: true, message: '昵称不能为空' },
-            { max: 20 }
+            { max: 20, message: '昵称字符长度不能大于 20 个字符' }
           ]
         }],
         roles: ['roles', {
@@ -134,7 +134,7 @@ export default {
             this.form.setFieldsValue(pick(res.result, 'username', 'status', 'name', 'roles'))
           })
         } else {
-          this.$refs.modal.error('获取管理账户详情失败', res.message)
+          this.$notification.error({ message: '获取管理账户详情失败', description: res.message })
         }
       }).catch(() => { this.confirmLoading = false })
     },
@@ -148,7 +148,7 @@ export default {
         if (res.status === 200) {
           this.roleList = res.result
         } else {
-          this.$refs.modal.error('获取角色失败', res.message)
+          this.$notification.error({ message: '获取角色失败', description: res.message })
         }
       }).catch(() => { this.confirmLoading = false })
     }

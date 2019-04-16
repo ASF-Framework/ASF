@@ -53,7 +53,7 @@ export default {
         name: ['name', {
           rules: [
             { required: true, message: '昵称不能为空' },
-            { max: 20 }
+            { max: 20, message: '昵称字符长度不能大于 20 个字符' }
           ]
         }],
         username: ['username', {
@@ -66,7 +66,7 @@ export default {
         password: ['password', {
           rules: [
             { required: true, message: '登录密码不能为空' },
-            { min: 2, message: '登录密码字符长度不能少于 6 个字符' },
+            { min: 2, message: '登录密码字符长度不能少于 2 个字符' },
             { max: 32, message: '登录密码字符长度不能大于 32 个字符' }
           ]
         }],
@@ -141,13 +141,15 @@ export default {
      *加载角色数据
      */
     loadRoleList () {
+      this.confirmLoading = true
       getRoleSimpleList().then(res => {
+        this.confirmLoading = false
         if (res.status === 200) {
           this.roleList = res.result
         } else {
-          this.$refs.modal.error('获取角色失败', res.message)
+          this.$notification.error({ message: '获取角色失败', description: res.message })
         }
-      })
+      }).catch(() => { this.confirmLoading = false })
     },
     /**
      * 验证确认密码是否一致

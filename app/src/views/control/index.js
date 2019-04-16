@@ -1,4 +1,4 @@
-import RoleList from './role/RoleList'
+import RoleList from './role/List'
 import AuditList from './audit/List'
 import PermissionList from './permission/PermissionList'
 import PermissionDetails from './permission/PermissionDetails'

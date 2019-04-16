@@ -91,7 +91,7 @@ export default {
           this.detailData = res.result
           this.detailData.rules = roles
         } else {
-          this.$refs.modal.error('获取管理账户详情失败', res.message)
+          this.$notification.error({ message: '获取管理账户详情失败', description: res.message })
         }
       }).catch(() => { this.confirmLoading = false })
     }

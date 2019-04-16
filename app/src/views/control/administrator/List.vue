@@ -101,7 +101,6 @@
 </template>
 
 <script>
-import STable from '@/components/Table/'
 import AdminEdit from './Edit'
 import AdminAdd from './Add'
 import AdminDetail from './Detail'
@@ -109,7 +108,7 @@ import AdminResetPassword from './ResetPassword'
 import { getAccountList, modifyStatusAccount, deleteAccount } from '@/api/control'
 export default {
   components: {
-    STable, AdminEdit, AdminAdd, AdminResetPassword, AdminDetail
+    AdminEdit, AdminAdd, AdminResetPassword, AdminDetail
   },
   data () {
     return {
@@ -212,7 +211,7 @@ export default {
   },
   methods: {
     /**
-    *搜索
+    *搜索 查询列表
     */
     search () {
       this.queryParam.skipPage = 1
@@ -265,8 +264,9 @@ export default {
     },
     /**
      * 禁用/启用管理员
-     *@param {String} id 编号
-     *@param {String} name 名称
+     * @param {String} id 编号
+     * @param {String} name 名称
+     * @param {Number} status 状态
      */
     handleModifyStatus (id, name, status) {
       const _this = this

@@ -10,8 +10,17 @@ const api = {
   resetPassword: '/asf/account/ResetPassword',
   deleteAccount: '/asf/account/delete',
 
+  // 权限
+  getPermissionMenuSimpleAll: '/asf/permission/GetMenuAllList',
+
   // 角色
   getRoleSimpleList: '/asf/role/GetListAll',
+  getRoleDetail: '/asf/role/GetDetails',
+  createRole: '/asf/role/Create',
+  modifyRole: '/asf/role/Modify',
+  deleteRole: '/asf/role/delete',
+  modifyRoleStatus: '/asf/role/ModifyStatus',
+  getRoleList: '/asf/role/getlist',
 
   // 公共API
   getPublicApiList: '/asf/permission/GetOpenApiList',
@@ -25,6 +34,35 @@ const api = {
 
 }
 export default api
+
+// 获取简单角色计划
+export function getRoleSimpleList () {
+  return get(api.getRoleSimpleList)
+}
+// 获取角色详情
+export function getRoleDetail (parameter) {
+  return get(api.getRoleDetail + '/' + parameter)
+}
+// 创建 角色
+export function createRole (parameter) {
+  return post(api.createRole, parameter)
+}
+// 修改 角色
+export function modifyRole (parameter) {
+  return post(api.modifyRole, parameter)
+}
+// 获取 角色集合
+export function getRoleList (parameter) {
+  return post(api.getRoleList, parameter, { errorRedirect: true })
+}
+// 修改 角色状态
+export function modifyRoleStatus (parameter) {
+  return post(api.modifyRoleStatus, parameter)
+}
+// 删除 角色
+export function deleteRole (parameter) {
+  return post(api.deleteRole + '/' + parameter)
+}
 
 // 创建 管理员
 export function createAccount (parameter) {
@@ -55,9 +93,9 @@ export function deleteAccount (parameter) {
   return post(api.deleteAccount + '/' + parameter)
 }
 
-// 获取简单角色计划
-export function getRoleSimpleList () {
-  return get(api.getRoleSimpleList)
+// 获取 导航权限简单信息
+export function getPermissionMenuSimpleAll () {
+  return get(api.getPermissionMenuSimpleAll)
 }
 
 // 公共API列表

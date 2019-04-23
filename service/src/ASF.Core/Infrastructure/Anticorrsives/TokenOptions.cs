@@ -3,7 +3,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ASF.Infrastructure.DependencyInjection
+namespace ASF.Infrastructure.Anticorrsives
 {
     public class TokenOptions
     {

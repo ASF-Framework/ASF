@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 
-namespace ASF.Infrastructure.ModelMapper
+namespace ASF.EntityFramework.ModelMapper
 {
     public class PermissionMapper : Profile
     {
         public PermissionMapper()
         {
-            base.CreateMap<ASF.Infrastructure.Model.PermissionModel, ASF.Domain.Entities.Permission>()
+            base.CreateMap<Model.PermissionModel, ASF.Domain.Entities.Permission>()
                 .ReverseMap();
         }
     }

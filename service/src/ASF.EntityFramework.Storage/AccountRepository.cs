@@ -1,16 +1,15 @@
 ﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
 using ASF.Domain.Values;
-using ASF.Infrastructure.Model;
+using ASF.EntityFramework.Model;
 using ASF.Infrastructure.Repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 
-namespace ASF.Infrastructure.Repository
+namespace ASF.EntityFramework.Repository
 {
     public class AccountRepository : IAccountRepository
     {

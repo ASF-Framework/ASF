@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ASF.Infrastructure\ASF.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\ASF.Infrastructure\ASF.EntityFramework.Storage.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ASF.Infrastructure.Model
+namespace ASF.EntityFramework.Model
 {
     [Table("Permissions")]
     public class PermissionModel
@@ -13,12 +13,12 @@ namespace ASF.Infrastructure.Model
         /// </summary>
         [Key, Required, MaxLength(100)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public string Id { get; private set; }
+        public string Id { get;  set; }
         /// <summary>
         /// 权限代码
         /// </summary>
         [Required]
-        public string Code { get; private set; }
+        public string Code { get;  set; }
         /// <summary>
         /// 上级权限编号
         /// </summary>

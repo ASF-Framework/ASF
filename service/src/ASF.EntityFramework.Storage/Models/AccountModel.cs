@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ASF.Infrastructure.Model
+namespace ASF.EntityFramework.Model
 {
     [Table("Accounts")]
     public class AccountModel
@@ -22,12 +22,12 @@ namespace ASF.Infrastructure.Model
         /// 用户名
         /// </summary>
         [Required, StringLength(32, MinimumLength = 2)]
-        public string Username { get; private set; }
+        public string Username { get;  set; }
         /// <summary>
         /// 登录密码
         /// </summary>
-        [Required, StringLength(20, MinimumLength = 6)]
-        public string Password { get; private set; }
+        [Required, StringLength(32, MinimumLength = 6)]
+        public string Password { get;  set; }
         /// <summary>
         /// 手机号码
         /// </summary>
@@ -49,17 +49,17 @@ namespace ASF.Infrastructure.Model
         /// <summary>
         /// 是否删除
         /// </summary>
-        public bool IsDeleted { get; private set; }
+        public bool IsDeleted { get;  set; }
         /// <summary>
         /// 角色集
         /// </summary>
         [Required]
         [MaxLength(20000)]
-        public string Roles { get; private set; }
+        public string Roles { get;  set; }
         /// <summary>
         /// 创建用户
         /// </summary>
-        public int CreateId { get; private set; }
+        public int CreateId { get;  set; }
         /// <summary>
         /// 创建时间
         /// </summary>
@@ -68,23 +68,23 @@ namespace ASF.Infrastructure.Model
         /// 最后登录IP
         /// </summary>
         [MaxLength(20)]
-        public string LoginIp { get; private set; }
+        public string LoginIp { get;  set; }
         /// <summary>
         /// 最后登录时间
         /// </summary>
-        public DateTime LoginTime { get; private set; } = DateTime.Now;
+        public DateTime LoginTime { get;  set; } = DateTime.Now;
         /// <summary>
         /// Token
         /// </summary>
-        public string Token { get; private set; }
+        public string Token { get;  set; }
         /// <summary>
         /// 刷新令牌
         /// </summary>
-        public string RefreshToken { get; private set; }
+        public string RefreshToken { get;  set; }
         /// <summary>
         /// 过期时间
         /// </summary>
-        public DateTime Expired { get; private set; }
+        public DateTime Expired { get;  set; }
 
         /// <summary>
         /// 删除

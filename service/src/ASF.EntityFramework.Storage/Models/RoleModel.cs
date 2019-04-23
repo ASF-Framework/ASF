@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ASF.Infrastructure.Model
+namespace ASF.EntityFramework.Model
 {
     [Table("Roles")]
     public class RoleModel

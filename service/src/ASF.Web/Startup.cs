@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Ocelot.DependencyInjection;
-using Ocelot.Middleware;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace ASF.Web
@@ -24,20 +23,13 @@ namespace ASF.Web
         public void ConfigureServices(IServiceCollection services)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-  
-            services.AddOcelot()
-                .AddASF(build =>
-                {
-                    string dbConnectionString = "Data Source=AppData/ASF.db";
-                    if (_env.IsDevelopment())
-                    {
-                        build.AddSQLite(dbConnectionString);
-                    }
-                    else
-                    {
-                        build.AddSQLiteCache(dbConnectionString);
-                    }
-                });
+
+            services.AddASF(build =>
+            {
+                string dbConnectionString = "Data Source=AppData/ASF.db";
+                build.AddDbContext(b => b.UseSqlite(dbConnectionString), _env);
+                build.AddAuthenticationJwtBearer();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,10 +40,9 @@ namespace ASF.Web
                 app.UseDeveloperExceptionPage();
             }
             app.UseFileServer();
-            app.UseOcelot(opt =>
-            {
-                opt.AddASF();
-            }).Wait();
+
+            app.ASFInitDatabase();
+            app.UseASF().Wait();
         }
     }
 }

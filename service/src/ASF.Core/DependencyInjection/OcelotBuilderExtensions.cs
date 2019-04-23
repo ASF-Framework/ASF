@@ -12,16 +12,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// 添加ASF
         /// </summary>
         /// <param name="builder"></param>
-        /// <returns></returns>
-        public static IOcelotBuilder AddASF(this IOcelotBuilder builder)
-        {
-            builder.AddASF(null);
-            return builder;
-        }
-        /// <summary>
-        /// 添加ASF
-        /// </summary>
-        /// <param name="builder"></param>
         /// <param name="startupAction">配置ASF函数</param>
         /// <returns></returns>
         public static IOcelotBuilder AddASF(this IOcelotBuilder builder, Action<ASFBuilder> startupAction)
@@ -34,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        public static OcelotPipelineConfiguration AddASF(this OcelotPipelineConfiguration configuration)
+        public static OcelotPipelineConfiguration UseASF(this OcelotPipelineConfiguration configuration)
         {
             configuration.AuthorisationMiddleware = ASFPermissionAuthorizationMiddleware.Invoke;
             configuration.PreErrorResponderMiddleware = ASFRequestLoggerMiddleware.Invoke;

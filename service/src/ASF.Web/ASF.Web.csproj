@@ -10,19 +10,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="AppData\ASF.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ASF.Core\ASF.Core.csproj" />
-    <ProjectReference Include="..\ASF.Infrastructure\ASF.Infrastructure.csproj" />
+    <ProjectReference Include="..\ASF.EntityFramework.Storage\ASF.EntityFramework.Storage.csproj" />
   </ItemGroup>
 
 </Project>

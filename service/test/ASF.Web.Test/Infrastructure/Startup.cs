@@ -39,7 +39,7 @@ namespace ASF.Core.Test.Infrastructure
         {
             app.UseOcelot(opt =>
             {
-                opt.AddASF();
+                opt.UseASF();
             }).Wait();
         }
     }

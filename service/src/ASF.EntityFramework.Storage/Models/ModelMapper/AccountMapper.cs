@@ -1,12 +1,12 @@
 ﻿using ASF.Domain.Entities;
 using ASF.Domain.Values;
-using ASF.Infrastructure.Model;
+using ASF.EntityFramework.Model;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ASF.Infrastructure.ModelMapper
+namespace ASF.EntityFramework.ModelMapper
 {
     public class AccountMapper : Profile
     {

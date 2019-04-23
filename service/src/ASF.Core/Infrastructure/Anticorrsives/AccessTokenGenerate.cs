@@ -1,6 +1,4 @@
 ﻿using ASF.Domain.Values;
-using ASF.Infrastructure.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,9 +8,9 @@ namespace ASF.Infrastructure.Anticorrsives
 {
     public class AccessTokenGenerate : IAccessTokenGenerate
     {
-        private readonly ASFOptions _options;
+        private readonly TokenOptions _options;
 
-        public AccessTokenGenerate(ASFOptions options)
+        public AccessTokenGenerate(TokenOptions options)
         {
             _options = options;
         }
@@ -24,13 +22,12 @@ namespace ASF.Infrastructure.Anticorrsives
         /// <returns></returns>
         public AccessToken Generate(Dictionary<string, string> claims)
         {
-            TokenOptions tokenOpt = _options.JwtToken;
             var now = DateTime.UtcNow;
-            var expires = DateTime.UtcNow.AddMinutes(tokenOpt.Expires);
+            var expires = DateTime.UtcNow.AddMinutes(_options.Expires);
             var claimList = new List<Claim>();
-            var issuer = tokenOpt.Issuer;
-            var audience = tokenOpt.Audience;
-            var signingCredentials = tokenOpt.SigningCredentials;
+            var issuer = _options.Issuer;
+            var audience = _options.Audience;
+            var signingCredentials = _options.SigningCredentials;
 
             foreach (var claim in claims)
             {

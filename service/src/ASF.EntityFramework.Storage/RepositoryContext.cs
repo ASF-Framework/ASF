@@ -1,7 +1,7 @@
-﻿using ASF.Infrastructure.Model;
+﻿using ASF.EntityFramework.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace ASF.Infrastructure.Repository
+namespace ASF.EntityFramework.Repository
 {
     public class RepositoryContext: DbContext
     {
@@ -12,6 +12,11 @@ namespace ASF.Infrastructure.Repository
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
         }
         public DbSet<AccountModel> Accounts { get; set; }
         public DbSet<LogInfoModel> LogInfos { get; set; }

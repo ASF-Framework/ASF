@@ -126,6 +126,18 @@ export default {
           }
         }).catch(() => { this.close() })
       })
+    },
+    /**
+     * 验证确认密码是否一致
+     */
+    compareConfirmPassword  (rule, value, callback) {
+      const form = this.form
+      if (value && value !== form.getFieldValue('password')) {
+        // eslint-disable-next-line standard/no-callback-literal
+        callback('您输入的两个密码不一致!')
+      } else {
+        callback()
+      }
     }
   }
 }

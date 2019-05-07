@@ -63,7 +63,7 @@ namespace ASF.Infrastructure.Repositories
                     || w.Name.Contains(requestDto.Vague));
             }
             if (!string.IsNullOrEmpty(requestDto.ParamId))
-                queryable.Where(w => w.ParentId == requestDto.ParamId);
+                queryable= queryable.Where(w => w.ParentId == requestDto.ParamId);
 
             if (requestDto.Enable == 1)
                 queryable = queryable.Where(w => w.Enable == true);

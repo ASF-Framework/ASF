@@ -49,6 +49,7 @@
 export default {
   name: 'JsonView',
   props: {
+    // eslint-disable-next-line vue/require-default-prop
     json: [Object, Array],
     jsonKey: {
       type: String,

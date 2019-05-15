@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
-import { RoleList, PermissionList, PermissionDetails, AuditList, AdminList } from '@/views/control'
+import { RoleList, PermissionList, PermissionDetails, AuditList, AdminList, PublicApiList } from '@/views/control'
 
 export const asyncRouterMap = [{
   path: '/',
@@ -81,7 +81,14 @@ export const asyncRouterMap = [{
           path: '/control/audit',
           name: 'Audit',
           component: AuditList,
-          meta: { title: '审计管理', keepAlive: true, permission: ['asf_logging'] }
+          meta: { title: '审计管理', keepAlive: true, permission: ['asf_audit'] }
+        },
+        // 公共API管理
+        {
+          path: '/control/publicapi',
+          name: 'PublicApi',
+          component: PublicApiList,
+          meta: { title: '公共 API', keepAlive: true, permission: ['asf_publicapi'] }
         }
       ]
     },
@@ -132,7 +139,7 @@ export const asyncRouterMap = [{
 },
 {
   path: '*',
-  redirect: '/404',
+  redirect: '/exception/404',
   hidden: true
 }]
 
@@ -140,31 +147,47 @@ export const asyncRouterMap = [{
  * 基础路由
  * @type { *[] }
  */
-export const constantRouterMap = [{
-  path: '/user',
-  component: UserLayout,
-  redirect: '/user/login',
-  hidden: true,
-  children: [
+export const constantRouterMap = [
+  {
+    path: '/user',
+    component: UserLayout,
+    redirect: '/user/login',
+    hidden: true,
+    children: [
+      {
+        path: 'login',
+        name: 'login',
+        component: resolve => require(['@/views/user/Login'], resolve)
+      }]
+  },
+  // 异常页面
+  {
+    path: '/exception',
+    component: BasicLayout,
+    children: [{
+      path: '/exception/404',
+      name: '404',
+      component: () => import('@/views/exception/404')
+    }, {
+      path: '/exception/403',
+      name: '403',
+      component: () => import('@/views/exception/403')
+    },
     {
-      path: 'login',
-      name: 'login',
-      component: resolve => require(['@/views/user/Login'], resolve)
+      path: '/exception/500',
+      name: '500',
+      component: () => import('@/views/exception/500')
     }]
-},
-{
-  path: '/test',
-  component: BlankLayout,
-  redirect: '/test/home',
-  children: [
-    {
-      path: 'home',
-      name: 'TestHome',
-      component: () => import('@/views/Home')
-    }
-  ]
-},
-{
-  path: '/404',
-  component: () => import('@/views/404')
-}]
+  },
+  {
+    path: '/test',
+    component: BlankLayout,
+    redirect: '/test/home',
+    children: [
+      {
+        path: 'home',
+        name: 'TestHome',
+        component: () => import('@/views/Home')
+      }
+    ]
+  }]

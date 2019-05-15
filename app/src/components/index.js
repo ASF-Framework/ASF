@@ -20,10 +20,14 @@ import DescriptionList from '@/components/DescriptionList'
 import Tree from '@/components/Tree/Tree'
 import Trend from '@/components/Trend'
 import STable from '@/components/Table'
+import SModal from '@/components/Modal'
 import MultiTab from '@/components/MultiTab'
 import Result from '@/components/Result'
+import TagSelect from '@/components/TagSelect'
 import IconSelector from '@/components/IconSelector'
 import ExceptionPage from '@/components/Exception'
+import StandardFormRow from '@/components/StandardFormRow'
+import ArticleListContent from '@/components/ArticleListContent'
 
 export {
   AvatarList,
@@ -47,8 +51,12 @@ export {
   DescriptionList as DetailList,
   Tree,
   STable,
+  SModal,
   MultiTab,
   Result,
   ExceptionPage,
-  IconSelector
+  IconSelector,
+  TagSelect,
+  StandardFormRow,
+  ArticleListContent
 }

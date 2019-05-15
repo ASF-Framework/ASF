@@ -24,8 +24,6 @@ namespace ASF.EntityFramework.Repository
             return Mapper.Map<Permission>(model);
         }
 
-       
-
         public async Task<Permission> GetAsync(string id)
         {
             var model = await _dbContext.Permissions.FirstOrDefaultAsync(w => w.Id == id);

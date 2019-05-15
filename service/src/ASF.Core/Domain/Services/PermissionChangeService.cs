@@ -61,8 +61,12 @@ namespace ASF.Domain.Services
         /// <param name="description">描述</param>
         /// <param name="enable">是否可用</param>
         /// <param name="sort">菜单排序</param>
+        /// <param name="template">菜单模板</param>
+        /// <param name="icon">菜单图标</param>
+        /// <param name="redirect">菜单重定向</param>
+        /// <param name="hidden">菜单是否隐藏</param>
         /// <returns></returns>
-        public async Task<Result<Permission>> ModifyMenu(string pid, string name, string parentId,string description,bool enable, int sort)
+        public async Task<Result<Permission>> ModifyMenu(string pid, string name, string parentId,string description,bool enable, int sort,string template, string icon,string redirect,bool hidden)
         { 
             //获取权限数据
             var permission = await _permissionRepository.GetAsync(pid);
@@ -97,7 +101,10 @@ namespace ASF.Domain.Services
             permission.Sort = sort;
             permission.Enable = enable;
             permission.Description = description;
-
+            permission.MenuIcon = icon;
+            permission.MenuRedirect = redirect;
+            permission.MenuHidden = hidden;
+            permission.SetMenuTemlate(template);
             //验证权限聚合的数据合法性
             return permission.Valid<Permission>();
         }

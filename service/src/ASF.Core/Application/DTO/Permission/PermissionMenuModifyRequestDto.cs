@@ -26,6 +26,25 @@ namespace ASF.Application.DTO
         [Required, MaxLength(100)]
         public string Name { get; set; }
         /// <summary>
+        /// 图标
+        /// </summary>
+        [MaxLength(20)]
+        public string Icon { get; set; }
+        /// <summary>
+        /// 重定向Url
+        /// </summary>
+        [MaxLength(300)]
+        public string Redirect { get; set; }
+        /// <summary>
+        /// 是否隐藏
+        /// </summary>
+        public bool Hidden { get; set; }
+        /// <summary>
+        /// 模板
+        /// </summary>
+        [Required, MaxLength(100)]
+        public string Template { get; set; }
+        /// <summary>
         /// 排序
         /// </summary>
         public int Sort { get; set; } = 99;

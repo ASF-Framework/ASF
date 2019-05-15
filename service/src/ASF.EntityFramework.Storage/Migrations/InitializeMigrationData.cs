@@ -35,7 +35,7 @@ namespace ASF.EntityFramework.Migrations
                 return;
 
             List<PermissionModel> list = new List<PermissionModel>();
-            list.Add(new PermissionModel() { Id = "asf", Code = "asf", ParentId="", Name = "控制面板", Type = PermissionType.Menu, Description = "控制面板", IsSystem = true, Enable = true });
+            list.Add(new PermissionModel() { Id = "asf", Code = "asf", ParentId="", Name = "控制面板", Type = PermissionType.Menu, Description = "控制面板", IsSystem = true, Enable = true,ApiTemplate= "PageView",MenuIcon= "table" });
             list.Add(new PermissionModel() { Id = "asf_account", Code = "account", ParentId = "asf", Name = "管理员列表", Description = "管理员列表", Type = PermissionType.Menu, IsSystem = true, Enable = true });
             list.Add(new PermissionModel() { Id = "asf_account_query", Code = "query", ParentId = "asf_account", Name = "查看", Description = "查看管理员账户列表", ApiTemplate = "/api/asf/account/getlist", Type = PermissionType.Action, IsSystem = true, Enable = true });
             list.Add(new PermissionModel() { Id = "asf_account_create", Code = "create", ParentId = "asf_account", Name = "新增", Description = "创建管理账户", ApiTemplate = "/api/asf/account/create", Type = PermissionType.Action, IsLogger = true, IsSystem = true, Enable = true });

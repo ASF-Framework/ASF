@@ -23,10 +23,10 @@ const api = {
   getRoleList: '/asf/role/getlist',
 
   // 公共API
-  getPublicApiList: '/asf/permission/GetOpenApiList',
-  createPublicApi: '/asf/permission/CreateOpenApi',
-  modifyPublicApi: '/asf/permission/ModifyOpenApi',
-  deletePublicApi: '/asf/permission/Delete',
+  getPublicApiList: '/asf/permission/openapi/GetList',
+  createPublicApi: '/asf/permission/openapi/Create',
+  modifyPublicApi: '/asf/permission/openapi/Modify',
+  deletePublicApi: '/asf/permission/openapi/Delete',
 
   // 审计
   getAuditList: '/asf/Logger/GetList',

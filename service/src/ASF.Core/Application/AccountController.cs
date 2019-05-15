@@ -148,7 +148,7 @@ namespace ASF.Application
 
         }
         /// <summary>
-        /// 登录获取用户信息
+        /// 登录获取用户信息和权限信息
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -166,22 +166,7 @@ namespace ASF.Application
                 return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
 
             //组装响应数据
-            result.Permissions
-                .Where(f => f.IsNormal() && f.Type == PermissionType.Menu)
-                .ToList()
-                .ForEach(p =>
-                {
-                    var permissionInfo = new AccountInfoByLoginResponseDto.PermissionInfo(p);
-                    result.Permissions
-                        .Where(f => f.Type == PermissionType.Action && f.IsNormal() && f.ParentId == p.Id)
-                        .ToList()
-                        .ForEach(a =>
-                        {
-                            permissionInfo.Actions.Add(new AccountInfoByLoginResponseDto.ActionInfo(a));
-                        });
-                    responseDto.Role.Permissions.Add(permissionInfo);
-                });
-
+            responseDto.SetMenus(result.Permissions);
             return Result<AccountInfoByLoginResponseDto>.ReSuccess(responseDto);
         }
         /// <summary>

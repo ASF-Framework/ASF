@@ -60,6 +60,21 @@ namespace ASF.EntityFramework.Model
         /// 是否启用
         /// </summary>
         public bool Enable { get; set; }
+
+        /// <summary>
+        /// 菜单图标
+        /// </summary>
+        [MaxLength(20)]
+        public string MenuIcon { get; set; }
+        /// <summary>
+        /// 菜单重定向Url
+        /// </summary>
+        [MaxLength(300)]
+        public string MenuRedirect { get; set; }
+        /// <summary>
+        /// 菜单是否隐藏
+        /// </summary>
+        public bool MenuHidden { get; set; }
         /// <summary>
         /// 添加时间
         /// </summary>

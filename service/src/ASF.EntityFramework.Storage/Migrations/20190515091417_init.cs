@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ASF.EntityFramework.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -73,6 +73,9 @@ namespace ASF.EntityFramework.Migrations
                     Description = table.Column<string>(maxLength: 200, nullable: true),
                     Sort = table.Column<int>(nullable: false),
                     Enable = table.Column<bool>(nullable: false),
+                    MenuIcon = table.Column<string>(maxLength: 20, nullable: true),
+                    MenuRedirect = table.Column<string>(maxLength: 300, nullable: true),
+                    MenuHidden = table.Column<bool>(nullable: false),
                     CreateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>

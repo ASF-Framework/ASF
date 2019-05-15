@@ -16,6 +16,25 @@ namespace ASF.Application.DTO
         [Required, MaxLength(30)]
         public string Code { get;  set; }
         /// <summary>
+        /// 图标
+        /// </summary>
+        [MaxLength(20)]
+        public string Icon { get; set; }
+        /// <summary>
+        /// 重定向Url
+        /// </summary>
+        [MaxLength(300)]
+        public string Redirect { get; set; }
+        /// <summary>
+        /// 是否隐藏
+        /// </summary>
+        public bool Hidden { get; set; }
+        /// <summary>
+        /// 模板
+        /// </summary>
+        [Required, MaxLength(100)]
+        public string Template { get; set; }
+        /// <summary>
         /// 上级权限编号
         /// </summary>
         [MaxLength(100)]
@@ -38,6 +57,9 @@ namespace ASF.Application.DTO
         {
             var p = new Permission(this.Code, this.ParentId, this.Name, PermissionType.Menu, this.Description);
             p.Sort = this.Sort;
+            p.MenuHidden = this.Hidden;
+            p.MenuIcon = this.Icon;
+            p.SetMenuTemlate(this.Template);
             return p;
         }
         /// <summary>

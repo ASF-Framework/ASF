@@ -28,6 +28,22 @@ namespace ASF.Application.DTO
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime CreateTime { get; set; }
         /// <summary>
+        /// 图标
+        /// </summary>
+        public string Icon { get; set; }
+        /// <summary>
+        /// 重定向Url
+        /// </summary>
+        public string Redirect { get; set; }
+        /// <summary>
+        /// 是否隐藏
+        /// </summary>
+        public bool Hidden { get; set; }
+        /// <summary>
+        /// 模板
+        /// </summary>
+        public string Template { get; set; }
+        /// <summary>
         /// 描述
         /// </summary>
         public string Description { get; set; }

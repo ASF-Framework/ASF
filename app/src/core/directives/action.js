@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import store from '@/store'
 
 /**
  * Action 权限指令
@@ -17,17 +16,12 @@ import store from '@/store'
 const action = Vue.directive('action', {
   inserted: function (el, binding, vnode) {
     const actionName = binding.arg
-    const roles = store.getters.roles
-    const elVal = vnode.context.$route.meta.permission
-    const permissionId = elVal instanceof String && [elVal] || elVal
-    roles.permissions.forEach(p => {
-      if (!permissionId.includes(p.permissionId)) {
-        return
-      }
-      if (p.actionList && !p.actionList.includes(actionName)) {
-        el.parentNode && el.parentNode.removeChild(el) || (el.style.display = 'none')
-      }
-    })
+    const elVal = vnode.context.$route.meta.actions
+    const actions = elVal instanceof String && [elVal] || elVal
+    console.log(actions, actionName)
+    if (actions && !actions.includes(actionName)) {
+      el.parentNode && el.parentNode.removeChild(el) || (el.style.display = 'none')
+    }
   }
 })
 

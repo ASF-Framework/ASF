@@ -45,10 +45,11 @@ namespace ASF.Application.DTO
         private List<PermissionInfo> FilterSubMenus(string parentId)
         {
             return this.Permissions.Where(f => f.IsNormal() && f.Type == PermissionType.Menu && f.ParentId == parentId)
+               .OrderBy(f => f.Sort)
                .Select(p =>
                {
                    var permissionInfo = new AccountInfoByLoginResponseDto.PermissionInfo(p);
-                   permissionInfo.SubMenus = this.FilterSubMenus(p.Id);
+                   permissionInfo.Children = this.FilterSubMenus(p.Id);
                    //查询菜单下的功能
                    this.Permissions.Where(f => f.Type == PermissionType.Action && f.IsNormal() && f.ParentId == p.Id)
                       .ToList()
@@ -63,24 +64,20 @@ namespace ASF.Application.DTO
         {
             public PermissionInfo(Permission permission)
             {
-                this.Key = permission.Id;
-                this.Name = permission.Name;
-                this.Template = permission.ApiTemplate;
+                this.Name = permission.Id;
+                this.Title = permission.Name;
                 this.Redirect = permission.MenuRedirect;
                 this.Icon = permission.MenuIcon;
+                this.Hidden = permission.MenuHidden;
             }
             /// <summary>
-            /// 权限ID
-            /// </summary>
-            public string Key { get; set; }
-            /// <summary>
-            /// 权限名称
+            /// 菜单名称
             /// </summary>
             public string Name { get; set; }
             /// <summary>
-            /// 页面模板
+            /// 菜单标题
             /// </summary>
-            public string Template { get; set; }
+            public string Title { get; set; }
             /// <summary>
             /// 菜单重定向
             /// </summary>
@@ -90,9 +87,13 @@ namespace ASF.Application.DTO
             /// </summary>
             public string Icon { get; set; }
             /// <summary>
+            /// 是否隐藏
+            /// </summary>
+            public bool Hidden { get; set; }
+            /// <summary>
             /// 可访问的子菜单集合
             /// </summary>
-            public List<PermissionInfo> SubMenus { get; set; } = new List<PermissionInfo>();
+            public List<PermissionInfo> Children { get; set; } = new List<PermissionInfo>();
             /// <summary>
             /// 操作集合
             /// </summary>

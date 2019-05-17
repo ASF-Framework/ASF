@@ -74,8 +74,7 @@ export default {
     },
     updateMenu () {
       const routes = this.$route.matched.concat()
-
-      if (routes.length >= 4 && this.$route.meta.hidden) {
+      if (routes.length >= 4 && this.$route.hidden) {
         routes.pop()
         this.selectedKeys = [routes[2].path]
       } else {

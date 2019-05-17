@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
-import router from '@/router'
 import { VueAxios } from './axios'
 import notification from 'ant-design-vue/es/notification'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
@@ -54,7 +53,7 @@ const err = (error) => {
         break
     }
     if (errorRedirect && redirectPath !== '') {
-      router.push({ path: redirectPath })
+      this.$router.push({ path: redirectPath })
     }
   } else if (error.request) {
     notification.error({ message: '处理失败', description: error.toString() })

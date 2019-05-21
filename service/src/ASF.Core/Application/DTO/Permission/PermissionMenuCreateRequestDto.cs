@@ -30,15 +30,10 @@ namespace ASF.Application.DTO
         /// </summary>
         public bool Hidden { get; set; }
         /// <summary>
-        /// 模板
-        /// </summary>
-        [Required, MaxLength(100)]
-        public string Template { get; set; }
-        /// <summary>
         /// 上级权限编号
         /// </summary>
         [MaxLength(100)]
-        public string ParentId { get; set; }
+        public string ParentId { get; set; } = "";
         /// <summary>
         /// 名称
         /// </summary>
@@ -59,7 +54,7 @@ namespace ASF.Application.DTO
             p.Sort = this.Sort;
             p.MenuHidden = this.Hidden;
             p.MenuIcon = this.Icon;
-            p.SetMenuTemlate(this.Template);
+            p.MenuRedirect = this.Redirect;
             return p;
         }
         /// <summary>

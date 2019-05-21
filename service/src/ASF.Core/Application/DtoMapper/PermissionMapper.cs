@@ -12,8 +12,7 @@ namespace ASF.Application.DtoMapper
             base.CreateMap<Permission, PermissionMenuInfoDetailsResponseDto>()
                 .ForPath(f => f.Icon, p => p.MapFrom(s => s.MenuIcon))
                 .ForPath(f => f.Hidden, p => p.MapFrom(s => s.MenuHidden))
-                .ForPath(f => f.Redirect, p => p.MapFrom(s => s.MenuRedirect))
-                .ForPath(f => f.Template, p => p.MapFrom(s => s.ApiTemplate));
+                .ForPath(f => f.Redirect, p => p.MapFrom(s => s.MenuRedirect));
             base.CreateMap<Permission, PermissionMenuInfoBaseResponseDto>();
             base.CreateMap<Permission, PermissionOpenApiInfoDetailsResponseDto>();
 

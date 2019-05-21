@@ -37,10 +37,6 @@ namespace ASF.Application.DTO
         [MaxLength(200)]
         public string Description { get; set; }
         /// <summary>
-        /// 排序
-        /// </summary>
-        public int Sort { get; set; } = 99;
-        /// <summary>
         /// 是否启用
         /// </summary>
         public bool Enable { get; set; }

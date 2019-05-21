@@ -18,7 +18,6 @@ const action = Vue.directive('action', {
     const actionName = binding.arg
     const elVal = vnode.context.$route.meta.actions
     const actions = elVal instanceof String && [elVal] || elVal
-    console.log(actions, actionName)
     if (actions && !actions.includes(actionName)) {
       el.parentNode && el.parentNode.removeChild(el) || (el.style.display = 'none')
     }

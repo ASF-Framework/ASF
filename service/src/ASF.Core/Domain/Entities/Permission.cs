@@ -126,14 +126,7 @@ namespace ASF.Domain.Entities
             this.ApiTemplate = apiTemplate.ToLower();
         }
 
-        /// <summary>
-        /// 设置菜单模板
-        /// </summary>
-        /// <param name="template"></param>
-        public void SetMenuTemlate(string template)
-        {
-            this.ApiTemplate = template;
-        }
+       
 
         /// <summary>
         /// 匹配Api模板

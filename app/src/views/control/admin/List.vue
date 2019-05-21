@@ -4,10 +4,7 @@
     <div class="table-page-search-wrapper">
       <a-row type="flex" justify="space-around" :gutter="48">
         <a-col :md="18" :sm="24">
-          <a-tooltip>
-            <template slot="title">新建管理员</template>
-            <a-button v-action:create type="primary" @click="$refs.add.show()" icon="plus" class="right10"></a-button>
-          </a-tooltip>
+          <a-button v-action:create type="primary" @click="$refs.add.show()" icon="plus" class="right10">新增</a-button>
           <a-radio-group :defaultValue="0" v-model="queryParam.isDeleted" buttonStyle="solid" class="right10" @change="search">
             <a-radio-button :value="0">正常</a-radio-button>
             <a-radio-button :value="1">已删除</a-radio-button>

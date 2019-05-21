@@ -10,8 +10,22 @@ const api = {
   resetPassword: '/asf/account/ResetPassword',
   deleteAccount: '/asf/account/delete',
 
-  // 权限
-  getPermissionMenuSimpleAll: '/asf/permission/GetMenuAllList',
+  // 菜单
+  getMenuSimpleAll: '/asf/permission/menu/GetAllList',
+  getMenuDetails: '/asf/Permission/menu/GetDetails',
+  getMenuList: '/asf/permission/menu/GetList',
+  createMenu: '/asf/permission/menu/Create',
+  modifyMenuSort: '/asf/permission/menu/ModifySort',
+  modifyMenu: '/asf/permission/menu/Modify',
+  deleteMenu: '/asf/permission/menu/Delete',
+
+  // 功能
+  getActionList: '/asf/Permission/action/GetList',
+  getActionDetails: '/asf/Permission/action/GetDetails',
+  createAction: '/asf/Permission/action/Create',
+  modifyAction: '/asf/Permission/action/Modify',
+  modifyActionSort: '/asf/permission/action/ModifySort',
+  deleteAction: '/asf/permission/action/Delete',
 
   // 角色
   getRoleSimpleList: '/asf/role/GetListAll',
@@ -35,91 +49,113 @@ const api = {
 }
 export default api
 
-// 获取简单角色计划
+// 操作功能
+export function getActionList (parameter) {
+  return post(api.getActionList, parameter, { errorRedirect: true })
+}
+export function getActionDetails (parameter) {
+  return get(api.getActionDetails + '/' + parameter)
+}
+export function createAction (parameter) {
+  return post(api.createAction, parameter)
+}
+export function modifyAction (parameter) {
+  return post(api.modifyAction, parameter)
+}
+export function modifyActionSort (parameter) {
+  return post(api.modifyActionSort, parameter)
+}
+export function deleteMenu (parameter) {
+  return post(api.deleteMenu + '/' + parameter)
+}
+
+// 菜单
+export function getMenuList (parameter) {
+  return post(api.getMenuList, parameter, { errorRedirect: true })
+}
+export function getMenuDetails (parameter) {
+  return get(api.getMenuDetails + '/' + parameter)
+}
+export function getMenuSimpleAll () {
+  return get(api.getMenuSimpleAll)
+}
+export function modifyMenuSort (parameter) {
+  return post(api.modifyMenuSort, parameter)
+}
+export function createMenu (parameter) {
+  return post(api.createMenu, parameter)
+}
+export function modifyMenu (parameter) {
+  return post(api.modifyMenu, parameter)
+}
+export function deleteAction (parameter) {
+  return post(api.deleteAction + '/' + parameter)
+}
+
+// 角色
 export function getRoleSimpleList () {
   return get(api.getRoleSimpleList)
 }
-// 获取角色详情
 export function getRoleDetail (parameter) {
   return get(api.getRoleDetail + '/' + parameter)
 }
-// 创建 角色
 export function createRole (parameter) {
   return post(api.createRole, parameter)
 }
-// 修改 角色
 export function modifyRole (parameter) {
   return post(api.modifyRole, parameter)
 }
-// 获取 角色集合
 export function getRoleList (parameter) {
   return post(api.getRoleList, parameter, { errorRedirect: true })
 }
-// 修改 角色状态
 export function modifyRoleStatus (parameter) {
   return post(api.modifyRoleStatus, parameter)
 }
-// 删除 角色
 export function deleteRole (parameter) {
   return post(api.deleteRole + '/' + parameter)
 }
 
-// 创建 管理员
+// 管理员
 export function createAccount (parameter) {
   return post(api.createAccount, parameter)
 }
-// 修改 管理员
 export function modifyAccount (parameter) {
   return post(api.modifyAccount, parameter)
 }
-// 重置 管理员密码
 export function resetPassword (parameter) {
   return post(api.resetPassword, parameter)
 }
-// 获取 管理员详情
 export function getAccountDetail (parameter) {
   return get(api.getAccountDetail + '/' + parameter)
 }
-// 获取 管理员集合
 export function getAccountList (parameter) {
   return post(api.getAccountList, parameter, { errorRedirect: true })
 }
-// 修改 管理员状态
 export function modifyStatusAccount (parameter) {
   return post(api.modifyStatusAccount, parameter)
 }
-// 删除 管理员
 export function deleteAccount (parameter) {
   return post(api.deleteAccount + '/' + parameter)
 }
 
-// 获取 导航权限简单信息
-export function getPermissionMenuSimpleAll () {
-  return get(api.getPermissionMenuSimpleAll)
-}
-
-// 公共API列表
+// 公共API
 export function getPublicApiList (parameter) {
   return post(api.getPublicApiList, parameter, { errorRedirect: true })
 }
-// 创建 公共API
 export function createPublicApi (parameter) {
   return post(api.createPublicApi, parameter)
 }
-// 删除 公共API
 export function deletePublicApi (parameter) {
   return post(api.deletePublicApi + `/${parameter}`)
 }
-// 修改 公共API
 export function modifyPublicApi (parameter) {
   return post(api.modifyPublicApi, parameter)
 }
 
-// 获取审计集合
+// 审计
 export function getAuditList (parameter) {
   return post(api.getAuditList, parameter, { errorRedirect: true })
 }
-// 根据日期删除日志
 export function deleteAudit (parameter) {
   return post(api.deleteAudit, parameter)
 }

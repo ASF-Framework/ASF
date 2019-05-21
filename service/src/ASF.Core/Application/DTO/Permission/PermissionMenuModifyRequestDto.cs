@@ -19,7 +19,7 @@ namespace ASF.Application.DTO
         /// 上级权限编号
         /// </summary>
         [MaxLength(100)]
-        public string ParentId { get; set; }
+        public string ParentId { get; set; } = "";
         /// <summary>
         /// 名称
         /// </summary>
@@ -39,15 +39,7 @@ namespace ASF.Application.DTO
         /// 是否隐藏
         /// </summary>
         public bool Hidden { get; set; }
-        /// <summary>
-        /// 模板
-        /// </summary>
-        [Required, MaxLength(100)]
-        public string Template { get; set; }
-        /// <summary>
-        /// 排序
-        /// </summary>
-        public int Sort { get; set; } = 99;
+
         /// <summary>
         /// 描述
         /// </summary>

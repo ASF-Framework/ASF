@@ -1,8 +1,8 @@
 import RoleList from './role/List'
 import AuditList from './audit/List'
-import PermissionList from './permission/PermissionList'
-import PermissionDetails from './permission/PermissionDetails'
-import AdminList from './administrator/List'
+import MenuList from './menu/List'
+import MenuDetails from './menu/Details'
+import AdminList from './admin/List'
 import PublicApiList from './publicapi/List'
 
-export { RoleList, PermissionList, PermissionDetails, AuditList, AdminList, PublicApiList }
+export { RoleList, AuditList, AdminList, PublicApiList, MenuList, MenuDetails }

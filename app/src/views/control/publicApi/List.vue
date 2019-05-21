@@ -4,10 +4,7 @@
     <div class="table-page-search-wrapper">
       <a-row type="flex" justify="space-around" :gutter="48">
         <a-col :md="18" :sm="24">
-          <a-tooltip>
-            <template slot="title">新增公共 API</template>
-            <a-button v-action:create type="primary" @click="$refs.add.show()" icon="plus" class="right10"></a-button>
-          </a-tooltip>
+          <a-button v-action:create type="primary" @click="$refs.add.show()" icon="plus" class="right10">新增</a-button>
           <a-select placeholder="请选择" v-model="queryParam.enable" style="width:100px;" @change="loadDataing">
             <a-select-option :value="-1">API 状态</a-select-option>
             <a-select-option :value="1">启用</a-select-option>
@@ -30,8 +27,10 @@
     <!--列表-->
     <a-table
       ref="table"
-      :pagination="false"
+      size="middle"
       rowKey="id"
+      :rowSelection="{}"
+      :pagination="false"
       :loading="table.loading"
       :columns="table.columns"
       :dataSource="table.dataSource">

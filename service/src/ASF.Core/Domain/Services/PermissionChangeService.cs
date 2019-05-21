@@ -25,9 +25,8 @@ namespace ASF.Domain.Services
         /// <param name="enable">是否可用</param>
         /// <param name="apiTemplate">api 地址</param>
         /// <param name="isLogger">是否记录日志</param>
-        /// <param name="sort">菜单排序</param>
         /// <returns></returns>
-        public async Task<Result<Permission>> ModifyAction (string pid, string name, string description, bool enable, string apiTemplate, bool isLogger, int sort)
+        public async Task<Result<Permission>> ModifyAction (string pid, string name, string description, bool enable, string apiTemplate, bool isLogger)
         {
             //获取权限数据
             var permission = await _permissionRepository.GetAsync(pid);
@@ -47,7 +46,6 @@ namespace ASF.Domain.Services
             permission.Enable = enable;
             permission.Description = description;
             permission.SetApiTemplate(apiTemplate);
-            permission.Sort = sort;
 
             //验证权限聚合的数据合法性
             return permission.Valid<Permission>();
@@ -60,13 +58,11 @@ namespace ASF.Domain.Services
         /// <param name="parentId">分类</param>
         /// <param name="description">描述</param>
         /// <param name="enable">是否可用</param>
-        /// <param name="sort">菜单排序</param>
-        /// <param name="template">菜单模板</param>
         /// <param name="icon">菜单图标</param>
         /// <param name="redirect">菜单重定向</param>
         /// <param name="hidden">菜单是否隐藏</param>
         /// <returns></returns>
-        public async Task<Result<Permission>> ModifyMenu(string pid, string name, string parentId,string description,bool enable, int sort,string template, string icon,string redirect,bool hidden)
+        public async Task<Result<Permission>> ModifyMenu(string pid, string name, string parentId,string description,bool enable, string icon,string redirect,bool hidden)
         { 
             //获取权限数据
             var permission = await _permissionRepository.GetAsync(pid);
@@ -82,10 +78,10 @@ namespace ASF.Domain.Services
             }
 
             //如果配置上级权限，需要验证上级权限必须为菜单权限
-            if (permission.ParentId != parentId)
+            if (permission.ParentId != parentId && !string.IsNullOrEmpty(parentId) && permission.Id!= parentId)
             {
                 //判断上级权限,上级权限不能为菜单权限
-                var paremt = await this._permissionRepository.GetAsync(permission.ParentId);
+                var paremt = await this._permissionRepository.GetAsync(parentId);
                 if (paremt == null)
                 {
                     return Result<Permission>.ReFailure(ResultCodes.PermissionNotExist);
@@ -98,13 +94,11 @@ namespace ASF.Domain.Services
 
             permission.Name = name;
             permission.ParentId = parentId;
-            permission.Sort = sort;
             permission.Enable = enable;
             permission.Description = description;
             permission.MenuIcon = icon;
             permission.MenuRedirect = redirect;
             permission.MenuHidden = hidden;
-            permission.SetMenuTemlate(template);
             //验证权限聚合的数据合法性
             return permission.Valid<Permission>();
         }

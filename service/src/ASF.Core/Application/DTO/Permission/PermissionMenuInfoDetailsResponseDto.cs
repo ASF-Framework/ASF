@@ -18,6 +18,11 @@ namespace ASF.Application.DTO
         /// 排序
         /// </summary>
         public int Sort { get; set; }
+
+        /// <summary>
+        /// 菜单标识
+        /// </summary>
+        public string Code { get; set; }
         /// <summary>
         /// 是否启用
         /// </summary>
@@ -39,10 +44,6 @@ namespace ASF.Application.DTO
         /// 是否隐藏
         /// </summary>
         public bool Hidden { get; set; }
-        /// <summary>
-        /// 模板
-        /// </summary>
-        public string Template { get; set; }
         /// <summary>
         /// 描述
         /// </summary>

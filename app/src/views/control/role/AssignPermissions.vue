@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { getPermissionMenuSimpleAll } from '@/api/control'
+import { getMenuSimpleAll } from '@/api/control'
 export default {
   data () {
     return {
@@ -91,11 +91,11 @@ export default {
      */
     loadData () {
       this.loading = true
-      getPermissionMenuSimpleAll().then(res => {
+      getMenuSimpleAll().then(res => {
         this.loading = false
         if (res.status === 200) {
           this.$nextTick(() => {
-            this.tables.dataSource = this.buildDataSource(res.result)
+            this.tables.dataSource = this.buildTreeData(res.result)
           })
         } else {
           this.$notification.error({ message: `获取需要分配权限失败`, description: res.message })
@@ -148,12 +148,11 @@ export default {
      * @param {Array} data 数据
      * @param {String} parentId 父级编号
      */
-    buildDataSource (data, parentId = '') {
-      const newData = []
-      data.forEach((value, index, arr) => {
-        if (value.parentId === null) { value.parentId = '' }
+    buildTreeData (data, parentId = '') {
+      return data.map(value => {
+        value.parentId = value.parentId || ''
         if (value.parentId === parentId) {
-          const children = this.buildDataSource(arr, value.id)
+          const children = this.buildTreeData(data, value.id)
 
           value.key = value.id
           value.children = children.length > 0 ? children : null
@@ -171,12 +170,9 @@ export default {
           if (!value.checkAll) {
             value.checkboxIndeterminate = value.selectOption.length > 0
           }
-          newData.push(value)
           this.tables.expandedRowKeys.push(value.key)
         }
       })
-
-      return newData
     }
   }
 }

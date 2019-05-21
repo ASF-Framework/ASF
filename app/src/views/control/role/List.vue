@@ -4,10 +4,7 @@
     <div class="table-page-search-wrapper">
       <a-row type="flex" justify="space-around" :gutter="48">
         <a-col :md="18" :sm="24">
-          <a-tooltip>
-            <template slot="title">新增角色</template>
-            <a-button type="primary" icon="plus" @click="$refs.add.show()" style="margin-right:10px" v-action:create></a-button>
-          </a-tooltip>
+          <a-button type="primary" icon="plus" @click="$refs.add.show()" style="margin-right:10px" v-action:create>新增</a-button>
           <a-radio-group defaultValue="-1" v-model="queryParam.Enable" buttonStyle="solid" @change="search()">
             <a-radio-button value="-1">全部</a-radio-button>
             <a-radio-button value="1">启用</a-radio-button>

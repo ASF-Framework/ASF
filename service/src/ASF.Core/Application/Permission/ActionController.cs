@@ -68,7 +68,7 @@ namespace ASF.Application
 
             //修改功能权限
             var modifyResult = await this._serviceProvider.GetRequiredService<PermissionChangeService>()
-                .ModifyAction(dto.Id, dto.Name, dto.Description, dto.Enable, dto.ApiTemplate, dto.IsLogger, dto.Sort);
+                .ModifyAction(dto.Id, dto.Name, dto.Description, dto.Enable, dto.ApiTemplate, dto.IsLogger);
             if (!modifyResult.Success)
                 return modifyResult;
 

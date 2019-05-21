@@ -73,14 +73,14 @@ export default {
       }
     },
     updateMenu () {
+      console.log(this.$route)
       const routes = this.$route.matched.concat()
-      if (routes.length >= 4 && this.$route.hidden) {
+      if (routes.length >= 4 && this.$route.meta.hidden) {
         routes.pop()
         this.selectedKeys = [routes[2].path]
       } else {
         this.selectedKeys = [routes.pop().path]
       }
-
       const openKeys = []
       if (this.mode === 'inline') {
         routes.forEach(item => {
@@ -152,7 +152,6 @@ export default {
       },
       openChange: this.onOpenChange
     }
-
     const menuTree = menu.map(item => {
       if (item.hidden) {
         return null

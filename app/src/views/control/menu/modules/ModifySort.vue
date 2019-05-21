@@ -3,7 +3,7 @@
     <div class="editable-cell-text-wrapper">
       <a-input-number
         size="small"
-        :min="1"
+        :min="0"
         :max="1000"
         v-model="value"
         @blur="onChange"
@@ -13,39 +13,48 @@
 </template>
 
 <script>
-import { modifySort } from '@/api/manage'
+import { modifyActionSort, modifyMenuSort } from '@/api/control'
 export default {
   props: {
     text: { type: Number, default: 0 },
-    id: { type: String, default: '' }
+    id: { type: String, default: '' },
+    type: { type: String, required: true }
   },
   data () {
     return {
       value: this.text,
-      // eslint-disable-next-line vue/no-dupe-keys
       pid: this.id
     }
   },
   methods: {
     onChange (e) {
-      if (e.target.value === '') {
-        e.target.value = 0
+      if (this.text === this.value) {
         return
       }
-      this.value = e.target.value
+      if (e.target.value === '') {
+        this.value = this.text
+        return
+      }
+      this.value = this.value
       const parameter = {
         id: this.pid,
         sort: this.value
       }
-      modifySort(parameter).then(res => {
-        if (res.status === 200) {
-          this.modifyComplete()
-        }
-      })
-    },
-    modifyComplete () {
-      this.$emit('modifyComplete', this.pid, this.value)
+      if (this.type === 'menu') {
+        modifyMenuSort(parameter).then(res => {
+          if (res.status === 200) {
+            this.$emit('complete', this.pid, this.value)
+          }
+        })
+      } else {
+        modifyActionSort(parameter).then(res => {
+          if (res.status === 200) {
+            this.$emit('complete', this.pid, this.value)
+          }
+        })
+      }
     }
+
   }
 }
 </script>

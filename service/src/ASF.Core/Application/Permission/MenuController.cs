@@ -66,7 +66,8 @@ namespace ASF.Application
                 return result;
 
             //修改功能权限
-            var modifyResult = await this._serviceProvider.GetRequiredService<PermissionChangeService>().ModifyMenu(dto.Id, dto.Name, dto.ParentId, dto.Description, dto.Enable, dto.Sort,dto.Template,dto.Icon,dto.Redirect,dto.Hidden);
+            var modifyResult = await this._serviceProvider.GetRequiredService<PermissionChangeService>()
+                .ModifyMenu(dto.Id, dto.Name, dto.ParentId, dto.Description, dto.Enable, dto.Icon,dto.Redirect,dto.Hidden);
             if (!modifyResult.Success)
                 return modifyResult;
 
@@ -96,9 +97,10 @@ namespace ASF.Application
             var menuList = permissionList.Where(f => f.Type == PermissionType.Menu).OrderBy(f => f.Sort).ToList();
             var menus = Mapper.Map<List<PermissionMenuInfoDetailsResponseDto>>(menuList);
             //筛选菜单对应的功能权限
+            var actionList= await this._permissionRepository.GetList();
             menus.ForEach(m =>
             {
-                m.Actions = permissionList
+                m.Actions = actionList
                      .Where(f => f.Type == PermissionType.Action && f.ParentId == m.Id)
                      .OrderBy(f => f.Sort).ToList()
                      .ToDictionary(k => k.Id, v => v.Name);

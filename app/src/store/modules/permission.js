@@ -23,10 +23,10 @@ const permission = {
       return new Promise(resolve => {
         menuMap = menuMap || asyncRouterMap.find(r => r.path === '/').children
         const menus = BuildMenu(menuMap, asyncRouterMap)
+
         commit('SET_MENUS', menus)
         const dynamicRouters = FilterAsyncRouter(asyncRouterMap)
         commit('SET_ROUTERS', dynamicRouters)
-        console.log(dynamicRouters)
         resolve()
       })
     }
@@ -56,16 +56,17 @@ function BuildMenu (menuMap, routerMap) {
       router.meta = []
       router.meta.title = menu.meta.title
       router.meta.actions = menu.actions || menu.permission
+      router.meta.hidden = menu.hidden
     } else {
       // 没有找到前端路由，使用菜单的重定向
       if (menu.redirect) {
         menu.meta.target = '_blank'
         menu.path = menu.redirect
       } else {
-        menu.hidden = true
+        // 如果没有子菜单就隐藏
+        menu.hidden = !(menu.children && menu.children.length)
       }
     }
-
     // 组装子菜单
     if (menu.children && menu.children.length) {
       // 检查子菜单是否全部隐藏
@@ -76,7 +77,6 @@ function BuildMenu (menuMap, routerMap) {
     } else {
       menu.children = null
     }
-
     return menu
   })
 }

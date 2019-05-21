@@ -1,7 +1,11 @@
 // eslint-disable-next-line
 import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
-import { RoleList, PermissionList, PermissionDetails, AuditList, AdminList, PublicApiList } from '@/views/control'
+import { RoleList, AuditList, AdminList, PublicApiList, MenuList, MenuDetails } from '@/views/control'
 
+/**
+ * 动态路由
+ * @type { Array }
+ */
 export const asyncRouterMap = [{
   path: '/',
   name: 'index',
@@ -30,12 +34,12 @@ export const asyncRouterMap = [{
     {
       path: '/control',
       name: 'asf',
-      redirect: '/control/administrator',
+      redirect: '/control/admin',
       component: PageView,
       children: [
         // 管理员列表
         {
-          path: '/control/administrator',
+          path: '/control/admin',
           name: 'asf_account',
           component: AdminList
         },
@@ -45,25 +49,22 @@ export const asyncRouterMap = [{
           name: 'asf_role',
           component: RoleList
         },
-        // 权限列表
+        // 菜单
         {
-          path: '/control/permission',
+          path: '/control/menu',
           name: 'asf_permission',
-          redirect: '/control/permission/list',
           component: RouteView,
-          hideChildrenInMenu: true,
+          redirect: '/control/menu/list',
           children: [
             {
-              path: '/control/permission/details',
+              path: '/control/menu/details',
               name: 'asf_permission_details',
-              hidden: true,
-              component: PermissionDetails
+              component: MenuDetails
             },
             {
-              path: '/control/permission/list',
+              path: '/control/menu/list',
               name: 'asf_permission_list',
-              hidden: true,
-              component: PermissionList
+              component: MenuList
             }
           ]
         },
@@ -82,11 +83,15 @@ export const asyncRouterMap = [{
       ]
     }
   ]
+},
+{
+  path: '*',
+  redirect: '/404'
 }]
 
 /**
  * 基础路由
- * @type { *[] }
+ * @type { Array }
  */
 export const constantRouterMap = [
   {
@@ -100,10 +105,6 @@ export const constantRouterMap = [
         name: 'login',
         component: resolve => require(['@/views/user/Login'], resolve)
       }]
-  },
-  {
-    path: '*',
-    redirect: '/404'
   },
   // 异常页面
   {

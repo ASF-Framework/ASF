@@ -7,7 +7,7 @@ FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
 COPY ["ASF.Web/ASF.Web.csproj", "src/ASF.Web/"]
 COPY ["ASF.Core/ASF.Core.csproj", "src/ASF.Core/"]
-COPY ["ASF.Infrastructure/ASF.Infrastructure.csproj", "src/ASF.Infrastructure/"]
+COPY ["ASF.EntityFramework.Storage/ASF.EntityFramework.Storage", "src/ASF.EntityFramework.Storage/"]
 RUN dotnet restore "src/ASF.Web/ASF.Web.csproj"
 COPY . .
 WORKDIR "/src/ASF.Web"

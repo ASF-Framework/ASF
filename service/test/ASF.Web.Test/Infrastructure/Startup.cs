@@ -1,6 +1,7 @@
-﻿using ASF.Infrastructure.ModelMapper;
+﻿using ASF.EntityFramework.ModelMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ocelot.DependencyInjection;
@@ -22,11 +23,13 @@ namespace ASF.Core.Test.Infrastructure
         public void ConfigureServices(IServiceCollection services)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            services.AddOcelot()
-                .AddASF(build =>
-                {
-                    build.AddSQLite("Data Source=ASF.db");
-                });
+
+            services.AddASF(build =>
+            {
+                string dbConnectionString = "Data Source=AppData/ASF.db";
+                build.AddDbContext(b => b.UseSqlite(dbConnectionString));
+                build.AddAuthenticationJwtBearer();
+            });
             services.AddLogging();
             services.AddAutoMapper(c =>
             {

@@ -1,5 +1,6 @@
 ﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
+using ASF.Domain.Values;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -77,6 +78,12 @@ namespace ASF.Infrastructure.Repositories
         {
             var list = await this.GetList();
             return list.Where(f => f.ParentId == parentId).ToList();
+        }
+
+        public async Task<IList<Permission>> GetActionListByParentId(string parentId)
+        {
+            var list = await this.GetList();
+            return list.Where(f => f.ParentId == parentId && f.Type== PermissionType.Action).ToList();
         }
 
         public Task<bool> HasById(string id)

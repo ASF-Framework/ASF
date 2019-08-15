@@ -18,6 +18,8 @@ const api = {
   modifyMenuSort: '/asf/permission/menu/ModifySort',
   modifyMenu: '/asf/permission/menu/Modify',
   deleteMenu: '/asf/permission/menu/Delete',
+  exportMenu: '/asf/permission/menu/Export',
+  importMenu:'/asf/permission/menu/Import',
 
   // 功能
   getActionList: '/asf/Permission/action/GetList',
@@ -41,6 +43,7 @@ const api = {
   createPublicApi: '/asf/permission/openapi/Create',
   modifyPublicApi: '/asf/permission/openapi/Modify',
   deletePublicApi: '/asf/permission/openapi/Delete',
+  importPublicApi:'/asf/permission/openapi/Import',
 
   // 审计
   getAuditList: '/asf/Logger/GetList',
@@ -90,6 +93,14 @@ export function modifyMenu (parameter) {
 }
 export function deleteAction (parameter) {
   return post(api.deleteAction + '/' + parameter)
+}
+
+export function exportMenu (parameter) {
+  return post(api.exportMenu ,  parameter)
+}
+
+export function importMenu (parameter) {
+  return post(api.importMenu ,  parameter)
 }
 
 // 角色
@@ -150,6 +161,10 @@ export function deletePublicApi (parameter) {
 }
 export function modifyPublicApi (parameter) {
   return post(api.modifyPublicApi, parameter)
+}
+
+export function importPublicApi (parameter) {
+  return post(api.importPublicApi ,  parameter)
 }
 
 // 审计

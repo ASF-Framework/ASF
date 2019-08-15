@@ -19,7 +19,7 @@
         </a-form-item>
         <a-form-item label="菜单图标" v-bind="layout" >
           <a-input placeholder="请输入菜单的图标 " v-decorator="formDecorator.icon" @change="e=>{this.iconType=e.target.value}" style="width: 40%"/>
-          <a-icon :type="iconType" style="font-size: 20px; margin-left: 5px;"></a-icon>
+          <a-icon v-if="iconType" :type="iconType" style="font-size: 20px; margin-left: 5px;"></a-icon>
         </a-form-item>
         <a-form-item label="父级菜单" v-bind="layout" hasFeedback>
           <menu-tree-select :allowClear="true" placeholder="请选择父级菜单，不选默认顶级菜单" v-decorator="formDecorator.parentId"></menu-tree-select>

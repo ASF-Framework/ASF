@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using ASF.Domain.Entities;
+using ASF.Domain.Values;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
@@ -23,6 +25,12 @@ namespace ASF.Application.DTO
         /// 菜单标识
         /// </summary>
         public string Code { get; set; }
+
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public PermissionType Type { get; set; }
+
         /// <summary>
         /// 是否启用
         /// </summary>
@@ -44,10 +52,30 @@ namespace ASF.Application.DTO
         /// 是否隐藏
         /// </summary>
         public bool Hidden { get; set; }
+
+        /// <summary>
+        /// 权限服务地址
+        /// </summary>
+        public string ApiTemplate { get; private set; }
         /// <summary>
         /// 描述
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// 转换为实体
+        /// </summary>
+        /// <returns></returns>
+        public Permission To()
+        {
+            var p = new Permission(this.Code, this.ParentId, this.Name, PermissionType.Menu, this.Description);
+            p.Sort = this.Sort;
+            p.MenuHidden = this.Hidden;
+            p.MenuIcon = this.Icon;
+            p.MenuRedirect = this.Redirect;
+            p.SetApiTemplate(this.ApiTemplate);
+            return p;
+        }
 
     }
 }

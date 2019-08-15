@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -67,7 +68,7 @@ namespace ASF.Application
 
             //修改功能权限
             var modifyResult = await this._serviceProvider.GetRequiredService<PermissionChangeService>()
-                .ModifyMenu(dto.Id, dto.Name, dto.ParentId, dto.Description, dto.Enable, dto.Icon,dto.Redirect,dto.Hidden);
+                .ModifyMenu(dto.Id, dto.Name, dto.ParentId, dto.Description, dto.Enable, dto.Icon, dto.Redirect, dto.Hidden);
             if (!modifyResult.Success)
                 return modifyResult;
 
@@ -97,7 +98,7 @@ namespace ASF.Application
             var menuList = permissionList.Where(f => f.Type == PermissionType.Menu).OrderBy(f => f.Sort).ToList();
             var menus = Mapper.Map<List<PermissionMenuInfoDetailsResponseDto>>(menuList);
             //筛选菜单对应的功能权限
-            var actionList= await this._permissionRepository.GetList();
+            var actionList = await this._permissionRepository.GetList();
             menus.ForEach(m =>
             {
                 m.Actions = actionList
@@ -155,6 +156,81 @@ namespace ASF.Application
             });
             return ResultList<PermissionMenuInfoBaseResponseDto>.ReSuccess(menus);
         }
-       
+
+        /// <summary>
+        /// 导出权限菜单
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ResultList<PermissionMenuInfoDetailsResponseDto>> Export([FromBody] PermissionMenuExportRequestDto dto)
+        {
+            // 验证请求数据合法性
+            var result = dto.Valid();
+            if (!result.Success)
+                return ResultList<PermissionMenuInfoDetailsResponseDto>.ReFailure(result);
+            if (dto.List != null && dto.List.Count > 0)
+            {
+                List<PermissionMenuInfoDetailsResponseDto> res = new List<PermissionMenuInfoDetailsResponseDto>();
+
+                foreach (var item in dto.List)
+                {
+                    res.Add(item);
+                    var children = await this._permissionRepository.GetActionListByParentId(item.Id);
+                    var child = Mapper.Map<List<PermissionMenuInfoDetailsResponseDto>>(children);
+                    if (child != null && child.Count > 0)
+                    {
+                        foreach (var chi in child)
+                        {
+                            res.Add(chi);
+                        }
+                    }
+                }
+                return ResultList<PermissionMenuInfoDetailsResponseDto>.ReSuccess(res);
+            }
+            else
+            {
+                return ResultList<PermissionMenuInfoDetailsResponseDto>.ReFailure("没有菜单", 200);
+            }
+        }
+
+        /// <summary>
+        /// 导入
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<Result> Import([FromBody] PermissionMenuExportRequestDto dto)
+        {
+            //验证请求数据合法性
+            var result = dto.Valid();
+            if (!result.Success)
+                return result;
+
+            if (dto.List != null && dto.List.Count > 0)
+            {
+                foreach (var item in dto.List)
+                {
+                    var model = await this._permissionRepository.GetAsync(item.Id);
+                    if (model != null)
+                    {
+                        //修改
+                        var entity = item.To();
+                        await _permissionRepository.ModifyAsync(entity);
+                        await _unitOfWork.CommitAsync(autoRollback: true);
+                    }
+                    else
+                    {
+                        //添加
+                        var entity =item.To();
+                        await _permissionRepository.AddAsync(entity);
+                        await _unitOfWork.CommitAsync(autoRollback: true);
+                    }
+                }
+            }
+            return Result.ReSuccess();
+        }
+
+
     }
 }

@@ -73,7 +73,7 @@ export default {
       }
     },
     updateMenu () {
-      console.log(this.$route)
+      //console.log(this.$route)
       const routes = this.$route.matched.concat()
       if (routes.length >= 4 && this.$route.meta.hidden) {
         routes.pop()

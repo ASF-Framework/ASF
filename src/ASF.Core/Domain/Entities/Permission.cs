@@ -1,6 +1,7 @@
 ﻿using ASF.Domain.Values;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ASF.Domain.Entities
@@ -122,8 +123,11 @@ namespace ASF.Domain.Entities
         /// <param name="apiAddress"></param>
         public void SetApiTemplate(string apiTemplate)
         {
-            this.ApiTemplateRegex = new Regex($"^{this.ApiTemplate}$");
-            this.ApiTemplate = apiTemplate.ToLower();
+            if (!string.IsNullOrEmpty(apiTemplate))
+            {
+                this.ApiTemplateRegex = new Regex($"^{this.ApiTemplate}$");
+                this.ApiTemplate = apiTemplate.ToLower();
+            }
         }
 
        

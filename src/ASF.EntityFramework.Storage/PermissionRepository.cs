@@ -1,5 +1,6 @@
 ﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
+using ASF.Domain.Values;
 using ASF.EntityFramework.Model;
 using ASF.Infrastructure.Repositories;
 using AutoMapper;
@@ -70,6 +71,12 @@ namespace ASF.EntityFramework.Repository
         public async Task<IList<Permission>> GetListByParentId(string parentId)
         {
             var list = await _dbContext.Permissions.Where(f => f.ParentId == parentId).ToListAsync();
+            return Mapper.Map<IList<Permission>>(list);
+        }
+
+        public async Task<IList<Permission>> GetActionListByParentId(string parentId)
+        {
+            var list = await _dbContext.Permissions.Where(f => f.ParentId == parentId && f.Type== PermissionType.Action).ToListAsync();
             return Mapper.Map<IList<Permission>>(list);
         }
 

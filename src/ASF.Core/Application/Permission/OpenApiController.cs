@@ -115,5 +115,42 @@ namespace ASF.Application
             return ResultList<PermissionOpenApiInfoDetailsResponseDto>.ReSuccess(menus);
         }
 
+        /// <summary>
+        /// 导入
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<Result> Import([FromBody] PermissionOpenApiRequestDto dto)
+        {
+            //验证请求数据合法性
+            var result = dto.Valid();
+            if (!result.Success)
+                return result;
+
+            if (dto.List != null && dto.List.Count > 0)
+            {
+                foreach (var item in dto.List)
+                {
+                    var model = await this._permissionRepository.GetAsync(item.Id);
+                    if (model != null)
+                    {
+                        //修改
+                        var entity = item.To();
+                        await _permissionRepository.ModifyAsync(entity);
+                        await _unitOfWork.CommitAsync(autoRollback: true);
+                    }
+                    else
+                    {
+                        //添加
+                        var entity = item.To();
+                        await _permissionRepository.AddAsync(entity);
+                        await _unitOfWork.CommitAsync(autoRollback: true);
+                    }
+                }
+            }
+            return Result.ReSuccess();
+        }
+
     }
 }

@@ -6,8 +6,8 @@
         <a-col :md="18" :sm="24">
           <a-button type="primary" @click="$refs.add.show()" icon="plus" class="right10">新增</a-button>
           <a-button-group class="right10">
-            <a-button type="primary">导出</a-button>
-            <a-button type="primary">导入</a-button>
+            <a-button type="primary" @click="handleExport">导出</a-button>
+            <a-button type="primary" @click="$refs.immodal.import()">导入</a-button>
           </a-button-group>
           <a-select placeholder="请选择" v-model="queryParam.enable" style="width:100px;" @change="loadDataing">
             <a-select-option :value="-1">API 状态</a-select-option>
@@ -33,18 +33,19 @@
       ref="table"
       rowKey="id"
       size="middle"
-      :rowSelection="{}"
+      :rowSelection="{selectedRowKeys: table.selectedRowKeys, onChange: onSelectChange}"
       :pagination="false"
       :loading="table.loading"
       :columns="table.columns"
       :expandedRowKeys="table.expandedRowKeys"
+      
       :dataSource="table.dataSource"
       @expandedRowsChange="(e)=>{this.table.expandedRowKeys=e}">
       <span slot="id" slot-scope="text">
         <router-link :to="{ name: 'asf_permission_details', query: {data: text }}" >{{ text }}</router-link>
       </span>
       <span slot="icon" slot-scope="text">
-        <a-icon v-show="text" :type="text" />
+        <a-icon v-if="text" :type="text" />
       </span>
       <span slot="enable" slot-scope="text">
         <a-badge v-if="text" status="success" text="启用"/>
@@ -85,19 +86,21 @@
     </a-table>
 
     <!--功能模块-->
+    <import-modal ref="immodal" @ok="loadDataing"></import-modal>
     <menu-add ref="add" @complete="loadDataing"></menu-add>
     <menu-edit ref="edit" @complete="loadDataing"></menu-edit>
   </a-card>
 </template>
 
 <script>
-import { getMenuList, deleteMenu } from '@/api/control'
+import { getMenuList, deleteMenu,exportMenu,importMenu } from '@/api/control'
 import ModifySort from './modules/ModifySort'
+import ImportModal from './modules/ImportModal'
 import MenuAdd from './Add'
 import MenuEdit from './Edit'
 export default {
   name: 'MenuList',
-  components: { ModifySort, MenuAdd, MenuEdit },
+  components: { ModifySort, MenuAdd, MenuEdit ,ImportModal},
   created () { this.loadDataing() },
   data () {
     return {
@@ -109,6 +112,7 @@ export default {
       },
       // 列表属性
       table: {
+        selectedRowKeys:[],
         loading: false,
         expandedRowKeys: [],
         dataSource: [],
@@ -172,10 +176,17 @@ export default {
             }
           }
         ]
-      }
+      },
+      selectRows:[],
     }
   },
   methods: {
+    //表格勾选事件
+    onSelectChange(selectedRowKeys,selectedRows){
+      const _this=this
+      _this.table.selectedRowKeys = selectedRowKeys
+      _this.selectRows=selectedRows
+    },
 
     /**
      * 加载列表
@@ -193,6 +204,58 @@ export default {
       }).catch(() => {
         this.table.loading = false
       })
+    },
+    /**
+     * 导出菜单
+     */
+    handleExport(){
+      const _this = this
+      let param={list:_this.selectRows}      
+      if (_this.selectRows === undefined || _this.selectRows.length === 0) {
+        _this.$notification['warning']({
+          message: '提示',
+          description: '请勾选你要导出的对象',
+          duration: 4
+        })
+        return false
+      }
+      this.$confirm({ title: '导出菜单',
+        content: `是否导出菜单？`,
+        onOk: () => {
+          _this.table.loading=true
+          exportMenu(param).then(res => {
+            console.log('result:',res)
+            if (res.status === 200) {
+              _this.table.loading=false
+              _this.table.expandedRowKeys=[]
+              let json= JSON.stringify(res.result)
+              _this.exportRaw('menu.json',json)
+              _this.loadDataing()
+              _this.$message.success(`导出菜单成功`)
+            } else {
+              _this.table.loading=false
+              _this.table.expandedRowKeys=[]
+              _this.$message.error('导出失败;' + res.message)
+            }
+          })
+        }
+      })
+    },
+    //保存txt\json文档到本地
+    fakeClick(obj){
+      var ev = document.createEvent("MouseEvents");
+      ev.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+      obj.dispatchEvent(ev);
+    },
+    //保存txt\json文档到本地
+    exportRaw(name,data){
+      var urlObject = window.URL || window.webkitURL || window;
+      var export_blob = new Blob([data]);
+      var save_link = document.createElementNS("http://www.w3.org/1999/xhtml", "a")
+      //console.log('save_link',save_link)
+      save_link.href = urlObject.createObjectURL(export_blob);
+      save_link.download = name;
+      this.fakeClick(save_link);
     },
 
     /**

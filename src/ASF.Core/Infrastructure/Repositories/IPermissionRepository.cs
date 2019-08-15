@@ -33,6 +33,13 @@ namespace ASF.Infrastructure.Repositories
         Task<IList<Permission>> GetListByParentId(string parentId);
 
         /// <summary>
+        /// 获取action集合，根据父类
+        /// </summary>
+        /// <param name="parentId"></param>
+        /// <returns></returns>
+        Task<IList<Permission>> GetActionListByParentId(string parentId);
+
+        /// <summary>
         /// 获取所有权限集合
         /// </summary>
         /// <param name="ids"></param>

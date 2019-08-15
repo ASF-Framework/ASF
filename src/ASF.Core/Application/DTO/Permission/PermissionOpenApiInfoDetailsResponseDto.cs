@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using ASF.Domain.Entities;
+using ASF.Domain.Values;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
@@ -40,6 +42,19 @@ namespace ASF.Application.DTO
         /// 描述
         /// </summary>
         public string Description { get; set; }
-      
+
+        /// <summary>
+        /// 转换为实体
+        /// </summary>
+        /// <returns></returns>
+        public Permission To()
+        {
+            var p = new Permission(this.Id, null, this.Name, PermissionType.OpenApi, this.Description);
+            p.Enable = this.Enable;
+            p.IsSystem = this.IsSystem;
+            p.SetApiTemplate(this.ApiTemplate);
+            return p;
+        }
+
     }
 }

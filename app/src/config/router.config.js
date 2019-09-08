@@ -1,7 +1,11 @@
 // eslint-disable-next-line
 import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
-import { RoleList, PermissionList, PermissionDetails, AuditList, AdminList, PublicApiList } from '@/views/control'
+import { RoleList, AuditList, AdminList, PublicApiList, MenuList, MenuDetails } from '@/views/control'
 
+/**
+ * 动态路由
+ * @type { Array }
+ */
 export const asyncRouterMap = [{
   path: '/',
   name: 'index',
@@ -15,137 +19,79 @@ export const asyncRouterMap = [{
       name: 'dashboard',
       redirect: '/dashboard/analysis',
       component: RouteView,
-      meta: { title: '仪表盘', keepAlive: true, icon: 'dashboard', permission: ['asf'] },
       children: [{
         path: '/dashboard/analysis',
         name: 'Analysis',
-        component: () => import('@/views/dashboard/Analysis'),
-        meta: { title: '分析页', keepAlive: true, permission: ['asf'] }
+        component: () => import('@/views/dashboard/Analysis')
       },
       {
         path: '/dashboard/workplace',
         name: 'Workplace',
-        component: () => import('@/views/dashboard/Workplace'),
-        meta: { title: '工作台', keepAlive: true, permission: ['asf'] }
+        component: () => import('@/views/dashboard/Workplace')
       }]
     },
     // control
     {
       path: '/control',
-      name: 'control',
-      redirect: '/control/administrator',
+      name: 'asf',
+      redirect: '/control/admin',
       component: PageView,
-      meta: { title: '控制面板', icon: 'table', permission: ['asf'] },
       children: [
         // 管理员列表
         {
-          path: '/control/administrator',
-          name: 'administrator',
-          component: AdminList,
-          meta: { title: '管理员', keepAlive: true, permission: ['asf_account'] }
+          path: '/control/admin',
+          name: 'asf_account',
+          component: AdminList
         },
         // 角色列表
         {
           path: '/control/role',
-          name: 'role',
-          component: RoleList,
-          meta: { title: '角色管理', keepAlive: true, permission: ['asf_role'] }
+          name: 'asf_role',
+          component: RoleList
         },
-        // 权限列表
+        // 菜单
         {
-          path: '/control/permission',
-          name: 'permission',
-          redirect: '/control/permission/list',
+          path: '/control/menu',
+          name: 'asf_permission',
           component: RouteView,
-          hideChildrenInMenu: true,
-          meta: { title: '权限管理', permission: ['asf_permission'], keepAlive: true },
+          redirect: '/control/menu/list',
           children: [
             {
-              path: '/control/permission/details',
-              name: 'permissionDetail',
-              hidden: true,
-              component: PermissionDetails,
-              meta: { title: '权限详情', hidden: true, permission: ['asf_permission'], keepAlive: false }
+              path: '/control/menu/details',
+              name: 'asf_permission_details',
+              component: MenuDetails
             },
             {
-              path: '/control/permission/list',
-              name: 'PermissionList',
-              hidden: true,
-              component: PermissionList,
-              meta: { title: '权限列表', keepAlive: true, hidden: true, permission: ['asf_permission'] }
+              path: '/control/menu/list',
+              name: 'asf_permission_list',
+              component: MenuList
             }
           ]
         },
         // 审计管理
         {
           path: '/control/audit',
-          name: 'Audit',
-          component: AuditList,
-          meta: { title: '审计管理', keepAlive: true, permission: ['asf_audit'] }
+          name: 'asf_audit',
+          component: AuditList
         },
         // 公共API管理
         {
           path: '/control/publicapi',
-          name: 'PublicApi',
-          component: PublicApiList,
-          meta: { title: '公共 API', keepAlive: true, permission: ['asf_publicapi'] }
+          name: 'asf_publicapi',
+          component: PublicApiList
         }
       ]
-    },
-    // account
-    {
-      path: '/account',
-      component: RouteView,
-      hidden: true,
-      name: 'account',
-      meta: {
-        title: '个人页',
-        icon: 'user',
-        keepAlive: true
-      },
-      children: [{
-        path: '/account/center',
-        name: 'center',
-        component: () => import('@/views/account/center/Index'),
-        meta: { title: '个人中心', keepAlive: true }
-      },
-      {
-        path: '/account/settings',
-        name: 'settings',
-        component: () => import('@/views/account/settings/Index'),
-        meta: { title: '个人设置', hideHeader: true, keepAlive: true },
-        redirect: '/account/settings/Security',
-        alwaysShow: true,
-        children: [{
-          path: '/account/settings/Security',
-          name: 'SecuritySettings',
-          component: () => import('@/views/account/settings/Security'),
-          meta: { title: '账户设置', hidden: true, keepAlive: true }
-        },
-        {
-          path: '/account/settings/custom',
-          name: 'CustomSettings',
-          component: () => import('@/views/account/settings/Custom'),
-          meta: { title: '个性化设置', hidden: true, keepAlive: true }
-        },
-        {
-          path: '/account/settings/notification',
-          name: 'NotificationSettings',
-          component: () => import('@/views/account/settings/Notification'),
-          meta: { title: '新消息通知', hidden: true, keepAlive: true }
-        }]
-      }]
-    }]
+    }
+  ]
 },
 {
   path: '*',
-  redirect: '/exception/404',
-  hidden: true
+  redirect: '/404'
 }]
 
 /**
  * 基础路由
- * @type { *[] }
+ * @type { Array }
  */
 export const constantRouterMap = [
   {
@@ -165,18 +111,59 @@ export const constantRouterMap = [
     path: '/exception',
     component: BasicLayout,
     children: [{
-      path: '/exception/404',
+      path: '/404',
       name: '404',
-      component: () => import('@/views/exception/404')
+      component: () => import('@/views/exception/404'),
+      meta: { title: '404' }
     }, {
-      path: '/exception/403',
+      path: '/403',
       name: '403',
-      component: () => import('@/views/exception/403')
+      component: () => import('@/views/exception/403'),
+      meta: { title: '403' }
     },
     {
-      path: '/exception/500',
+      path: '/500',
       name: '500',
-      component: () => import('@/views/exception/500')
+      component: () => import('@/views/exception/500'),
+      meta: { title: '500' }
+    }]
+  },
+  // 个人页面
+  {
+    path: '/profiles',
+    component: BasicLayout,
+    hidden: true,
+    name: 'profiles',
+    meta: { title: '个人页', icon: 'user' },
+    children: [{
+      path: '/profiles/profiles',
+      name: 'center',
+      component: () => import('@/views/profiles/center/Index'),
+      meta: { title: '个人中心' }
+    },
+    {
+      path: '/profiles/settings',
+      name: 'settings',
+      component: () => import('@/views/profiles/settings/Index'),
+      redirect: '/profiles/settings/Security',
+      children: [{
+        path: '/profiles/settings/Security',
+        name: 'SecuritySettings',
+        component: () => import('@/views/profiles/settings/Security'),
+        meta: { title: '账户设置' }
+      },
+      {
+        path: '/profiles/settings/custom',
+        name: 'CustomSettings',
+        component: () => import('@/views/profiles/settings/Custom'),
+        meta: { title: '个性化设置' }
+      },
+      {
+        path: '/profiles/settings/notification',
+        name: 'NotificationSettings',
+        component: () => import('@/views/profiles/settings/Notification'),
+        meta: { title: '新消息通知' }
+      }]
     }]
   },
   {

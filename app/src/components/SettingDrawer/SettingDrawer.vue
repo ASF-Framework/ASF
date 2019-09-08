@@ -247,10 +247,8 @@ export default {
   }
 }`
       this.$copyText(text).then(message => {
-        console.log('copy', message)
         this.$message.success('复制完毕')
       }).catch(err => {
-        console.log('copy.err', err)
         this.$message.error('复制失败')
       })
     },

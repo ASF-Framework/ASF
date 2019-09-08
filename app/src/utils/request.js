@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
-import router from '@/router'
 import { VueAxios } from './axios'
 import notification from 'ant-design-vue/es/notification'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
@@ -9,7 +8,7 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 // 创建 axios 实例
 const service = axios.create({
   baseURL: '/api', // api base_url
-  timeout: 6000 // 请求超时时间
+  timeout: 30000 // 请求超时时间
 })
 
 const err = (error) => {
@@ -31,15 +30,15 @@ const err = (error) => {
     switch (error.response.status) {
       case 500:
         notification.warning({ message: '请求失败', description: '抱歉，服务器出错了' })
-        redirectPath = '/exception/500'
+        redirectPath = '/500'
         break
       case 404:
         notification.warning({ message: '404', description: '抱歉，你访问的页面不存在或仍在开发中' })
-        redirectPath = '/exception/404'
+        redirectPath = '/404'
         break
       case 403:
         notification.warning({ message: '拒绝访问', description: '抱歉，你无权访问该页面' })
-        redirectPath = '/exception/403'
+        redirectPath = '/403'
         break
       case 401:
         notification.error({ message: '登录过期', description: '登录已经过期，请重新登录' })
@@ -54,7 +53,7 @@ const err = (error) => {
         break
     }
     if (errorRedirect && redirectPath !== '') {
-      router.push({ path: redirectPath })
+      this.$router.push({ path: redirectPath })
     }
   } else if (error.request) {
     notification.error({ message: '处理失败', description: error.toString() })

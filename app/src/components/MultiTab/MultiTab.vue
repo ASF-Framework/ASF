@@ -1,30 +1,3 @@
-<!--
-<template>
-  <div style="margin: -23px -24px 24px -24px">
-    &lt;!&ndash;<a-dropdown :trigger="['contextmenu']" overlayClassName="multi-tab-menu-wrapper">
-      <a-menu slot="overlay">
-        <a-menu-item key="1">1st menu item</a-menu-item>
-        <a-menu-item key="2">2nd menu item</a-menu-item>
-        <a-menu-item key="3">3rd menu item</a-menu-item>
-      </a-menu>
-    </a-dropdown>&ndash;&gt;
-    <a-tabs
-      hideAdd
-      v-model="activeKey"
-      type="editable-card"
-      :tabBarStyle="{ background: '#FFF', margin: 0, paddingLeft: '16px', paddingTop: '1px' }"
-      @edit="onEdit"
-    >
-      <a-tab-pane v-for="page in pages" :style="{ height: 0 }" :tab="page.meta.title" :key="page.fullPath" :closable="pages.length > 1">
-      </a-tab-pane>
-      <template slot="renderTabBar" slot-scope="props, DefaultTabBar">
-        <component :is="DefaultTabBar" {...props} />
-      </template>
-    </a-tabs>
-  </div>
-</template>
--->
-
 <script>
 export default {
   name: 'MultiTab',

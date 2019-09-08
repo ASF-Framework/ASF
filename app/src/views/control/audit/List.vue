@@ -64,6 +64,7 @@
     <a-table
       ref="table"
       rowKey="id"
+      size="middle"
       :pagination="table.pagination"
       :columns="table.columns"
       :loading="table.loading"

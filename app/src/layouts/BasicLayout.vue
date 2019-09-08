@@ -83,13 +83,15 @@ export default {
     return {
       production: config.production,
       collapsed: false,
-      menus: []
+      menus: [],
+      selectedKeys: [],
+      openKeys: []
     }
   },
   computed: {
     ...mapState({
       // 动态主路由
-      mainMenu: state => state.permission.addRouters
+      mainMenu: state => state.permission.menus
     }),
     contentPaddingLeft () {
       if (!this.fixSidebar || this.isMobile()) {
@@ -107,7 +109,7 @@ export default {
     }
   },
   created () {
-    this.menus = this.mainMenu.find(item => item.path === '/').children
+    this.menus = this.mainMenu
     this.collapsed = !this.sidebarOpened
   },
   mounted () {
@@ -122,6 +124,22 @@ export default {
     }
   },
   methods: {
+    updateMenu () {
+      const routes = this.$route.matched.concat()
+      if (routes.length >= 4 && this.$route.hidden) {
+        routes.pop()
+        this.selectedKeys = [routes[2].path]
+      } else {
+        this.selectedKeys = [routes.pop().path]
+      }
+
+      const openKeys = []
+      if (this.mode === 'inline') {
+        routes.forEach(item => {
+          openKeys.push(item.path)
+        })
+      }
+    },
     ...mapActions(['setSidebar']),
     toggle () {
       this.collapsed = !this.collapsed

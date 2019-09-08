@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import router from './router'
+import router from './core/router'
 import store from './store'
 
 import NProgress from 'nprogress' // progress bar
@@ -18,19 +18,21 @@ router.beforeEach((to, from, next) => {
   if (Vue.ls.get(ACCESS_TOKEN)) {
     /* has token */
     if (to.path === '/user/login') {
-      next({ path: '/dashboard/workplace' })
+      next({ path: '/home' })
       NProgress.done()
     } else {
-      if (store.getters.roles.length === 0) {
+      if (store.getters.menus.length === 0) {
         store
           .dispatch('GetInfo')
           .then(res => {
-            const roles = res.result && res.result.role
-            store.dispatch('GenerateRoutes', { roles }).then(() => {
+            const menus = res.result && res.result.menus
+            store.dispatch('GenerateRoutes', menus).then(() => {
               // 根据roles权限生成可访问的路由表
               // 动态添加可访问路由表
-              router.addRoutes(store.getters.addRouters)
+              router.addRoutes(store.getters.dynamicRouters)
+
               const redirect = decodeURIComponent(from.query.redirect || to.path)
+
               if (to.path === redirect) {
                 // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
                 next({ ...to, replace: true })
@@ -41,10 +43,7 @@ router.beforeEach((to, from, next) => {
             })
           })
           .catch(() => {
-            notification.error({
-              message: '错误',
-              description: '请求用户信息失败，请重试'
-            })
+            notification.error({ message: '错误', description: '请求用户信息失败，请重试' })
             store.dispatch('Logout').then(() => {
               next({ path: '/user/login', query: { redirect: to.fullPath } })
             })
@@ -58,6 +57,7 @@ router.beforeEach((to, from, next) => {
       // 在免登录白名单，直接进入
       next()
     } else {
+      //console.log(to)
       next({ path: '/user/login', query: { redirect: to.fullPath } })
       NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
     }

@@ -85,7 +85,7 @@ export default {
     /deep/ .term {
       color: rgba(0,0,0,.85);
       display: table-cell;
-      line-height: 20px;
+      line-height: 30px;
       margin-right: 8px;
       padding-bottom: 16px;
       white-space: nowrap;
@@ -99,8 +99,8 @@ export default {
     /deep/ .content {
       color: rgba(0,0,0,.65);
       display: table-cell;
-      min-height: 22px;
-      line-height: 22px;
+      min-height: 20px;
+      line-height: 20px;
       padding-bottom: 16px;
       width: 100%;
       &:empty {

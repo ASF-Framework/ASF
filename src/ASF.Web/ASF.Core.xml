@@ -806,6 +806,16 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:ASF.Application.DTO.PermissionMenuExportRequestDto">
+            <summary>
+            权限菜单导出请求对象
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuExportRequestDto.List">
+            <summary>
+            权限List
+            </summary>
+        </member>
         <member name="P:ASF.Application.DTO.PermissionMenuInfoBaseResponseDto.Id">
             <summary>
             唯一标示
@@ -846,6 +856,11 @@
             菜单标识
             </summary>
         </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
         <member name="P:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto.Enable">
             <summary>
             是否启用
@@ -871,10 +886,21 @@
             是否隐藏
             </summary>
         </member>
+        <member name="P:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto.ApiTemplate">
+            <summary>
+            权限服务地址
+            </summary>
+        </member>
         <member name="P:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto.Description">
             <summary>
             描述
             </summary>
+        </member>
+        <member name="M:ASF.Application.DTO.PermissionMenuInfoDetailsResponseDto.To">
+            <summary>
+            转换为实体
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:ASF.Application.DTO.PermissionMenuModifyRequestDto">
             <summary>
@@ -951,7 +977,7 @@
             权限服务地址
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:ASF.Application.DTO.PermissionOpenApiCreateRequestDto.Description" -->
+        <!-- 对于成员“P:ASF.Application.DTO.PermissionOpenApiCreateRequestDto.Description”忽略有格式错误的 XML 注释 -->
         <member name="M:ASF.Application.DTO.PermissionOpenApiCreateRequestDto.GetTimeStamp">
             <summary>
             获取时间戳
@@ -998,6 +1024,12 @@
             描述
             </summary>
         </member>
+        <member name="M:ASF.Application.DTO.PermissionOpenApiInfoDetailsResponseDto.To">
+            <summary>
+            转换为实体
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:ASF.Application.DTO.PermissionOpenApiModifyRequestDto">
             <summary>
             开放API权限修改请求
@@ -1023,7 +1055,17 @@
             权限服务地址
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:ASF.Application.DTO.PermissionOpenApiModifyRequestDto.Description" -->
+        <!-- 对于成员“P:ASF.Application.DTO.PermissionOpenApiModifyRequestDto.Description”忽略有格式错误的 XML 注释 -->
+        <member name="T:ASF.Application.DTO.PermissionOpenApiRequestDto">
+            <summary>
+            公共api请求对象
+            </summary>
+        </member>
+        <member name="P:ASF.Application.DTO.PermissionOpenApiRequestDto.List">
+            <summary>
+            权限List
+            </summary>
+        </member>
         <member name="T:ASF.Application.DTO.RoleCreateRequestDto">
             <summary>
             角色创建请求Dto
@@ -1294,6 +1336,20 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:ASF.Application.MenuController.Export(ASF.Application.DTO.PermissionMenuExportRequestDto)">
+            <summary>
+            导出权限菜单
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.MenuController.Import(ASF.Application.DTO.PermissionMenuExportRequestDto)">
+            <summary>
+            导入
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
         <member name="T:ASF.Application.OpenApiController">
             <summary>
             开放性API权限
@@ -1324,6 +1380,13 @@
             <summary>
             获取开放API权限集合
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ASF.Application.OpenApiController.Import(ASF.Application.DTO.PermissionOpenApiRequestDto)">
+            <summary>
+            导入
+            </summary>
+            <param name="dto"></param>
             <returns></returns>
         </member>
         <member name="M:ASF.Application.PermissionController.ModifySort(ASF.Application.DTO.PermissionModifySortRequestDto)">
@@ -2524,6 +2587,13 @@
             <param name="parentId"></param>
             <returns></returns>
         </member>
+        <member name="M:ASF.Infrastructure.Repositories.IPermissionRepository.GetActionListByParentId(System.String)">
+            <summary>
+            获取action集合，根据父类
+            </summary>
+            <param name="parentId"></param>
+            <returns></returns>
+        </member>
         <member name="M:ASF.Infrastructure.Repositories.IPermissionRepository.GetList">
             <summary>
             获取所有权限集合
@@ -2955,7 +3025,7 @@
             </summary>
             <returns></returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:System.Result.AsTask" -->
+        <!-- 对于成员“M:System.Result.AsTask”忽略有格式错误的 XML 注释 -->
         <member name="T:System.Result`1">
             <summary>
             实体结果对象
@@ -3006,7 +3076,7 @@
             <param name="result">结果</param>
             <returns></returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:System.Result`1.AsTask" -->
+        <!-- 对于成员“M:System.Result`1.AsTask”忽略有格式错误的 XML 注释 -->
         <member name="T:System.BaseResultCodes">
             <summary>
             结果返回码
@@ -3113,7 +3183,7 @@
             <param name="result">结果</param>
             <returns></returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:System.ResultList`1.AsTask" -->
+        <!-- 对于成员“M:System.ResultList`1.AsTask”忽略有格式错误的 XML 注释 -->
         <member name="T:System.ResultPagedList`1">
             <summary>
             分页列表结果对象
@@ -3179,6 +3249,6 @@
             <param name="result">结果</param>
             <returns></returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:System.ResultPagedList`1.AsTask" -->
+        <!-- 对于成员“M:System.ResultPagedList`1.AsTask”忽略有格式错误的 XML 注释 -->
     </members>
 </doc>

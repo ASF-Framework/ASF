@@ -149,12 +149,13 @@ export default {
      * @param {String} parentId 父级编号
      */
     buildTreeData (data, parentId = '') {
-      return data.map(value => {
+      const childrens = []
+      data.forEach(value => {
         value.parentId = value.parentId || ''
         if (value.parentId === parentId) {
           const children = this.buildTreeData(data, value.id)
-
           value.key = value.id
+
           value.children = children.length > 0 ? children : null
           value.selectOption = []
 
@@ -171,8 +172,10 @@ export default {
             value.checkboxIndeterminate = value.selectOption.length > 0
           }
           this.tables.expandedRowKeys.push(value.key)
+          childrens.push(value)
         }
       })
+      return childrens
     }
   }
 }

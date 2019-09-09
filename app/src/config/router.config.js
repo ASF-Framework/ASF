@@ -11,7 +11,7 @@ export const asyncRouterMap = [{
   name: 'index',
   component: BasicLayout,
   meta: { title: '首页' },
-  redirect: '/account/center',
+  redirect: '/profiles/profiles',
   children: [
     // dashboard
     {

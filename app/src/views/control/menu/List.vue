@@ -38,7 +38,7 @@
       :loading="table.loading"
       :columns="table.columns"
       :expandedRowKeys="table.expandedRowKeys"
-      
+
       :dataSource="table.dataSource"
       @expandedRowsChange="(e)=>{this.table.expandedRowKeys=e}">
       <span slot="id" slot-scope="text">
@@ -93,14 +93,14 @@
 </template>
 
 <script>
-import { getMenuList, deleteMenu,exportMenu,importMenu } from '@/api/control'
+import { getMenuList, deleteMenu, exportMenu } from '@/api/control'
 import ModifySort from './modules/ModifySort'
 import ImportModal from './modules/ImportModal'
 import MenuAdd from './Add'
 import MenuEdit from './Edit'
 export default {
   name: 'MenuList',
-  components: { ModifySort, MenuAdd, MenuEdit ,ImportModal},
+  components: { ModifySort, MenuAdd, MenuEdit, ImportModal },
   created () { this.loadDataing() },
   data () {
     return {
@@ -112,7 +112,7 @@ export default {
       },
       // 列表属性
       table: {
-        selectedRowKeys:[],
+        selectedRowKeys: [],
         loading: false,
         expandedRowKeys: [],
         dataSource: [],
@@ -177,15 +177,15 @@ export default {
           }
         ]
       },
-      selectRows:[],
+      selectRows: []
     }
   },
   methods: {
-    //表格勾选事件
-    onSelectChange(selectedRowKeys,selectedRows){
-      const _this=this
+    // 表格勾选事件
+    onSelectChange (selectedRowKeys, selectedRows) {
+      const _this = this
       _this.table.selectedRowKeys = selectedRowKeys
-      _this.selectRows=selectedRows
+      _this.selectRows = selectedRows
     },
 
     /**
@@ -208,9 +208,9 @@ export default {
     /**
      * 导出菜单
      */
-    handleExport(){
+    handleExport () {
       const _this = this
-      let param={list:_this.selectRows}      
+      const param = { list: _this.selectRows }
       if (_this.selectRows === undefined || _this.selectRows.length === 0) {
         _this.$notification['warning']({
           message: '提示',
@@ -222,40 +222,36 @@ export default {
       this.$confirm({ title: '导出菜单',
         content: `是否导出菜单？`,
         onOk: () => {
-          _this.table.loading=true
+          _this.table.loading = true
           exportMenu(param).then(res => {
-            console.log('result:',res)
             if (res.status === 200) {
-              _this.table.loading=false
-              _this.table.expandedRowKeys=[]
-              let json= JSON.stringify(res.result)
-              _this.exportRaw('menu.json',json)
+              _this.table.loading = false
+              _this.table.expandedRowKeys = []
+              const json = JSON.stringify(res.result)
+              _this.exportRaw('menu.json', json)
               _this.loadDataing()
               _this.$message.success(`导出菜单成功`)
             } else {
-              _this.table.loading=false
-              _this.table.expandedRowKeys=[]
+              _this.table.loading = false
+              _this.table.expandedRowKeys = []
               _this.$message.error('导出失败;' + res.message)
             }
           })
         }
       })
     },
-    //保存txt\json文档到本地
-    fakeClick(obj){
-      var ev = document.createEvent("MouseEvents");
-      ev.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-      obj.dispatchEvent(ev);
-    },
-    //保存txt\json文档到本地
-    exportRaw(name,data){
-      var urlObject = window.URL || window.webkitURL || window;
-      var export_blob = new Blob([data]);
-      var save_link = document.createElementNS("http://www.w3.org/1999/xhtml", "a")
-      //console.log('save_link',save_link)
-      save_link.href = urlObject.createObjectURL(export_blob);
-      save_link.download = name;
-      this.fakeClick(save_link);
+
+    // 保存txt\json文档到本地
+    exportRaw (name, data) {
+      const urlObject = window.URL || window.webkitURL || window
+      const exportBlob = new Blob([data])
+      const saveLink = document.createElementNS('http://www.w3.org/1999/xhtml', 'a')
+      saveLink.href = urlObject.createObjectURL(exportBlob)
+      saveLink.download = name
+
+      const ev = document.createEvent('MouseEvents')
+      ev.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+      saveLink.dispatchEvent(ev)
     },
 
     /**

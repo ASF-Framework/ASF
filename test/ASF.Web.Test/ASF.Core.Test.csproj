@@ -28,10 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<< HEAD:service/test/ASF.Web.Test/ASF.Core.Test.csproj
     <ProjectReference Include="..\..\src\ASF.Core\ASF.Core.csproj" />
-=======
->>>>>>> feature/dynamic-menu:test/ASF.Web.Test/ASF.Core.Test.csproj
     <ProjectReference Include="..\..\src\ASF.EntityFramework.Storage\ASF.EntityFramework.Storage.csproj" />
   </ItemGroup>
 </Project>

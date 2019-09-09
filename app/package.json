@@ -13,13 +13,8 @@
   },
   "dependencies": {
     "@antv/data-set": "^0.10.1",
-<<<<<<< HEAD
-    "ant-design-vue": "~1.3.8",
-    "axios": "^0.18.1",
-=======
     "ant-design-vue": "~1.3.9",
     "axios": "^0.19.0",
->>>>>>> feature/dynamic-menu
     "core-js": "^2.6.5",
     "enquire.js": "^2.1.6",
     "js-cookie": "^2.2.0",

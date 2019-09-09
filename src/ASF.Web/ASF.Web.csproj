@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="AppData\ASF.db" />
+    <None Remove="ASF.Core.xml" />
     <None Remove="ASF.db" />
   </ItemGroup>
 
@@ -20,6 +22,18 @@
   <ItemGroup>
     <ProjectReference Include="..\ASF.Core\ASF.Core.csproj" />
     <ProjectReference Include="..\ASF.EntityFramework.Storage\ASF.EntityFramework.Storage.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ASF.Core.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AppData\ASF.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

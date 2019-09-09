@@ -20,6 +20,9 @@
         <a-form-item label="功能名称" v-bind="layout">
           <a-input placeholder="请输入功能的名称 " v-decorator="formDecorator.name" style="width: 60%"/>
         </a-form-item>
+        <a-form-item label="状态" v-bind="layout">
+          <a-switch checkedChildren="启用" unCheckedChildren="禁用" v-decorator="formDecorator.enable"/>
+        </a-form-item>
         <a-form-item label="是否记录日志" v-bind="layout">
           <a-switch checkedChildren="记录" unCheckedChildren="不记录" v-decorator="formDecorator.isLogger"/>
         </a-form-item>
@@ -55,7 +58,7 @@ export default {
       // 表单描述
       formDecorator: {
         isLogger: ['isLogger', { initialValue: true, valuePropName: 'checked' }],
-
+        enable: ['enable', { initialValue: true, valuePropName: 'checked' }],
         name: ['name', {
           rules: [
             { required: true, message: '功能名称不能为空' },
@@ -97,7 +100,8 @@ export default {
       this.menuName = menuName
       this.visible = true
       this.$nextTick(() => {
-        this.form.setFieldsValue(pick(data, 'isLogger', 'name', 'apiTemplate', 'description'))
+        console.log(data)
+        this.form.setFieldsValue(pick(data, 'isLogger', 'name', 'apiTemplate', 'description', 'enable'))
       })
     },
     /**

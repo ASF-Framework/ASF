@@ -14,7 +14,7 @@ namespace ASF.Application.DTO
         /// 权限标识
         /// </summary>
         [Required]
-          public string Id { get; set; }
+        public string Id { get; set; }
         /// <summary>
         /// 上级权限编号
         /// </summary>

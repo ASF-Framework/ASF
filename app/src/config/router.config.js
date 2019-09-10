@@ -21,12 +21,12 @@ export const asyncRouterMap = [{
       component: RouteView,
       children: [{
         path: '/dashboard/analysis',
-        name: 'Analysis',
+        name: 'dashboard_analysis',
         component: () => import('@/views/dashboard/Analysis')
       },
       {
         path: '/dashboard/workplace',
-        name: 'Workplace',
+        name: 'dashboard_workplace',
         component: () => import('@/views/dashboard/Workplace')
       }]
     },

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Http;
 using System.Text;
 
 namespace ASF.Application.DTO
@@ -40,6 +41,10 @@ namespace ASF.Application.DTO
         /// 是否启用
         /// </summary>
         public bool Enable { get; set; }
+        /// <summary>
+        /// Http 方法集合
+        /// </summary>
+        public List<string> HttpMethods { get; set; } = new List<string>();
         /// <summary>
         /// 转换Json字符串
         /// </summary>

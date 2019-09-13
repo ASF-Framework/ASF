@@ -4,7 +4,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Net.Http;
 
 namespace ASF.Application.DTO
 {
@@ -42,7 +43,10 @@ namespace ASF.Application.DTO
         /// 描述
         /// </summary>
         public string Description { get; set; }
-
+        /// <summary>
+        /// Http 方法集合
+        /// </summary>
+        public List<string> HttpMethods { get; set; } 
         /// <summary>
         /// 转换为实体
         /// </summary>
@@ -53,6 +57,7 @@ namespace ASF.Application.DTO
             p.Enable = this.Enable;
             p.IsSystem = this.IsSystem;
             p.SetApiTemplate(this.ApiTemplate);
+            p.HttpMethods = this.HttpMethods.Select(f => new HttpMethod(f)).ToList();
             return p;
         }
 

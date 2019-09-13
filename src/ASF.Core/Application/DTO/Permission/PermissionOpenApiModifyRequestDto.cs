@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Net.Http;
 
 namespace ASF.Application.DTO
 {
@@ -30,5 +32,9 @@ namespace ASF.Application.DTO
         /// </summary>
         [MaxLength(200)]
         public string Description { get; set; }
+        /// <summary>
+        /// Http 方法集合
+        /// </summary>
+        public List<string> HttpMethods { get; set; } = new List<string>();
     }
 }

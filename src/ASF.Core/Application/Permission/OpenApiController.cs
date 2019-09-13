@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ASF.Application
@@ -67,7 +68,7 @@ namespace ASF.Application
                 return result;
 
             //修改功能权限
-            var modifyResult = await this._serviceProvider.GetRequiredService<PermissionChangeService>().ModifyOpenApi(dto.Id, dto.Name, dto.Description, dto.Enable, dto.ApiTemplate);
+            var modifyResult = await this._serviceProvider.GetRequiredService<PermissionChangeService>().ModifyOpenApi(dto.Id, dto.Name, dto.Description, dto.Enable, dto.ApiTemplate,dto.HttpMethods.Select(f => new HttpMethod(f)).ToList());
             if (!modifyResult.Success)
                 return modifyResult;
 

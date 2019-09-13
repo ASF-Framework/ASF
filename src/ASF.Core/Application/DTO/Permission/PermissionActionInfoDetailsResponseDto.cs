@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
+using System.Collections.Generic;
 
 namespace ASF.Application.DTO
 {
@@ -47,5 +48,9 @@ namespace ASF.Application.DTO
         /// 排序
         /// </summary>
         public int Sort { get; set; }
+        /// <summary>
+        /// Http 方法集合
+        /// </summary>
+        public List<string> HttpMethods { get; set; }
     }
 }

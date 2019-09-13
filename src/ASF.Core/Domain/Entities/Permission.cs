@@ -1,7 +1,9 @@
 ﻿using ASF.Domain.Values;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 
 namespace ASF.Domain.Entities
@@ -61,7 +63,10 @@ namespace ASF.Domain.Entities
         /// 是否系统权限
         /// </summary>
         public bool IsSystem { get; set; }
-
+        /// <summary>
+        /// Http 方法
+        /// </summary>
+        public List<HttpMethod> HttpMethods { get; set; }
         /// <summary>
         /// 菜单图标
         /// </summary>
@@ -120,7 +125,7 @@ namespace ASF.Domain.Entities
         /// <summary>
         /// 设置权限API模板
         /// </summary>
-        /// <param name="apiAddress"></param>
+        /// <param name="apiTemplate">api 模板</param>
         public void SetApiTemplate(string apiTemplate)
         {
             if (!string.IsNullOrEmpty(apiTemplate))
@@ -129,8 +134,6 @@ namespace ASF.Domain.Entities
                 this.ApiTemplate = apiTemplate.ToLower();
             }
         }
-
-       
 
         /// <summary>
         /// 匹配Api模板

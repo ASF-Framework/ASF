@@ -1,7 +1,10 @@
 ﻿using ASF.Domain.Entities;
 using ASF.Domain.Values;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Net.Http;
 
 namespace ASF.Application.DTO
 {
@@ -44,6 +47,10 @@ namespace ASF.Application.DTO
         [MaxLength(200)]
         public string Description { get; set; }
         /// <summary>
+        /// Http 方法集合
+        /// </summary>
+        public List<string> HttpMethods { get; set; } = new List<string>();
+        /// <summary>
         /// 转换Json字符串
         /// </summary>
         /// <returns></returns>
@@ -58,6 +65,7 @@ namespace ASF.Application.DTO
             p.SetApiTemplate(this.ApiTemplate);
             p.IsLogger = this.IsLogger;
             p.Sort = this.Sort;
+            p.HttpMethods = this.HttpMethods.Select(f=> new HttpMethod(f)).ToList();
             return p;
         }
     }

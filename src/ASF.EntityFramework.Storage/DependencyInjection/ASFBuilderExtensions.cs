@@ -55,7 +55,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 var context = services.GetService<RepositoryContext>();
                 try
                 {
-                    context.Database.Migrate();//初始化database
                     new InitializeMigrationData( services, context).Migration();
                     logger.LogInformation($"执行初始化 Database 数据 {typeof(RepositoryContext).Name} seed 成功");
                 }

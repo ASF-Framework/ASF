@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Net.Http;
 using System.Text;
 
 namespace ASF.Application.DTO
@@ -25,12 +27,16 @@ namespace ASF.Application.DTO
         /// </summary>
         [MaxLength(200)]
         public string Description { get; set; }
-
+        /// <summary>
+        /// Http 方法集合
+        /// </summary>
+        public List<string> HttpMethods { get; set; } = new List<string>();
         public Permission To()
         {
             string code = this.GetTimeStamp();
             var p = new Permission(code, "", this.Name, Domain.Values.PermissionType.OpenApi, this.Description);
             p.SetApiTemplate(this.ApiTemplate);
+            p.HttpMethods = this.HttpMethods.Select(f => new HttpMethod(f)).ToList();
             return p;
         }
 

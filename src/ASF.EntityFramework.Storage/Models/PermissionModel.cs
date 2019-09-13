@@ -76,6 +76,10 @@ namespace ASF.EntityFramework.Model
         /// </summary>
         public bool MenuHidden { get; set; }
         /// <summary>
+        /// Http 方法
+        /// </summary>
+        public string HttpMethods { get; set; }
+        /// <summary>
         /// 添加时间
         /// </summary>
         [Required]

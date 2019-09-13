@@ -1,6 +1,7 @@
 ﻿using ASF.Application.DTO;
 using ASF.Domain.Entities;
 using AutoMapper;
+using System.Linq;
 
 namespace ASF.Application.DtoMapper
 {
@@ -15,7 +16,6 @@ namespace ASF.Application.DtoMapper
                 .ForPath(f => f.Redirect, p => p.MapFrom(s => s.MenuRedirect));
             base.CreateMap<Permission, PermissionMenuInfoBaseResponseDto>();
             base.CreateMap<Permission, PermissionOpenApiInfoDetailsResponseDto>();
-
         }
     }
 }

@@ -12,6 +12,10 @@ namespace ASF.Application.DTO
         /// </summary>
         public string Id { get; set; }
         /// <summary>
+        /// 权限编号
+        /// </summary>
+        public string Code { get; set; }
+        /// <summary>
         /// 上级权限编号
         /// </summary>
         public string ParentId { get; set; }

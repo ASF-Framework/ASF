@@ -9,7 +9,7 @@ namespace ASF.EntityFramework.ModelMapper
         public PermissionMapper()
         {
             base.CreateMap<Model.PermissionModel, ASF.Domain.Entities.Permission>()
-                .ForMember(m => m.HttpMethods, s => s.MapFrom(f => f.HttpMethods.Split(',').Select(t => new HttpMethod(t)).ToList()));
+                .ForMember(m => m.HttpMethods, s => s.MapFrom(f => f.HttpMethods.Split(',').Where(t => !string.IsNullOrEmpty(t)).Select(t => new HttpMethod(t)).ToList()));
 
             base.CreateMap<ASF.Domain.Entities.Permission, Model.PermissionModel>()
                .ForMember(m => m.HttpMethods, s => s.MapFrom(f => string.Join(",", f.HttpMethods)));

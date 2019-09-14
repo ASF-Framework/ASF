@@ -69,28 +69,31 @@ namespace ASF.EntityFramework.Migrations
             list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_audit" : f.ParentId);
 
             // 初始开放性API权限数据
-            list.Add(new PermissionModel() { Code = "query", Name = "查看", Description = "公共API列表", ApiTemplate = "/permission/getopenapilist", Type = PermissionType.Action, HttpMethods = "POST" });
-            list.Add(new PermissionModel() { Code = "create", Name = "新增", Description = "新增公共API", ApiTemplate = "/permission/createopenapi", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
-            list.Add(new PermissionModel() { Code = "delete", Name = "删除", Description = "删除公共 API", ApiTemplate = "/permission/delete/[a-zA-Z0-9_]{1,100}", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
-            list.Add(new PermissionModel() { Code = "modify", Name = "修改", Description = "修改公共API", ApiTemplate = "/permission/modifyopenapi", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "query", Name = "查看", Description = "公共API列表", ApiTemplate = "/permission/openapi/getlist", Type = PermissionType.Action, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "create", Name = "新增", Description = "新增公共API", ApiTemplate = "/permission/openapi/create", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "modify", Name = "修改", Description = "修改公共API", ApiTemplate = "/permission/openapi/modify", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "import", Name = "导入", Description = "导入公共API权限", ApiTemplate = "/permission/openapi/import", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "delete", Name = "删除", Description = "删除公共 API", ApiTemplate = "/permission/delete/[a-zA-Z0-9_]{1,100}", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_publicapi" : f.ParentId);
 
             // 初始化菜单权限数据
-            list.Add(new PermissionModel() { Code = "query_menu", Name = "查看导航", Description = "查看导航权限列表", ApiTemplate = "/permission/menu/getlist", Type = PermissionType.Action, HttpMethods = "POST" });
-            list.Add(new PermissionModel() { Code = "export", Name = "导出", Description = "导出权限菜单", ApiTemplate = "/permission/menu/export", Type = PermissionType.Action, HttpMethods = "POST" });
-            list.Add(new PermissionModel() { Code = "import", Name = "导入", Description = "导入权限菜单", ApiTemplate = "/permission/menu/import", Type = PermissionType.Action, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "menu_query", Name = "查看菜单", Description = "查看菜单权限列表", ApiTemplate = "/permission/menu/getlist", Type = PermissionType.Action, HttpMethods = "POST" });
+         
+            list.Add(new PermissionModel() { Code = "menu_create", Name = "新增导航", Description = "创建导菜单权限", ApiTemplate = "/permission/menu/create", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "menu_details", Name = "菜单详情", Description = "菜单权限详情", ApiTemplate = "/permission/menu/getdetails/[a-zA-Z0-9_]{1,100}", Type = PermissionType.Action, HttpMethods = "GET" });
+            list.Add(new PermissionModel() { Code = "menu_modify", Name = "修改菜单", Description = "修改菜单权限", ApiTemplate = "/permission/menu/modify", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "menu_delete", Name = "删除菜单", Description = "删除菜单权限", ApiTemplate = "/permission/menu/delete/[a-zA-Z0-9_]{1,100}", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "menu_modify_sort", Name = "修改排序", Description = "修改菜单权限顺序", ApiTemplate = "/permission/menu/modifysort", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "export", Name = "导出", Description = "导出菜单权限", ApiTemplate = "/permission/menu/export", Type = PermissionType.Action, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "import", Name = "导入", Description = "导入菜单权限", ApiTemplate = "/permission/menu/import", Type = PermissionType.Action, HttpMethods = "POST" });
             list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_menu_list" : f.ParentId);
 
-            list.Add(new PermissionModel() { Code = "delete", Name = "删除", Description = "删除功能/导航权限", ApiTemplate = "/permission/delete/[a-zA-Z0-9_]{1,100}", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
-            list.Add(new PermissionModel() { Code = "modify_sort", Name = "修改排序", Description = "修改功能/导航权限显示排序", ApiTemplate = "/permission/modifysort", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
-            list.Add(new PermissionModel() { Code = "create_menu", Name = "新增导航", Description = "创建导航权限", ApiTemplate = "/permission/menu/create", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
-            list.Add(new PermissionModel() { Code = "menu_details", Name = "导航详情", Description = "导航权限详情", ApiTemplate = "/permission/menu/getdetails/[a-zA-Z0-9_]{1,100}", Type = PermissionType.Action, HttpMethods = "GET" });
-            list.Add(new PermissionModel() { Code = "menu_modify", Name = "修改导航", Description = "修改导航权限", ApiTemplate = "/permission/menu/modify", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "action_details", Name = "功能详情", Description = "功能权限详情", ApiTemplate = "/permission/action/getdetails/[a-zA-Z0-9_]{1,100}", Type = PermissionType.Action, HttpMethods = "GET" });
             list.Add(new PermissionModel() { Code = "action_create", Name = "新增功能", Description = "创建功能权限", ApiTemplate = "/permission/action/create", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "action_query", Name = "功能列表", Description = "查看功能权限列表", ApiTemplate = "/permission/action/getlist", Type = PermissionType.Action, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "action_modify", Name = "修改功能", Description = "修改功能权限", ApiTemplate = "/permission/action/modify", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "action_delete", Name = "删除功能", Description = "删除功能权限", ApiTemplate = "/permission/action/delete/[a-zA-Z0-9_]{1,100}", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "action_modify_sort", Name = "修改排序", Description = "修改功能权限顺序", ApiTemplate = "/permission/action/modifysort", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_menu_details" : f.ParentId);
 
             //全部设置为系统权限

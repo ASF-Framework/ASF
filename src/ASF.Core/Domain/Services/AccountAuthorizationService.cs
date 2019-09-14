@@ -44,9 +44,9 @@ namespace ASF.Domain.Services
                 this._logger.LogWarning($"Did not find the corresponding permissions of {requestPath}");
                 return Result<Permission>.ReFailure(ResultCodes.NotAcceptable);
             }
-            this._logger.LogDebug($"[{ request.Method}]{requestPath} matches to Permission with {parmission.Id} abc");
+            this._logger.LogDebug($"[{ request.Method}]{requestPath} matches to Permission with {parmission.Id}");
             // 判断请求方法
-            if (!parmission.HttpMethods.Select(f => f.Method.ToString()).ToList().Contains(request.Method.ToUpper()))
+            if (!parmission.HttpMethods.Select(f => f.Method.ToString().ToUpper()).ToList().Contains(request.Method.ToUpper()))
             {
                 this._logger.LogWarning($"Request method is incorrect : [{ request.Method}]{requestPath}");
                 return Result<Permission>.ReFailure(ResultCodes.NotAcceptable);

@@ -78,6 +78,7 @@ namespace ASF.EntityFramework.Model
         /// <summary>
         /// Http 方法
         /// </summary>
+        [MaxLength(100)]
         public string HttpMethods { get; set; }
         /// <summary>
         /// 添加时间

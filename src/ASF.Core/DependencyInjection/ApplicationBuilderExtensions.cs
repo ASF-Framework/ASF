@@ -10,9 +10,9 @@ namespace Microsoft.AspNetCore.Builder
         public static Task<IApplicationBuilder> UseASF(this IApplicationBuilder app)
         {
             return app.UseOcelot(opt =>
-             {
-                 opt.UseASF();
-             });
+            {
+                opt.UseASF();
+            });
         }
     }
 }

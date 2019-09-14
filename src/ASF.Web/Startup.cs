@@ -28,8 +28,8 @@ namespace ASF.Web
 
             services.AddASF(build =>
             {
-                string dbConnectionString = "Data Source=AppData/ASF.db";
-                build.AddDbContext(b => b.UseSqlite(dbConnectionString), _env);
+                build.AddDbContext(b => b.UseSqlite("Data Source=AppData/ASF.db"), _env);
+                build.AddDbContext(b => b.UseMySql("server=120.25.226.107;port=30006;database=asf;userid=root;password=rootzop112233"), _env);
                 build.AddAuthenticationJwtBearer();
             });
 
@@ -64,6 +64,8 @@ namespace ASF.Web
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "ASF");
             });
+
+            app.ASFInitDatabase();
             app.UseASF().Wait();
         }
     }

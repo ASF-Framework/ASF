@@ -52,7 +52,7 @@ namespace ASF.EntityFramework.Migrations
             list.Add(new PermissionModel() { Code = "modify", Name = "修改", Description = "修改管理账户信息", ApiTemplate = "/account/midify", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "modify_status", Name = "修改状态", Description = "修改管理账户状态", ApiTemplate = "/account/midifystatus", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "reset_password", Name = "重置密码", Description = "重置管理账号密码", ApiTemplate = "/account/resetpassword", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
-            list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_account" : "");
+            list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_account" : f.ParentId);
 
             //初始角色权限数据
             list.Add(new PermissionModel() { Code = "query", Name = "查看", Description = "角色列表", ApiTemplate = "/role/getlist", Type = PermissionType.Action, HttpMethods = "POST" });
@@ -61,12 +61,12 @@ namespace ASF.EntityFramework.Migrations
             list.Add(new PermissionModel() { Code = "details", Name = "详情", Description = "角色详情", ApiTemplate = "/role/getdetails/[0-9]{1,9}", Type = PermissionType.Action, HttpMethods = "GET" });
             list.Add(new PermissionModel() { Code = "modify", Name = "修改", Description = "修改角色", ApiTemplate = "/role/modify", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "modify_status", Name = "修改状态", Description = "修改角色状态", ApiTemplate = "/role/modifystatus", IsLogger = true, Type = PermissionType.Action, HttpMethods = "POST" });
-            list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_role" : "");
+            list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_role" : f.ParentId);
 
             // 初始审计权限数据
             list.Add(new PermissionModel() { Code = "query", Name = "查看", Description = "审计日志列表", ApiTemplate = "/logger/getlist", Type = PermissionType.Action, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "delete", Name = "批量删除", Description = "批量删除审计日志", ApiTemplate = "/logger/delete", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
-            list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_audit" : "");
+            list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_audit" : f.ParentId);
 
             // 初始开放性API权限数据
             list.Add(new PermissionModel() { Code = "query", Name = "查看", Description = "公共API列表", ApiTemplate = "/permission/getopenapilist", Type = PermissionType.Action, HttpMethods = "POST" });
@@ -74,13 +74,13 @@ namespace ASF.EntityFramework.Migrations
             list.Add(new PermissionModel() { Code = "delete", Name = "删除", Description = "删除公共 API", ApiTemplate = "/permission/delete/[a-zA-Z0-9_]{1,100}", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "modify", Name = "修改", Description = "修改公共API", ApiTemplate = "/permission/modifyopenapi", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "import", Name = "导入", Description = "导入公共API权限", ApiTemplate = "/permission/openapi/import", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
-            list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_publicapi" : "");
+            list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_publicapi" : f.ParentId);
 
             // 初始化菜单权限数据
             list.Add(new PermissionModel() { Code = "query_menu", Name = "查看导航", Description = "查看导航权限列表", ApiTemplate = "/permission/menu/getlist", Type = PermissionType.Action, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "export", Name = "导出", Description = "导出权限菜单", ApiTemplate = "/permission/menu/export", Type = PermissionType.Action, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "import", Name = "导入", Description = "导入权限菜单", ApiTemplate = "/permission/menu/import", Type = PermissionType.Action, HttpMethods = "POST" });
-            list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_menu_list" : "");
+            list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_menu_list" : f.ParentId);
 
             list.Add(new PermissionModel() { Code = "delete", Name = "删除", Description = "删除功能/导航权限", ApiTemplate = "/permission/delete/[a-zA-Z0-9_]{1,100}", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "modify_sort", Name = "修改排序", Description = "修改功能/导航权限显示排序", ApiTemplate = "/permission/modifysort", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
@@ -91,7 +91,7 @@ namespace ASF.EntityFramework.Migrations
             list.Add(new PermissionModel() { Code = "action_create", Name = "新增功能", Description = "创建功能权限", ApiTemplate = "/permission/action/create", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "action_query", Name = "功能列表", Description = "查看功能权限列表", ApiTemplate = "/permission/action/getlist", Type = PermissionType.Action, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "action_modify", Name = "修改功能", Description = "修改功能权限", ApiTemplate = "/permission/action/modify", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
-            list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_menu_details" : "");
+            list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_menu_details" : f.ParentId);
 
             //全部设置为系统权限
             list.ForEach(f =>
@@ -99,7 +99,7 @@ namespace ASF.EntityFramework.Migrations
                 f.IsSystem = true;
                 f.Enable = true;
                 f.Id = (f.ParentId.Any() ? f.ParentId + "_" : "") + f.Code;
-                f.ApiTemplate = string.IsNullOrEmpty(f.ApiTemplate) ? "/api/asf" + f.ApiTemplate : "";
+                f.ApiTemplate = !string.IsNullOrEmpty(f.ApiTemplate) && f.Type == PermissionType.Action ? "/api/asf" + f.ApiTemplate : f.ApiTemplate;
             });
             context.Permissions.AddRange(list);
             context.SaveChanges();
@@ -112,6 +112,7 @@ namespace ASF.EntityFramework.Migrations
 
             AccountModel account = new AccountModel()
             {
+                Id=1,
                 Name = "超级管理员",
                 Username = "admin",
                 Password = "21232f297a57a5a743894a0e4a801fc3",

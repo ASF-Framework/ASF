@@ -12,7 +12,7 @@ namespace ASF.EntityFramework.Model
         /// 编号
         /// </summary>
         [Key]
-        public int Id { get; private set; }
+        public int Id { get;  set; }
         /// <summary>
         /// 昵称
         /// </summary>

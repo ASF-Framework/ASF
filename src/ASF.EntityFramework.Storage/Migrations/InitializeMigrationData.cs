@@ -47,8 +47,8 @@ namespace ASF.EntityFramework.Migrations
             // 初始账户权限数据
             list.Add(new PermissionModel() { Code = "query", Name = "查看", Description = "查看管理员账户列表", ApiTemplate = "/account/getlist", Type = PermissionType.Action, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "create", Name = "新增", Description = "创建管理账户", ApiTemplate = "/account/create", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
-            list.Add(new PermissionModel() { Code = "delete", Name = "删除", Description = "删除管理账户", ApiTemplate = "/account/delete/[0-9]{1,9}", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
-            list.Add(new PermissionModel() { Code = "details", Name = "详情", Description = "管理员账户详情", ApiTemplate = "/account/getdetails/[0-9]{1,9}", Type = PermissionType.Action, HttpMethods = "GET" });
+            list.Add(new PermissionModel() { Code = "delete", Name = "删除", Description = "删除管理账户", ApiTemplate = "/account/delete/[0-9]{1,12}", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "details", Name = "详情", Description = "管理员账户详情", ApiTemplate = "/account/getdetails/[0-9]{1,12}", Type = PermissionType.Action, HttpMethods = "GET" });
             list.Add(new PermissionModel() { Code = "modify", Name = "修改", Description = "修改管理账户信息", ApiTemplate = "/account/midify", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "modify_status", Name = "修改状态", Description = "修改管理账户状态", ApiTemplate = "/account/midifystatus", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "reset_password", Name = "重置密码", Description = "重置管理账号密码", ApiTemplate = "/account/resetpassword", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
@@ -57,8 +57,8 @@ namespace ASF.EntityFramework.Migrations
             //初始角色权限数据
             list.Add(new PermissionModel() { Code = "query", Name = "查看", Description = "角色列表", ApiTemplate = "/role/getlist", Type = PermissionType.Action, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "create", Name = "新增", Description = "创建角色", ApiTemplate = "/role/create", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
-            list.Add(new PermissionModel() { Code = "delete", Name = "删除", Description = "删除角色", ApiTemplate = "/role/delete/[0-9]{1,9}", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
-            list.Add(new PermissionModel() { Code = "details", Name = "详情", Description = "角色详情", ApiTemplate = "/role/getdetails/[0-9]{1,9}", Type = PermissionType.Action, HttpMethods = "GET" });
+            list.Add(new PermissionModel() { Code = "delete", Name = "删除", Description = "删除角色", ApiTemplate = "/role/delete/[0-9]{1,12}", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
+            list.Add(new PermissionModel() { Code = "details", Name = "详情", Description = "角色详情", ApiTemplate = "/role/getdetails/[0-9]{1,12}", Type = PermissionType.Action, HttpMethods = "GET" });
             list.Add(new PermissionModel() { Code = "modify", Name = "修改", Description = "修改角色", ApiTemplate = "/role/modify", Type = PermissionType.Action, IsLogger = true, HttpMethods = "POST" });
             list.Add(new PermissionModel() { Code = "modify_status", Name = "修改状态", Description = "修改角色状态", ApiTemplate = "/role/modifystatus", IsLogger = true, Type = PermissionType.Action, HttpMethods = "POST" });
             list.ForEach(f => f.ParentId = f.ParentId == null ? "asf_role" : f.ParentId);

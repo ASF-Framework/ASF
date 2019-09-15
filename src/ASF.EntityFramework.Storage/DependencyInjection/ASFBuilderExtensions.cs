@@ -4,7 +4,6 @@ using ASF.EntityFramework.Migrations;
 using ASF.EntityFramework.Repository;
 using ASF.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -20,15 +19,15 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        public static ASFBuilder AddDbContext(this ASFBuilder builder, Action<DbContextOptionsBuilder> configureDbContext, IHostingEnvironment environment)
+        public static ASFBuilder AddDbContext(this ASFBuilder builder, Action<DbContextOptionsBuilder> configureDbContext, bool allowCache)
         {
-            if (environment.IsDevelopment())
+            if (allowCache)
             {
-                builder.AddDbContext(configureDbContext);
+                builder.AddDbContextCache(configureDbContext);
             }
             else
             {
-                builder.AddDbContextCache(configureDbContext);
+                builder.AddDbContext(configureDbContext);
             }
             return builder;
         }

@@ -12,8 +12,10 @@ namespace ASF.Web.Migrations
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlite("Data Source=AppData/ASF.db");
-            optionsBuilder.UseMySql("server=120.25.226.107;port=30006;database=asf;userid=root;password=rootzop112233");
+            //optionsBuilder.UseMySql("server=127.0.0.1;port=30006;database=asf;userid=root;password=root");
+            //optionsBuilder.UseSqlServer("Server=127.0.0.1;Database=asf;User ID=SA;Password=sa;Trusted_Connection=false;");
             base.OnConfiguring(optionsBuilder);
+
         }
     }
 }

@@ -11,7 +11,7 @@ namespace ASF.Web
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private readonly IConfiguration Configuration;
         private readonly IHostingEnvironment _env;
 
         public Startup(IConfiguration configuration, IHostingEnvironment env)
@@ -24,12 +24,29 @@ namespace ASF.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddASF(build =>
             {
-                build.AddDbContext(b => b.UseSqlite("Data Source=AppData/ASF.db"), _env);
-                //build.AddDbContext(b => b.UseMySql("server=120.25.226.107;port=30006;database=asf;userid=root;password=rootzop112233"), _env);
+                var asfOptions = Configuration.GetSection("ASF").Get<ASFOptions>();
+                build.AddDbContext(b =>
+                {
+                    switch (asfOptions.DBType.ToLower())
+                    {
+                        case "sqlite":
+                            b.UseSqlite(asfOptions.DBConnectionString);
+                            break;
+                        case "mysql":
+                            b.UseMySql(asfOptions.DBConnectionString);
+                            break;
+                        case "sqlserver":
+                            b.UseSqlServer(asfOptions.DBConnectionString);
+                            break;
+                        default:
+                            break;
+                    }
+                }, asfOptions.AllowCache);
+
+                JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
                 build.AddAuthenticationJwtBearer();
             });
 
@@ -54,17 +71,16 @@ namespace ASF.Web
             if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                //启用中间件服务生成Swagger作为JSON终结点
+                app.UseSwagger();
+                //启用中间件服务对swagger-ui，指定Swagger JSON终结点
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ASF");
+                });
             }
             app.UseFileServer();
-
-            //启用中间件服务生成Swagger作为JSON终结点
-            app.UseSwagger();
-            //启用中间件服务对swagger-ui，指定Swagger JSON终结点
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ASF");
-            });
-
             app.ASFInitDatabase();
             app.UseASF().Wait();
         }

@@ -20,6 +20,7 @@ namespace ASF.Domain.Entities
         {
             if (createOfAccountId == 0)
                 throw new ArgumentNullException("创建用户不能为空");
+            this.Id = id;
             this.CreateInfo = new CreateOfAccount(createOfAccountId);
             this.Name = name;
             this.Description = description;

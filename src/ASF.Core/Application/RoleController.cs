@@ -31,11 +31,6 @@ namespace ASF.Application
             this._operateLog = operateLog;
         }
         /// <summary>
-        /// 获取所有的角色基本信息
-        /// </summary>
-        /// <returns></returns>
-
-        /// <summary>
         /// 创建角色
         /// </summary>
         /// <param name="dto"></param>

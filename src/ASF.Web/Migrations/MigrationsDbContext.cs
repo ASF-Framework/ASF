@@ -13,9 +13,8 @@ namespace ASF.Web.Migrations
         {
             //optionsBuilder.UseSqlite("Data Source=AppData/ASF.db");
             //optionsBuilder.UseMySql("server=127.0.0.1;port=30006;database=asf;userid=root;password=root");
-            //optionsBuilder.UseSqlServer("Server=127.0.0.1;Database=asf;User ID=SA;Password=sa;Trusted_Connection=false;");
+            optionsBuilder.UseSqlServer("Server=127.0.0.1;Database=asf;User ID=SA;Password=sa;Trusted_Connection=false;");
             base.OnConfiguring(optionsBuilder);
-
         }
     }
 }

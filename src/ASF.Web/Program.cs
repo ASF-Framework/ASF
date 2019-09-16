@@ -12,11 +12,7 @@ namespace ASF.Web
         {
   
             new WebHostBuilder()
-                 .UseKestrel((context, opt) =>
-                 {
-                     opt.AddServerHeader = false;
-                     opt.Configure(context.Configuration.GetSection("Kestrel"));
-                 })
+                 .UseKestrel()
                  .UseIISIntegration()
                  .UseContentRoot(Directory.GetCurrentDirectory())
                  .ConfigureAppConfiguration((hostingContext, config) =>
@@ -25,7 +21,7 @@ namespace ASF.Web
                          .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
                          .AddJsonFile("appsettings.json", true, true)
                          .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true)
-                         .AddJsonFile("AppData/ocelot.json", false, true)
+                         .AddJsonFile("ocelot.json", false, true)
                          .AddEnvironmentVariables();
                  })
                   .ConfigureLogging((hostingContext, logging) =>

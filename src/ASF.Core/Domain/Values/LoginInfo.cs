@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Zop.AspNetCore.Authentication.JwtBearer;
 
 namespace ASF.Domain.Values
 {

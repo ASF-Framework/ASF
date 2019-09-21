@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using Zop.AspNetCore.Authentication.JwtBearer;
 
 namespace ASF.Web
 {
@@ -24,6 +25,11 @@ namespace ASF.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            services.AddAuthentication("Bearer").AddJwtBearer((AccessTokenOptions opt) =>
+            {
+                opt.SecurityType = SecurityType.RsaSha512;
+            });
 
             services.AddASF(build =>
             {
@@ -45,12 +51,8 @@ namespace ASF.Web
                             break;
                     }
                 }, asfOptions.AllowCache);
-
-                JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-                build.AddAuthenticationJwtBearer();
             });
-
-
+    
             //注册Swagger生成器，定义一个和多个Swagger 文档
             services.AddSwaggerGen(c =>
             {

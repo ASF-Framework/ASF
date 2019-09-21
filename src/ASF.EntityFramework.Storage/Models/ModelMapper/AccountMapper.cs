@@ -5,6 +5,7 @@ using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Zop.AspNetCore.Authentication.JwtBearer;
 
 namespace ASF.EntityFramework.ModelMapper
 {

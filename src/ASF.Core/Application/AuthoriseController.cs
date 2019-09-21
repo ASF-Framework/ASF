@@ -8,6 +8,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
+using Zop.AspNetCore.Authentication.JwtBearer;
 
 namespace ASF.Application
 {

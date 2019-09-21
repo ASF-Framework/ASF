@@ -1,12 +1,11 @@
 ﻿using ASF.Domain.Entities;
 using ASF.Domain.Values;
-using ASF.Infrastructure.Anticorrsives;
 using ASF.Infrastructure.Repositories;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
+using Zop.AspNetCore.Authentication.JwtBearer;
 
 namespace ASF.Domain.Services
 {
@@ -122,9 +121,9 @@ namespace ASF.Domain.Services
             claims.Add("auth_mode", loginType);
 
             var accessToken = _tokenGenerate.Generate(claims);
-
             //生成访问Token
             account.SetLoginInfo(new LoginInfo(ip, accessToken));
+
 
             //记录登录日志
             this._logLoginRecordService.Record(account, loginType);

@@ -45,7 +45,7 @@ namespace ASF.DependencyInjection
             Services.AddTransient<AccountAuthorizationService>();
             Services.AddTransient<AccountEmailChangeService>();
             Services.AddTransient<AccountInfoChangeService>();
-            Services.AddTransient<AccountLoginService>();
+            Services.AddTransient<IAccountLoginService,AccountLoginService>();
             Services.AddTransient<AccountPasswordChangeService>();
             Services.AddTransient<AccountRoleAssignationService>();
             Services.AddTransient<AccountPermissionService>();

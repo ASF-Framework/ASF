@@ -3,6 +3,7 @@ using ASF.Domain.Values;
 using ASF.Infrastructure.Repositories;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Security.Claims;
 using Zop.AspNetCore.Authentication.JwtBearer;
@@ -12,7 +13,7 @@ namespace ASF.Domain.Services
     /// <summary>
     /// 账户登录服务
     /// </summary>
-    public class AccountLoginService
+    public class AccountLoginService : IAccountLoginService
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IAccessTokenGenerate _tokenGenerate;
@@ -71,7 +72,7 @@ namespace ASF.Domain.Services
             return this.Login(account, password, ip);
         }
         /// <summary>
-        /// 使用邮箱登录账户
+        /// 使用手机登录账户
         /// </summary>
         /// <param name="telephone">手机号码</param>
         /// <param name="password">账户密码</param>
@@ -113,12 +114,16 @@ namespace ASF.Domain.Services
             }
 
             //生成访问Token
-            Dictionary<string, string> claims = new Dictionary<string, string>();
-            claims.Add(ClaimTypes.Role, "self");
-            claims.Add("name", account.Username);
-            claims.Add("nickname", account.Name);
-            claims.Add("sub", account.Id.ToString());
-            claims.Add("auth_mode", loginType);
+            List<Claim> claims = new List<Claim>();
+            claims.AddRange(new[] {
+                new Claim(ClaimTypes.Role, "self"),
+                new Claim(ClaimTypes.Role, "admin"),
+                new Claim("name", account.Username),
+                new Claim("nickname", account.Name),
+                new Claim("sub", account.Id.ToString()),
+                new Claim("auth_mode", loginType)
+            });
+
 
             var accessToken = _tokenGenerate.Generate(claims);
             //生成访问Token

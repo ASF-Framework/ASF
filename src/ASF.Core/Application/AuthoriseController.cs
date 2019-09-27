@@ -46,7 +46,7 @@ namespace ASF.Application
             }
 
             //账户登录验证
-            var service = this._serviceProvider.GetRequiredService<AccountLoginService>();
+            var service = this._serviceProvider.GetRequiredService<IAccountLoginService>();
             var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
             if (string.IsNullOrEmpty(ip))
                 ip = "127.0.0.1";

@@ -79,7 +79,7 @@ namespace ASF.Domain.Entities
         /// 创建时信息
         /// </summary>
         [Required]
-        public CreateOfAccount CreateInfo { get; private set; }
+        public CreateOfAccount CreateInfo { get; private set; } = new CreateOfAccount(0);
         /// <summary>
         /// 登录信息
         /// </summary>

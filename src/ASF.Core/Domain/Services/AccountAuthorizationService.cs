@@ -38,7 +38,7 @@ namespace ASF.Domain.Services
 
 
             //根据请求地址获取权限
-            var parmission = this.MatchPermission(requestPath);
+            var parmission = await this.MatchPermission(requestPath);
             if (parmission == null)
             {
                 this._logger.LogWarning($"Did not find the corresponding permissions of {requestPath}");
@@ -106,9 +106,9 @@ namespace ASF.Domain.Services
         /// </summary>
         /// <param name="requestPath"></param>
         /// <returns></returns>
-        private Permission MatchPermission(string requestPath)
+        private async Task<Permission> MatchPermission(string requestPath)
         {
-            var parmissions = _permissionRepository.GetList().GetAwaiter().GetResult();
+            var parmissions = await _permissionRepository.GetList();
             return parmissions.FirstOrDefault(f => f.MatchApiTemplate(requestPath));
         }
 

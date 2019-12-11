@@ -3,6 +3,7 @@ using ASF.Domain.Values;
 using System;
 using System.Net.Http;
 using Xunit;
+using Zop.AspNetCore.Authentication.JwtBearer;
 
 namespace ASF.Core.Test.Application
 {

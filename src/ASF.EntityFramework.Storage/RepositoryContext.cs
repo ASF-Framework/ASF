@@ -16,6 +16,26 @@ namespace ASF.EntityFramework.Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AccountModel>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id).ValueGeneratedOnAdd();
+            });
+            modelBuilder.Entity<LogInfoModel>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id).ValueGeneratedOnAdd();
+            });
+            modelBuilder.Entity<PermissionModel>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id).ValueGeneratedOnAdd();
+            });
+            modelBuilder.Entity<RoleModel>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id).ValueGeneratedOnAdd();
+            });
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<AccountModel> Accounts { get; set; }

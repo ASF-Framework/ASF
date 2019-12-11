@@ -23,15 +23,10 @@ namespace ASF.Core.Test.Infrastructure
         public void ConfigureServices(IServiceCollection services)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-<<<<<<< HEAD:service/test/ASF.Web.Test/Infrastructure/Startup.cs
-
-=======
->>>>>>> feature/dynamic-menu:test/ASF.Web.Test/Infrastructure/Startup.cs
             services.AddASF(build =>
             {
                 string dbConnectionString = "Data Source=AppData/ASF.db";
                 build.AddDbContext(b => b.UseSqlite(dbConnectionString));
-                build.AddAuthenticationJwtBearer();
             });
             services.AddLogging();
             services.AddAutoMapper(c =>

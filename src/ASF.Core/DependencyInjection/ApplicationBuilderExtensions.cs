@@ -23,7 +23,7 @@ namespace Microsoft.AspNetCore.Builder
                 }
                 finally
                 {
-                    next();
+                    next().Wait();
                 }
                 return Task.CompletedTask;
             });
